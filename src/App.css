@@ -1,0 +1,108 @@
+.inner-card {
+    width: 100px;
+    height: 110px;
+    margin: 5px;
+    background-color: #F5F5F5; 
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+  }
+  .inner-card:hover{
+    font-weight: 600;
+    border: 1px solid #152039e6;
+    scale: 1.05;
+    transition: 0.3s ease;
+    background-color: #D9D9D9;
+  }
+  .shadow{
+    border-radius: 4px;
+  background: #FFF;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  .TITULO{
+    color: #FFF;
+    text-align: center;
+    font-family: Roboto Condensed;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }  
+  .fondo-card{  
+    background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);}
+a{
+  text-transform:capitalize;
+  letter-spacing: 0.02rem;
+}
+.team-item2{
+    text-decoration: none; 
+    color: inherit; 
+    transition: text-decoration 0.3s ease; 
+  }
+  .team-item2:hover {
+    text-decoration: none;
+  }
+  .team {
+    color: #000 ;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+   
+  }
+  .card{
+    padding: 0;
+  }
+
+  .box-team{
+    display: flex;
+    justify-content: space-around;
+    
+  }
+  .logo{
+    width: 40px;
+  }
+  .texto-left{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    text-align: left;
+   
+  }
+  .texto-right{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    
+    text-align: right;
+  }
+  .data{
+    color: #000;
+  text-align: center;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  }
+
+  .titulo2{
+    text-align: center;
+     font-family: 'Days One', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background: linear-gradient(180deg, rgba(0, 191, 99, 0.80) 0%, rgba(9, 83, 126, 0.80) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+  }

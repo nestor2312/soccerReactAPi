@@ -1,0 +1,15 @@
+p{
+    color: white;
+}
+footer{
+  
+    height: 40px;
+  width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   position: relative;
+
+    background: linear-gradient(180deg, #152039 90%, #152039cc 100%);
+}

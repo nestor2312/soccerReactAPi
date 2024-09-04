@@ -1,0 +1,120 @@
+.inner-card {
+    width: 100px;
+    height: 110px;
+    margin: 5px;
+    background-color: #F5F5F5; 
+    box-shadow: 0px 4px 4px 0px #00000040;
+    border-radius: 3px;
+  }
+  .inner-card:hover{
+    font-weight: 600;
+    border: 1px solid #152039e6;
+    scale: 1.05;
+    transition: 0.3s ease;
+    background-color: #D9D9D9;
+  }
+  .shadow{
+    border-radius: 4px;
+  background: #FFF;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  .TITULO{
+    color: #FFF;
+    text-align: center;
+    font-family: Roboto Condensed;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }  
+  .fondo-card{  
+    background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);}
+a{
+  text-transform:capitalize;
+  letter-spacing: 0.02rem;
+}
+.team-item2{
+    text-decoration: none; 
+    color: inherit; 
+    transition: text-decoration 0.3s ease; 
+  }
+  .team-item2:hover {
+    text-decoration: none;
+  }
+  .team {
+    color: #000 ;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    text-align: left;
+  }
+  .card{
+    padding: 0;
+  }
+
+  .box-team{
+    
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  .loading-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0 auto;
+    font-size: 20px;
+  }
+  .margen{
+    margin: auto 60px;
+  }
+
+
+
+  .pagination {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    font-weight: bold;
+    font-family: 'Roboto Condensed', sans-serif;
+    margin: 0 10px;
+    padding: 5px 15px;
+    background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .pagination button:hover {
+   border-bottom: 2px solid #79a08d;
+  }
+  .pagination button:disabled {
+    font-weight: normal;
+    font-family: 'Roboto Condensed', sans-serif;
+    background: #cccccc!important;
+    cursor: not-allowed;
+    color: #152039;
+    border-bottom: 2px solid #cccccc;
+  }
+  
+  .pagination span {
+    margin: 0 5px;
+  }
+  
+
+
+
+  

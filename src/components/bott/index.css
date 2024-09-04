@@ -1,0 +1,30 @@
+/* .box{
+  
+    margin: auto; /* Center both horizontally and vertically */
+    /* gap: 20px;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+/* footer { 
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Add any other styles you want for the footer */
+  /* } */ 
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  /* .boxbot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  } */
