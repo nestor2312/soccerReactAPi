@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const endpoint = "http://127.0.0.1:8000/api/jugador";
+const endpoint = "https://hip-parts-nail.loca.lt/api/jugador";
 
-const equiposEndpoint = "http://127.0.0.1:8000/api/equipos";
+const equiposEndpoint = "https://hip-parts-nail.loca.lt/api/equipos";
 const FORM_Players = () => {
 
   const [equipoID, setequipo] = useState("");

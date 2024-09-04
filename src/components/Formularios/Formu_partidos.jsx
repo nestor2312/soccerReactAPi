@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const endpoint = "http://127.0.0.1:8000/api/partido";
+const endpoint = "https://hip-parts-nail.loca.lt/api/partido";
 
-const equiposEndpoint = "http://127.0.0.1:8000/api/equipos";
+const equiposEndpoint = "https://hip-parts-nail.loca.lt/api/equipos";
 const FORM_Matches = () => {
   const [marcador1, setmarcador1] = useState("");
   const [marcador2, setmarcador2] = useState("");

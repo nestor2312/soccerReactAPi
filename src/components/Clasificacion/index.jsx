@@ -5,8 +5,8 @@ import "./index.css";
 import axios from "axios";
 import Cargando from "../Carga/carga";
 
-const endpoint = "http://localhost:8000/api/userHomeclassification";
-const Images = "http://localhost:8000/storage/uploads";
+const endpoint = "https://hip-parts-nail.loca.lt/api/userHomeclassification";
+const Images = "https://hip-parts-nail.loca.lt/storage/uploads";
 
 const Clasificacion = () => {
   const [datosGrupos, setGroups] = useState([]);

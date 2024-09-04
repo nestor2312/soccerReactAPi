@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import "./index.css";
 import axios from "axios";
 
-const endpoint = "http://127.0.0.1:8000/api/equipo";
-const gruposEndpoint = "http://127.0.0.1:8000/api/grupos";
+const endpoint = "https://hip-parts-nail.loca.lt/api/equipo";
+const gruposEndpoint = "https://hip-parts-nail.loca.lt/api/grupos";
 
 const FORM_PQR = () => {
   const [nombre, setnombre] = useState("");

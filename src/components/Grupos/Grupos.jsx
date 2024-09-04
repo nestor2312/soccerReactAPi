@@ -7,7 +7,7 @@ import Menu from "../Menu/Menu";
 import "./index.css";
 import axios from "axios";
 
-const endpoint = 'http://localhost:8000/api';
+const endpoint = 'https://hip-parts-nail.loca.lt/api';
 
 
 const Grupos = () => {
