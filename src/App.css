@@ -106,3 +106,30 @@ a{
       -webkit-text-fill-color: transparent;
     text-transform: uppercase;
   }
+
+  @media only screen and (max-width: 576px) {
+    .hiden{
+      display: none;
+    }
+    .team-item:nth-child(n + 7) {
+      display: none;
+  }
+  .logo{
+    width: 25px;
+  }
+  .titulo2{
+    text-align: center;
+    font-family: 'Days One', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    background: linear-gradient(180deg, rgba(0, 191, 99, 0.80) 0%, rgba(9, 83, 126, 0.80) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+  }
+
+
+}

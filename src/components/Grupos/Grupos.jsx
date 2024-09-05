@@ -6,8 +6,9 @@ import Footer from "../Footer/Footer";
 import Menu from "../Menu/Menu";
 import "./index.css";
 import axios from "axios";
+import { API_ENDPOINT } from '../../ConfigAPI';
+const endpoint = API_ENDPOINT;
 
-const endpoint = 'https://hip-parts-nail.loca.lt/api';
 
 
 const Grupos = () => {

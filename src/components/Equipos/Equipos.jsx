@@ -5,9 +5,9 @@ import Menu from "../Menu/Menu";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cargando from "../Carga/carga";
-
-const endpoint = 'https://hip-parts-nail.loca.lt/api';
-const Images = 'https://hip-parts-nail.loca.lt/storage/uploads';
+import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+const endpoint = API_ENDPOINT;
+const Images =IMAGES_URL;
 
 const Equipos = () => {
   const [Teams, setTeams] = useState([]);
@@ -46,7 +46,7 @@ const Equipos = () => {
             <Cargando />
           </div>
         ) : (
-          <div className="margen">
+          <div className="margen margen-mobile">
             <div className="container-fluid">
               <div className="col-12 col-sm-12 col-md-12 mt-4">
                 <div className="card border-0 shadow">

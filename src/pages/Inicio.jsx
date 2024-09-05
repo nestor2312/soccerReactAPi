@@ -4,8 +4,11 @@ import Menu from "../components/Menu/Menu"
 import axios from "axios";
 import './../App.css'
 import Cargando from "../components/Carga/carga";
-const endpoint = 'https://hip-parts-nail.loca.lt/api';
-const Images = 'https://hip-parts-nail.loca.lt/storage/uploads'
+import { API_ENDPOINT, IMAGES_URL } from '../ConfigAPI';
+
+const endpoint = `${API_ENDPOINT}`;
+
+const Images = IMAGES_URL;
 
 
 
@@ -105,7 +108,7 @@ return<>
                     <td className="movil data">{equipo.pe}</td>
                     <td className="movil data">{equipo.pp}</td>
                     <td className="movil data">{equipo.gf}</td>
-                    <td className="movil data">{equipo.gc}</td>
+                    <td className="movil data  hiden">{equipo.gc}</td>
                     <td className="movil data">{equipo.gd}</td>
                     <td className="movil data">{equipo.puntos}</td>
                   </tr>

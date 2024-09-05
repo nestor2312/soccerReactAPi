@@ -7,3 +7,12 @@
 .margen{
     margin: auto 60px;
   }
+  table{
+    padding: 0.5rem 0.5rem !important;
+  }
+
+  @media only screen and (max-width: 576px) {
+    .margen{
+        margin: auto 10px;
+      }
+}

@@ -4,9 +4,11 @@ import Menu from "../Menu/Menu";
 import "./index.css";
 import axios from "axios";
 import Cargando from "../Carga/carga";
+import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
 
-const endpoint = "https://hip-parts-nail.loca.lt/api/userHomeclassification";
-const Images = "https://hip-parts-nail.loca.lt/storage/uploads";
+const endpoint = `${API_ENDPOINT}/userHomeclassification`;
+const Images = IMAGES_URL;
+
 
 const Clasificacion = () => {
   const [datosGrupos, setGroups] = useState([]);
@@ -53,7 +55,7 @@ const Clasificacion = () => {
                     {datosGrupo.grupo.nombre}
                   </div>
                   <div className="card table-responsive border-0 table-sm">
-                    <table className=" table-borderless">
+                    <table className="table-borderless">
                       <tbody>
                         <tr className="py-2">
                           <td></td>
@@ -65,7 +67,7 @@ const Clasificacion = () => {
                           <th className="movil titulo2">PP</th>
                           <th className="movil titulo2">GF</th>
                           <th className="movil titulo2">GC</th>
-                          <th className="movil titulo2">GD</th>
+                          <th className="movil titulo2 ">GD</th>
                           <th className="movil titulo2">Pts</th>
                         </tr>
                         {datosGrupo.equipos.map((equipo, index) => (

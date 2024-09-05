@@ -6,9 +6,9 @@ import Footer from "../Footer/Footer";
 import Menu from "../Menu/Menu";
 import { useEffect, useState } from "react";
 import Cargando from "../Carga/carga";
-
-const endpoint = 'https://hip-parts-nail.loca.lt/api';
-const Images = 'https://hip-parts-nail.loca.lt/storage/uploads'
+import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+const endpoint = API_ENDPOINT;
+const Images = IMAGES_URL;
 
 const Jugadores = () => {
   const [jugadores, setJugadores] = useState([]);

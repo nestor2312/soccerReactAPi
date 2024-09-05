@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_ENDPOINT } from '../../ConfigAPI';
 
-const endpoint = "https://hip-parts-nail.loca.lt/api/jugador";
+const endpoint = `${API_ENDPOINT}jugador`;
+const equiposEndpoint = `${API_ENDPOINT}equipos`;
 
-const equiposEndpoint = "https://hip-parts-nail.loca.lt/api/equipos";
 const FORM_Players = () => {
 
   const [equipoID, setequipo] = useState("");

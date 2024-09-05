@@ -1,7 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import "./index.css";
-const endpoint = "https://hip-parts-nail.loca.lt/api/grupo";
+
+import { API_ENDPOINT } from '../../ConfigAPI';
+const endpoint = `${API_ENDPOINT}grupo`;
+
+
+
 const FORM_Groups = () => {
   const [Nombre, setNombre] = useState("");
 

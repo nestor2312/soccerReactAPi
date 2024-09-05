@@ -4,9 +4,10 @@ import Menu from "../Menu/Menu";
 import "./index.css";
 import axios from "axios";
 import Cargando from "../Carga/carga";
+import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+const endpoint = API_ENDPOINT;
+const Images = IMAGES_URL;
 
-const endpoint = 'https://hip-parts-nail.loca.lt/api';
-const Images = 'https://hip-parts-nail.loca.lt/storage/uploads'
 const Partidos = () => {
   const [partidos, setPartidos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

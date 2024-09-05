@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import "./index.css";
 import axios from "axios";
-
-const endpoint = "https://hip-parts-nail.loca.lt/api/equipo";
-const gruposEndpoint = "https://hip-parts-nail.loca.lt/api/grupos";
+import { API_ENDPOINT } from '../../ConfigAPI';
+const endpoint = `${API_ENDPOINT}equipo`;
+const gruposEndpoint = `${API_ENDPOINT}grupos`;
 
 const FORM_PQR = () => {
   const [nombre, setnombre] = useState("");

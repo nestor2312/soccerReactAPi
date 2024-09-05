@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
+
 
 import Inicio from './pages/Inicio';
 import Partidos from './components/Partidos/Partidos';
