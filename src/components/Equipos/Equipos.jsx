@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+import ErrorCarga from "../Error/Error";
 const endpoint = API_ENDPOINT;
 const Images =IMAGES_URL;
 
@@ -14,7 +15,7 @@ const Equipos = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-
+  const [error, setError] = useState(null);
   useEffect(() => {
     const getTeamsAll = async (page) => {
       try {
@@ -24,6 +25,7 @@ const Equipos = () => {
         setLastPage(response.data.last_page); // Última página
         setIsLoading(false);
       } catch (error) {
+        setError('error al cargar los equipos')
         setIsLoading(false);
         console.error("Error  teams:", error);
       }
@@ -45,7 +47,12 @@ const Equipos = () => {
           <div className="loading-container">
             <Cargando />
           </div>
+        ) :  error ? (
+          <div className="loading-container">
+             <ErrorCarga/>
+          </div>
         ) : (
+    
           <div className="margen margen-mobile">
             <div className="container-fluid">
               <div className="col-12 col-sm-12 col-md-12 mt-4">

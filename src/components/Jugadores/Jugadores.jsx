@@ -7,12 +7,14 @@ import Menu from "../Menu/Menu";
 import { useEffect, useState } from "react";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+import ErrorCarga from "../Error/Error";
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
 const Jugadores = () => {
   const [jugadores, setJugadores] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     const getJugadores = async () => {
       try {
@@ -21,6 +23,7 @@ const Jugadores = () => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
+        setError('error al cargar los jugadores')
         console.error("Error al obtener los jugadores:", error);
       }
     };
@@ -36,6 +39,10 @@ const Jugadores = () => {
             
           </div>
        
+        )  :  error ? (
+          <div className="loading-container">
+             <ErrorCarga/>
+          </div>
         ) : (
     <section className="margen Jugadores mt-4">
     

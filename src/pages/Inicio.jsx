@@ -5,6 +5,7 @@ import axios from "axios";
 import './../App.css'
 import Cargando from "../components/Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../ConfigAPI';
+import ErrorCarga from "../components/Error/Error";
 
 const endpoint = `${API_ENDPOINT}`;
 
@@ -17,6 +18,7 @@ const Inicio = ()=>{
     const [Matches, setMatches] = useState([]);
     const [clasificacion, setclasificacion] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     useEffect(() => {
       const getTeamsAll = async () => {
         try {
@@ -26,6 +28,7 @@ const Inicio = ()=>{
           setIsLoading(false)
         } catch (error) {
           setIsLoading(false)
+          setError("Error al cargar los partidos");
           console.error("Error  teams:", error);
         }
       };
@@ -35,6 +38,7 @@ const Inicio = ()=>{
           const filteredMatches = response.data.slice(0, 7);
           setMatches(filteredMatches);
         } catch (error) {
+          setError("Error al cargar los partidos");
           console.error("Error  Matches:", error);
         }
       };
@@ -44,6 +48,7 @@ const Inicio = ()=>{
           const filteredClasificacion = response.data.slice(0, 1);
           setclasificacion(filteredClasificacion);
         } catch (error) {
+          setError("Error al cargar los partidos");
           console.error("Error  clasificacion:", error);
         }
       };
@@ -56,12 +61,15 @@ const Inicio = ()=>{
 return<>
 <Menu/>
 {isLoading ? (
-          <div className="loading-container">
-          <Cargando/>
-            
-          </div>
-       
-        ) : (
+      <div className="loading-container">
+        <Cargando/>
+      </div>
+    ) : error ? (
+      <div className="loading-container">
+         <ErrorCarga/>
+      </div>
+    ) : (
+
 <section className="Subcategoria">
       <div className="margen">
     <div className="row">

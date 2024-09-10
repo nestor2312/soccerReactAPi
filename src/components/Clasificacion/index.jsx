@@ -5,6 +5,7 @@ import "./index.css";
 import axios from "axios";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+import ErrorCarga from "../Error/Error";
 
 const endpoint = `${API_ENDPOINT}/userHomeclassification`;
 const Images = IMAGES_URL;
@@ -15,7 +16,7 @@ const Clasificacion = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-
+  const [error, setError] = useState(null);
   useEffect(() => {
     const getGroupsAll = async () => {
       try {
@@ -26,6 +27,7 @@ const Clasificacion = () => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
+        setError('error al cargar los grupos')
         console.error("Error fetching groups:", error);
       }
     };
@@ -44,6 +46,10 @@ const Clasificacion = () => {
       {isLoading ? (
         <div className="loading-container">
           <Cargando/>
+        </div>
+      ) :  error ? (
+        <div className="loading-container">
+           <ErrorCarga/>
         </div>
       ) : (
         <section className="margen">

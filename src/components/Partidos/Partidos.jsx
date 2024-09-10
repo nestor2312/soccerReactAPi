@@ -5,12 +5,14 @@ import "./index.css";
 import axios from "axios";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+import ErrorCarga from "../Error/Error";
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
 const Partidos = () => {
   const [partidos, setPartidos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     const getPartidos = async () => {
       try {
@@ -19,6 +21,7 @@ const Partidos = () => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
+        setError('error al cargar los partodos')
         console.error("Error al obtener los partidos:", error);
       }
     };
@@ -35,6 +38,10 @@ const Partidos = () => {
             
           </div>
        
+        ) :  error ? (
+          <div className="loading-container">
+             <ErrorCarga/>
+          </div>
         ) : (
       <section className="Partidos">
         <div className="margen mt-4">
