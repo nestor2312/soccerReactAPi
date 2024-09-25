@@ -8,17 +8,20 @@ import { useEffect, useState } from "react";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
 import ErrorCarga from "../Error/Error";
+import { useParams } from "react-router-dom";
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
 const Jugadores = () => {
+  const { subcategoriaId } = useParams();
   const [jugadores, setJugadores] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
     const getJugadores = async () => {
       try {
-        const response = await axios.get(`${endpoint}/jugadores`);
+        // const response = await axios.get(`${endpoint}/jugadores`);
+        const response = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/jugadores`);
         setJugadores(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -29,7 +32,7 @@ const Jugadores = () => {
     };
 
     getJugadores();
-  }, []);
+  }, [subcategoriaId]);
 
   return ( <>
     <Menu/>

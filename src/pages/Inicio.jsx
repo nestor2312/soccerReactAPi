@@ -6,7 +6,7 @@ import './../App.css'
 import Cargando from "../components/Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../ConfigAPI';
 import ErrorCarga from "../components/Error/Error";
-
+import { useParams } from 'react-router-dom';
 const endpoint = `${API_ENDPOINT}`;
 
 const Images = IMAGES_URL;
@@ -14,6 +14,7 @@ const Images = IMAGES_URL;
 
 
 const Inicio = ()=>{
+  const { subcategoriaId } = useParams();
     const [Teams, setTeams] = useState([]);
     const [Matches, setMatches] = useState([]);
     const [clasificacion, setclasificacion] = useState([]);
@@ -22,7 +23,9 @@ const Inicio = ()=>{
     useEffect(() => {
       const getTeamsAll = async () => {
         try {
-          const response = await axios.get(`${endpoint}/userHomeTeams`);
+          // const response = await axios.get(`${endpoint}/userHomeTeams`);
+          const response = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/equipos`);
+
           const filteredteams = response.data.slice(0, 8);
           setTeams(filteredteams);
           setIsLoading(false)
@@ -34,7 +37,9 @@ const Inicio = ()=>{
       };
       const getMatchesAll = async () => {
         try {
-          const response = await axios.get(`${endpoint}/partidos`);
+          // const response = await axios.get(`${endpoint}/partidos`);
+          const response = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/partidos`);
+
           const filteredMatches = response.data.slice(0, 7);
           setMatches(filteredMatches);
         } catch (error) {
@@ -44,7 +49,10 @@ const Inicio = ()=>{
       };
       const getclasificacion = async () => {
         try {
-          const response = await axios.get(`${endpoint}/clasificacion`);
+          // const response = await axios.get(`${endpoint}clasificacion`);
+          const response = await axios.get(
+            `${API_ENDPOINT}subcategoria/${subcategoriaId}/clasificacion`
+          );
           const filteredClasificacion = response.data.slice(0, 1);
           setclasificacion(filteredClasificacion);
         } catch (error) {
@@ -55,7 +63,7 @@ const Inicio = ()=>{
       getclasificacion()
       getMatchesAll()
       getTeamsAll();
-    }, []);
+    }, [subcategoriaId]);
 
 
 return<>

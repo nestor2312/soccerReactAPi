@@ -7,33 +7,34 @@ import axios from "axios";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
 import ErrorCarga from "../Error/Error";
+import { useParams } from 'react-router-dom';
+// import Navbar from "../nav/nav";
 const endpoint = API_ENDPOINT;
 const Images =IMAGES_URL;
 
 const Equipos = () => {
   const [Teams, setTeams] = useState([]);
+  const { subcategoriaId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line no-unused-vars
   const [lastPage, setLastPage] = useState(1);
   const [error, setError] = useState(null);
   useEffect(() => {
-    const getTeamsAll = async (page) => {
+    const fetchEquipos = async () => {
       try {
-        const response = await axios.get(`${endpoint}/userTeams?page=${page}`);
-        setTeams(response.data.data); // Datos de los equipos
-        setCurrentPage(response.data.current_page); // Página actual
-        setLastPage(response.data.last_page); // Última página
+        const response = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/equipos`);
+        setTeams(response.data);
         setIsLoading(false);
       } catch (error) {
-        setError('error al cargar los equipos')
         setIsLoading(false);
-        console.error("Error  teams:", error);
+        setError("Error al cargar los equipos.");
+        console.error("Error al obtener los equipos:", error);
       }
     };
 
-    getTeamsAll(currentPage);
-  }, [currentPage]);
-
+    fetchEquipos();
+  }, [subcategoriaId]);
   const handlePageChange = (page) => {
     setCurrentPage(page);
     setIsLoading(true);
@@ -42,6 +43,7 @@ const Equipos = () => {
   return (
     <>
       <Menu />
+      {/* <Navbar></Navbar> */}
       <section>
         {isLoading ? (
           <div className="loading-container">

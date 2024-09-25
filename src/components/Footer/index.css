@@ -1,6 +1,4 @@
-p{
-    color: white;
-}
+
 footer{
   
     height: 40px;
@@ -12,4 +10,7 @@ footer{
    position: relative;
 
     background: linear-gradient(180deg, #152039 90%, #152039cc 100%);
+}
+.text_footer{
+  color: white;
 }

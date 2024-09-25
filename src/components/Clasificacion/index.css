@@ -5,7 +5,7 @@
     width: 50px;
 }
 .margen{
-    margin: auto 60px;
+    margin: auto 170px;
   }
   table{
     padding: 0.5rem 0.5rem !important;
@@ -15,4 +15,16 @@
     .margen{
         margin: auto 10px;
       }
+}
+.card-header{
+padding: 11px !important;
+}
+.data{
+  color: #000;
+text-align: center;
+font-family: 'Roboto Condensed', sans-serif;
+font-size: 15px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
 }

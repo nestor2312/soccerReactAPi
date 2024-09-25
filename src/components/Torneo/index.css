@@ -1,0 +1,53 @@
+
+.contenido{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.boton-torneo {
+    position: relative;
+    font-size: 35px;
+    border: 3px solid black;
+    width: 500px;
+    height: 300px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
+    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+    overflow: hidden;
+}
+
+.boton-torneo::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("./../../assets/Soccer.png"), 
+                      url("./../../assets/Soccer.png"), 
+                      url("./../../assets/Soccer.png"), 
+                      url("./../../assets/Soccer.png");
+    background-repeat: no-repeat;
+    background-size: 36%;  
+    background-position: -17% -20%, 24% 102%, 82% 145%, 117% -25%;
+    opacity: 0.3; 
+    z-index: 1;
+}
+.boton-torneo span {
+    color: #FFF;
+text-transform: capitalize;
+    text-shadow: 
+    -2px -2px 0 #000000, 
+    2px -2px 0 #000000, 
+    -2px 2px 0 #000000, 
+    2px 2px 0 #000000; 
+    font-family: "Days One";
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    z-index: 2; 
+}
