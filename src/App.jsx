@@ -13,64 +13,114 @@ import Torneo from "./components/Torneo/Torneo";
 import Categoria from "./components/Categoria/Categoria";
 import Subcategoria from "./components/Subcategoria/Subcategoria";
 import Login from "./components/Login/Login";
+import ProtectedRoute from "./components/ProtectedRoute"; // Importar el ProtectedRoute
 
 function App() {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/imgagenbot" element={<Bot />} />
-          <Route path="/" element={<Inicio />} />
-          <Route path="/partidos" element={<Partidos />} />
-          <Route path="/equipos" element={<Equipos />} />
-          <Route path="/jugadores" element={<Jugadores />} />
-          <Route path="/clasificacion" element={<Clasificacion />} />
-          <Route path="/registrar" element={<Registrar />} />
+    <Router>
+      <Routes>
+        <Route path="/imgagenbot" element={<Bot />} />
+        <Route path="/" element={<Inicio />} />
+        <Route path="/partidos" element={<Partidos />} />
+        <Route path="/equipos" element={<Equipos />} />
+        <Route path="/jugadores" element={<Jugadores />} />
+        <Route path="/clasificacion" element={<Clasificacion />} />
+       
 
-          <Route path="/torneo" element={<Torneo />} />
-          <Route path="/torneo/:id/categorias" element={<Categoria />} />
-          <Route
-            path="/torneo/categoria/:categoriaId/subcategoria"
-            element={<Subcategoria />}
-          />
-          <Route
-            path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/equipos"
-            element={<Equipos />}
-          />
-           <Route  path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores" element={<Jugadores />} />
-          
-          
-          <Route
-            path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio"
-            element={<Inicio />}
-          />
-          <Route
-            path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/partidos"
-            element={<Partidos />}
-          />
-          <Route
-            path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/clasificacion"
-            element={<Clasificacion />}
-          />
+        <Route path="/torneo" element={<Torneo />} />
+        <Route path="/torneo/:id/categorias" element={<Categoria />} />
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria"
+          element={<Subcategoria />}
+        />
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/equipos"
+          element={<Equipos />}
+        />
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores"
+          element={<Jugadores />}
+        />
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio"
+          element={<Inicio />}
+        />
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/partidos"
+          element={<Partidos />}
+        />
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/clasificacion"
+          element={<Clasificacion />}
+        />
 
-          <Route path="/registrar" element={<Registrar />} />
-          <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        {/* <Route path="/registrar" element={<Registrar />} /> */}
+        {/* Rutas protegidas */}
 
-          {/* <Route path="/torneo/:torneoId" element={<Torneo torneo={Torneodatos} />} />
-        <Route path="/torneo/:torneoId/categoria/:categoriaId" element={<Categoria torneo={Torneodatos} />} />
-        <Route path="/torneo/:torneoId/categoria/:categoriaId/subcategoria/:subcategoriaId/" element={<Subcategoria torneo={Torneodatos} />}>
-        <Route path="inicio" element={<Inicio torneo={Torneodatos} />} />
-          <Route path="grupos" element={<Grupos torneo={Torneodatos} />} />
-          <Route path="equipos" element={<Equipos torneo={Torneodatos} />} />
-          <Route path="partidos" element={<Partidos torneo={Torneodatos} />} />
-          <Route path="jugadores" element={<Jugadores torneo={Torneodatos} />} />
-          <Route path="clasificacion" element={<Clasificacion torneo={Torneodatos} />} />
-          Agrega más subrutas según sea necesario
-        </Route> */}
-        </Routes>
-      </Router>
-    </>
+                <Route path="/registrar" element={
+                   <ProtectedRoute>
+ <Registrar />
+                   </ProtectedRoute>
+                 } />
+{/* 
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio"
+          element={
+            <ProtectedRoute>
+              <Inicio />
+            </ProtectedRoute>
+          }
+        /> */}
+
+
+        
+        {/* Puedes agregar más rutas protegidas como esta */}
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
+
+
+
+// import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import Bot from "./pages/Immg";
+// import Login from "./components/Login/Login";
+// import Register from "./components/Login/Registrar"; 
+// import Inicio from "./pages/Inicio";
+// import ProtectedRoute from './components/ProtectedRoute';
+// import { useEffect, useState } from 'react';
+
+// function App() {
+//   // eslint-disable-next-line no-unused-vars
+//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+//   useEffect(() => {
+//     const token = sessionStorage.getItem('token');
+//     if (token) {
+//       setIsAuthenticated(true);  // Marcar como autenticado si existe el token
+//     }
+//   }, []);
+
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         <Route path="/" element={<Bot />} />
+//         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+//         <Route path="/register" element={<Register />} />
+//         <Route
+//           path="/profile"
+//           element={
+//             <ProtectedRoute>
+//               <Inicio />
+//             </ProtectedRoute>
+//           }
+//         />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App;
