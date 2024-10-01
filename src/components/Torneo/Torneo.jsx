@@ -29,6 +29,7 @@ const Torneo = () => {
 
   return (
     <>
+    <h1 className="text-center text-title">torneo</h1>
       {isLoading ? (
         <div className="loading-container">
           <Cargando />
@@ -39,7 +40,7 @@ const Torneo = () => {
         </div>
       ) : (
         <div className="contenido">
-              <h1>Torneo</h1>
+              {/* <h1>Torneo</h1> */}
           {torneos.map((torneo) => (
             
             <div key={torneo.id} className="box">

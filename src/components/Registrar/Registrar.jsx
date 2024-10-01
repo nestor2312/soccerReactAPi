@@ -4,6 +4,7 @@ import FORM_Teams from "../Formularios/Formu_equipos";
 import FORM_Groups from "../Formularios/Formu_grupos";
 import FORM_Matches from "../Formularios/Formu_partidos";
 import FORM_Players from "../Formularios/Formu_jugadores";
+import LogoutButton from "../Login/CerrarSesion";
 
 
 const Registrar = () => {
@@ -20,6 +21,7 @@ const Registrar = () => {
   return (
     <>
       <div className="panel-group margen" id="accordion">
+    <LogoutButton></LogoutButton>
       <h1>Ingresar información</h1>
       <div className="panel panel-default">
           <div className="panel-heading box-info">

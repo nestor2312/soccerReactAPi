@@ -533,21 +533,22 @@ const Clasificacion = () => {
   <p>No hay datos disponibles.</p>
 )}
           </div>
-          <div className="pagination mb-4">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              ← Anterior
-            </button>
-            <span>{`Página ${currentPage} de ${lastPage}`}</span>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === lastPage}
-            >
-              Siguiente →
-            </button>
-          </div>
+          {datosGrupos && datosGrupos.length > 0 && (
+      <div className="pagination mb-4">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          ← Anterior
+        </button>
+        <span>{`Página ${currentPage || 1} de ${lastPage || 1}`}</span> <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === lastPage}
+        >
+          Siguiente →
+        </button>
+      </div>
+    )}
         </section>
       )}
       <Footer />

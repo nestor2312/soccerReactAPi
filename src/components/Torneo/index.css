@@ -8,7 +8,7 @@
 .boton-torneo {
     position: relative;
     font-size: 35px;
-    border: 3px solid black;
+    border: 2px solid #000000;
     width: 500px;
     height: 300px;
     color: white;
@@ -51,3 +51,112 @@ text-transform: capitalize;
     line-height: normal;
     z-index: 2; 
 }
+
+.text-title{
+    text-transform: uppercase;
+    color: #FFF;
+    text-align: center;
+    text-shadow: 
+    -2px -2px 0 #00BF63CC, 
+    2px -2px 0 #00BF63CC, 
+    -2px 2px 0 #00BF63CC, 
+    2px 2px 0 #00BF63CC, 
+    0px 4px 6px #000000cc; 
+   
+    font-family: "Days One";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 6px;
+}
+
+@media (max-width: 768px) {
+    .contenido{  
+        justify-content:center; 
+    }
+    .boton-torneo {
+      
+        font-size: 25px;
+        border: 2px solid #000000;
+        width: 400px;
+        height: 250px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
+        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+        overflow: hidden;
+    }
+     
+  }
+
+  @media (max-width: 480px) {
+    .contenido{  
+        justify-content:center; 
+    }
+    .boton-torneo {
+      
+        font-size: 25px;
+        border: 2px solid #000000;
+        width: 400px;
+        height: 250px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
+        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+        overflow: hidden;
+    }
+     
+  }
+
+  @media (max-width: 360px) {
+    .contenido{  
+        justify-content:center; 
+    }
+    .boton-torneo {
+      
+        font-size: 25px;
+        border: 2px solid #000000;
+        width: 340px;
+        height: 250px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
+        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+        overflow: hidden;
+    }
+     
+  }
+
+  @media (max-width: 320px) {
+    .contenido{  
+        justify-content:center; 
+    }
+    .boton-torneo {
+      
+        font-size: 25px;
+        border: 2px solid #000000;
+        width: 300px;
+        height: 250px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
+        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+        overflow: hidden;
+    }
+     
+  }
+  
+

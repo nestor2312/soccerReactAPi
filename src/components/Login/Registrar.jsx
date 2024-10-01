@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { API_ENDPOINT } from '../../ConfigAPI';
 
 const endpoint = API_ENDPOINT;
@@ -39,29 +39,42 @@ const Register = () => {
         }
     };
 
+    useEffect(() => {
+        // Cambiar el color de fondo del body cuando se monta el componente
+        document.body.style.background = "linear-gradient(180deg, #152039 0%, rgba(0, 191, 99, 0.80) 100%)"; 
+        // Restaurar el color de fondo original cuando el componente se desmonte
+        return () => {
+          document.body.style.backgroundColor = ""; // Restablece el fondo original
+        };
+      }, []);
+
     return (
         <div>
-            <h2>Register</h2>
-            <form onSubmit={handleRegister}>
+            <div className="posicion">
+            <div className="caja2">
+            <h2 className="text-login">Crear una cuenta</h2>
+            <form onSubmit={handleRegister} className='form-registro'>
                 <div>
-                    <label>Name:</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                    <input className='form-register'  placeholder="Ingresar nombre " type="text" value={name} onChange={(e) => setName(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                   
+                    <input className='form-register'  placeholder="Ingresar correo" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    
+                    <input className='form-register'  placeholder="Ingresar una contraseña" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Confirm Password:</label>
-                    <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                    
+                    <input className='form-register'  placeholder="Confirmar Contraseña" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                 </div>
-                <button type="submit">Register</button>
+                <button type="submit">Crear cuenta</button>
+                <h1 className="text-login"><Link to="/login" className='link-login'>Iniciar sesion</Link></h1>
             </form>
             {error && <p>{error}</p>}
+        </div>
+        </div>
         </div>
     );
 };
