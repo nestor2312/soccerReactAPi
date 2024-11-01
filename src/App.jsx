@@ -126,7 +126,7 @@ function App() {
       {/* <Route path="/equipos" element={<Equipos />} /> */}
       {/* <Route path="/partidos" element={<Partidos />} /> */}
 
-      <Route path="/torneo" element={<Torneo />} />
+      <Route path="/" element={<Torneo />} />
         <Route path="/torneo/:id/categorias" element={<Categoria />} />
       <Route
           path="/torneo/categoria/:categoriaId/subcategoria"
