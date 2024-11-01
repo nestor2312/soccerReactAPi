@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API_ENDPOINT } from '../../ConfigAPI';
 import axios from "axios";
-import "./index.css";
+
 import Cargando from '../Carga/carga';
 import ErrorCarga from '../Error/Error';
 
@@ -45,7 +45,7 @@ const Categoria = () => {
             <div key={categoria.id} className="box">
               <Link to={`/torneo/categoria/${categoria.id}/subcategoria`}>
                 <div className="card_torneo">
-                  <button className="boton-torneo">
+                  <button className="boton-torneo btn-button-general">
                     <span>{categoria.nombre}</span>
                   </button>
                 </div>

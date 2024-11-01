@@ -107,6 +107,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { API_ENDPOINT } from '../../ConfigAPI';
 import { Link, useNavigate } from 'react-router-dom';
+import CargaSesion from "../Carga/carga_sesion";
 
 const endpoint = API_ENDPOINT;
 
@@ -114,10 +115,12 @@ const Login = ({ setIsAuthenticated }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();  // Hook para redirección
 
     const handleLogin = async (e) => {
+      setIsLoading(true);
         e.preventDefault();
       
         try {
@@ -135,10 +138,13 @@ const Login = ({ setIsAuthenticated }) => {
           localStorage.setItem('token', response.data.token);
           // Marcar autenticación exitosa
           setIsAuthenticated(true);
+
           navigate('/registrar_datos');
         } catch (error) {
           console.log(error.response);  // Revisa los errores que devuelve el backend
           setError(error.response?.data?.message || 'Error al iniciar sesión. Verifique sus datos.');
+        }finally {
+          setIsLoading(false); // Terminar la carga
         }
       };
       
@@ -157,17 +163,25 @@ const Login = ({ setIsAuthenticated }) => {
         <div className="caja">
           <h2 className="text-login" >Iniciar sesión</h2>
           <form onSubmit={handleLogin}>
-          <input type="email"  placeholder="Correo" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password"  placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input type="email"  placeholder="Correo" className="login-input" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password"  placeholder="Contraseña" className="login-input" value={password} onChange={(e) => setPassword(e.target.value)} required />
          
             <p>¿No tienes cuenta?</p>
             <p><Link to="/register" className='link-login'>Registrarse</Link></p>
-            <button type="submit">Ingresar</button>
+
+            <button type="submit" className="btn-button-general">
+          ingresar
+            </button>
           </form>
             {error && <p>{error}</p>}
            
         </div>
       </div>
+        {isLoading ? (
+                  <CargaSesion/>
+                  ) : (
+                   ''
+                  )}
     </>
   );
 };

@@ -1,30 +1,51 @@
 import { useEffect, useState } from "react";
-
-import "./index.css";
 import axios from "axios";
-import { API_ENDPOINT } from '../../ConfigAPI';
+
+import { API_ENDPOINT,IMAGES_URL } from '../../ConfigAPI';
+import "./index.css";
+
 const endpoint = `${API_ENDPOINT}equipo`;
+const Infoendpoint = `${API_ENDPOINT}equipos`;
 const gruposEndpoint = `${API_ENDPOINT}grupos`;
+const Images =IMAGES_URL;
 
-const FORM_PQR = () => {
-  const [nombre, setnombre] = useState("");
 
+const FORM_Teams = () => {
+  const [nombre, setNombre] = useState("");
   const [archivo, setArchivo] = useState(null);
   const [GrupoID, setGrupoID] = useState("");
-  const [grupos, setgrupos] = useState([]);
-
+  const [grupos, setGrupos] = useState([]);
+  const [Teams, setTeams] = useState([]);
+  const [setError] = useState(null);
+  // Fetch grupos al cargar el componente
   useEffect(() => {
-    const fetchgrupos = async () => {
+    const fetchGrupos = async () => {
       try {
         const response = await axios.get(gruposEndpoint);
-        setgrupos(response.data);
+        setGrupos(response.data);
       } catch (error) {
+        setError("Error al cargar los equipos.");
         console.error("Error al obtener los grupos:", error);
       }
     };
-    fetchgrupos();
+    fetchGrupos();
+
+    const InfoEquipos = async () => {
+      try {
+        const response = await axios.get(`${Infoendpoint}`);
+        setTeams(response.data);
+      
+      } catch (error) {
+       
+        setError("Error al cargar los equipos.");
+        console.error("Error al obtener los equipos:", error);
+      }
+    };
+    InfoEquipos();
+
   }, []);
 
+  // Manejo del envío del formulario
   const store = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -46,70 +67,123 @@ const FORM_PQR = () => {
   };
 
   return (
-    <div className=" custom-card">
-      <div className="row">
-        <form className="col s12" onSubmit={store}>
-          <div className="row">
-            <div className="mb-3 mt-3">
-              <label htmlFor="nombre" className="form-label">
-                nombre de Equipo:
-              </label>
-              <input
-                id="nombre"
-                placeholder="ingrese el nombre del Equipo"
-                name="nombre"
-                type="text"
-                className="form-control validate required light-blue-text"
-                onChange={(e) => setnombre(e.target.value)}
-                value={nombre}
-              />
-            </div>
+    <div>
+      <h1 className="text-left ">Registro de Equipos</h1>
+      <div>
 
-            <div className="input-field col s12 m6">
-              <label htmlFor="grupo_id" className="form-label">
+        <form className="col-md-12" onSubmit={store}>
+          {/* Nombre del equipo */}
+          <div className="form-group">
+            <label htmlFor="nombre">Nombre del Equipo:</label>
+            <input
+              type="text"
+              className="form-control form-input-admin"
+              id="nombre"
+              placeholder="Ingrese el nombre del equipo"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
+          </div>
+
+          {/* Selector de grupo */}
+          <div className="form-group mt-3">
+            <label htmlFor="grupo_id">Selecciona un grupo:</label>
+            <select
+              id="grupo_id"
+              className="form-control"
+              value={GrupoID}
+              onChange={(e) => setGrupoID(e.target.value)}
+            >
+              <option value="" disabled>
                 Selecciona un grupo
-              </label>
-              <select
-                id="user_id"
-                name="user_id"
-                className="form-control validate required "
-                onChange={(e) => setGrupoID(e.target.value)}
-                value={GrupoID}
-              >
-                <option value="" disabled>
-                  Selecciona un grupo
+              </option>
+              {grupos.map((grupo) => (
+                <option key={grupo.id} value={grupo.id}>
+                  {grupo.nombre}
                 </option>
-                {grupos.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="input-field col s12 m6">
-              <div className="mb-3">
-                <label className="btn btn-primary">
-                  añadir Archivo
-                  <input
-                    name="archivo"
-                    type="file"
-                    className="form-control d-none"
-                    onChange={(e) => setArchivo(e.target.files[0])}
-                  />
-                </label>
-              </div>
-            </div>
+              ))}
+            </select>
+          </div>
 
-            <div className="col s12 m12">
-              <button className="btn btn-outline-info" type="submit">
-                Enviar
-              </button>
-            </div>
+          {/* Input para el archivo */}
+          <div className="form-group mt-3">
+            <label htmlFor="archivo">Añadir Archivo:</label>
+            <input
+              type="file"
+              className="form-control  form-input-admin"
+              id="archivo"
+              onChange={(e) => setArchivo(e.target.files[0])}
+            />
+          </div>
+
+          {/* Botón para enviar el formulario */}
+          <div className="d-flex mt-2 mb-2">
+            <button className="btn btn-outline-primary" type="submit">
+              Enviar
+            </button>
           </div>
         </form>
       </div>
+
+      {/* Tabla para mostrar los equipos */}
+  
+      <div>  
+      <div className="table-responsive card my-2">   
+  <table className="table ">
+    <thead className="thead-light">
+      <tr>
+        <th className="text-center">Logo</th>
+        <th className="text-center">Grupo</th>
+        <th className="text-center">Equipo</th>
+        <th className="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {Teams.map((team) => (
+        <tr key={team.id}>
+          {/* Centramos el logo */}
+          <td className="text-center">
+            <img
+            onError={'eorro'}
+              src={`${Images}/${team.archivo}`}
+              width="50%"
+              className="d-block mx-auto my-3 logomovil"
+              alt={team.nombre}
+            />
+          </td>
+          
+          {/* Centramos el nombre del grupo */}
+          <td className="text-center align-middle">{team.grupo.nombre}</td>
+
+          {/* Centramos el nombre del equipo */}
+          <td className="text-center align-middle">{team.nombre}</td>
+
+          {/* Centramos las acciones */}
+          <td className="text-center align-middle">
+            <button
+              className="btn btn-warning fas fa-pen mx-2"
+              // onClick={() => (team.id)}
+            >
+              Editar
+            </button>
+            <button
+              className="btn btn-danger far fa-trash-alt mx-2"
+              onClick={() => (team.id)}
+            >
+              Borrar
+            </button>
+          </td>
+        </tr>
+      ))}
+      
+    </tbody>
+  </table>
+</div>
+
+</div>
     </div>
+
   );
 };
 
-export default FORM_PQR;
+export default FORM_Teams;

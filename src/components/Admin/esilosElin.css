@@ -1,41 +1,4 @@
 
-.form-input-admin{
-    margin: 0px !important; 
-
-}
-.form-input-admin::placeholder {
-    color: #000000cc !important;
-    font-size: 16px;
-}
-
-input{
-    background:#ffffff4d;
-    opacity:  90%;
-    height: 35px;
-    /* padding: 2px; */
-    width: 75%;
-    border-radius: 10px;
-    /* border: 2px solid #00a354; */
-    /* margin: 10px 40px!important; */
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size: 16px;
-    color: #000000;
-  }
-  .card_red{
-    position: absolute;
-    /* left: 10px; */
-    height: 8px;
-    width: 4px;
-    border-radius: 6px;
-    border: none;
-    background: red;
-  }
-
-
-
-
-
-  
   /* .eliminatorias */
   
   
@@ -79,24 +42,23 @@ input{
   }
   
   .equipo {
-    font-size: 15px;
     text-transform: capitalize;
-    color: #000000;
+    color: rgb(0, 0, 0);
     font-family: 'Roboto Condensed', sans-serif;
+   
+   
   }
-
-
   
   .goles {
     color: #000;
     text-align: center;
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-style: bold;
-    font-weight: 700;
+    font-weight: 600;
     line-height: normal;
     margin-left: auto;
-    margin-right: 5px;
+    margin-right: 10px;
     
     
   }
@@ -104,17 +66,15 @@ input{
   /* Octavos de finl */
   
   .partido {
-   
     width: 100%;
-    height: 150px;
+    /* height: 150px; */
     display: flex;
     align-items: center;    
     padding: 10px 0 10px 10px;   
   }
   
   .partido .jugador {
-    
-    width: 155px;
+    width: 150px;
     border-radius: 5px;
     background-color: #D9D9D9; 
     border: 2px solid #000000; 
@@ -122,17 +82,12 @@ input{
   }
   
   .partido .jornada{
-   
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
-  .partido .jornada:hover{
-    scale: 1.02;
-  }
   
   .partido .jornada .jugador {
- 
     display: flex;
     justify-content: space-between;
     padding: 15px;
@@ -148,7 +103,7 @@ input{
   }
   
   .jornada_contenedor .jornada .jugador {
-    width: 155px;
+    width: 150px;
     padding: 1px;
     border-radius: 5px;
     background-color: #D9D9D9; 
@@ -207,7 +162,7 @@ input{
     text-align: center;
     font-feature-settings: 'clig' off, 'liga' off;
     font-family: 'Days One', sans-serif;
-  
+   
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -222,7 +177,7 @@ input{
   }
   
   .win {
-    background: linear-gradient(180deg, #152039 30%, #00bf638b 100%);
+    background-color: #09537ec2!important;
   }
   
   .win .goles {
@@ -559,7 +514,6 @@ input{
   }
   .partido{
     padding: 0px;
-
   }
   
   .TITULO{
@@ -663,16 +617,6 @@ input{
   
     
   }
-
-  .colsa{
-    background: red;
-  }
   
   
   
-
- 
-
-
-
-

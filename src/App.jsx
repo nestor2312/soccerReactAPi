@@ -96,7 +96,7 @@ import Clasificacion from "./components/Clasificacion";
 import Torneo from "./components/Torneo/Torneo";
 import Categoria from "./components/Categoria/Categoria";
 import Subcategoria from "./components/Subcategoria/Subcategoria";
-import Register from  "./components/Login/Registrar";
+// import Register from  "./components/Login/Registrar";
 
 
 
@@ -122,6 +122,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+      {/* <Route path="/clasificacion" element={<Clasificacion />} /> */}
+      {/* <Route path="/equipos" element={<Equipos />} /> */}
+      {/* <Route path="/partidos" element={<Partidos />} /> */}
 
       <Route path="/torneo" element={<Torneo />} />
         <Route path="/torneo/:id/categorias" element={<Categoria />} />
@@ -151,7 +154,7 @@ function App() {
         />
       
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/register" element={<Register />} />
+        {/* <Route path="/register" element={<Register />} /> */}
         <Route
           path="/registrar_datos"
           element={

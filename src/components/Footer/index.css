@@ -1,16 +1,17 @@
-
-footer{
-  
-    height: 40px;
+footer {
+  height: 40px;
   width: 100%;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   position: relative;
-
-    background: linear-gradient(180deg, #152039 90%, #152039cc 100%);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Cambiado de relative a fixed */
+  background: linear-gradient(180deg, #152039 90%, #152039cc 100%);
+  padding: 10px 0;
 }
-.text_footer{
+
+.text_footer {
   color: white;
+  font-size: 14px;
+  margin: 0;
 }

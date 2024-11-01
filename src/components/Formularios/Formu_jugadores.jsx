@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from '../../ConfigAPI';
-
+import "./index.css"
 const endpoint = `${API_ENDPOINT}jugador`;
 const equiposEndpoint = `${API_ENDPOINT}equipos`;
+const InfoJugadores_endpoint = `${API_ENDPOINT}jugadores`;
 
 const FORM_Players = () => {
-
+const[jugadores, setJugadores] = useState([])
   const [equipoID, setequipo] = useState("");
   const [nombre, setnombre] = useState("");
   const [apellido, setapellido] = useState("");
@@ -14,7 +15,6 @@ const FORM_Players = () => {
   const [numero, setnumero] = useState("");
   const [card_amarilla, setcard_amarilla] = useState("");
   const [card_roja, setcard_roja] = useState("");
-  
   
   const [equipos, setequipos] = useState([]);
 
@@ -28,6 +28,17 @@ const FORM_Players = () => {
       }
     };
     fetchequipos();
+
+    const ListaInfojugadores = async ()=>{
+      try {
+        const response = await axios.get(InfoJugadores_endpoint);
+        setJugadores(response.data);
+      } catch (error) {
+        console.error("Error al obtener los jugadores:", error);
+        
+      }
+    }
+    ListaInfojugadores();
   }, []);
 
   const store = async (e) => {
@@ -54,8 +65,10 @@ const FORM_Players = () => {
   };
 
   return (
-    <div className=" custom-card">
-      <div className="row">
+    <div>
+       <h1 className="text-left">Registro de Jugadores</h1>
+      <div>
+    
         <form className="col s12" onSubmit={store}>
           <div className="row">
 
@@ -181,6 +194,48 @@ const FORM_Players = () => {
           </div>
         </form>
       </div>
+
+
+      <div className="table-responsive card my-2">   
+  <table className="table ">
+    <thead className="thead-light">
+      <tr>
+        <th className="center">Equipo</th>
+        <th className="center">Nombre</th>
+        <th className="center">Apellido</th>
+        <th className="center">Edad</th>
+        <th className="center">Numero </th>
+        <th className="center">Tarjeta <div className="card_red"></div></th>
+        <th className="center">Tarjeta</th>
+
+        <th className="center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+    {jugadores.map((jugador) => (
+            <tr key={jugador.id}>
+                <td className="center">{jugador.equipo.nombre}</td>
+                <td className="center">{jugador.nombre}</td>
+                <td className="center">{jugador.apellido}</td>
+                <td className="center">{jugador.edad}</td>
+                <td className="center">{jugador.numero}</td>
+                <td className="center">{jugador.card_amarilla} </td>
+                <td className="center">{jugador.card_roja}</td>
+              {/* <td className="center">{subcategoria.categoria.nombre}</td> */}
+              <td className="center">
+            <form action="" method="post">
+              <a href="equipos/{{$equipo->id}}/edit" className="btn btn-warning fas fa-pen">Editar</a>            
+          
+               <button type="submit" className="btn btn-danger far fa-trash-alt delete-btn">Borrar</button>
+              </form>
+            </td>
+          </tr>   
+            ))} 
+         
+    </tbody>
+  </table>
+ 
+</div>
     </div>
   );
 };

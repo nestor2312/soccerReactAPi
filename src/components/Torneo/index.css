@@ -6,9 +6,11 @@
 }
 
 .boton-torneo {
+  
+    overflow: hidden;
     position: relative;
     font-size: 35px;
-    border: 2px solid #000000;
+    border: 3px solid #0000;
     width: 500px;
     height: 300px;
     color: white;
@@ -17,9 +19,21 @@
     justify-content: center;
     text-align: center;
     /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
-    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
-    overflow: hidden;
+    /* background: linear-gradient(180deg, #00BF63 0%, #09537E 100%); */
+    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
+    linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
+  
 }
+
+/* .pr{
+    padding: 20px;
+    border-radius: 5px;
+    border: 3px solid #0000;
+    background: linear-gradient(red, blue) padding-box,
+    linear-gradient(orange ,rgb(74, 218, 8)) border-box;
+} */
+
+
 
 .boton-torneo::after {
     content: "";
@@ -56,12 +70,13 @@ text-transform: capitalize;
     text-transform: uppercase;
     color: #FFF;
     text-align: center;
-    text-shadow: 
+    /* text-shadow: 
     -2px -2px 0 #00BF63CC, 
     2px -2px 0 #00BF63CC, 
     -2px 2px 0 #00BF63CC, 
     2px 2px 0 #00BF63CC, 
-    0px 4px 6px #000000cc; 
+    0px 4px 6px #000000cc;  */
+      text-shadow: .1em .1em 0 #09537E;
    
     font-family: "Days One";
     font-size: 40px;
@@ -71,7 +86,10 @@ text-transform: capitalize;
     letter-spacing: 6px;
 }
 
+
+
 @media (max-width: 768px) {
+    text-title{}
     .contenido{  
         justify-content:center; 
     }

@@ -52,7 +52,7 @@ const Subcategoria = () => {
                   to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoria.id}/inicio`}
                 >
                   <div className="card_torneo">
-                    <button className="boton-torneo">
+                    <button className="boton-torneo btn-button-general">
                       <span>{subcategoria.nombre}</span>
                     </button>
                   </div>

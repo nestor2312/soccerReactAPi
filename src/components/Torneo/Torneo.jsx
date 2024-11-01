@@ -14,7 +14,7 @@ const Torneo = () => {
   useEffect(() => {
     const getTorneosAll = async () => {
       try {
-        const response = await axios.get(`${API_ENDPOINT}torneo`);
+        const response = await axios.get(`${API_ENDPOINT}torneos`);
         setTorneos(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -29,7 +29,8 @@ const Torneo = () => {
 
   return (
     <>
-    <h1 className="text-center text-title">torneo</h1>
+  
+    <h1 className="text-center text-title mt-2">torneos</h1>
       {isLoading ? (
         <div className="loading-container">
           <Cargando />
@@ -46,7 +47,7 @@ const Torneo = () => {
             <div key={torneo.id} className="box">
               <Link to={`/torneo/${torneo.id}/categorias`}>
                 <div className="card_torneo">
-                  <button className="boton-torneo">
+                  <button className="boton-torneo btn-button-general">
                     <span>{torneo.nombre}</span>
                   </button>
                 </div>

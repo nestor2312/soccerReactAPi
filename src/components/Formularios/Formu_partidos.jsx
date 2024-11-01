@@ -3,12 +3,14 @@ import axios from "axios";
 import { API_ENDPOINT } from '../../ConfigAPI';
 const endpoint = `${API_ENDPOINT}partido`;
 const equiposEndpoint = `${API_ENDPOINT}equipos`;
+const InfoPartidos =`${API_ENDPOINT}partidos`;
+// const Images = IMAGES_URL;
 const FORM_Matches = () => {
   const [marcador1, setmarcador1] = useState("");
   const [marcador2, setmarcador2] = useState("");
   const [equipoLocalID, setequipoLocal] = useState("");
   const [equipoVisitanteID, setequipoVisitante] = useState("");
-
+  const [partidos, setPartidos] = useState([]);
   const [equipos, setequipos] = useState([]);
 
   useEffect(() => {
@@ -20,8 +22,31 @@ const FORM_Matches = () => {
         console.error("Error al obtener los equipos:", error);
       }
     };
+
+
+    
+    const getPartidos = async () => {
+      try {
+        const response = await axios.get(`${InfoPartidos}`);
+        // const response = await axios.get(`${endpoint}/partidos/subcategoria/${subcategoriaId}`);
+        setPartidos(response.data);
+        // setPartidos(partidosResponse.data);
+    
+      } catch (error) {
+      
+        // setError('error al cargar los partodos')
+        console.error("Error al obtener los partidos:", error);
+      }
+    };
+
+    getPartidos();
+
+   
+
     fetchequipos();
   }, []);
+
+  
 
   const store = async (e) => {
     e.preventDefault();
@@ -44,10 +69,11 @@ const FORM_Matches = () => {
   };
 
   return (
-    <div className=" custom-card">
-      <div className="row">
+    <div>
+       <h1 className="text-left">Registro de Partidos</h1>
+      <div>
         <form className="col s12" onSubmit={store}>
-          <div className="row">
+          <div >
 
           <div className="input-field col-4 s12 m6">
               <label htmlFor="equipo_local" className="form-label">
@@ -80,7 +106,7 @@ const FORM_Matches = () => {
                 id="icon_prefix"
                 name="marcador1"
                 type="number"
-                placeholder="marcador local"
+                placeholder="marcador Local"
                 className="form-control validate required light-blue-text"
                 onChange={(e) => setmarcador1(e.target.value)}
                 value={marcador1}
@@ -94,8 +120,8 @@ const FORM_Matches = () => {
                 id="icon_prefix"
                 name="marcador2"
                 type="number"
-                placeholder="marcador visitante"
-                className="validate required light-blue-text"
+                placeholder="marcador Visitante"
+                className="form-control validate required light-blue-text"
                 onChange={(e) => setmarcador2(e.target.value)}
                 value={marcador2}
               />
@@ -104,7 +130,7 @@ const FORM_Matches = () => {
 
             <div className="input-field col-4 s12 m6">
               <label htmlFor="grupo_id" className="form-label">
-                Selecciona un equipo
+              Selecciona Equipo Visitante
               </label>
               <select
                 id="user_id"
@@ -114,7 +140,7 @@ const FORM_Matches = () => {
                 value={equipoVisitanteID}
               >
                 <option value="" disabled>
-                  Selecciona un grupo
+                  Selecciona un Equipo
                 </option>
                 {equipos.map((equipo) => (
                   <option key={equipo.id} value={equipo.id}>
@@ -132,6 +158,53 @@ const FORM_Matches = () => {
           </div>
         </form>
       </div>
+      <div className="table-responsive card my-2">   
+  <table className="table ">
+    <thead className="thead-light">
+      <tr>
+        <th className="text-center">Local</th>
+        <th className="text-center">marcador</th>
+        <th className="text-center">Visitante</th>
+        <th className="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+    {partidos.map((partido) => (
+            <tr key={partido.id}>
+              
+                <td className="text-left">
+                {/* <img
+                          src={`${Images}/${partido.equipo_a.archivo}`} 
+                          className="logo2"
+                          alt={partido.equipo_a.nombre}
+                        /> */}
+                  {partido.equipo_a.nombre}</td>
+                <td className="text-center">{partido.marcador1} - {partido.marcador2}</td>
+              <td className="text-right">{partido.equipo_b.nombre}
+
+              {/* <img
+                          src={`${Images}/${partido.equipo_b.archivo}`} 
+                          className="logo2"
+                          alt={partido.equipo_a.nombre}
+                        /> */}
+              </td>
+              <td className="text-center d-flex justify-content-around">
+          <div>
+              <a href="equipos/{{$equipo->id}}/edit" className="btn btn-warning fas fa-pen">Editar</a>            
+          </div>
+          <div>
+               <button type="submit" className="btn btn-danger far fa-trash-alt delete-btn">Borrar</button>
+          </div>
+          
+             
+            </td>
+          </tr>   
+            ))} 
+         
+    </tbody>
+  </table>
+ 
+</div>
     </div>
   );
 };

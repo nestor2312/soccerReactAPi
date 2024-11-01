@@ -55,11 +55,7 @@ const Menu = () => {
           Equipos
         </Link>
       
-           <Link to={`/registrar`}
-          className={`nv `}
-        >
-          Registrar
-        </Link>
+           
       </div>
 
       {/* Ícono para abrir/cerrar el menú */}

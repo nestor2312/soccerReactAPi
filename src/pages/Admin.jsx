@@ -1,165 +1,308 @@
+/* eslint-disable no-undef */
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { createTheme } from '@mui/material/styles';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import TableViewIcon from '@mui/icons-material/TableView';
+import DescriptionIcon from '@mui/icons-material/Description';
+import GroupsIcon from '@mui/icons-material/Groups';
+import GroupIcon from '@mui/icons-material/Group';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { AppProvider } from '@toolpad/core/AppProvider';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { Link } from 'react-router-dom';
+import './../App.css'
+import RegistroEquipos from "../components/Formularios/Formu_equipos"
+import FORM_Torneos from '../components/Formularios/Formu_torneos';
+import FORM_Categoria from '../components/Formularios/Form_categoria';
+import FORM_Subcategoria from '../components/Formularios/Form_subcategoria';
+import FORM_Groups from '../components/Formularios/Formu_grupos';
+import FORM_Matches from '../components/Formularios/Formu_partidos';
+import FORM_Players from '../components/Formularios/Formu_jugadores';
+import AdminClasificacion from '../components/Clasificacion/ClasificacionAdmin';
+import FORM_Eliminatorias from '../components/Formularios/Form_eliminatorias';
+// import RoutessComponent from './Rutas';
 
-// // Importa los archivos CSS de AdminLTE
-// import 'admin-lte/dist/css/adminlte.min.css';
-// import '@fortawesome/fontawesome-free/css/all.min.css';
-
-// import 'bootstrap/dist/css/bootstrap.min.css';  // Si deseas usar Bootstrap
-
-// // Importa los archivos JavaScript de AdminLTE
-// import 'admin-lte/dist/js/adminlte.min.js';
-// import 'bootstrap/dist/js/bootstrap.bundle.min.js';  // Si deseas usar Bootstrap
-
-
-
-function Admin() {
+const NAVIGATION = [
+  {
+    kind: 'header',
+    title: 'Configuraciones',
+  },
+  {
+    segment: 'torneos',
+    title: 'Torneos',
+    icon: <GroupsIcon />,
+    link: <Link to="/torneos">Torneos</Link> 
    
+    
+  },
+  {
+    segment: 'categorias',
+    title: 'Categorias',
+    icon: <GroupsIcon />,
+    link: <Link to="/categorias">Categorias</Link> 
+   
+    
+  },
+  {
+    segment: 'subcategorias',
+    title: 'Subcategorias',
+    icon: <GroupsIcon />,
+    link: <Link to="/Subcategorias">Subcategorias</Link> 
+   
+    
+  },
+  {
+    segment: 'grupos',
+    title: 'Grupos',
+    icon: <BackupTableIcon />,
+  },
+  {
+    segment: 'dashboard',
+    title: 'Equipos',
+    icon: <GroupsIcon />,
+    link: <Link to="/dashboard">Equipos</Link> 
+   
+    
+  },
+  {
+    segment: 'eliminatorias',
+    title: 'Eliminatorias',
+    icon: <EmojiEventsIcon />,
+  },
+  {
+    segment: 'partidos',
+    title: 'Partidos',
+    icon: <SportsSoccerIcon />,
+  },
+  {
+    segment: 'clasificacion',
+    title: 'Clasificacion',
+    icon: <TableViewIcon />,
+  },
+  {
+    segment: 'jugadores',
+    title: 'Jugadores',
+    icon: <GroupIcon />,
+  },
+  {
+    segment: 'orders',
+    title: 'Anotaciones',
+    icon: <GroupIcon />,
+  },
+  {
+    segment: 'asistencias',
+    title: 'Asistencias',
+    icon: <GroupIcon />,
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Estadisticas',
+  },
+  {
+    segment: 'reports',
+    title: 'estadisticas',
+    icon: <BarChartIcon />,
+    children: [
+      {
+        segment: 'sales',
+        title: 'goles',
+        icon: <DescriptionIcon />,
+      },
+      {
+        segment: 'traffic',
+        title: 'asistencias',
+        icon: <DescriptionIcon />,
+      },
+    ],
+  }
+];
+
+const demoTheme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data-toolpad-color-scheme',
+  },
+  // palette: {
+  //   mode: 'light', //modo blanco
+  //   primary: {
+  //     main: '#ff5722', //  color texto menu
+  //   },
+  //   secondary: { 
+  //     main: '#03a9f4', //  color secundario color texto menu
+  //   },
+  //   background: {
+  //     default: '#e61010', //  fondo modo blanco contenido
+  //     paper: '#230505', // fondo  modo blanco menus
+  //   },
+  //   text: {
+  //     primary: '#ffffff', // Color texto  modo blanco
+  //     secondary: '#24d238', // Color del texto centro menu en modo blanco
+  //   },
+  // },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: '#09537E', // color texto menu
+        },
+        secondary: {
+          main: '#03a9f4', //  color secundario color texto menu
+        },
+        background: {
+          default: '#f5f5f5', // fondo modo blanco contenido
+          // paper: '#e4e1e1', // fondo  modo blanco menus
+          paper: '#c8c4c4', 
+          // paper: '#b2afb2', 
+          // paper: '#d4d4d4', 
+          
+           
+        },
+        text: {
+          primary: '#152039', //  Color texto  modo blanco
+          secondary: '#000000', //  Color del texto centro menu en modo blanco
+        },
+      },
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: '#ffffff', // Color primario para el modo oscuro
+        },
+        secondary: {
+          main: '#29b6f6', // Color secundario para el modo oscuro
+        },
+        background: {
+          default: '#303030', // Fondo general para el modo oscuro
+          paper: '#424242', // Fondo de elementos tipo "papel" en modo oscuro
+        },
+        text: {
+          primary: '#ffffff', // Texto principal en modoo oscuro
+          secondary: '#bbbbbb', // Texto secundario en modo oscuro
+        },
+      },
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
+
+
+// eslint-disable-next-line react/prop-types
+function DemoPageContent({ pathname }) {
+  let content;
+  switch (pathname) {
+    case '/dashboard':
+      content = <RegistroEquipos />;
+      break;
+      case '/torneos':
+        content = <FORM_Torneos />;
+        break;
+    case '/categorias':
+      content = <FORM_Categoria />;
+      break;
+      case '/subcategorias':
+        content = <FORM_Subcategoria />;
+        break;
+    case '/grupos':
+      content = <FORM_Groups />;
+      break;
+      case '/partidos':
+        content = <FORM_Matches />;
+        break;
+        case '/jugadores':
+          content = <FORM_Players />;
+          break;
+          case '/clasificacion':
+            content = <AdminClasificacion />;
+            break;
+            case '/eliminatorias':
+              content = <FORM_Eliminatorias />;
+              break;
+    default:
+      content = <Typography><h3>Selecciona una opción del menú</h3></Typography>;
+  }
+
   return (
-    <div className="wrapper">
-    {/* Navbar */}
-    <nav className="main-header navbar navbar-expand navbar-white navbar-light">
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <a className="nav-link" data-widget="pushmenu" href="#" role="button">
-            <i className="fas fa-bars"></i>
-          </a>
-        </li>
-        <li className="nav-item d-none d-sm-inline-block">
-          <a href="/" className="nav-link">Home</a>
-        </li>
-        <li className="nav-item d-none d-sm-inline-block">
-          <a href="/about" className="nav-link">About</a>
-        </li>
-      </ul>
-    </nav>
-
-    {/* Sidebar */}
-    <aside className="main-sidebar sidebar-dark-primary elevation-4">
-      <a href="/" className="brand-link">
-        <span className="brand-text font-weight-light">AdminLTE 3</span>
-      </a>
-      <div className="sidebar">
-        <nav className="mt-2">
-          <ul className="nav nav-pills nav-sidebar flex-column" role="menu">
-            <li className="nav-item">
-              <a href="/" className="nav-link">
-                <i className="nav-icon fas fa-tachometer-alt"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="/users" className="nav-link">
-                <i className="nav-icon fas fa-users"></i>
-                <p>Users</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="/settings" className="nav-link">
-                <i className="nav-icon fas fa-cogs"></i>
-                <p>Settings</p>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </aside>
-
-    {/* Content Wrapper */}
-    <div className="content-wrapper">
-      <section className="content">
-        <div className="container-fluid">
-          {/* Small boxes (Stat box) */}
-          <div className="row">
-            <div className="col-lg-3 col-6">
-              {/* small box */}
-              <div className="small-box bg-info">
-                <div className="inner">
-                  <h3>150</h3>
-                  <p>New Orders</p>
-                </div>
-                <div className="icon">
-                  <i className="fas fa-shopping-cart"></i>
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-success">
-                <div className="inner">
-                  <h3>53<sup style={{ fontSize: '20px' }}>%</sup></h3>
-                  <p>Bounce Rate</p>
-                </div>
-                <div className="icon">
-                  <i className="fas fa-chart-line"></i>
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-warning">
-                <div className="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
-                </div>
-                <div className="icon">
-                  <i className="fas fa-user-plus"></i>
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-danger">
-                <div className="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
-                </div>
-                <div className="icon">
-                  <i className="fas fa-users"></i>
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Main row */}
-          <div className="row">
-            {/* Left col */}
-            <section className="col-lg-7 connectedSortable">
-              {/* Custom content */}
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Example Chart</h3>
-                  <div className="card-tools">
-                    <button type="button" className="btn btn-tool">
-                      <i className="fas fa-minus"></i>
-                    </button>
-                  </div>
-                </div>
-                <div className="card-body">
-                  {/* Aquí va tu gráfico o contenido */}
-                  <p>Esta es una plantilla básica de AdminLTE integrada en React.</p>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    {/* Footer */}
-    <footer className="main-footer">
-      <div className="float-right d-none d-sm-inline">Anything you want</div>
-      <strong>Copyright © 2024</strong> All rights reserved.
-    </footer>
-  </div>
+    <Box
+      sx={{
+        py: 3,
+        px: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'left',
+        textAlign: 'left',
+      }}
+    >
+      {content}
+    </Box>
   );
 }
 
-export default Admin;
+
+function DashboardLayoutBasic(props) {
+  const { window } = props;
+
+  const [pathname, setPathname] = React.useState('/dashboard');
+
+  const router = React.useMemo(() => {
+    return {
+      pathname,
+      searchParams: new URLSearchParams(),
+      navigate: (path) => setPathname(String(path)),
+    };
+  }, [pathname]);
+
+  // Remove this const when copying and pasting into your project.
+  const demoWindow = window !== undefined ? window() : undefined;
+
+  return (
+    // preview-start
+    <AppProvider
+    branding={{
+      // logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+      title: 'Panel Admin',
+    }}
+    navigation={NAVIGATION}
+    router={router}
+    theme={demoTheme}
+    window={demoWindow}
+    >
+      <DashboardLayout>
+     
+      {/* <RoutessComponent /> */}
+        <DemoPageContent pathname={pathname} />
+       
+
+      </DashboardLayout>
+     
+    </AppProvider>
+  
+    // preview-end
+  );
+}
+
+DashboardLayoutBasic.propTypes = {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * Remove this when copying and pasting into your project.
+   */
+  window: PropTypes.func,
+};
+
+// eslint-disable-next-line no-unused-vars
+
+export default DashboardLayoutBasic;

@@ -55,21 +55,21 @@ const Register = () => {
             <h2 className="text-login">Crear una cuenta</h2>
             <form onSubmit={handleRegister} className='form-registro'>
                 <div>
-                    <input className='form-register'  placeholder="Ingresar nombre " type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                    <input className='form-register login-input'  placeholder="Ingresar nombre " type="text" value={name} onChange={(e) => setName(e.target.value)} required />
                 </div>
                 <div>
                    
-                    <input className='form-register'  placeholder="Ingresar correo" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <input className='form-register login-input'  placeholder="Ingresar correo" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div>
                     
-                    <input className='form-register'  placeholder="Ingresar una contraseña" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <input className='form-register login-input'  placeholder="Ingresar una contraseña" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <div>
                     
-                    <input className='form-register'  placeholder="Confirmar Contraseña" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                    <input className='form-register login-input'  placeholder="Confirmar Contraseña" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                 </div>
-                <button type="submit">Crear cuenta</button>
+                <button type="submit" className='btn-button-general'>Crear cuenta</button>
                 <h1 className="text-login"><Link to="/login" className='link-login'>Iniciar sesion</Link></h1>
             </form>
             {error && <p>{error}</p>}

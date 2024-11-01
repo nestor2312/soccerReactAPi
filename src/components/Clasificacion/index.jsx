@@ -463,7 +463,7 @@ const Clasificacion = () => {
   };
 
   return (
-    <>
+    <div>
       <Menu />
       {isLoading ? (
         <div className="loading-container">
@@ -474,7 +474,7 @@ const Clasificacion = () => {
           <ErrorCarga />
         </div>
       ) : (
-        <section className="margen">
+        <section className="margen main-content">
           <div className="row">
           {datosGrupos && datosGrupos.length > 0 ? (
   datosGrupos.map((datosGrupo, index) => (
@@ -534,7 +534,7 @@ const Clasificacion = () => {
 )}
           </div>
           {datosGrupos && datosGrupos.length > 0 && (
-      <div className="pagination mb-4">
+      <div className="pagination mb-5">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -552,7 +552,7 @@ const Clasificacion = () => {
         </section>
       )}
       <Footer />
-    </>
+    </div>
   );
 };
 

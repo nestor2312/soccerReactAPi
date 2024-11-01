@@ -16,6 +16,18 @@
         margin: auto 10px;
       }
 }
+.fondo-card-admin{
+  background-color: #e9ecef!important;
+}
+.TITULO-admin{
+  text-align: center;
+  font-family: Roboto Condensed;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+}
 .card-header{
 padding: 11px !important;
 }
