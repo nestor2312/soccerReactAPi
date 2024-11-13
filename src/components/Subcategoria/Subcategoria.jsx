@@ -32,6 +32,7 @@ const Subcategoria = () => {
 
   return (
     <>
+     <h1 className="text-center text-title mt-2">subcategorias</h1>
       {isLoading ? (
         <div className="loading-container">
           <Cargando />

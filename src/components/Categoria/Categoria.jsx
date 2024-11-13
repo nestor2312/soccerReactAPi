@@ -30,6 +30,8 @@ const Categoria = () => {
 
   return (
     <>
+      <h3 className="text-center text-title mt-2">champions</h3>
+     <h1 className="text-center text-title mt-2">categorias</h1>
       {isLoading ? (
         <div className="loading-container">
           <Cargando />

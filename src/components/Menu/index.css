@@ -18,19 +18,18 @@ a:hover{
 p{
     padding-right: 15px;
 }
-a.active{
- 
-    color: #ffffff!important;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.889)!important;
-    border-radius: 3px!important;
-    text-decoration: inherit!important;
-    text-shadow: 
-    -1px -1px 0 #000000, 
-    1px -1px 0 #000000, 
-    -1px 1px 0 #000000, 
-    1px 1px 0 #000000; 
+a.active {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff!important;
+  border-radius: 3px;
+  text-decoration: inherit;
+  font-weight: 900;
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
+.navbar-logo{
+  margin-left: 10px;
+}
 
 /* Estilos básicos del navbar */
 .navbar {
@@ -41,6 +40,9 @@ a.active{
     /* background: red; */
     background:  linear-gradient(180deg, #152039 0%, #00bf63cc 100%);
     color: white;
+  }
+  .navbar-links a:last-child {
+    margin-right: 23px;
   }
   
   .navbar-logo h1 {
@@ -86,6 +88,8 @@ a.active{
         color: white;
   
   }
+ 
+  
   
   
   .close-btn {
@@ -121,6 +125,7 @@ a.active{
        /* position: fixed; */
         justify-content: space-between;
         z-index: 2;
+      
       }
 
     .navbar-links {
@@ -129,17 +134,19 @@ a.active{
       right: 0;
       background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
       z-index: 2;
-    
       flex-direction: column;
       width: 100%;
       height: 0;
       overflow: hidden;
-      transition: opacity 0.2s ease, visibility 0.2s ease;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+
     }
   
     .navbar-links.open {
+      transform: translateX(0);
       height: 100vh;
-      position: fixed;
+    
     }
   
     .navbar-toggle {
@@ -169,14 +176,27 @@ a.active{
         padding: 10px 40px 10px 40px;
         border-radius: 3px;
         border: 2px solid gainsboro;
+        transition: transform 0.3s ease;
       
     }
 
    .nv:hover {
-    font-size: 1.6rem;
+    transform: scale(1.01);
+   
         border: 2px solid gainsboro;
-        background: rgba(220, 220, 220, 0.158);
+        background: #dcdcdc28;
     }
+
+    .nv.active {
+      background-color:  #dcdcdc4b;
+      color: white; /* Texto blanco para mayor contraste */
+      border: 2px solid gainsboro; 
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombras para destacar el texto */
+  }
+  .navbar-logo{
+    margin-left: 10px;
+  }
+ 
   
     
      

@@ -114,6 +114,7 @@ font-size: 15px;
   font-weight: bold;
   text-transform: capitalize;
   margin: 10px 61px!important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .btn-button-general:hover{
  

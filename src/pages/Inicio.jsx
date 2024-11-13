@@ -12,11 +12,6 @@ const endpoint = `${API_ENDPOINT}`;
 const Images = IMAGES_URL;
 
 
-
-
-
-
-
 const Inicio = ()=>{
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
   const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
@@ -113,7 +108,7 @@ const Inicio = ()=>{
         try {
           // const response = await axios.get(`${endpoint}clasificacion`);
           const response = await axios.get(
-            `${API_ENDPOINT}subcategoria/${subcategoriaId}/clasificacion`
+            `${API_ENDPOINT}subcategoria/${subcategoriaId}/Inicioclasificacion`
           );
           const filteredClasificacion = response.data.slice(0, 1);
           setclasificacion(filteredClasificacion);

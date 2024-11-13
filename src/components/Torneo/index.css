@@ -53,11 +53,14 @@
 .boton-torneo span {
     color: #FFF;
 text-transform: capitalize;
-    text-shadow: 
+    /* text-shadow: 
     -2px -2px 0 #000000, 
     2px -2px 0 #000000, 
     -2px 2px 0 #000000, 
-    2px 2px 0 #000000; 
+    2px 2px 0 #000000;  */
+    text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.8), 
+    -1px -1px 3px rgba(0, 0, 0, 0.4);
     font-family: "Days One";
     font-size: 35px;
     font-style: normal;
@@ -66,26 +69,36 @@ text-transform: capitalize;
     z-index: 2; 
 }
 
-.text-title{
+/* .text-title{
     text-transform: uppercase;
     color: #FFF;
     text-align: center;
-    /* text-shadow: 
+    text-shadow: 
     -2px -2px 0 #00BF63CC, 
     2px -2px 0 #00BF63CC, 
     -2px 2px 0 #00BF63CC, 
     2px 2px 0 #00BF63CC, 
-    0px 4px 6px #000000cc;  */
+    0px 4px 6px #000000cc; 
       text-shadow: .1em .1em 0 #09537E;
-   
     font-family: "Days One";
     font-size: 40px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 6px;
-}
 
+} */
+.text-title{
+text-transform: uppercase;
+color: #09537E; /* Un azul que combina con tu diseño */
+text-align: center;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+font-family: "Days One";
+font-size: 40px;
+font-weight: 400;
+line-height: 1.2;
+letter-spacing: 6px;
+}
 
 
 @media (max-width: 768px) {
@@ -142,7 +155,7 @@ text-transform: capitalize;
         font-size: 25px;
         border: 2px solid #000000;
         width: 340px;
-        height: 250px;
+        height: 220px;
         color: white;
         display: flex;
         align-items: center;
