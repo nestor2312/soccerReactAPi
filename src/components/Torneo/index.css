@@ -100,98 +100,44 @@ line-height: 1.2;
 letter-spacing: 6px;
 }
 
-
 @media (max-width: 768px) {
+    .contenido {
+      justify-content: center;
+    }
+    .boton-torneo {
+      font-size: 25px;
+      border: 3px solid transparent;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
+                  linear-gradient(180deg, #007A3A 0%, #064062 100%) border-box;
+      overflow: hidden;
+    }
+  }
   
-    .contenido{  
-        justify-content:center; 
-    }
-    .boton-torneo {
-      
-        font-size: 25px;
-        border: 3px solid #0000;
-        width: 400px;
-        height: 250px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
-        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-    linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
-        overflow: hidden;
-    }
-     
-  }
-
   @media (max-width: 480px) {
-    .contenido{  
-        justify-content:center; 
-    }
     .boton-torneo {
-      
-        font-size: 25px;
-        border: 3px solid #0000;
-        width: 400px;
-        height: 250px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
-        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-        linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
-        overflow: hidden;
+      width: 80%; 
+      height: auto; 
     }
-     
   }
-
+  
   @media (max-width: 360px) {
-    .contenido{  
-        justify-content:center; 
-    }
     .boton-torneo {
-      
-        font-size: 25px;
-        border: 3px solid #0000;
-        width: 340px;
-        height: 220px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
-        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-    linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
-        overflow: hidden;
+      width: 75%; 
+      height: auto;
     }
-     
   }
-
+  
   @media (max-width: 320px) {
-    .contenido{  
-        justify-content:center; 
-    }
     .boton-torneo {
-      
-        font-size: 25px;
-        border: 3px solid #0000;
-        width: 300px;
-        height: 250px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
-        background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-        linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
-        overflow: hidden;
+      width: 70%; 
+      height: auto;
     }
-     
   }
+  
   
 
