@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+   
 }
 
 .boton-torneo {
@@ -116,6 +117,10 @@ letter-spacing: 6px;
                   linear-gradient(180deg, #007A3A 0%, #064062 100%) border-box;
       overflow: hidden;
     }
+
+    .boton-torneo:last-of-type {
+        margin-bottom: 15px !important; /* Espacio al último botón */
+      }
   }
   
 
@@ -133,9 +138,9 @@ letter-spacing: 6px;
       height: 250px; 
       font-size: 30px; 
     }
-    .boton-torneo:last-child{
-        margin-bottom: 10px!important;
-    }
+    button.boton-torneo.btn-button-general:last-child {
+        margin-bottom: 30px !important;
+      }
   }
   
   /* Media query para pantallas aún más pequeñas (360px) */
@@ -152,9 +157,9 @@ letter-spacing: 6px;
       height: 220px;
       font-size: 25px; 
     }
-    .boton-torneo:last-child{
-        padding: 10px!important;
-    }
+    button.boton-torneo.btn-button-general:last-child {
+        margin-bottom: 30px !important;
+      }
   }
   
   /* Media query para pantallas extremadamente pequeñas (320px) */
@@ -172,7 +177,7 @@ letter-spacing: 6px;
     }
 
     
-    .boton-torneo:last-child{
-        padding: 10px!important;
-    }
+    button.boton-torneo.btn-button-general:last-child {
+        margin-bottom: 30px !important;
+      }
   }
