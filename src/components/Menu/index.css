@@ -189,12 +189,16 @@ a.active {
 
     .nv.active {
       background-color:  #dcdcdc4b;
-      color: white; /* Texto blanco para mayor contraste */
+      color: white; 
       border: 2px solid gainsboro; 
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombras para destacar el texto */
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
   }
   .navbar-logo{
     margin-left: 10px;
+  }
+
+  .navbar-links a:last-child {
+    margin-right: 0px;
   }
  
   
