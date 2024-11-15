@@ -74,7 +74,7 @@ margin-left: 10px;
   margin: 4px 0;
 }
 .navbar-toggle .barr {
- width: 40px;
+margin-right: 8px;
       background: transparent;
       border: 1px solid white;
       border-radius: 6px 3px 6px 3px;
@@ -109,7 +109,7 @@ margin-left: 10px;
   justify-content: center;
   align-items: center;
   position: fixed;
-  right: 8px;
+  right: 13px;
   top: 12px;
   bottom: 0;
  
@@ -158,10 +158,10 @@ margin-left: 10px;
 
   .navbar-links a {
     margin-top: 20px;
-    padding: 1rem;
+    padding: 0.9rem;
     border-bottom: 1px solid white;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .nv {
@@ -186,7 +186,9 @@ margin-left: 10px;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   }
 
- 
+  .navbar-links a:last-child {
+    margin-right: auto;
+  }
 }
 
 

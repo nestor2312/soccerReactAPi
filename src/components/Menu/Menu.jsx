@@ -55,7 +55,7 @@ const Menu = () => {
   
     <div className="navbar-toggle" onClick={toggleMenu}>
       {isOpen ? (
-        <span className="close-btn">X</span>
+        <span className="close-btn">✖</span>
       ) : (
         <button className="navbar-toggler barr">☰</button>
       )}
