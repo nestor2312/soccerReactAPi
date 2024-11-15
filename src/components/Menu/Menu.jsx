@@ -5,63 +5,73 @@ import "./index.css";
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { categoriaId, subcategoriaId } = useParams(); // Obtener los IDs dinámicos
-  
+  const { categoriaId, subcategoriaId } = useParams();
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <nav className="navbar">
-    <div className="navbar-logo">
-      <h1>Logo</h1>
-    </div>
-  
-    <div className={`navbar-links ${isOpen ? "open" : ""}`}>
-      <Link to={`/torneo`} className="nv">
-        ← Copas
-      </Link>
-      <Link
-        to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/inicio`}
-        className={`nv ${location.pathname.includes('inicio') ? 'active' : ''}`}
-      >
-        Inicio
-      </Link>
-      <Link
-        to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/partidos`}
-        className={`nv ${location.pathname.includes('partidos') ? 'active' : ''}`}
-      >
-        Partidos
-      </Link>
-      <Link
-        to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/jugadores`}
-        className={`nv ${location.pathname.includes('jugadores') ? 'active' : ''}`}
-      >
-        Jugadores
-      </Link>
-      <Link
-        to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/clasificacion`}
-        className={`nv ${location.pathname.includes('clasificacion') ? 'active' : ''}`}
-      >
-        Clasificación
-      </Link>
-      <Link
-        to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/equipos`}
-        className={`nv ${location.pathname.includes('equipos') ? 'active' : ''}`}
-      >
-        Equipos
-      </Link>
-    </div>
-  
-    <div className="navbar-toggle" onClick={toggleMenu}>
-      {isOpen ? (
-        <span className="close-btn">X</span>
-      ) : (
-        <button className="navbar-toggler barr">☰</button>
-      )}
-    </div>
-  </nav>
-  
+      <div className="navbar-logo">
+        <h1>Logo</h1>
+      </div>
+
+      {/* Botón de menú para móviles */}
+      <div className="navbar-toggle" onClick={toggleMenu}>
+        {isOpen ? (
+          <span className="close-btn">X</span>
+        ) : (
+          <button className="navbar-toggler">☰</button>
+        )}
+      </div>
+
+      {/* Menú de enlaces */}
+      <div className={`navbar-links ${isOpen ? "open" : ""}`}>
+        <Link to={`/torneo`} className="nv" onClick={closeMenu}>
+          ← Copas
+        </Link>
+        <Link
+          to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/inicio`}
+          className={`nv ${location.pathname.includes("inicio") ? "active" : ""}`}
+          onClick={closeMenu}
+        >
+          Inicio
+        </Link>
+        <Link
+          to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/partidos`}
+          className={`nv ${location.pathname.includes("partidos") ? "active" : ""}`}
+          onClick={closeMenu}
+        >
+          Partidos
+        </Link>
+        <Link
+          to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/jugadores`}
+          className={`nv ${location.pathname.includes("jugadores") ? "active" : ""}`}
+          onClick={closeMenu}
+        >
+          Jugadores
+        </Link>
+        <Link
+          to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/clasificacion`}
+          className={`nv ${location.pathname.includes("clasificacion") ? "active" : ""}`}
+          onClick={closeMenu}
+        >
+          Clasificación
+        </Link>
+        <Link
+          to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/equipos`}
+          className={`nv ${location.pathname.includes("equipos") ? "active" : ""}`}
+          onClick={closeMenu}
+        >
+          Equipos
+        </Link>
+      </div>
+    </nav>
   );
 };
 
