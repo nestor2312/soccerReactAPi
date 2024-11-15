@@ -118,18 +118,21 @@ margin-left: 10px;
   border: 2px solid #ffffff;
   color: red;
 }
-/* Estilos para dispositivos móviles */
 @media (max-width: 768px) {
   .navbar {
     justify-content: space-between;
   }
 
+  .navbar-toggle {
+    display: flex;
+  }
+
   .navbar-links {
-    z-index: 2;
-    position: absolute;
-    top: 60px;
+    position: fixed;
+    top: 0;
     right: 0;
     background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+    z-index: 2;
     flex-direction: column;
     width: 100%;
     height: 100vh;
@@ -140,10 +143,15 @@ margin-left: 10px;
 
   .navbar-links.open {
     transform: translateX(0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
 
-  .navbar-toggle {
-    display: flex;
+  /* Evitar desplazamiento de la página cuando el menú está abierto */
+  .no-scroll {
+    overflow: hidden;
   }
 
   .navbar-links a {
@@ -154,7 +162,7 @@ margin-left: 10px;
   }
 
   .nv {
-    margin: 10px auto;
+    margin: 5px auto 10px auto;
     width: 80%;
     text-align: center;
     padding: 10px 40px;
@@ -165,11 +173,12 @@ margin-left: 10px;
 
   .nv:hover {
     transform: scale(1.01);
-    background: rgba(220, 220, 220, 0.16);
+    background: #dcdcdc28;
   }
 
   .nv.active {
-    background-color: rgba(220, 220, 220, 0.3);
+    background-color: #dcdcdc4b;
+    color: white;
     border: 2px solid gainsboro;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   }
