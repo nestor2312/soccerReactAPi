@@ -1,3 +1,36 @@
-.logo2{
-    width: 62px;
+.logo2 {
+    width: 70%;
+}
+
+.card-matches { 
+    height: 130px!important;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    transition: 0.5s ease;
+}
+
+.card-matches:hover {
+    scale: 1.04;
+    transition: 0.3s ease;
+    border: 1px solid #152039e6;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.25);
+}
+.hiden{
+    display: none;
+}
+.hiden-box{
+    display: block;
+}
+
+.score {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  
+    .hiden{
+        display: block!important;
+    }
+    .hiden-box{
+        display: none!important;
+    }
 }

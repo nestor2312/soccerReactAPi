@@ -5,13 +5,22 @@
     width: 50px;
 }
 .margen{
-    margin: auto 170px;
+    margin: auto 160px;
   }
   table{
     padding: 0.5rem 0.5rem !important;
   }
 
+  @media (max-width: 1366px) {
+    .margen{
+      margin: auto 58px;
+    }
+  }
+
   @media only screen and (max-width: 576px) {
+        .logomovil{
+      width: 30%;
+    }
     .margen{
         margin: auto 10px;
       }

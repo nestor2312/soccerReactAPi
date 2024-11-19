@@ -28,7 +28,9 @@
     line-height: normal;
   }  
   .fondo-card{  
-    background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);}
+    /* linear-gradient(180deg, #152039 0%, #00bf63cc 100%);
+} */
+    background: linear-gradient(180deg, #152039 0%, #00bf63cc 100%)!important;}
 a{
   text-transform:capitalize;
   letter-spacing: 0.02rem;
@@ -99,7 +101,13 @@ a{
     text-transform: uppercase;
   }
 
+
+
   @media only screen and (max-width: 576px) {
+    .hidenb{
+      display: none!important;
+  }
+
     .hiden{
       display: none;
     }

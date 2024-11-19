@@ -89,7 +89,7 @@ const AdminClasificacion = () => {
                                 alt={equipo.nombre}
                               />
                             </td>
-                            <td className="movil data text-left team">
+                            <td className="movil text-left team"  width="25%">
                               {equipo.nombre}
                             </td>
                             <td className="movil data">{equipo.pj}</td>

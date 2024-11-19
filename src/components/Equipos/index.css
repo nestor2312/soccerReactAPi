@@ -127,6 +127,32 @@ a {
   margin: 0 5px;
 }
 
+/* Para pantallas tipo laptop (hasta 1366px) */
+@media (max-width: 1366px) {
+  .team-item:nth-child(n + 8) {
+    display: none;
+  }
+}
+@media (max-width: 1024px) {
+  .team-item {
+    display: none; /* Ocultar todos inicialmente */
+  }
+  .team-item:nth-child(-n + 6) {
+    display: block; /* Mostrar los primeros 6 elementos */
+  }
+}
+
+/* Para móviles (hasta 767px): mostrar solo 3 elementos */
+@media (max-width: 767px) {
+  .team-item {
+    display: none; /* Ocultar todos inicialmente */
+  }
+  .team-item:nth-child(-n + 3) {
+    display: block; /* Mostrar los primeros 3 elementos */
+  }
+}
+
+
 @media only screen and (max-width: 576px) {
   .inner-card {
     width: 80px;

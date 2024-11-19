@@ -381,12 +381,13 @@ const Clasificacion = () => {
                   <td>
                     <img
                       src={`${IMAGES_URL}/${equipo.archivo}`}
-                      width="50%"
+                     width="5%"
+                     
                       className="d-block mx-auto my-3 logomovil"
                       alt={equipo.nombre}
                     />
                   </td>
-                  <td className="movil data text-left team">
+                  <td className="movil text-left team"  width="25%">
                     {equipo.nombre}
                   </td>
                   <td className="movil data">{equipo.pj}</td>

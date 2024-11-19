@@ -64,7 +64,7 @@ const Inicio = ()=>{
           // const response = await axios.get(`${endpoint}/userHomeTeams`);
           const response = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/equipos`);
 
-          const filteredteams = response.data.slice(0, 8);
+          const filteredteams = response.data.slice(0, 9);
           setTeams(filteredteams);
           setIsLoading(false)
         } catch (error) {
@@ -78,7 +78,7 @@ const Inicio = ()=>{
           // const response = await axios.get(`${endpoint}/partidos`);
           const response = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/partidos`);
 
-          const filteredMatches = response.data.slice(0, 7);
+          const filteredMatches = response.data.slice(0, 4);
           setMatches(filteredMatches);
         } catch (error) {
           setError("Error al cargar los partidos");
@@ -158,7 +158,7 @@ return<>
                 <th className="movil titulo2">pe</th>
                 <th className="movil titulo2">pp</th>
                 <th className="movil titulo2">gf</th>
-                <th className="movil titulo2 hiden">gc</th>
+                <th className="movil titulo2 hidenb">gc</th>
                 <th className="movil titulo2">gd</th>
                 <th className="movil titulo2">pts</th> 
               </tr>
@@ -167,27 +167,27 @@ return<>
               {datosGrupo.equipos.map((equipo, index) => (
                     <tr key={equipo.id =1}   className={index < 2 ? "fila-resaltada" : ""} >
         
-                    <td>
+                    <th>
                     <img
                       src={`${Images}/${equipo.archivo}`}
-                      width="50%"
-                      className="d-block mx-auto my-3 logomovil"
+                      width="5%"
+                      className="logo"
                       alt={equipo.nombre}
                     />
 
-                    </td>
+                    </th>
 
-                    <td className="movil data text-left team">
+                    <th className="movil text-left team"  width="25%">
                       {equipo.nombre}
-                    </td>
-                    <td className="movil data">{equipo.pj}</td>
-                    <td className="movil data">{equipo.pg}</td>
-                    <td className="movil data">{equipo.pe}</td>
-                    <td className="movil data">{equipo.pp}</td>
-                    <td className="movil data">{equipo.gf}</td>
-                    <td className="movil data  hiden">{equipo.gc}</td>
-                    <td className="movil data">{equipo.gd}</td>
-                    <td className="movil data">{equipo.puntos}</td>
+                    </th>
+                    <th className="movil data">{equipo.pj}</th>
+                    <th className="movil data">{equipo.pg}</th>
+                    <th className="movil data">{equipo.pe}</th>
+                    <th className="movil data">{equipo.pp}</th>
+                    <th className="movil data">{equipo.gf}</th>
+                    <th className="movil data hidenb">{equipo.gc}</th>
+                    <th className="movil data">{equipo.gd}</th>
+                    <th className="movil data">{equipo.puntos}</th>
                   </tr>
                  ))}
               </tbody> 
@@ -204,11 +204,11 @@ return<>
             <table className="table-borderless">
               <thead>
               <th></th>
-                      <th className="titulo2 texto-left">Local</th>
+                      <th className="titulo2 text-left">Local</th>
                       <th></th>
                       <th></th>
                       <th></th>
-                      <th className="titulo2 texto-right">Visitante</th>
+                      <th className="titulo2 text-right">Visitante</th>
                       <th></th>
               </thead>
               <tbody>
@@ -222,11 +222,11 @@ return<>
                         />
                     </td>
                      
-                      <td className="texto-left " >{partido.equipo_a.nombre}</td>
+                      <td className="text-left team" width="40%" >{partido.equipo_a.nombre}</td>
                       <td className=" data"> {partido.marcador1}</td>
-                      <td className=" data">-</td>
+                      <th className=" data">-</th>
                       <td className=" data"> {partido.marcador2}</td>
-                      <td className="texto-right " >{partido.equipo_b.nombre}</td>
+                      <td className="text-right team" width="40%" >{partido.equipo_b.nombre}</td>
                       <td width="10%">
                      <img
                           src={`${Images}/${partido.equipo_b.archivo}`} 
@@ -498,11 +498,11 @@ return<>
               {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
             </span>
             <span className="goles">
-              {marcador1_ida} - {marcador1_vuelta || "-"}
+              {marcador1_ida}  {marcador1_vuelta || ""}
               {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador1_vuelta && ` (Global: ${marcador1_global})`}
+              {marcador1_vuelta && `  ${marcador1_global}`}
               {/* Mostrar penales solo si están definidos */}
-              {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? ` | Penales: ${partido.marcador1_penales}` : ""}
+              {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
             </span>
           </div>
         </div>
@@ -522,11 +522,11 @@ return<>
               {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
             </span>
             <span className="goles">
-              {marcador2_ida} - {marcador2_vuelta || "-"}
+              {marcador2_ida}  {marcador2_vuelta || ""}
               {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador2_vuelta && ` (Global: ${marcador2_global})`}
+              {marcador2_vuelta && ` ${marcador2_global}`}
               {/* Mostrar penales solo si están definidos */}
-              {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? ` | Penales: ${partido.marcador2_penales}` : ""}
+              {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? ` (${partido.marcador2_penales})` : ""}
             </span>
           </div>
         </div>
@@ -546,51 +546,34 @@ return<>
 
                 {/* Ganador */}
                 <div className="ganador_esquema">
-  <div className="ganador">
-    <div className="conector_doble"></div>
-    <div className="conector_simple"></div>
-
-    {/* Verificar si ambos marcadores de ida y vuelta están presentes */}
-    {partidoFinal[0] && partidoFinal[0].marcador1_ida !== null && partidoFinal[0].marcador2_ida !== null ? (
-      (() => {
-        // Calcular el marcador global solo si hay marcador de vuelta
-        const marcador1_global = partidoFinal[0].marcador1_vuelta !== null
-          ? partidoFinal[0].marcador1_ida + partidoFinal[0].marcador1_vuelta
-          : partidoFinal[0].marcador1_ida;
-        const marcador2_global = partidoFinal[0].marcador2_vuelta !== null
-          ? partidoFinal[0].marcador2_ida + partidoFinal[0].marcador2_vuelta
-          : partidoFinal[0].marcador2_ida;
-
-        // Determinar el equipo ganador considerando marcador global y penales
-        const isLocalWinner = marcador1_global > marcador2_global ||
-                              (marcador1_global === marcador2_global && partidoFinal[0].marcador1_penales > partidoFinal[0].marcador2_penales);
-        const isVisitanteWinner = marcador2_global > marcador1_global ||
-                                  (marcador2_global === marcador1_global && partidoFinal[0].marcador2_penales > partidoFinal[0].marcador1_penales);
-
-        // Asignar el equipo ganador
-        const equipoGanador = isLocalWinner ? partidoFinal[0].equipo_aa : isVisitanteWinner ? partidoFinal[0].equipo_b : null;
-
-        return equipoGanador ? (
-          <div className="jugador win">
-            <img
-              src={`${Images}/${equipoGanador.archivo}`}
-              className="logo"
-              alt={equipoGanador.nombre}
-            />
-            <span className="equipo">{equipoGanador.nombre}</span>
-          </div>
-        ) : (
-          <div className="jugador">
-            <span className="equipo">Por definir ganador</span>
-          </div>
-        );
-      })()
-    ) : (
-      <div className="jugador">
-        <span className="equipo">Por definir ganador</span>
-      </div>
-    )}
-  </div>
+                {partidoFinal[0]?.marcador1 !== null &&
+                  partidoFinal[0]?.marcador2 !== null &&
+                  partidoFinal[0]?.marcador1 !== partidoFinal[0]?.marcador2 ? (
+                    <div
+                      className={`jugador ${partidoFinal[0]?.marcador1 > partidoFinal[0]?.marcador2 ? "win" : "win"}`}
+                    >
+                      <img
+                        src={
+                          partidoFinal[0]?.marcador1 >
+                          partidoFinal[0]?.marcador2
+                            ? `${Images}/${partidoFinal[0].equipo_aa?.archivo}`
+                            : `${Images}/${partidoFinal[0].equipo_b?.archivo}`
+                        }
+                        className="logo"
+                        alt="sin imagen"
+                      />
+                      <span className="equipo">
+                        {partidoFinal[0]?.marcador1 > partidoFinal[0]?.marcador2
+                          ? partidoFinal[0].equipo_aa?.nombre
+                          : partidoFinal[0].equipo_b?.nombre}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="jugador">
+                      <span className="equipo">Por definir ganador</span>
+                    </div>
+                  )}
+               
         </div>
       </div>
       </div>

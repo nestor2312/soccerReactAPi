@@ -37,8 +37,8 @@ margin-left: 10px;
   justify-content: start;
   align-items: center;
   padding: 1rem;
-  /* background: red; */
-  background:  linear-gradient(180deg, #152039 0%, #00bf63cc 100%);
+  background:linear-gradient(rgb(21, 32, 57) 30%, rgba(0, 191, 99, 0.545) 90%);
+
   color: white;
 }
 .navbar-links a:last-child {
@@ -80,7 +80,7 @@ margin-right: 8px;
       border-radius: 6px 3px 6px 3px;
       display: flex;
       position: absolute;
-      top: 2vh;
+      top: 1.5vh;
       right: 10px;
       font-size: 24px;
       cursor: pointer;

@@ -50,42 +50,91 @@ const Partidos = () => {
              <ErrorCarga/>
           </div>
         ) : (
-      <section className="Partidos">
-        <div className="margen mt-4">
-          <div className="row">
-            {partidos.map((partido) => (
-              <div className="col-md-4 mb-4" key={partido.id}>
-                <div className="card card-matches d-flex justify-content-center align-items-center">
-                  <div className="card-body d-flex justify-content-center align-items-center">
-                    <div className="row">
-                      <div className="col-4 d-flex justify-content-start align-items-center">
-                        <img
-                          src={`${Images}/${partido.equipo_a.archivo}`} 
-                          className="logo2"
-                          alt={partido.equipo_a.nombre}
-                        />
-                        <span className="team">{partido.equipo_a.nombre}</span>
-                        {/* <span className="team">{partido.equipoA.nombre}</span> */}
-                      </div>
-                      <div className="col-4 d-flex flex-wrap align-content-around justify-content-center">
-                        <span className="score">{partido.marcador1} - {partido.marcador2}</span>
-                      </div>
-                      <div className="col-4 d-flex justify-content-end align-items-center">
-                        <span className="team">{partido.equipo_b.nombre}</span>
-                        <img
-                          src={`${Images}/${partido.equipo_b.archivo}`}  // Ruta de la imagen del equipo B
-                          className="logo2"
-                          alt={partido.equipo_b.nombre}
-                        />
-                      </div>
-                    </div>
-                  </div>
+
+
+          <><div className="col-sm-12 mt-4 hiden mb-5">
+              <div className="card border-0 shadow">
+                <div className="card-header fondo-card TITULO border-0">Partidos</div>
+                <div className="card table-responsive border-0 table-sm">
+                  <table className="table-borderless">
+                    <thead>
+                      <th></th>
+                      <th className="titulo2 text-left">Local</th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th className="titulo2 text-right">Visitante</th>
+                      <th></th>
+                    </thead>
+                    <tbody>
+                      {partidos.map((partido) => (
+                        <tr key={partido.id} width="10%">
+                          <td width="10%">
+                            <img
+                              src={`${Images}/${partido.equipo_a.archivo}`}
+                              className="logo" width="100%"
+                              alt={partido.equipo_a.nombre} />
+                          </td>
+
+                          <td className="text-left team" width="40%">{partido.equipo_a.nombre}</td>
+                          <td className=" data"> {partido.marcador1}</td>
+                          <th className=" data">-</th>
+                          <td className=" data"> {partido.marcador2}</td>
+                          <td className="text-right team" width="40%">{partido.equipo_b.nombre}</td>
+                          <td width="10%">
+                            <img
+                              src={`${Images}/${partido.equipo_b.archivo}`}
+                              className="logo" width="100%"
+                              alt={partido.equipo_b.nombre} />
+
+                          </td>
+                        </tr>
+
+
+
+
+
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
+            <section className="Partidos hiden-box">
+                <div className="margen mt-4">
+                  <div className="row">
+                    {partidos.map((partido) => (
+                      <div className="col-md-4 mb-4" key={partido.id}>
+                        <div className="card card-matches d-flex justify-content-center align-items-center">
+                          <div className="card-body d-flex justify-content-center align-items-center">
+                            <div className="row">
+                              <div className="col-4 d-flex justify-content-start align-items-center">
+                                <img
+                                  src={`${Images}/${partido.equipo_a.archivo}`}
+                                  className="logo2"
+                                  alt={partido.equipo_a.nombre} />
+                                <span className="team">{partido.equipo_a.nombre}</span>
+                                {/* <span className="team">{partido.equipoA.nombre}</span> */}
+                              </div>
+                              <div className="col-4 d-flex flex-wrap align-content-around justify-content-center">
+                                <span className="score">{partido.marcador1} - {partido.marcador2}</span>
+                              </div>
+                              <div className="col-4 d-flex justify-content-end align-items-center">
+                                <span className="team">{partido.equipo_b.nombre}</span>
+                                <img
+                                  src={`${Images}/${partido.equipo_b.archivo}`} // Ruta de la imagen del equipo B
+                                  className="logo2"
+                                  alt={partido.equipo_b.nombre} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section></>
+      
         )}
       <Footer />
     </>
