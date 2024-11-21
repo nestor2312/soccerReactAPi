@@ -49,4 +49,12 @@
         filter: drop-shadow(4px 4px 4px #00000040);
         animation: carga 2.5s infinite;
     }
+
+    .cargandologin{
+        width: 340px;
+        filter: drop-shadow(4px 4px 4px #00000040);
+        animation: carga 2.5s infinite;
+        top: 25%;
+        left: 8%;
+    }
 }

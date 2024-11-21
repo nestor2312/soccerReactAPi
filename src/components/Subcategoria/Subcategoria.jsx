@@ -32,7 +32,7 @@ const Subcategoria = () => {
 
   return (
     <>
-      <h1 className="text-center text-title mt-2">Subcategorías</h1>
+      <h2 className="text-center text-title mt-2">Subcategorías</h2>
       {isLoading ? (
         <div className="loading-container">
           <Cargando />
