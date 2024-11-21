@@ -46,7 +46,7 @@ const Jugadores = () => {
           <div className="loading-container">
              <ErrorCarga/>
           </div>
-        ) : (
+        )  : jugadores.length > 0 ? (
     <section className="margen Jugadores mt-4">
     
     
@@ -81,7 +81,9 @@ const Jugadores = () => {
         </div>
         
     </section>
-          )}
+        ) : (
+          <p className="no-datos">No hay Jugadores disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
+        )}
     <Footer/>
     </>
 

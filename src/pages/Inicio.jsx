@@ -197,57 +197,65 @@ return<>
         </div>
       </div>
         ))}
-      <div className="col-sm-12 col-md-6 mt-4">
-        <div className="card border-0 shadow">
-          <div className="card-header fondo-card TITULO border-0">Partidos</div>
-          <div className="card table-responsive border-0 table-sm">         
-            <table className="table-borderless">
-              <thead>
+        
+        {Matches.length > 0 ? (
+  <div className="col-sm-12 col-md-6 mt-4">
+    <div className="card border-0 shadow">
+      <div className="card-header fondo-card TITULO border-0">Partidos</div>
+      <div className="card table-responsive border-0 table-sm">
+        <table className="table-borderless">
+          <thead>
+            <tr>
               <th></th>
-                      <th className="titulo2 text-left">Local</th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th className="titulo2 text-right">Visitante</th>
-                      <th></th>
-              </thead>
-              <tbody>
-              {Matches.map((partido) => (
-                  <tr key={partido.id} width="10%">
-                    <td width="10%">
-                     <img
-                          src={`${Images}/${partido.equipo_a.archivo}`} 
-                          className="logo" width="100%"
-                          alt={partido.equipo_a.nombre}
-                        />
-                    </td>
-                     
-                      <td className="text-left team" width="40%" >{partido.equipo_a.nombre}</td>
-                      <td className=" data"> {partido.marcador1}</td>
-                      <th className=" data">-</th>
-                      <td className=" data"> {partido.marcador2}</td>
-                      <td className="text-right team" width="40%" >{partido.equipo_b.nombre}</td>
-                      <td width="10%">
-                     <img
-                          src={`${Images}/${partido.equipo_b.archivo}`} 
-                          className="logo" width="100%"
-                          alt={partido.equipo_b.nombre}
-                        />
-
-                    </td>
-                  </tr>
-
-
-
-
-
- ))}
-              </tbody>
-          </table>  
-          </div>
-        </div>
-        {/* {{-- <button class="botonUno btn-block" ><span><a href="matches" class="matches">ver mas partidos</a></span></button>    --}} */}
+              <th className="titulo2 text-left">Local</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th className="titulo2 text-right">Visitante</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {Matches.map((partido) => (
+              <tr key={partido.id}>
+                <td width="10%">
+                  <img
+                    src={`${Images}/${partido.equipo_a.archivo}`}
+                    className="logo"
+                    width="100%"
+                    alt={partido.equipo_a.nombre}
+                  />
+                </td>
+                <td className="text-left team" width="40%">
+                  {partido.equipo_a.nombre}
+                </td>
+                <td className="data">{partido.marcador1}</td>
+                <th className="data">-</th>
+                <td className="data">{partido.marcador2}</td>
+                <td className="text-right team" width="40%">
+                  {partido.equipo_b.nombre}
+                </td>
+                <td width="10%">
+                  <img
+                    src={`${Images}/${partido.equipo_b.archivo}`}
+                    className="logo"
+                    width="100%"
+                    alt={partido.equipo_b.nombre}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
+) : (
+  <p className="no-datos"></p> // Mostrar este mensaje si no hay datos
+)}
+
+
+
       <div className="col-12 col-sm-12 col-md-12 mt-4">
   <div className="card border-0 shadow">
     <div className="card-header fondo-card TITULO border-0">Equipos</div>
@@ -274,7 +282,7 @@ return<>
 
      {/* Esquema de eliminatorias */}
 
-     <div className="col-sm-12 col-md-12 mt-4">
+     <div className="col-sm-12 col-md-12 mt-4 mb-5">
           <div className="card mt-2 border-0 shadow">
             <div className="card-header fondo-card TITULO border-0">
               Eliminatorias
@@ -545,36 +553,51 @@ return<>
                 </div>
 
                 {/* Ganador */}
-                <div className="ganador_esquema">
-                {partidoFinal[0]?.marcador1 !== null &&
-                  partidoFinal[0]?.marcador2 !== null &&
-                  partidoFinal[0]?.marcador1 !== partidoFinal[0]?.marcador2 ? (
-                    <div
-                      className={`jugador ${partidoFinal[0]?.marcador1 > partidoFinal[0]?.marcador2 ? "win" : "win"}`}
-                    >
-                      <img
-                        src={
-                          partidoFinal[0]?.marcador1 >
-                          partidoFinal[0]?.marcador2
-                            ? `${Images}/${partidoFinal[0].equipo_aa?.archivo}`
-                            : `${Images}/${partidoFinal[0].equipo_b?.archivo}`
-                        }
-                        className="logo"
-                        alt="sin imagen"
-                      />
-                      <span className="equipo">
-                        {partidoFinal[0]?.marcador1 > partidoFinal[0]?.marcador2
-                          ? partidoFinal[0].equipo_aa?.nombre
-                          : partidoFinal[0].equipo_b?.nombre}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="jugador">
-                      <span className="equipo">Por definir ganador</span>
-                    </div>
-                  )}
-               
-        </div>
+                <div className="ganador">
+    <div className="conector_doble"></div>
+    <div className="conector_simple"></div>
+
+    {/* Verificar si ambos marcadores de ida y vuelta están presentes */}
+    {partidoFinal[0] && partidoFinal[0].marcador1_ida !== null && partidoFinal[0].marcador2_ida !== null ? (
+      (() => {
+        // Calcular el marcador global solo si hay marcador de vuelta
+        const marcador1_global = partidoFinal[0].marcador1_vuelta !== null
+          ? partidoFinal[0].marcador1_ida + partidoFinal[0].marcador1_vuelta
+          : partidoFinal[0].marcador1_ida;
+        const marcador2_global = partidoFinal[0].marcador2_vuelta !== null
+          ? partidoFinal[0].marcador2_ida + partidoFinal[0].marcador2_vuelta
+          : partidoFinal[0].marcador2_ida;
+
+        // Determinar el equipo ganador considerando marcador global y penales
+        const isLocalWinner = marcador1_global > marcador2_global ||
+                              (marcador1_global === marcador2_global && partidoFinal[0].marcador1_penales > partidoFinal[0].marcador2_penales);
+        const isVisitanteWinner = marcador2_global > marcador1_global ||
+                                  (marcador2_global === marcador1_global && partidoFinal[0].marcador2_penales > partidoFinal[0].marcador1_penales);
+
+        // Asignar el equipo ganador
+        const equipoGanador = isLocalWinner ? partidoFinal[0].equipo_aa : isVisitanteWinner ? partidoFinal[0].equipo_b : null;
+
+        return equipoGanador ? (
+          <div className="jugador win">
+            <img
+              src={`${Images}/${equipoGanador.archivo}`}
+              className="logo"
+              alt={equipoGanador.nombre}
+            />
+            <span className="equipo">{equipoGanador.nombre}</span>
+          </div>
+        ) : (
+          <div className="jugador">
+            <span className="equipo">Por definir ganador</span>
+          </div>
+        );
+      })()
+    ) : (
+      <div className="jugador">
+        <span className="equipo">Por definir ganador</span>
+      </div>
+    )}
+  </div>
       </div>
       </div>
       </div>

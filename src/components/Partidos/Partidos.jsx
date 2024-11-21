@@ -49,7 +49,7 @@ const Partidos = () => {
           <div className="loading-container">
              <ErrorCarga/>
           </div>
-        ) : (
+        )  : partidos.length > 0 ? (
 
 
           <><div className="col-sm-12 mt-4 hiden mb-5">
@@ -135,7 +135,9 @@ const Partidos = () => {
                 </div>
               </section></>
       
-        )}
+    ) : (
+      <p className="no-datos">No hay Partidos disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
+    )}
       <Footer />
     </>
   );

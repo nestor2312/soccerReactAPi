@@ -22,7 +22,7 @@ const Subcategoria = () => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        setError("error al cargar los partodos");
+        setError("error al cargar los partidos");
         console.error("Error al obtener los partidos:", error);
       }
     };
@@ -32,7 +32,7 @@ const Subcategoria = () => {
 
   return (
     <>
-     <h1 className="text-center text-title mt-2">subcategorias</h1>
+      <h1 className="text-center text-title mt-2">Subcategorías</h1>
       {isLoading ? (
         <div className="loading-container">
           <Cargando />
@@ -41,13 +41,10 @@ const Subcategoria = () => {
         <div className="loading-container">
           <ErrorCarga />
         </div>
-      ) : (
+      ) : subcategorias.length > 0 ? ( // Condición para mostrar las subcategorías si hay datos
         <div>
-          {/* <button>volver</button> */}
           <div className="contenido">
-            
             {subcategorias.map((subcategoria) => (
-              
               <div key={subcategoria.id} className="box">
                 <Link
                   to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoria.id}/inicio`}
@@ -59,10 +56,11 @@ const Subcategoria = () => {
                   </div>
                 </Link>
               </div>
-             
             ))}
           </div>
         </div>
+      ) : (
+        <p className="no-datos">No hay subcategorías disponibles.</p> // Mostrar este mensaje si no hay datos
       )}
     </>
   );

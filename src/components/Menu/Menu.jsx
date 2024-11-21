@@ -18,7 +18,7 @@ const Menu = () => {
     </div>
   
     <div className={`navbar-links ${isOpen ? "open" : ""}`}>
-      <Link to={`/torneo`} className="nv">
+      <Link to={`/`} className="nv">
         ← Copas
       </Link>
       <Link

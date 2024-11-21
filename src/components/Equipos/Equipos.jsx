@@ -53,7 +53,7 @@ const Equipos = () => {
           <div className="loading-container">
              <ErrorCarga/>
           </div>
-        ) : (
+        )  : Teams.length > 0 ? (
     
           <div className="margen margen-mobile">
             <div className="container-fluid">
@@ -102,6 +102,8 @@ const Equipos = () => {
               </div>
             </div>
           </div>
+         ) : (
+          <p className="no-datos">No hay Jugadores disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
         )}
       </section>
       <Footer />

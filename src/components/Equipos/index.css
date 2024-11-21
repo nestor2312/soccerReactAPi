@@ -128,11 +128,7 @@ a {
 }
 
 /* Para pantallas tipo laptop (hasta 1366px) */
-@media (max-width: 1366px) {
-  .team-item:nth-child(n + 8) {
-    display: none;
-  }
-}
+
 @media (max-width: 1024px) {
   .team-item {
     display: none; /* Ocultar todos inicialmente */

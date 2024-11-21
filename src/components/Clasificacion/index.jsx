@@ -362,7 +362,7 @@ const Clasificacion = () => {
         <div className="card table-responsive border-0 table-sm">
           <table className="table-borderless">
             <tbody>
-              <tr className="py-2">
+              <tr>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -383,7 +383,7 @@ const Clasificacion = () => {
                       src={`${IMAGES_URL}/${equipo.archivo}`}
                      width="5%"
                      
-                      className="d-block mx-auto my-3 logomovil"
+                      className="logo logomovil"
                       alt={equipo.nombre}
                     />
                   </td>

@@ -30,7 +30,7 @@ const Categoria = () => {
 
   return (
     <>
-      <h3 className="text-center text-title mt-2">champions</h3>
+    
      <h1 className="text-center text-title mt-2">categorias</h1>
       {isLoading ? (
         <div className="loading-container">
@@ -40,7 +40,7 @@ const Categoria = () => {
         <div className="loading-container">
           <ErrorCarga />
         </div>
-      ) : (
+      )  : categorias.length > 0 ? (
         <div>
            <div className="contenido">
            {categorias.map((categoria) => (
@@ -57,7 +57,9 @@ const Categoria = () => {
         </div>
          
         </div>
-      )}
+     ) : (
+      <p className="no-datos">No hay categorias disponibles.</p> // Mostrar este mensaje si no hay datos
+    )}
     </>
   );
 };
