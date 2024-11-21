@@ -62,7 +62,7 @@ text-transform: capitalize;
     text-shadow: 
     1px 1px 3px rgba(0, 0, 0, 0.8), 
     -1px -1px 3px rgba(0, 0, 0, 0.4);
-    font-family: 'Days One', sans-serif;
+    font-family: "Days One", sans-serif;
     font-size: 35px;
     font-style: normal;
     font-weight: 400;
@@ -94,7 +94,7 @@ text-transform: uppercase;
 color: #09537E; /* Un azul que combina con tu diseño */
 text-align: center;
 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-font-family: 'Days One', sans-serif;
+font-family: "Days One", sans-serif;
 font-size: 40px;
 font-weight: 400;
 line-height: 1.2;
