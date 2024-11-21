@@ -57,7 +57,7 @@ const Equipos = () => {
     
           <div className="margen margen-mobile">
             <div className="container-fluid">
-              <div className="col-12 col-sm-12 col-md-12 mt-4">
+              <div className="col-12 col-sm-12 col-md-12 mt-4 mb-5">
                 <div className="card border-0 shadow">
                   <div className="card-header fondo-card TITULO border-0">
                     Equipos
