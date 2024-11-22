@@ -96,7 +96,7 @@ import Clasificacion from "./components/Clasificacion";
 import Torneo from "./components/Torneo/Torneo";
 import Categoria from "./components/Categoria/Categoria";
 import Subcategoria from "./components/Subcategoria/Subcategoria";
-// import Register from  "./components/Login/Registrar";
+import Register from  "./components/Login/Registrar";
 
 
 
@@ -154,7 +154,7 @@ function App() {
         />
       
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        {/* <Route path="/register" element={<Register />} /> */}
+        <Route path="/register" element={<Register />} />
         <Route
           path="/registrar_datos"
           element={

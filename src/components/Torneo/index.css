@@ -161,6 +161,22 @@ button.boton-torneo.btn-button-general:last-child {
 
 /* Media query para pantallas más pequeñas (480px) */
 @media (max-width: 480px) {
+
+  .boton-torneo::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("./../../assets/Soccer.png"), 
+                      url("./../../assets/Soccer.png"), 
+                      url("./../../assets/Soccer.png"), 
+                      url("./../../assets/Soccer.png");
+    background-repeat: no-repeat;
+    background-size: 36%;  
+    background-position: -17% -20%, 24% 102%, 82% 120%, 117% -25%;
+    opacity: 0.3; 
+    z-index: 1;
+}
     .contenido{
         display: block;
     }
