@@ -125,7 +125,11 @@ const Inicio = ()=>{
     }, [subcategoriaId]);
 
     
-
+// const abreviarNombre = (nombre) => {
+//   if (!nombre) return "Por definir";
+//   return window.innerWidth <= 768 ? nombre.slice(0, 3) : nombre;
+// };
+// {abreviarNombre(partido.equipo_b?.nombre)}
 
 return<>
 <Menu/>

@@ -515,7 +515,7 @@ input{
   
   }
   .jornada_contenedor .jornada .jugador{
-    width: 87px;
+    width: 90px;
   }
   .conectores .conector .conector_simple{
     width: 1px;
@@ -540,11 +540,15 @@ input{
   }
   .goles{
     font-family: 'Days One', sans-serif;
-    font-size: 11px;
-    margin-right: 2px;
+    font-size: 8px;
+    margin-right: 1px;
+    font-style: bold;
+    font-weight: 400;
+  
+  
   }
   .score{
-    font-size: 13px;
+    font-size: 12px;
     font-weight:600
   }
   
