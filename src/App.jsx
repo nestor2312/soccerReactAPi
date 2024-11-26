@@ -104,6 +104,7 @@ import Register from  "./components/Login/Registrar";
 
 import { useEffect, useState } from 'react';
 import Admin from './pages/Admin';
+import LogoutButton from './components/Login/CerrarSesion';
 
 function App() {
   
@@ -155,11 +156,13 @@ function App() {
       
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/logout" element={<LogoutButton setIsAuthenticated={setIsAuthenticated}/>} />
         <Route
           path="/registrar_datos"
           element={
             <ProtectedRoute>
-              <Admin />
+             
+              <Admin setIsAuthenticated={setIsAuthenticated} />
             </ProtectedRoute>
           }
         />

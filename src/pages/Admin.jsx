@@ -25,7 +25,7 @@ import FORM_Matches from '../components/Formularios/Formu_partidos';
 import FORM_Players from '../components/Formularios/Formu_jugadores';
 import AdminClasificacion from '../components/Clasificacion/ClasificacionAdmin';
 import FORM_Eliminatorias from '../components/Formularios/Form_eliminatorias';
-// import RoutessComponent from './Rutas';
+import LogoutButton from '../components/Login/CerrarSesion';
 
 const NAVIGATION = [
   {
@@ -38,15 +38,13 @@ const NAVIGATION = [
     icon: <GroupsIcon />,
     link: <Link to="/torneos">Torneos</Link> 
    
-    
   },
   {
     segment: 'categorias',
     title: 'Categorias',
     icon: <GroupsIcon />,
     link: <Link to="/categorias">Categorias</Link> 
-   
-    
+
   },
   {
     segment: 'subcategorias',
@@ -54,7 +52,6 @@ const NAVIGATION = [
     icon: <GroupsIcon />,
     link: <Link to="/Subcategorias">Subcategorias</Link> 
    
-    
   },
   {
     segment: 'grupos',
@@ -67,7 +64,6 @@ const NAVIGATION = [
     icon: <GroupsIcon />,
     link: <Link to="/dashboard">Equipos</Link> 
    
-    
   },
   {
     segment: 'eliminatorias',
@@ -122,7 +118,8 @@ const NAVIGATION = [
         icon: <DescriptionIcon />,
       },
     ],
-  }
+  },
+  
 ];
 
 const demoTheme = createTheme({
@@ -247,24 +244,34 @@ function DemoPageContent({ pathname }) {
         textAlign: 'left',
       }}
     >
+     
       {content}
     </Box>
   );
 }
 
 
-function DashboardLayoutBasic(props) {
-  const { window } = props;
+function DashboardLayoutBasic(props ) {
+  const { window, setIsAuthenticated } = props; 
 
-  const [pathname, setPathname] = React.useState('/dashboard');
+  const [pathname, setPathname] = React.useState('/torneos');
 
   const router = React.useMemo(() => {
     return {
       pathname,
       searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
+      navigate: (path) => {
+        if (path === 'logout') {
+          // Lógica para cerrar sesión
+          setIsAuthenticated(false);
+          localStorage.removeItem('token'); // O cualquier otro método de logout
+          navigate('/login'); // Redirige a login
+        } else {
+          setPathname(String(path));
+        }
+      },
     };
-  }, [pathname]);
+  }, [pathname, setIsAuthenticated]);
 
   // Remove this const when copying and pasting into your project.
   const demoWindow = window !== undefined ? window() : undefined;
@@ -279,16 +286,31 @@ function DashboardLayoutBasic(props) {
     navigation={NAVIGATION}
     router={router}
     theme={demoTheme}
+   
+    
     window={demoWindow}
     >
       <DashboardLayout>
      
       {/* <RoutessComponent /> */}
+
         <DemoPageContent pathname={pathname} />
        
 
       </DashboardLayout>
      
+     
+      <Box
+    sx={{
+      position: 'absolute',
+      top: 80,
+      right: 10,
+      zIndex: 10,
+    }}
+  >
+
+    <LogoutButton setIsAuthenticated={setIsAuthenticated} />
+  </Box>
     </AppProvider>
   
     // preview-end
@@ -296,13 +318,11 @@ function DashboardLayoutBasic(props) {
 }
 
 DashboardLayoutBasic.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
+
   window: PropTypes.func,
+  setIsAuthenticated: PropTypes.func.isRequired,
 };
 
-// eslint-disable-next-line no-unused-vars
+
 
 export default DashboardLayoutBasic;
