@@ -159,3 +159,14 @@ font-size: 15px;
   font-size: 14px;
   margin-top: 10px;
 }
+@media (max-width: 768px) {
+  .posicion::after {
+   
+   
+    background-size: 95%;  
+    background-position:  50% 50%;
+    opacity: 0.6; 
+   
+  }
+  
+}
