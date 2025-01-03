@@ -3,26 +3,68 @@ import axios from "axios";
 
 import { API_ENDPOINT } from '../../ConfigAPI';
 import "./index.css";
+import Cargando from "../Carga/carga";
+import ErrorCarga from "../Error/Error";
+import ModalEdit from "../Formularios-edit/ModalEdit";
 
 const endpoint = `${API_ENDPOINT}categoria`;
 const InfoCategorias_endpoint = `${API_ENDPOINT}categorias`;
 const TorneosEndpoint = `${API_ENDPOINT}torneos`;
 
+
 const FORM_Categoria = () => {
+  
+  const [selectedCategoria, setSelectedCategoria] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
   const [nombre, setNombre] = useState("");
   const [TorneoID, setTorneoID] = useState("");
   const [Torneos, setTorneos] = useState([]);
   const [Categorias, setCategorias] = useState([]);
   const [setError] = useState(null);
+  const [error] = useState(null);
+  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
+  
+  const categoriasFields = [
+    { name: "nombre", label: "Nombre de la Categoría", required: true },
+    {
+      name: "torneo_id",
+      label: "Seleccionar Torneo",
+      type: "select",
+      required: true,
+      options: Torneos.map((torneo) => ({
+        value: torneo.id,
+        label: torneo.nombre,
+      })),
+    },
+  ];
+
+  const saveCategoria = async (updatedCategoria) => {
+    try {
+      await axios.put(`${API_ENDPOINT}categoria/${updatedCategoria.id}`, updatedCategoria);
+      fetchCategorias(); 
+      setAlerta({ mensaje: "Categoria actualizada correctamente!", tipo: "success" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTorneos((prevCategorias) =>
+        prevCategorias.map((c) => (c.id === updatedCategoria.id ? updatedCategoria : c))
+      
+      );
+    } catch (error) {
+      console.error("Error al actualizar la categoria:", error);
+      setAlerta({ mensaje: "Error al actualizar la categoria!", tipo: "danger" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+    }
+  };
 
   // Función para obtener las categorías
   const fetchCategorias = async () => {
     try {
       const response = await axios.get(`${InfoCategorias_endpoint}`);
       setCategorias(response.data);
+      setIsLoading(false);
     } catch (error) {
       setError("Error al cargar las categorías.");
       console.error("Error al obtener las categorías:", error);
+      setIsLoading(false);
     }
   };
 
@@ -40,17 +82,25 @@ const FORM_Categoria = () => {
 
     fetchTorneos();
     fetchCategorias();
-  }, []); // [] para asegurarse de que se ejecuta solo al montar el componente
+  }, []); 
 
   // Manejo del envío del formulario
   const store = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await axios.post(endpoint, { nombre, torneo_id: TorneoID });
       // Actualiza las categorías después de agregar una nueva
-      fetchCategorias(); // Ahora sí podemos llamar a fetchCategorias después de enviar
+      fetchCategorias(); 
+      setNombre("");
+      setTorneoID("");
+      setAlerta({ mensaje: "¡Categoría registrada con éxito!", tipo: "success" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
     } catch (error) {
       console.error('Error al guardar la categoría', error);
+      setAlerta({ mensaje: "Error al registrar la categoría.", tipo: "danger" });
+    }finally {
+      setIsLoading(false); 
     }
   };
 
@@ -60,16 +110,45 @@ const FORM_Categoria = () => {
       try {
         await axios.delete(`${endpoint}/${id}`);
         setCategorias(Categorias.filter((Categoria) => Categoria.id !== id));
+        setAlerta({ mensaje: "¡Categoría eliminada con éxito!", tipo: "success" });
        
       } catch (error) {
         console.error('Error al eliminar la categoria', error);
-       
+        setAlerta({ mensaje: "Error al eliminar la categoría.", tipo: "danger" });
       } 
     }
   };
 
+  useEffect(() => {
+    document.title = "Admin - Categorías";
+  }, []);
+
+
   return (
+    <>
+    {isLoading ? (
+      <div className="loading-container">
+        <Cargando/>
+      </div>
+    ) :  error ? (
+      <div className="loading-container">
+         <ErrorCarga/>
+      </div>
+    ) : (
+
     <div>
+      {alerta.mensaje && (
+  <div className={`alert alert-${alerta.tipo} alert-dismissible fade show`} role="alert">
+    {alerta.mensaje}
+    <button
+      type="button"
+      className="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      onClick={() => setAlerta({ mensaje: "", tipo: "" })}
+    ></button>
+  </div>
+)}
       <h1 className="text-left">Registro de Categorías</h1>
       <div>
         <form className="col-md-12" onSubmit={store}>
@@ -134,11 +213,12 @@ const FORM_Categoria = () => {
                   <td className="center">
                    
                   <button
-                      className="btn btn-warning fas fa-pen"
-                      onClick={() => alert('Implementar editar aquí')}
-                    >
-                      Editar
-                    </button>
+                                type="button"
+                                className="btn btn-warning"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                                onClick={() => setSelectedCategoria(Categoria)}
+                              >Editar</button>
                       <button
                       className="btn btn-danger far fa-trash-alt delete-btn"
                       onClick={() => deleteCategoria(Categoria.id)}
@@ -151,9 +231,17 @@ const FORM_Categoria = () => {
               ))}
             </tbody>
           </table>
+          <ModalEdit
+  data={selectedCategoria}
+  type="Categoría"
+  fields={categoriasFields}
+  onSave={saveCategoria}
+/>;
         </div>
       </div>
     </div>
+  )}
+   </>
   );
 };
 

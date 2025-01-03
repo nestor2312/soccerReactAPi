@@ -41,6 +41,10 @@ const AdminClasificacion = () => {
     setIsLoading(true);
   };
 
+  useEffect(() => {
+    document.title = "Admin - Clasificacion";
+  }, []);
+
   return (
     <>
     
@@ -55,60 +59,67 @@ const AdminClasificacion = () => {
       ) : (
         <section>
             <h1>Clasificacion</h1>
-          <div className="row">
-            {datosGrupos.map((datosGrupo) => (
-              <div key={datosGrupo.grupo.id} className="col-12 col-sm-12 col-md-6 mt-4">
-                <div className="card border-0 shadow">
-                  <div className="card-header fondo-card-admin TITULO-admin  border-0">
-                    {datosGrupo.grupo.nombre} 
-                  </div>
-                  <div className="card table-responsive border-0 table-sm">
-                    <table className="table-borderless">
-                      <tbody>
-                        <tr className="py-2">
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <th className="movil titulo2">PJ</th>
-                          <th className="movil titulo2">PG</th>
-                          <th className="movil titulo2">PE</th>
-                          <th className="movil titulo2">PP</th>
-                          <th className="movil titulo2">GF</th>
-                          <th className="movil titulo2">GC</th>
-                          <th className="movil titulo2 ">GD</th>
-                          <th className="movil titulo2">Pts</th>
-                        </tr>
-                        {datosGrupo.equipos.map((equipo, index) => (
-                          <tr key={equipo.id} className={index < 2 ? "fila-resaltada" : ""}>
-                            <td className="movil data">{index + 1}</td>
-                            <td>
-                              <img
-                                src={`${Images}/${equipo.archivo}`}
-                                width="50%"
-                                className="d-block mx-auto my-3 logomovil"
-                                alt={equipo.nombre}
-                              />
-                            </td>
-                            <td className="movil text-left team"  width="25%">
-                              {equipo.nombre}
-                            </td>
-                            <td className="movil data">{equipo.pj}</td>
-                            <td className="movil data">{equipo.pg}</td>
-                            <td className="movil data">{equipo.pe}</td>
-                            <td className="movil data">{equipo.pp}</td>
-                            <td className="movil data">{equipo.gf}</td>
-                            <td className="movil data">{equipo.gc}</td>
-                            <td className="movil data">{equipo.gd}</td>
-                            <td className="movil data">{equipo.puntos}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+            <div className="row">
+  {datosGrupos.map((datosGrupo) => (
+    <div key={datosGrupo.grupo.id} className="col-12 col-sm-12 col-md-6 mt-4">
+      <div className="card border-0 shadow">
+        <div className="card-header fondo-card-admin TITULO-admin border-0">
+          {datosGrupo.grupo.nombre}
+        </div>
+        <div className="card table-responsive border-0 table-sm">
+          <table className="table-borderless">
+            <tbody>
+              <tr className="py-2">
+                <td></td>
+                <td></td>
+                <td></td>
+                <th className="movil titulo2">PJ</th>
+                <th className="movil titulo2">PG</th>
+                <th className="movil titulo2">PE</th>
+                <th className="movil titulo2">PP</th>
+                <th className="movil titulo2">GF</th>
+                <th className="movil titulo2">GC</th>
+                <th className="movil titulo2">GD</th>
+                <th className="movil titulo2">Pts</th>
+              </tr>
+              {datosGrupo.equipos.map((equipo, index) => {
+                const numClasificados = datosGrupo.grupo.num_clasificados || 0;
+                return (
+                  <tr
+                    key={equipo.id}
+                    className={index < numClasificados ? "fila-resaltada" : ""}
+                  >
+                    <td className="movil data">{index + 1}</td>
+                    <td>
+                      <img
+                        src={`${Images}/${equipo.archivo}`}
+                        width="50%"
+                        className="d-block mx-auto my-3 logomovil"
+                        alt={equipo.nombre}
+                      />
+                    </td>
+                    <td className="movil text-left team" width="25%">
+                      {equipo.nombre}
+                    </td>
+                    <td className="movil data">{equipo.pj}</td>
+                    <td className="movil data">{equipo.pg}</td>
+                    <td className="movil data">{equipo.pe}</td>
+                    <td className="movil data">{equipo.pp}</td>
+                    <td className="movil data">{equipo.gf}</td>
+                    <td className="movil data">{equipo.gc}</td>
+                    <td className="movil data">{equipo.gd}</td>
+                    <td className="movil data">{equipo.puntos}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
           <div className="pagination mb-4">
             <button
               onClick={() => handlePageChange(currentPage - 1)}

@@ -1,13 +1,12 @@
+/* eslint-disable no-unused-vars */
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
-import EliminatoriasInfo from "../Admin/EliminatoriasCuadro";
-
+import EditPlayOffsModal from "../Formularios-edit/ModalEditPlayOffs";
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 const endpoint = `${API_ENDPOINT}eliminatoria`;
-const equiposEndpoint = `${API_ENDPOINT}equipos`;
 const Images = IMAGES_URL;
-
 const FORM_Eliminatorias = () => {
 
   const [marcadores, setMarcadores] = useState({
@@ -20,10 +19,8 @@ const FORM_Eliminatorias = () => {
   });
 
   const [numPartido, setNumPartido] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [tipoEliminatoria, setTipoEliminatoria] = useState("solo_ida");
-
-  
+  const [equiposFiltrados, setEquiposFiltrados] = useState([]);
   const [equipoVisitanteID, setEquipoVisitante] = useState("");
   const [equipoLocalID, setEquipoLocal] = useState("");
   const [equipos, setEquipos] = useState([]);
@@ -33,40 +30,50 @@ const FORM_Eliminatorias = () => {
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
   const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
   const [eliminatoriasFinal, setEliminatoriasFinal] = useState([]);
+  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
+  const [showModal, setShowModal] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
+  const handleEditClick = (partido) => {
+    setSelectedPartido(partido); // Asignar los datos del partido al estado
+    setShowModal(true); // Mostrar el modal
+  };
+
+  
+  
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedPartido(null); // Limpiar los datos del partido
+  };
+  
+
   const partidosEsperadosCuartos = 4;
   const partidosEsperadosSemis = 2;
   const partidosEsperadosFinal = 1;
-
   let partidosCuartos = [...eliminatoriasCuartos];
   let partidosSemis = [...eliminatoriasSemis];
   let partidoFinal = [...eliminatoriasFinal];
-
   while (partidosCuartos.length < partidosEsperadosCuartos) {
-    partidosCuartos.push({
-     
+    partidosCuartos.push({ 
     });
   }
   while (partidosSemis.length < partidosEsperadosSemis) {
-    partidosSemis.push({
-     
+    partidosSemis.push({ 
     });
   }
   while (partidoFinal.length < partidosEsperadosFinal) {
     partidoFinal.push({
     });
   }
-
   const handleSubcategoriaChange = (e) => {
     setSelectedSubcategoria(e.target.value);
   };
 
   useEffect(() => {
-
     const getEliminatorias = async () => {
       if (selectedSubcategoria) {
         try {
-          const response = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${selectedSubcategoria}`);
-         
+          const response = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${selectedSubcategoria}`);   
           const eliminatoriasData = response.data; // Almacenar la respuesta en una variable
           setEliminatoriasCuartos(eliminatoriasData.cuartos || []);
           setEliminatoriasSemis(eliminatoriasData.semis || []);
@@ -84,29 +91,37 @@ const FORM_Eliminatorias = () => {
   }, [selectedSubcategoria]);
     
   useEffect(() => {
-
     const fetchSubcategorias = async () => {
       try {
         const response = await axios.get(subcategoriasEndpoint);
-
         setSubcategorias(response.data);
       } catch (error) {
         console.error("Error al obtener las subcategorías:", error);
       }
     };
-    const fetchEquipos = async () => {
-      try {
-        const response = await axios.get(equiposEndpoint);
-        setEquipos(response.data);
-      } catch (error) {
-        console.error("Error al obtener los equipos:", error);
+    
+    fetchSubcategorias();
+  
+  }, []);
+  useEffect(() => {
+    const fetchEquiposPorSubcategoria = async () => {
+      if (SubcategoriaID) {
+        try {
+          const response = await axios.get(`${API_ENDPOINT}subcategoria/${SubcategoriaID}/equipos`);
+          setEquiposFiltrados(response.data); // Actualiza el estado con los equipos filtrados
+        } catch (error) {
+          console.error("Error al obtener los equipos por subcategoría:", error);
+        }
       }
     };
+  
+    fetchEquiposPorSubcategoria();
+  }, [SubcategoriaID]);
 
-    fetchSubcategorias();
-    fetchEquipos(); 
-  }, []);
 
+  const [selectedPartido, setSelectedPartido] = useState(null);
+
+  
   const [fieldsToShow, setFieldsToShow] = useState({
     ida: false,
     vuelta: false,
@@ -128,30 +143,172 @@ const handleMarcadorChange = (e) => {
       [name]: value,
   }));
 };
-  
-  const store = async (e) => {
-    e.preventDefault();
-    const data = {
-      ...marcadores,
-      equipo_a_id: equipoLocalID,
-      equipo_b_id: equipoVisitanteID,
-      numPartido,
-      tipo_eliminatoria: tipoEliminatoria,
-    
-      subcategoria_id: SubcategoriaID,
-    };
-    console.log('los datos a enviar son ===>',data);
-    try {
-      await axios.post(endpoint, data);
-      alert("Datos enviados exitosamente");
-    } catch (error) {
-      console.error("Error al enviar los datos:", error);
-      alert("Error al enviar los datos");
-    }
+
+
+const store = async (e) => {
+  e.preventDefault();
+
+  // Convertir numPartido a número y verificar que sea válido
+  const partidoNumero = parseInt(numPartido, 10);
+  if (isNaN(partidoNumero)) {
+    alert("El número de partido es inválido");
+    return;
+  }
+
+  // Definir los límites por fase (clave: numPartido)
+  const limitesRondas = {
+    1: 4, // Cuartos de final
+    2: 2, // Semifinales
+    3: 1, // Final
   };
 
+  const maxRegistros = limitesRondas[partidoNumero];
+  if (!maxRegistros) {
+    alert("El número de partido no corresponde a ninguna etapa válida.");
+    return;
+  }
+
+  // Seleccionar la lista correspondiente de eliminatorias según la fase
+  let registrosActuales = [];
+  switch (partidoNumero) {
+    case 1:
+      registrosActuales = eliminatoriasCuartos;
+      break;
+    case 2:
+      registrosActuales = eliminatoriasSemis;
+      break;
+    case 3:
+      registrosActuales = eliminatoriasFinal;
+      break;
+    default:
+      alert("El número de partido no corresponde a una fase válida.");
+      return;
+  }
+
+  // Filtrar registros actuales según subcategoria_id y numPartido
+  const registrosFiltrados = registrosActuales.filter(
+    (registro) =>
+      parseInt(registro.numPartido, 10) === partidoNumero &&
+      parseInt(registro.subcategoria_id, 10) === parseInt(SubcategoriaID, 10)
+  );
+
+  // Validar el límite de registros antes de proceder
+  if (registrosFiltrados.length >= maxRegistros) {
+    alert(`No puedes registrar más de ${maxRegistros} partidos para esta ronda en la subcategoría seleccionada.`);
+    return;
+  }
+
+  // Preparar los datos para el backend
+  const data = {
+    ...marcadores,
+    equipo_a_id: equipoLocalID,
+    equipo_b_id: equipoVisitanteID,
+    numPartido: partidoNumero,
+    tipo_eliminatoria: tipoEliminatoria,
+    subcategoria_id: parseInt(SubcategoriaID, 10),
+  };
+
+  console.log("Datos enviados al backend:", data);
+
+  try {
+    // Enviar datos al backend
+    const response = await axios.post(endpoint, data);
+    console.log("Respuesta del servidor:", response.data);
+
+    // Recargar las eliminatorias desde el backend
+    const getResponse = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${SubcategoriaID}`);
+    const updatedEliminatorias = getResponse.data;
+
+    // Actualizar estados locales
+    setEliminatoriasCuartos(updatedEliminatorias.cuartos || []);
+    setEliminatoriasSemis(updatedEliminatorias.semis || []);
+    setEliminatoriasFinal(updatedEliminatorias.final || []);
+
+    setAlerta({ mensaje: "¡Partido registrado correctamente!", tipo: "success" });
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+  } catch (error) {
+    console.error("Error al enviar los datos:", error);
+    setAlerta({ mensaje: "¡Error al registrar el partido!", tipo: "danger" });
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+  
+  }
+};
+
+const abreviarNombre = (nombre) => {
+  if (!nombre) return "por definir";
+
+  // Dividir el nombre en palabras
+  const palabras = nombre.split(" ");
+
+  if (palabras.length >= 2) {
+    // Primera letra de la primera palabra
+    const primeraLetraPrimeraPalabra = palabras[0].charAt(0).toUpperCase();
+    // Primera letra de la segunda palabra
+    const primeraLetraSegundaPalabra = palabras[1].charAt(0).toUpperCase();
+    // Segunda letra de la segunda palabra (si fuera necesario)
+    const adicional = palabras[1].charAt(1).toUpperCase() || palabras[0].charAt(1).toUpperCase();
+
+    return (
+      primeraLetraPrimeraPalabra + 
+      primeraLetraSegundaPalabra + 
+      adicional
+    ).slice(0, 3); // Asegurar 3 caracteres
+  }
+
+  // Si solo hay una palabra, tomar los primeros 3 caracteres
+  return nombre.slice(0, 3).toUpperCase();
+};
+
+
+
+
+
+
+
+const saveEliminatoria = async (updatedEliminatoria) => {
+  console.log('datos enviados al back son : ', updatedEliminatoria);
+  try {
+    await axios.put(`${API_ENDPOINT}eliminatoria/${updatedEliminatoria.id}`, updatedEliminatoria);
+    setAlerta({ mensaje: "¡Partido actualizado correctamente!", tipo: "success" });
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+    const response = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${selectedSubcategoria}`);
+    const updatedEliminatoriasData = response.data;
+
+    // Actualiza el estado con los datos obtenidos de la nueva solicitud
+    setEliminatoriasCuartos(updatedEliminatoriasData.cuartos || []);
+    setEliminatoriasSemis(updatedEliminatoriasData.semis || []);
+    setEliminatoriasFinal(updatedEliminatoriasData.final || []);
+  } catch (error) {
+    console.error("Error al actualizar eliminatoria:", error);
+    setAlerta({ mensaje: "¡Error al actualizar el partido!", tipo: "danger" });
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+  }
+};
+
+  
+
+
+  useEffect(() => {
+    document.title = "Admin - Eliminatorias";
+  }, []);
   return (
     <><div>
+       {alerta.mensaje && (
+        <div
+          className={`alert alert-${alerta.tipo} alert-dismissible fade show`}
+          role="alert"
+        >
+          {alerta.mensaje}
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+            onClick={() => setAlerta({ mensaje: "", tipo: "" })}
+          ></button>
+        </div>
+      )}
+
       <h1 className="text-left">Registro de Eliminatorias</h1>
       <form className="col s12" onSubmit={store}>
         <div className="row">
@@ -171,7 +328,6 @@ const handleMarcadorChange = (e) => {
               <option value="" disabled>
                 Selecciona una subcategoría
               </option>
-
               {subcategorias.map((subcategoria) => (
                 <option key={subcategoria.id} value={subcategoria.id}>
                   {subcategoria.nombre}
@@ -194,7 +350,7 @@ const handleMarcadorChange = (e) => {
               <option value="" disabled>
                 Selecciona un Equipo
               </option>
-              {equipos.map((equipo) => (
+              {equiposFiltrados.map((equipo) => (
                 <option key={equipo.id} value={equipo.id}>
                   {equipo.nombre}
                 </option>
@@ -288,7 +444,7 @@ const handleMarcadorChange = (e) => {
               <option value="" disabled>
                 Selecciona un Equipo
               </option>
-              {equipos.map((equipo) => (
+              {equiposFiltrados.map((equipo) => (
                 <option key={equipo.id} value={equipo.id}>
                   {equipo.nombre}
                 </option>
@@ -354,12 +510,8 @@ const handleMarcadorChange = (e) => {
           ))}
         </select>
 
-
-        
-
-        <EliminatoriasInfo/>
-        
-        <ul className="nav nav-pills">
+  
+        <ul className="nav nav-pills mt-2 mb-2">
           <li className="nav-item">
             <a className="nav-link active" data-bs-toggle="tab" href="#home">
               Cuartos
@@ -454,12 +606,8 @@ const handleMarcadorChange = (e) => {
           )}
           
           <td className="text-center">
-            <a href={`{{ route('eliminatorias.reset', ${partido.id}) }}`} className="btn btn-info">
-              <i className="fas fa-sync-alt"></i> Reiniciar
-            </a>
-            <a href={`eliminatorias/${partido.id}/edit`} className="btn btn-warning">
-              <i className="fas fa-pen"></i> Editar
-            </a>
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>Editar</button>
+
           </td>
         </tr>
       );
@@ -468,7 +616,15 @@ const handleMarcadorChange = (e) => {
 </table>
 
 
+ <EditPlayOffsModal
+      showModal={showModal}
+      onClose={handleCloseModal}
+      PlayOffsData={selectedPartido} // Pasa los datos del partido al modal
+      API_ENDPOINT={API_ENDPOINT} // Pasa el endpoint API
+      onSave={saveEliminatoria} // Función para guardar el partido
+    />
 </div>
+
 
           <div className="tab-pane container fade" id="menu1">
           <table className="table">
@@ -546,18 +702,21 @@ const handleMarcadorChange = (e) => {
           )}
           
           <td className="text-center">
-            <a href={`{{ route('eliminatorias.reset', ${partido.id}) }}`} className="btn btn-info">
-              <i className="fas fa-sync-alt"></i> Reiniciar
-            </a>
-            <a href={`eliminatorias/${partido.id}/edit`} className="btn btn-warning">
-              <i className="fas fa-pen"></i> Editar
-            </a>
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>Editar</button>
+
           </td>
         </tr>
       );
     })}
   </tbody>
 </table>
+<EditPlayOffsModal
+      showModal={showModal}
+      onClose={handleCloseModal}
+      PlayOffsData={selectedPartido} // Pasa los datos del partido al modal
+      API_ENDPOINT={API_ENDPOINT} // Pasa el endpoint API
+      onSave={saveEliminatoria} // Función para guardar el partido
+    />
           </div>
           
           <div className="tab-pane container fade" id="menu2">
@@ -636,18 +795,21 @@ const handleMarcadorChange = (e) => {
           )}
           
           <td className="text-center">
-            <a href={`{{ route('eliminatorias.reset', ${partido.id}) }}`} className="btn btn-info">
-              <i className="fas fa-sync-alt"></i> Reiniciar
-            </a>
-            <a href={`eliminatorias/${partido.id}/edit`} className="btn btn-warning">
-              <i className="fas fa-pen"></i> Editar
-            </a>
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>Editar</button>
+
           </td>
         </tr>
       );
     })}
   </tbody>
 </table>
+<EditPlayOffsModal
+      showModal={showModal}
+      onClose={handleCloseModal}
+      PlayOffsData={selectedPartido} // Pasa los datos del partido al modal
+      API_ENDPOINT={API_ENDPOINT} // Pasa el endpoint API
+      onSave={saveEliminatoria} // Función para guardar el partido
+    />
           </div>
         </div>
 
@@ -697,7 +859,9 @@ const handleMarcadorChange = (e) => {
             className="logo" 
           />
           <span className="equipo">
-            {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
+          {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
+
+          
           </span>
           <span className="goles">
             {marcador1_ida} {marcador1_vuelta || " "}
@@ -718,7 +882,8 @@ const handleMarcadorChange = (e) => {
             className="logo" 
           />
           <span className="equipo">
-            {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+          {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
+
           </span>
           <span className="goles">
             {marcador2_ida} {marcador2_vuelta || ""}
@@ -762,21 +927,22 @@ const handleMarcadorChange = (e) => {
                 {/* {{--semis --}} */}
                 <div className="jornada_contenedor">
   {partidosSemis.map((partido, index) => {
-    // Definir valores de ida y vuelta para global y penales
-    const marcador1_ida = partido.marcador1_ida || '';
-    const marcador1_vuelta = partido.marcador1_vuelta || '';
-    const marcador2_ida = partido.marcador2_ida || '';
-    const marcador2_vuelta = partido.marcador2_vuelta || '';
 
-    // Calcular el marcador global solo si hay marcador de vuelta
-    const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
-    const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
 
-    // Determinar el ganador en caso de ida/vuelta o en penales
-    const isLocalWinner = marcador1_global > marcador2_global ||
-                          (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
-    const isVisitanteWinner = marcador2_global > marcador1_global ||
-                              (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
+const marcador1_ida = partido.marcador1_ida;
+const marcador1_vuelta = partido.marcador1_vuelta;
+const marcador2_ida = partido.marcador2_ida;
+const marcador2_vuelta = partido.marcador2_vuelta;
+
+// Calcular los marcadores globales si hay marcador de vuelta
+const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
+const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
+
+// Condiciones para determinar el ganador
+const isLocalWinner = marcador1_global > marcador2_global || 
+                      (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
+const isVisitanteWinner = marcador2_global > marcador1_global || 
+                          (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
 
     return (
       <>
@@ -790,14 +956,14 @@ const handleMarcadorChange = (e) => {
               className="logo" 
             />
             <span className="equipo">
-              {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
+            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador1_ida} - {marcador1_vuelta || "-"}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador1_vuelta && ` (Global: ${marcador1_global})`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? ` | Penales: ${partido.marcador1_penales}` : ""}
+            {marcador1_ida} {marcador1_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador1_vuelta && ` (${marcador1_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
             </span>
           </div>
         </div>
@@ -812,14 +978,14 @@ const handleMarcadorChange = (e) => {
               className="logo" 
             />
             <span className="equipo">
-              {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador2_ida} - {marcador2_vuelta || "-"}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador2_vuelta && ` (Global: ${marcador2_global})`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? ` | Penales: ${partido.marcador2_penales}` : ""}
+            {marcador2_ida} {marcador2_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador2_vuelta && ` (${marcador2_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? `  (${partido.marcador2_penales})` : ""}
             </span>
           </div>
         </div>
@@ -844,22 +1010,21 @@ const handleMarcadorChange = (e) => {
                 {/* {{-- final --}}     */}
                 <div className="jornada_contenedor">
   {partidoFinal.map((partido, index) => {
-    // Definir valores de ida y vuelta y global
-    const marcador1_ida = partido.marcador1_ida || '';
-    const marcador1_vuelta = partido.marcador1_vuelta || '';
-    const marcador2_ida = partido.marcador2_ida || '';
-    const marcador2_vuelta = partido.marcador2_vuelta || '';
-
-    // Calcular el marcador global solo si hay marcador de vuelta
-    const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
-    const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
-
-    // Determinar el ganador con marcador global y penales
-    const isLocalWinner = marcador1_global > marcador2_global ||
-                          (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
-    const isVisitanteWinner = marcador2_global > marcador1_global ||
-                              (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
-
+     const marcador1_ida = partido.marcador1_ida;
+     const marcador1_vuelta = partido.marcador1_vuelta;
+     const marcador2_ida = partido.marcador2_ida;
+     const marcador2_vuelta = partido.marcador2_vuelta;
+   
+     // Calcular los marcadores globales si hay marcador de vuelta
+     const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
+     const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
+   
+     // Condiciones para determinar el ganador
+     const isLocalWinner = marcador1_global > marcador2_global || 
+                           (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
+     const isVisitanteWinner = marcador2_global > marcador1_global || 
+                               (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
+   
     return (
       <>
         <div className="jornada" key={`local-${index}`}>
@@ -874,14 +1039,14 @@ const handleMarcadorChange = (e) => {
               className="logo"
             />
             <span className="equipo">
-              {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
+            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador1_ida} {marcador1_vuelta || "-"}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador1_vuelta && ` (${marcador1_global})`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `(${partido.marcador1_penales})` : ""}
+            {marcador1_ida} {marcador1_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador1_vuelta && ` (${marcador1_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
             </span>
           </div>
         </div>
@@ -898,14 +1063,14 @@ const handleMarcadorChange = (e) => {
               className="logo"
             />
             <span className="equipo">
-              {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador2_ida} {marcador2_vuelta || "-"}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador2_vuelta && ` (${marcador2_global})`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? `(${partido.marcador2_penales})` : ""}
+            {marcador2_ida} {marcador2_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador2_vuelta && ` (${marcador2_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? `  (${partido.marcador2_penales})` : ""}
             </span>
           </div>
         </div>

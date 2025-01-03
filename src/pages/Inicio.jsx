@@ -125,12 +125,34 @@ const Inicio = ()=>{
     }, [subcategoriaId]);
 
     
-// const abreviarNombre = (nombre) => {
-//   if (!nombre) return "Por definir";
-//   return window.innerWidth <= 768 ? nombre.slice(0, 3) : nombre;
-// };
-// {abreviarNombre(partido.equipo_b?.nombre)}
+    const abreviarNombre = (nombre) => {
+      if (!nombre) return "por definir";
+    
+      // Dividir el nombre en palabras
+      const palabras = nombre.split(" ");
+    
+      if (palabras.length >= 2) {
+        // Primera letra de la primera palabra
+        const primeraLetraPrimeraPalabra = palabras[0].charAt(0).toUpperCase();
+        // Primera letra de la segunda palabra
+        const primeraLetraSegundaPalabra = palabras[1].charAt(0).toUpperCase();
+        // Segunda letra de la segunda palabra (si fuera necesario)
+        const adicional = palabras[1].charAt(1).toUpperCase() || palabras[0].charAt(1).toUpperCase();
+    
+        return (
+          primeraLetraPrimeraPalabra + 
+          primeraLetraSegundaPalabra + 
+          adicional
+        ).slice(0, 3); // Asegurar 3 caracteres
+      }
+    
+      // Si solo hay una palabra, tomar los primeros 3 caracteres
+      return nombre.slice(0, 3).toUpperCase();
+    };
 
+useEffect(() => {
+  document.title = "Inicio";
+}, []);
 return<>
 <Menu/>
 {isLoading ? (
@@ -302,21 +324,21 @@ return<>
                 <div className="jornada_contenedor">
                 {/* Cuartos */}
                 {partidosCuartos.map((partido, index) => {
-  const marcador1_ida = partido.marcador1_ida;
-  const marcador1_vuelta = partido.marcador1_vuelta;
-  const marcador2_ida = partido.marcador2_ida;
-  const marcador2_vuelta = partido.marcador2_vuelta;
-
-  // Calcular los marcadores globales si hay marcador de vuelta
-  const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
-  const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
-
-  // Condiciones para determinar el ganador
-  const isLocalWinner = marcador1_global > marcador2_global || 
-                        (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
-  const isVisitanteWinner = marcador2_global > marcador1_global || 
-                            (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
-
+   const marcador1_ida = partido.marcador1_ida;
+   const marcador1_vuelta = partido.marcador1_vuelta;
+   const marcador2_ida = partido.marcador2_ida;
+   const marcador2_vuelta = partido.marcador2_vuelta;
+ 
+   // Calcular los marcadores globales si hay marcador de vuelta
+   const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
+   const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
+ 
+   // Condiciones para determinar el ganador
+   const isLocalWinner = marcador1_global > marcador2_global || 
+                         (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
+   const isVisitanteWinner = marcador2_global > marcador1_global || 
+                             (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
+ 
   return (
     <div className="partido" key={index}>
       <div className="jornada">
@@ -330,7 +352,7 @@ return<>
             className="logo" 
           />
           <span className="equipo">
-            {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
+          {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
           </span>
           <span className="goles">
             {marcador1_ida} {marcador1_vuelta || " "}
@@ -351,7 +373,7 @@ return<>
             className="logo" 
           />
           <span className="equipo">
-            {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+          {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
           </span>
           <span className="goles">
             {marcador2_ida} {marcador2_vuelta || ""}
@@ -395,22 +417,21 @@ return<>
                 {/* {{--semis --}} */}
                 <div className="jornada_contenedor">
   {partidosSemis.map((partido, index) => {
-    // Definir valores de ida y vuelta para global y penales
-    const marcador1_ida = partido.marcador1_ida || '';
-    const marcador1_vuelta = partido.marcador1_vuelta || '';
-    const marcador2_ida = partido.marcador2_ida || '';
-    const marcador2_vuelta = partido.marcador2_vuelta || '';
-
-    // Calcular el marcador global solo si hay marcador de vuelta
-    const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
-    const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
-
-    // Determinar el ganador en caso de ida/vuelta o en penales
-    const isLocalWinner = marcador1_global > marcador2_global ||
-                          (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
-    const isVisitanteWinner = marcador2_global > marcador1_global ||
-                              (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
-
+     const marcador1_ida = partido.marcador1_ida;
+     const marcador1_vuelta = partido.marcador1_vuelta;
+     const marcador2_ida = partido.marcador2_ida;
+     const marcador2_vuelta = partido.marcador2_vuelta;
+   
+     // Calcular los marcadores globales si hay marcador de vuelta
+     const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
+     const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
+   
+     // Condiciones para determinar el ganador
+     const isLocalWinner = marcador1_global > marcador2_global || 
+                           (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
+     const isVisitanteWinner = marcador2_global > marcador1_global || 
+                               (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
+   
     return (
       <>
         <div className="jornada" key={`local-${index}`}>
@@ -423,14 +444,14 @@ return<>
               className="logo" 
             />
             <span className="equipo">
-              {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
+            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador1_ida} - {marcador1_vuelta || "-"}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador1_vuelta && ` (Global: ${marcador1_global})`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? ` | Penales: ${partido.marcador1_penales}` : ""}
+            {marcador1_ida} {marcador1_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador1_vuelta && ` (${marcador1_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
             </span>
           </div>
         </div>
@@ -445,14 +466,14 @@ return<>
               className="logo" 
             />
             <span className="equipo">
-              {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador2_ida} - {marcador2_vuelta || "-"}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador2_vuelta && ` (Global: ${marcador2_global})`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? ` | Penales: ${partido.marcador2_penales}` : ""}
+            {marcador2_ida} {marcador2_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador2_vuelta && ` (${marcador2_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? `  (${partido.marcador2_penales})` : ""}
             </span>
           </div>
         </div>
@@ -477,22 +498,21 @@ return<>
                 {/* {{-- final --}}     */}
                 <div className="jornada_contenedor">
   {partidoFinal.map((partido, index) => {
-    // Definir valores de ida y vuelta y global
-    const marcador1_ida = partido.marcador1_ida || '';
-    const marcador1_vuelta = partido.marcador1_vuelta || '';
-    const marcador2_ida = partido.marcador2_ida || '';
-    const marcador2_vuelta = partido.marcador2_vuelta || '';
-
-    // Calcular el marcador global solo si hay marcador de vuelta
-    const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
-    const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
-
-    // Determinar el ganador con marcador global y penales
-    const isLocalWinner = marcador1_global > marcador2_global ||
-                          (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
-    const isVisitanteWinner = marcador2_global > marcador1_global ||
-                              (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
-
+     const marcador1_ida = partido.marcador1_ida;
+     const marcador1_vuelta = partido.marcador1_vuelta;
+     const marcador2_ida = partido.marcador2_ida;
+     const marcador2_vuelta = partido.marcador2_vuelta;
+   
+     // Calcular los marcadores globales si hay marcador de vuelta
+     const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
+     const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
+   
+     // Condiciones para determinar el ganador
+     const isLocalWinner = marcador1_global > marcador2_global || 
+                           (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
+     const isVisitanteWinner = marcador2_global > marcador1_global || 
+                               (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
+   
     return (
       <>
         <div className="jornada" key={`local-${index}`}>
@@ -507,14 +527,14 @@ return<>
               className="logo"
             />
             <span className="equipo">
-              {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"}
+            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador1_ida}  {marcador1_vuelta || ""}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador1_vuelta && `  ${marcador1_global}`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
+            {marcador1_ida} {marcador1_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador1_vuelta && ` (${marcador1_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
             </span>
           </div>
         </div>
@@ -531,14 +551,14 @@ return<>
               className="logo"
             />
             <span className="equipo">
-              {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
             </span>
             <span className="goles">
-              {marcador2_ida}  {marcador2_vuelta || ""}
-              {/* Mostrar global solo si hay marcador de vuelta */}
-              {marcador2_vuelta && ` ${marcador2_global}`}
-              {/* Mostrar penales solo si están definidos */}
-              {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? ` (${partido.marcador2_penales})` : ""}
+            {marcador2_ida} {marcador2_vuelta || " "}
+            {/* Goles Globales solo si hay marcador de vuelta */}
+            {marcador2_vuelta && ` (${marcador2_global})`}
+            {/* Penales solo si están definidos */}
+            {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? `  (${partido.marcador2_penales})` : ""}
             </span>
           </div>
         </div>

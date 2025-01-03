@@ -52,6 +52,7 @@
     z-index: 1;
 }
 .boton-torneo span {
+  letter-spacing: 0.02em;
     color: #FFF;
 text-transform: capitalize;
     /* text-shadow: 
@@ -75,23 +76,23 @@ text-transform: capitalize;
     color: #FFF;
     text-align: center;
     text-shadow: 
-    -2px -2px 0 #00BF63CC, 
+    /* -2px -2px 0 #00BF63CC, 
     2px -2px 0 #00BF63CC, 
     -2px 2px 0 #00BF63CC, 
     2px 2px 0 #00BF63CC, 
-    0px 4px 6px #000000cc; 
-      text-shadow: .1em .1em 0 #09537E;
-    font-family: "Days One";
+    0px 4px 6px #000000cc;  */
+      /* text-shadow: .1em .1em 0 #09537E; */
+    /* font-family: "Days One";
     font-size: 40px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 6px;
 
-} */
+} */ 
 .text-title{
 text-transform: uppercase;
-color: #09537E; /* Un azul que combina con tu diseño */
+color: #09537E; 
 text-align: center;
 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 font-family: "Days One", sans-serif;

@@ -24,7 +24,7 @@
 .TITULO {
   color: #FFF;
   text-align: center;
-  font-family: Roboto Condensed;
+  font-family: 'Roboto Condensed', sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
@@ -161,6 +161,8 @@ a {
   }
   .logomovil{
     width: 50%;
+  
+    /* object-fit: contain; */
   }
   .margen-mobile {
     margin: auto -10px!important;

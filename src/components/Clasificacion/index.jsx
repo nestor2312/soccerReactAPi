@@ -331,6 +331,10 @@ const Clasificacion = () => {
     getGroupsAll();
   }, [currentPage, subcategoriaId]);
 
+  useEffect(() => {
+    document.title = "Clasificacion";
+  }, []);
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= lastPage) {
       setCurrentPage(page);

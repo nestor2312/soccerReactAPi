@@ -21,15 +21,34 @@ input{
     font-size: 16px;
     color: #000000;
   }
-  .card_red{
-    position: absolute;
-    /* left: 10px; */
-    height: 8px;
-    width: 4px;
-    border-radius: 6px;
-    border: none;
-    background: red;
-  }
+
+
+
+/* Styles for Cards Icons */
+.card-icon {
+ 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Red Card Icon */
+.card_red {
+  width: 16px;
+  height: 24px;
+}
+
+/* Yellow Card Icon */
+.card_yellow {
+  width: 16px;
+  height: 24px;
+}
+
+/* Adjust Spacing Between Image and Text */
+.card-icon img {
+  margin-top: 4px;
+}
+  
 
 
 
@@ -247,6 +266,8 @@ input{
   
     color: #fff;
   }
+
+ 
   
   
   /* Media//////////////////////////////////////////////////////////////////////// */

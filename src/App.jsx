@@ -92,6 +92,8 @@ import Partidos from "./components/Partidos/Partidos";
 import Equipos from "./components/Equipos/Equipos";
 import Jugadores from "./components/Jugadores/Jugadores";
 import Clasificacion from "./components/Clasificacion";
+import Estadisticas from "./components/estadisticas/Estadisticas";
+
 // import Registrar from "./components/Registrar/Registrar";
 import Torneo from "./components/Torneo/Torneo";
 import Categoria from "./components/Categoria/Categoria";
@@ -152,6 +154,10 @@ function App() {
         <Route
           path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/clasificacion"
           element={<Clasificacion />}
+        />
+          <Route
+         path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/estadisticas"
+          element={<Estadisticas/>}
         />
       
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />

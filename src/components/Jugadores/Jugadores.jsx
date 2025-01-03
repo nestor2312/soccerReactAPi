@@ -9,6 +9,7 @@ import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
 import ErrorCarga from "../Error/Error";
 import { useParams } from "react-router-dom";
+
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
@@ -34,6 +35,10 @@ const Jugadores = () => {
     getJugadores();
   }, [subcategoriaId]);
 
+  
+  useEffect(() => {
+    document.title = "Jugadores";
+  }, []);
   return ( <>
     <Menu/>
     {isLoading ? (

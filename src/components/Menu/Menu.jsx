@@ -51,6 +51,12 @@ const Menu = () => {
       >
         Equipos
       </Link>
+      <Link
+        to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/estadisticas`}
+        className={`nv ${location.pathname.includes('estadisticas') ? 'active' : ''}`}
+      >
+        Estadisticas
+      </Link>
     </div>
   
     <div className="navbar-toggle" onClick={toggleMenu}>

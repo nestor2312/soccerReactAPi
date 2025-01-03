@@ -30,6 +30,11 @@ const Subcategoria = () => {
     fetchSubcategorias();
   }, [categoriaId]);
 
+  useEffect(() => {
+    document.title = "Subcategorías";
+  }, []);
+
+
   return (
     <>
       <h2 className="text-center text-title mt-2">Subcategorías</h2>

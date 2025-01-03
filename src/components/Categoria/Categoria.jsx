@@ -28,6 +28,11 @@ const Categoria = () => {
     fetchCategorias();
   }, [id]);
 
+  useEffect(() => {
+    document.title = "Categorias";
+  }, []);
+
+
   return (
     <>
     

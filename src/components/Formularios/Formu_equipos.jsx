@@ -1,13 +1,12 @@
+
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { API_ENDPOINT,IMAGES_URL } from '../../ConfigAPI';
+import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
+import Alert from "../Alerta/Alerta";
 import "./index.css";
-
-const endpoint = `${API_ENDPOINT}equipo`;
-const Infoendpoint = `${API_ENDPOINT}equipos`;
-const gruposEndpoint = `${API_ENDPOINT}grupos`;
-const Images =IMAGES_URL;
+import EditTeamModal from "../Formularios-edit/ModalEditTeams";
 
 
 const FORM_Teams = () => {
@@ -17,35 +16,99 @@ const FORM_Teams = () => {
   const [grupos, setGrupos] = useState([]);
   const [Teams, setTeams] = useState([]);
   const [setError] = useState(null);
-  // Fetch grupos al cargar el componente
+  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
+  const endpoint = `${API_ENDPOINT}equipo`;
+  const Infoendpoint = `${API_ENDPOINT}equipos`;
+  const gruposEndpoint = `${API_ENDPOINT}grupos`;
+  const [selectedTeam, setSelectedTeam] = useState(null);
+
+  const handleUpdateTeam = async (team) => {
+    try {
+      // Crear un objeto FormData
+      const data = {
+        nombre: team.nombre,
+        grupo_id: team.grupo_id,
+      };
+      // Si hay un archivo, convertirlo a base64
+      if (team.archivo) {
+        const base64Archivo = await new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          // fileReader.onloadend = () => resolve(fileReader.result.split(",")[1]);
+          fileReader.onloadend = () => resolve(fileReader.result); // Mantener el prefijo completo
+          fileReader.onerror = reject;
+          fileReader.readAsDataURL(team.archivo);
+        });
+        data.archivo = base64Archivo; // Agregar el archivo convertido a base64 al objeto
+        
+
+      }
+      // Enviar los datos (ya sea con o sin archivo)
+      await axios.put(`${endpoint}/${team.id}`, data, {
+        headers: {
+          "Content-Type": "application/json", // Especifica que estamos enviando JSON
+        },
+      });
+      console.log("Equipo actualizado correctamente");
+      setAlerta({ mensaje: "Equipo actualizado exitosamente.", tipo: "success" });
+      InfoEquipos(); // Refresca la lista de equipos
+      setSelectedTeam(null); // Resetea la selección del equipo
+    } catch (error) {
+      if (error.response) {
+        console.error("Error del servidor:", error.response.data);
+        setAlerta({ mensaje: `Error: ${error.response.data}`, tipo: "error" });
+      } else {
+        console.error("Error inesperado:", error.message);
+        setAlerta({ mensaje: `Error: ${error.message}`, tipo: "error" });
+      }
+    }
+  };
+  
+  
+  
+  
+
+
   useEffect(() => {
     const fetchGrupos = async () => {
       try {
         const response = await axios.get(gruposEndpoint);
         setGrupos(response.data);
       } catch (error) {
-        setError("Error al cargar los equipos.");
+        setError("Error al cargar los grupos.");
         console.error("Error al obtener los grupos:", error);
       }
     };
     fetchGrupos();
-
-    const InfoEquipos = async () => {
-      try {
-        const response = await axios.get(`${Infoendpoint}`);
-        setTeams(response.data);
-      
-      } catch (error) {
-       
-        setError("Error al cargar los equipos.");
-        console.error("Error al obtener los equipos:", error);
-      }
-    };
-    InfoEquipos();
-
   }, []);
 
-  // Manejo del envío del formulario
+  const InfoEquipos = async () => {
+    try {
+      const response = await axios.get(Infoendpoint);
+      setTeams(response.data);
+    } catch (error) {
+      setError("Error al cargar los equipos.");
+      console.error("Error al obtener los equipos:", error);
+    }
+  };
+
+  useEffect(() => {
+    InfoEquipos();
+    document.title = "Admin - Equipos";
+  }, []);
+
+  const deleteEquipos = async (id) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este equipo?")) {
+      try {
+        await axios.delete(`${endpoint}/${id}`);
+        setAlerta({ mensaje: "Equipo eliminado correctamente.", tipo: "success" });
+        setTeams((prevTeams) => prevTeams.filter((team) => team.id !== id));
+      } catch (error) {
+        setError("Error al eliminar el equipo.");
+        console.error("Error al eliminar el equipo:", error);
+      }
+    }
+  };
+
   const store = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -55,23 +118,29 @@ const FORM_Teams = () => {
 
     try {
       await axios.post(endpoint, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      alert("Datos enviados exitosamente");
+      InfoEquipos();
+      setAlerta({ mensaje: "Equipo agregado exitosamente.", tipo: "success" });
     } catch (error) {
+      setAlerta({ mensaje: "Error al agregar el equipo.", tipo: "danger" });
       console.error("Error al enviar los datos:", error);
-      alert("Error al enviar los datos");
+      setError("Error al enviar los datos.");
     }
   };
 
   return (
     <div>
-      <h1 className="text-left ">Registro de Equipos</h1>
-      <div>
-
-        <form className="col-md-12" onSubmit={store}>
+{alerta.mensaje && (
+  <Alert
+    mensaje={alerta.mensaje}
+    tipo={alerta.tipo}
+    onClose={() => setAlerta({ mensaje: "", tipo: "" })}
+  />
+)}
+      <h1 className="text-left">Registro de Equipos</h1>
+    
+      <form className="col-md-12" onSubmit={store}>
           {/* Nombre del equipo */}
           <div className="form-group">
             <label htmlFor="nombre">Nombre del Equipo:</label>
@@ -81,10 +150,8 @@ const FORM_Teams = () => {
               id="nombre"
               placeholder="Ingrese el nombre del equipo"
               value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
+              onChange={(e) => setNombre(e.target.value)} />
           </div>
-
           {/* Selector de grupo */}
           <div className="form-group mt-3">
             <label htmlFor="grupo_id">Selecciona un grupo:</label>
@@ -92,14 +159,13 @@ const FORM_Teams = () => {
               id="grupo_id"
               className="form-control"
               value={GrupoID}
-              onChange={(e) => setGrupoID(e.target.value)}
-            >
+              onChange={(e) => setGrupoID(e.target.value)}>
               <option value="" disabled>
                 Selecciona un grupo
               </option>
               {grupos.map((grupo) => (
                 <option key={grupo.id} value={grupo.id}>
-                  {grupo.nombre}
+                  {grupo.nombre} - {grupo.subcategoria.nombre} 
                 </option>
               ))}
             </select>
@@ -123,67 +189,66 @@ const FORM_Teams = () => {
             </button>
           </div>
         </form>
+
+      <div className="table-responsive card my-2">
+        <table className="table">
+          <thead className="thead-light">
+            <tr>
+              <th className="text-center">Logo</th>
+              <th className="text-center">Grupo</th>
+              <th className="text-center">Equipo</th>
+              <th className="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Teams.map((team) => (
+              <tr key={team.id}>
+                <td className="text-center">
+                  <img
+                    src={`${IMAGES_URL}/${team.archivo}`}
+                    width="50%"
+                    className="d-block mx-auto my-3 logomovil"
+                    alt={team.nombre}
+                    onError={(e) => (e.target.src = "/ruta/a/imagen-defecto.png")}
+                  />
+                </td>
+                <td className="text-center align-middle">{team.grupo.nombre}</td>
+                <td className="text-center align-middle">{team.nombre}</td>
+                <td className="text-center align-middle">
+                <button
+  type="button"
+  className="btn btn-warning"
+  data-bs-toggle="modal"
+  data-bs-target="#editModal"
+  onClick={() => {
+    if (team) setSelectedTeam(team);
+  }}
+>
+  Editar
+</button>
+
+                      <button               
+                    className="btn btn-danger far fa-trash-alt delete-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      deleteEquipos(team.id);
+                    }}
+                  >
+                    Borrar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+       <EditTeamModal
+        team={selectedTeam} 
+        onUpdate={handleUpdateTeam} 
+        grupos={grupos} />
       </div>
-
-      {/* Tabla para mostrar los equipos */}
-  
-      <div>  
-      <div className="table-responsive card my-2">   
-  <table className="table ">
-    <thead className="thead-light">
-      <tr>
-        <th className="text-center">Logo</th>
-        <th className="text-center">Grupo</th>
-        <th className="text-center">Equipo</th>
-        <th className="text-center">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {Teams.map((team) => (
-        <tr key={team.id}>
-          {/* Centramos el logo */}
-          <td className="text-center">
-            <img
-            onError={'eorro'}
-              src={`${Images}/${team.archivo}`}
-              width="50%"
-              className="d-block mx-auto my-3 logomovil"
-              alt={team.nombre}
-            />
-          </td>
-          
-          {/* Centramos el nombre del grupo */}
-          <td className="text-center align-middle">{team.grupo.nombre}</td>
-
-          {/* Centramos el nombre del equipo */}
-          <td className="text-center align-middle">{team.nombre}</td>
-
-          {/* Centramos las acciones */}
-          <td className="text-center align-middle">
-            <button
-              className="btn btn-warning fas fa-pen mx-2"
-              // onClick={() => (team.id)}
-            >
-              Editar
-            </button>
-            <button
-              className="btn btn-danger far fa-trash-alt mx-2"
-              onClick={() => (team.id)}
-            >
-              Borrar
-            </button>
-          </td>
-        </tr>
-      ))}
-      
-    </tbody>
-  </table>
-</div>
-
-</div>
     </div>
-
   );
 };
 
 export default FORM_Teams;
+

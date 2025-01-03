@@ -13,6 +13,10 @@ const Register = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();  // Hook para redirección
 
+    useEffect(() => {
+        document.title = "Registrarse";
+      }, []);
+
     const handleRegister = async (e) => {
         e.preventDefault();
 

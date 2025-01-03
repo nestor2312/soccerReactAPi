@@ -26,6 +26,10 @@ const Torneo = () => {
 
     getTorneosAll();
   }, []);
+  useEffect(() => {
+    document.title = "Torneos";
+  }, []);
+
 
   return (
     <>

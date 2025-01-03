@@ -55,6 +55,10 @@ const Login = ({ setIsAuthenticated }) => {
     };
   }, []);
 
+  useEffect(() => {
+    document.title = "Iniciar sesion";
+  }, []);
+
   return (
     <>
       <div className="posicion">

@@ -40,6 +40,11 @@ const Equipos = () => {
     setIsLoading(true);
   };
 
+  useEffect(() => {
+    document.title = "Equipos";
+  }, []);
+
+
   return (
     <>
       <Menu />

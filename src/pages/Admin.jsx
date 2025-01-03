@@ -6,9 +6,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import TableViewIcon from '@mui/icons-material/TableView';
-import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
 import GroupIcon from '@mui/icons-material/Group';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
@@ -85,40 +83,11 @@ const NAVIGATION = [
     title: 'Jugadores',
     icon: <GroupIcon />,
   },
-  {
-    segment: 'orders',
-    title: 'Anotaciones',
-    icon: <GroupIcon />,
-  },
-  {
-    segment: 'asistencias',
-    title: 'Asistencias',
-    icon: <GroupIcon />,
-  },
+ 
   {
     kind: 'divider',
   },
-  {
-    kind: 'header',
-    title: 'Estadisticas',
-  },
-  {
-    segment: 'reports',
-    title: 'estadisticas',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'goles',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'asistencias',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
+
   
 ];
 
