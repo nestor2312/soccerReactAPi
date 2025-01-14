@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import EditPlayOffsModal from "../Formularios-edit/ModalEditPlayOffs";
+
+import CreateIcon from '@mui/icons-material/Create';
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 const endpoint = `${API_ENDPOINT}eliminatoria`;
 const Images = IMAGES_URL;
@@ -225,11 +227,11 @@ const store = async (e) => {
     setEliminatoriasFinal(updatedEliminatorias.final || []);
 
     setAlerta({ mensaje: "¡Partido registrado correctamente!", tipo: "success" });
-    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
   } catch (error) {
     console.error("Error al enviar los datos:", error);
     setAlerta({ mensaje: "¡Error al registrar el partido!", tipo: "danger" });
-    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
   
   }
 };
@@ -270,7 +272,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
   try {
     await axios.put(`${API_ENDPOINT}eliminatoria/${updatedEliminatoria.id}`, updatedEliminatoria);
     setAlerta({ mensaje: "¡Partido actualizado correctamente!", tipo: "success" });
-    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     const response = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${selectedSubcategoria}`);
     const updatedEliminatoriasData = response.data;
 
@@ -281,7 +283,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
   } catch (error) {
     console.error("Error al actualizar eliminatoria:", error);
     setAlerta({ mensaje: "¡Error al actualizar el partido!", tipo: "danger" });
-    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
   }
 };
 
@@ -365,6 +367,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               className="form-control validate"
               name="marcador1_ida"
               type="number"
+    min={0}
+    max={100} 
               placeholder="Marcador Local (Ida)"
               value={marcadores.marcador1_ida}
               onChange={handleMarcadorChange}
@@ -374,6 +378,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               className="form-control validate"
               name="marcador2_ida"
               type="number"
+    min={0}
+    max={100} 
               placeholder="Marcador Visitante (Ida)"
               value={marcadores.marcador2_ida}
               onChange={handleMarcadorChange}
@@ -389,6 +395,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               className="form-control validate"
               name="marcador1_vuelta"
               type="number"
+              min={0}
+              max={20} 
               placeholder="Marcador Local (Vuelta)"
               value={marcadores.marcador1_vuelta}
               onChange={handleMarcadorChange}
@@ -398,6 +406,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               className="form-control validate"
               name="marcador2_vuelta"
               type="number"
+    min={0}
+    max={100} 
               placeholder="Marcador Visitante (Vuelta)"
               value={marcadores.marcador2_vuelta}
               onChange={handleMarcadorChange}
@@ -413,6 +423,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               className="form-control validate "
               name="marcador1_penales"
               type="number"
+              min={0}
+              max={20} 
               placeholder="Penales Local"
               value={marcadores.marcador1_penales}
               onChange={handleMarcadorChange}
@@ -422,6 +434,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               className="form-control validate"
               name="marcador2_penales"
               type="number"
+    min={0}
+    max={100} 
               placeholder="Penales Visitante"
               value={marcadores.marcador2_penales}
               onChange={handleMarcadorChange}
@@ -459,6 +473,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               id="numPartido"
               name="numPartido"
               type="number"
+              min={1}
+              max={4} 
               placeholder="Número de Partido"
               className="form-control validate light-blue-text"
               onChange={(e) => setNumPartido(e.target.value)}
@@ -488,7 +504,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
           {/* Botón Enviar */}
           <div className="col s12 m12 mt-3">
             <button className="btn btn-outline-info" type="submit">
-              Enviar
+            Registrar Partido
             </button>
           </div>
         </div>
@@ -511,7 +527,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
         </select>
 
   
-        <ul className="nav nav-pills mt-2 mb-2">
+        <ul className="nav nav-pills mt-4 mb-3">
           <li className="nav-item">
             <a className="nav-link active" data-bs-toggle="tab" href="#home">
               Cuartos
@@ -606,7 +622,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
           )}
           
           <td className="text-center">
-            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>Editar</button>
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
 
           </td>
         </tr>
@@ -702,7 +718,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
           )}
           
           <td className="text-center">
-            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>Editar</button>
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
 
           </td>
         </tr>
@@ -795,7 +811,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
           )}
           
           <td className="text-center">
-            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>Editar</button>
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
 
           </td>
         </tr>

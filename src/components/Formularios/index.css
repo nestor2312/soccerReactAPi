@@ -49,7 +49,12 @@ input{
   margin-top: 4px;
 }
   
-
+.celda-equipos {
+  display: flex; /* Activa flexbox solo dentro de la celda */
+  justify-content: space-evenly; /* Espacio igual entre los elementos */
+  align-items: center; /* Alinea elementos verticalmente */
+ 
+}
 
 
 

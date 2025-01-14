@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import ModalEditMatches from "../Formularios-edit/ModalEditMatches";
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CreateIcon from '@mui/icons-material/Create';
 const endpoint = `${API_ENDPOINT}partido`;
 
 const FORM_Matches = () => {
@@ -53,7 +54,7 @@ const FORM_Matches = () => {
         mensaje: "¡Partido actualizado correctamente!",
         tipo: "success",
       });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     } catch (error) {
       // Manejar errores
       console.error("Error al actualizar el partido:", error);
@@ -61,7 +62,7 @@ const FORM_Matches = () => {
         mensaje: "¡Error al actualizar el partido!",
         tipo: "danger",
       });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     }
   };
 
@@ -200,12 +201,16 @@ const FORM_Matches = () => {
       });
 
       setAlerta({
-        mensaje: "¡Partido Registrado correctamente!",
+        mensaje: "¡Partido registrado correctamente!",
         tipo: "success",
       });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       fetchPartidos();
     } catch (error) {
+      setAlerta({
+        mensaje: "¡Error al registrar el partido!",
+        tipo: "success",
+      });
       console.error("Error al enviar los datos:", error);
       alert("Error al enviar los datos");
     }
@@ -225,7 +230,7 @@ const FORM_Matches = () => {
           mensaje: "¡Partido eliminado correctamente!",
           tipo: "success",
         });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         const response = await axios.get(`${API_ENDPOINT}partidos`);
         setPartidos(response.data);
       } catch (error) {
@@ -233,7 +238,7 @@ const FORM_Matches = () => {
           mensaje: "¡Error al eliminar el partido!",
           tipo: "success",
         });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         console.error("Error al eliminar el partido:", error);
       }
     }
@@ -368,6 +373,8 @@ const FORM_Matches = () => {
                 id="icon_prefix"
                 name="marcador1"
                 type="number"
+                min={0}
+                max={50} 
                 placeholder="marcador Local"
                 className="form-control validate required light-blue-text"
                 onChange={(e) => setMarcador1(e.target.value)}
@@ -380,6 +387,8 @@ const FORM_Matches = () => {
                 id="icon_prefix"
                 name="marcador1"
                 type="number"
+    min={0}
+    max={50} 
                 placeholder="marcador Local"
                 className="form-control validate required light-blue-text"
                 onChange={(e) => setMarcador2(e.target.value)}
@@ -412,7 +421,7 @@ const FORM_Matches = () => {
         </div>
         <div className="col s12 m12 mt-3">
           <button className="btn btn-outline-info" type="submit">
-            Registrar partido
+            Registrar Partido
           </button>
         </div>
       </form>
@@ -450,12 +459,12 @@ const FORM_Matches = () => {
                            alt={partido.equipo_a.nombre}
                          /> */}
                 </td>
-                <td className="text-center d-flex justify-content-around">
+                <td className="text-center d-flex justify-content-evenly">
                   <button
                     className="btn btn-warning"
                     onClick={() => handleEditClick(partido)}
                   >
-                    Editar
+                    <CreateIcon/>
                   </button>
                   <div>
                     <button
@@ -465,7 +474,7 @@ const FORM_Matches = () => {
                         deletePartidos(partido.id);
                       }}
                     >
-                      Borrar
+                       <DeleteOutlineIcon/>
                     </button>{" "}
                   </div>
                 </td>

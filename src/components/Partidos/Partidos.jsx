@@ -16,15 +16,17 @@ const Partidos = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   // eslint-disable-next-line no-unused-vars
-
+  const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line no-unused-vars
+  const [lastPage, setLastPage] = useState(1);
   useEffect(() => {
     const getPartidos = async () => {
       try {
-        // const response = await axios.get(`${endpoint}/partidos`);
-        // const response = await axios.get(`${endpoint}/partidos/subcategoria/${subcategoriaId}`);
-        // setPartidos(response.data);
-        const partidosResponse = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/partidos`);
-        setPartidos(partidosResponse.data);
+        
+        const partidosResponse = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/partidos/paginador?page=${currentPage}`);
+      
+        setPartidos(partidosResponse.data.data);
+        setLastPage(partidosResponse.data.last_page);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -34,7 +36,12 @@ const Partidos = () => {
     };
 
     getPartidos();
-  }, [subcategoriaId]);
+  }, [subcategoriaId, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setIsLoading(true);
+  };
 
   useEffect(() => {
     document.title = "Partidos";
@@ -101,8 +108,26 @@ const Partidos = () => {
                       ))}
                     </tbody>
                   </table>
+                  
                 </div>
+                
               </div>
+                 {/* Paginación */}
+            <div className="pagination mb-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                ← Anterior
+              </button>
+              <span>{`Página ${currentPage} de ${lastPage}`}</span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === lastPage}
+              >
+                Siguiente →
+              </button>
+            </div>
             </div>
             <section className="Partidos hiden-box">
                 <div className="margen mt-4">
@@ -136,6 +161,22 @@ const Partidos = () => {
                       </div>
                     ))}
                   </div>
+                  <div className="pagination mb-4">
+                    <button
+                    
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                     ← Anterior
+                    </button>
+                    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === lastPage}
+                    >
+                      Siguiente →
+                    </button>
+                  </div>
                 </div>
               </section></>
       
@@ -149,42 +190,4 @@ const Partidos = () => {
 
 export default Partidos;
 
-// import { useParams } from 'react-router-dom';
-// import { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { API_ENDPOINT } from '../../ConfigAPI';
-
-// const Partidos = () => {
-//   // eslint-disable-next-line no-unused-vars
-//   const { categoriaId, subcategoriaId } = useParams();
-//   const [partidos, setPartidos] = useState([]);
-
-//   useEffect(() => {
-//     const fetchPartidos = async () => {
-//       try {
-//         const response = await axios.get(`${endpoint}/partidos`);
-//                 setPartidos(response.data);
-//       } catch (error) {
-//         console.error("Error al cargar los partidos:", error);
-//       }
-//     };
-
-//     fetchPartidos();
-//   }, [subcategoriaId]);
-
-//   return (
-//     <div>
-//       <h2>Partidos de la Subcategoría {subcategoriaId}</h2>
-//       <ul>
-//         {partidos.map(partido => (
-//           <li key={partido.id}>
-//             {partido.equipo_local.nombre} vs {partido.equipo_visitante.nombre} - {partido.fecha}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default Partidos;
 

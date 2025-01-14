@@ -18,7 +18,7 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                     <tr>
                     <th></th>
                       <th className="text-left titulo2">Nombre</th>
-                      <th className="text-center titulo2">{titulo}</th>
+                      <th className="text-center titulo2 ">{titulo}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -33,7 +33,7 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                         </td>
                          
                         <td>{Player.nombre} {Player.apellido}</td>
-                        <td className="text-center">{Player[campo]}</td>
+                        <td className="text-center data">{Player[campo]}</td>
                       </tr>
                     ))}
                   </tbody>

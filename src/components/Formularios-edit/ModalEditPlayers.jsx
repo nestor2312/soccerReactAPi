@@ -17,6 +17,8 @@ const EditPlayerModal = ({ showModal, PlayerData, API_ENDPOINT, onSave, onClose 
   const [numero, setNumero] = useState(PlayerData?.numero || 0);
   const [card_amarilla, setcard_amarilla] = useState(PlayerData?.card_amarilla || 0);
   const [card_roja, setcard_roja] = useState(PlayerData?.card_roja || 0);
+  const [goles, setgoles] = useState(PlayerData?.goles || 0);
+  const [asistencias, setasistencias] = useState(PlayerData?.asistencias || 0);
   // eslint-disable-next-line no-unused-vars
   const [subcategorias, setSubcategorias] = useState([]);
 
@@ -30,6 +32,8 @@ const EditPlayerModal = ({ showModal, PlayerData, API_ENDPOINT, onSave, onClose 
     setNumero(PlayerData?.numero || 0);
     setcard_amarilla(PlayerData?.card_amarilla || 0);
     setcard_roja(PlayerData?.card_roja || 0);
+    setgoles(PlayerData?.goles || 0);
+    setasistencias(PlayerData?.asistencias || 0);
   }, [PlayerData]);
   
 
@@ -71,6 +75,8 @@ const EditPlayerModal = ({ showModal, PlayerData, API_ENDPOINT, onSave, onClose 
       numero,
       card_amarilla,
       card_roja,
+      goles,
+      asistencias
     };
     onSave(updatedPlayer);
   };
@@ -205,6 +211,30 @@ const EditPlayerModal = ({ showModal, PlayerData, API_ENDPOINT, onSave, onClose 
                     value={card_roja}
                     onChange={(e) => setcard_roja(e.target.value)}
                     placeholder="Tarjeta Roja"
+                  />
+                </div>
+              </div>
+              <div className="col-md-6 ml-auto">
+                <div>
+                  <label>Goles:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={goles}
+                    onChange={(e) => setgoles(e.target.value)}
+                    placeholder="Goles"
+                  />
+                </div>
+              </div>
+              <div className="col-md-6 ml-auto">
+                <div>
+                  <label>Asistencias:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={asistencias}
+                    onChange={(e) => setasistencias(e.target.value)}
+                    placeholder="Asistencias"
                   />
                 </div>
               </div>

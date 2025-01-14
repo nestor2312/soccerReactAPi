@@ -48,7 +48,6 @@ const Equipos = () => {
   return (
     <>
       <Menu />
-      {/* <Navbar></Navbar> */}
       <section>
         {isLoading ? (
           <div className="loading-container">
@@ -70,7 +69,10 @@ const Equipos = () => {
                   <div className="card-body box-team">
                     {Teams.map((team) => (
                       <div key={team.id} className="row justify-content-around">
-                        <Link to="link" className="team-item2">
+                      <Link 
+        to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} // Navegar a jugadores del equipo seleccionado
+        className="team-item2"
+      >
                           <div className="inner-card mt-3 d-flex flex-wrap align-content-end justify-content-center">
                             <div>
                               <img
@@ -108,7 +110,7 @@ const Equipos = () => {
             </div>
           </div>
          ) : (
-          <p className="no-datos">No hay Jugadores disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
+          <p className="no-datos">No hay Equipos disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
         )}
       </section>
       <Footer />

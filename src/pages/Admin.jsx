@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable no-undef */
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -83,11 +84,27 @@ const NAVIGATION = [
     title: 'Jugadores',
     icon: <GroupIcon />,
   },
+  
  
   {
     kind: 'divider',
   },
-
+  {
+    segment: 'logout',
+    title: 'Cerrar sesión',
+    icon: <GroupIcon />,
+    link: (
+      <Typography
+        onClick={() => {
+          setIsAuthenticated(false);
+          localStorage.removeItem('token');
+        }}
+        sx={{ cursor: 'pointer', color: 'inherit' }}
+      >
+        Cerrar sesión
+      </Typography>
+    ),
+  },
   
 ];
 
@@ -127,8 +144,7 @@ const demoTheme = createTheme({
           paper: '#c8c4c4', 
           // paper: '#b2afb2', 
           // paper: '#d4d4d4', 
-          
-           
+                 
         },
         text: {
           primary: '#152039', //  Color texto  modo blanco
@@ -165,7 +181,6 @@ const demoTheme = createTheme({
     },
   },
 });
-
 
 // eslint-disable-next-line react/prop-types
 function DemoPageContent({ pathname }) {
@@ -212,19 +227,15 @@ function DemoPageContent({ pathname }) {
         alignItems: 'left',
         textAlign: 'left',
       }}
-    >
-     
+    >   
       {content}
     </Box>
   );
 }
 
-
 function DashboardLayoutBasic(props ) {
   const { window, setIsAuthenticated } = props; 
-
   const [pathname, setPathname] = React.useState('/torneos');
-
   const router = React.useMemo(() => {
     return {
       pathname,
@@ -251,12 +262,54 @@ function DashboardLayoutBasic(props ) {
     branding={{
       // logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
       title: 'Panel Admin',
+      actions: [
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {/* Cambiar a modo oscuro */}
+          <button 
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+              background: '#09537E',
+              color: '#fff',
+            }}
+            onClick={() => {
+              // Cambia entre los modos claro/oscuro
+              const themeMode = document.documentElement.getAttribute('data-toolpad-color-scheme');
+              document.documentElement.setAttribute(
+                'data-toolpad-color-scheme',
+                themeMode === 'light' ? 'dark' : 'light'
+              );
+            }}
+          >
+            Cambiar a modo oscuro
+          </button>
+  
+          {/* Botón de Cerrar Sesión */}
+          <button
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+              background: '#e61010',
+              color: '#fff',
+            }}
+            onClick={() => {
+              // Lógica para cerrar sesión
+              setIsAuthenticated(false);
+              localStorage.removeItem('token');
+            }}
+          >
+            Cerrar sesión
+          </button>
+        </Box>,
+      ],
     }}
     navigation={NAVIGATION}
     router={router}
-    theme={demoTheme}
-   
-    
+    theme={demoTheme}  
     window={demoWindow}
     >
       <DashboardLayout>
@@ -264,11 +317,7 @@ function DashboardLayoutBasic(props ) {
       {/* <RoutessComponent /> */}
 
         <DemoPageContent pathname={pathname} />
-       
-
-      </DashboardLayout>
-     
-     
+      </DashboardLayout>  
       <Box
     sx={{
       position: 'absolute',
@@ -277,21 +326,16 @@ function DashboardLayoutBasic(props ) {
       zIndex: 10,
     }}
   >
-
     <LogoutButton setIsAuthenticated={setIsAuthenticated} />
   </Box>
     </AppProvider>
   
-    // preview-end
   );
 }
-
 DashboardLayoutBasic.propTypes = {
 
   window: PropTypes.func,
   setIsAuthenticated: PropTypes.func.isRequired,
 };
-
-
 
 export default DashboardLayoutBasic;

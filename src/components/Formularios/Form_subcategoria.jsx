@@ -4,7 +4,8 @@ import axios from "axios";
 import { API_ENDPOINT } from '../../ConfigAPI';
 import "./index.css";
 import ModalEdit from "../Formularios-edit/ModalEdit";
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CreateIcon from '@mui/icons-material/Create';
 const endpoint = `${API_ENDPOINT}subcategoria`;
 const InfoSubCategorias_endpoint = `${API_ENDPOINT}subcategorias`;
 const CategoriaEndpoint = `${API_ENDPOINT}categorias`;
@@ -42,7 +43,7 @@ const FORM_Subcategoria = () => {
       await axios.put(`${API_ENDPOINT}subcategoria/${updatedSubcategoria.id}`, updatedSubcategoria);
       InfoSubcategorias(); 
       setAlerta({ mensaje: "Subcategoria actualizada correctamente!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setTorneos((prevSubcategorias) =>
         prevSubcategorias.map((c) => (c.id === updatedSubcategoria.id ? updatedSubcategoria : c))
       
@@ -50,7 +51,7 @@ const FORM_Subcategoria = () => {
     } catch (error) {
       console.error("Error al actualizar la categoria:", error);
       setAlerta({ mensaje: "Error al actualizar la categoria!", tipo: "danger" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     }
   };
 
@@ -97,8 +98,8 @@ const FORM_Subcategoria = () => {
     try {
       await axios.post(endpoint, { nombre, categoria_id: CategoriaID });
       InfoSubcategorias();
-      setAlerta({ mensaje: "Subcategorias registrada con éxito!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setAlerta({ mensaje: "Subcategoria registrada con éxito!", tipo: "success" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setNombre("");
       setCategoriaID("");
     } catch (error) {
@@ -110,8 +111,8 @@ const FORM_Subcategoria = () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta Subcategoria?')) {
       try {
         await axios.delete(`${endpoint}/${id}`);
-        setAlerta({ mensaje: "Subcategorias eliminada correctamente!", tipo: "danger" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setAlerta({ mensaje: "Subcategoria eliminada correctamente!", tipo: "danger" });
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         setSubcategorias(Subcategorias.filter((Subcategoria) => Subcategoria.id !== id));
       } catch (error) {
         console.error('Error al eliminar el Subcategoria', error);
@@ -139,7 +140,7 @@ const FORM_Subcategoria = () => {
 )}
       <h1 className="text-left ">Registro de Subcategorias</h1>
       <div>
-        <form className="col-md-12" onSubmit={store}>
+        <form className="col-md-12" onSubmit={store} autoComplete="off">
           <div className="form-group">
             <label htmlFor="nombre">Nombre de la Subcategoria:</label>
             <input
@@ -175,7 +176,7 @@ const FORM_Subcategoria = () => {
           {/* Botón para enviar el formulario */}
           <div className="d-flex mt-2 mb-2">
             <button className="btn btn-outline-primary" type="submit">
-              Enviar
+            Registrar Subcategoria
             </button>
           </div>
         </form>
@@ -187,10 +188,10 @@ const FORM_Subcategoria = () => {
           <table className="table ">
             <thead className="thead-light">
               <tr>
-                <th className="center">Subcategoria</th>
-                <th className="center">Categoria</th>
-                <th className="center">Torneo</th>
-                <th className="center">Acciones</th>
+                <th className="text-center">Subcategoria</th>
+                <th className="text-center">Categoria</th>
+                <th className="text-center">Torneo</th>
+                <th className="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -201,20 +202,20 @@ const FORM_Subcategoria = () => {
                   <td className="center">
                     {Torneos.find(torneo => torneo.id === subcategoria.categoria.torneo_id)?.nombre || "No disponible"}
                   </td>
-                  <td className="center">
+                  <td className="text-center d-flex justify-content-evenly">
                   <button
                                 type="button"
                                 className="btn btn-warning"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editModal"
                                 onClick={() => setSelectedSubcategoria(subcategoria)}
-                              >Editar</button>
+                              ><CreateIcon/></button>
                     
                     <button
                       className="btn btn-danger far fa-trash-alt delete-btn"
                       onClick={() => deleteSubcategoria(subcategoria.id)}
-                    >
-                      Borrar
+                    > <DeleteOutlineIcon/>
+                    
                     </button>
                   </td>
                 </tr>   

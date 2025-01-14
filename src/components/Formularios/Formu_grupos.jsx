@@ -3,6 +3,9 @@ import axios from "axios";
 import "./index.css";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import ModalEdit from "../Formularios-edit/ModalEdit";
+
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CreateIcon from '@mui/icons-material/Create';
 const endpoint = `${API_ENDPOINT}grupo`;
 const Infoendpoint = `${API_ENDPOINT}grupos`;
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
@@ -36,16 +39,16 @@ const FORM_Groups = () => {
     try {
       await axios.put(`${API_ENDPOINT}grupo/${updatedGrupo.id}`, updatedGrupo);
      
-      setAlerta({ mensaje: "Grupo actualizada correctamente!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setAlerta({ mensaje: "Grupo actualizado correctamente!", tipo: "success" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setGrupos((prevGrupos) =>
         prevGrupos.map((g) => (g.id === updatedGrupo.id ? updatedGrupo : g))
       
       );
     } catch (error) {
-      console.error("Error al actualizar la categoria:", error);
-      setAlerta({ mensaje: "Error al actualizar la categoria!", tipo: "danger" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      console.error("Error al actualizar el Grupo:", error);
+      setAlerta({ mensaje: "Error al actualizar el Grupo!", tipo: "danger" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     }
   };
 
@@ -78,13 +81,13 @@ const FORM_Groups = () => {
       try {
         await axios.delete(`${endpoint}/${id}`);
         setAlerta({ mensaje: "Grupo eliminado correctamente!", tipo: "success" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         // Recargar los grupos después de eliminar
         const response = await axios.get(Infoendpoint);
         setGrupos(response.data);
       } catch (error) {
         setAlerta({ mensaje: "Error al eliminar el grupo!", tipo: "danger" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         setError("Error al eliminar el grupo.");
         console.error("Error al eliminar el grupo:", error);
       }
@@ -99,13 +102,13 @@ const FORM_Groups = () => {
       setNombre("");
       setSubcategoriaID("");
       setAlerta({ mensaje: "Grupo registrado con éxito!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       // Recargar los grupos después de agregar
       const response = await axios.get(Infoendpoint);
       setGrupos(response.data);
     } catch (error) {
       setAlerta({ mensaje: "Error al registrar el grupo!", tipo: "danger" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setError("Error al guardar el grupo.");
       console.error("Error al guardar el grupo", error);
     }
@@ -129,7 +132,7 @@ const FORM_Groups = () => {
     
       
       {/* Formulario para agregar un grupo */}
-      <form className="col-md-12" onSubmit={store}>
+      <form className="col-md-12" onSubmit={store} autoComplete="off">
         <div className="form-group">
           <label htmlFor="nombre">Nombre del Grupo:</label>
           <input
@@ -145,7 +148,9 @@ const FORM_Groups = () => {
         <div className="form-group">
           <label htmlFor="nombre">Numero de clasificados:</label>
           <input
-            type="text"
+           type="number"
+           min={1}
+           max={50} 
             className="form-control form-input-admin"
             id="nombre"
             placeholder="Ingrese el nombre del grupo"
@@ -175,7 +180,7 @@ const FORM_Groups = () => {
 
         <div className="d-flex mt-2 mb-2">
           <button className="btn btn-outline-primary" type="submit">
-            Enviar
+          Registrar Grupo
           </button>
         </div>
       </form>
@@ -185,26 +190,26 @@ const FORM_Groups = () => {
         <table className="table">
           <thead className="thead-light">
             <tr>
-              <th className="center">Subcategoría</th>
-              <th className="center">Grupo</th>
-              <th className="center">Clasificados</th>
-              <th className="center">Acciones</th>
+              <th className="text-center">Subcategoría</th>
+              <th className="text-center">Grupo</th>
+              <th className="text-center">Clasificados</th>
+              <th className="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {Grupos.map((Grupo) => (
               <tr key={Grupo.id}>
-                <td className="center">{Grupo.subcategoria.nombre}</td>
-                <td className="center">{Grupo.nombre}</td>
-                <td className="center">{Grupo.num_clasificados}</td>
-                <td className="center">
+                <td className="text-center">{Grupo.subcategoria.nombre}</td>
+                <td className="text-center">{Grupo.nombre}</td>
+                <td className="text-center">{Grupo.num_clasificados}</td>
+                <td className="text-center d-flex justify-content-evenly">
                 <button
                                 type="button"
                                 className="btn btn-warning"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editModal"
                                 onClick={() => setSelectedGrupo(Grupo)}
-                              >Editar</button>
+                              ><CreateIcon/></button>
                   <button
                     className="btn btn-danger far fa-trash-alt delete-btn"
                     onClick={(e) => {
@@ -212,7 +217,7 @@ const FORM_Groups = () => {
                       deleteGrupo(Grupo.id);
                     }}
                   >
-                    Borrar
+                     <DeleteOutlineIcon/>
                   </button>
                 </td>
               </tr>
@@ -224,7 +229,7 @@ const FORM_Groups = () => {
   type="Grupo"
   fields={gruposFields}
   onSave={saveGrupo}
-/>;
+/>
       </div>
     </div>
   );

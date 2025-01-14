@@ -7,7 +7,8 @@ import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import Alert from "../Alerta/Alerta";
 import "./index.css";
 import EditTeamModal from "../Formularios-edit/ModalEditTeams";
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CreateIcon from '@mui/icons-material/Create';
 
 const FORM_Teams = () => {
   const [nombre, setNombre] = useState("");
@@ -121,7 +122,7 @@ const FORM_Teams = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       InfoEquipos();
-      setAlerta({ mensaje: "Equipo agregado exitosamente.", tipo: "success" });
+      setAlerta({ mensaje: "Equipo registrado exitosamente.", tipo: "success" });
     } catch (error) {
       setAlerta({ mensaje: "Error al agregar el equipo.", tipo: "danger" });
       console.error("Error al enviar los datos:", error);
@@ -185,7 +186,7 @@ const FORM_Teams = () => {
           {/* Botón para enviar el formulario */}
           <div className="d-flex mt-2 mb-2">
             <button className="btn btn-outline-primary" type="submit">
-              Enviar
+            Registrar Equipo
             </button>
           </div>
         </form>
@@ -214,17 +215,17 @@ const FORM_Teams = () => {
                 </td>
                 <td className="text-center align-middle">{team.grupo.nombre}</td>
                 <td className="text-center align-middle">{team.nombre}</td>
-                <td className="text-center align-middle">
+                <td className="text-center align-middle justify-content-md-center ">
                 <button
   type="button"
-  className="btn btn-warning"
+  className="btn btn-warning "
   data-bs-toggle="modal"
   data-bs-target="#editModal"
   onClick={() => {
     if (team) setSelectedTeam(team);
   }}
 >
-  Editar
+  <CreateIcon/>
 </button>
 
                       <button               
@@ -234,7 +235,7 @@ const FORM_Teams = () => {
                       deleteEquipos(team.id);
                     }}
                   >
-                    Borrar
+                     <DeleteOutlineIcon/>
                   </button>
                 </td>
               </tr>

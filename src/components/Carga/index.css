@@ -1,5 +1,5 @@
 .cargando{
-    width: 400px;
+    width: 300px;
     filter: drop-shadow(3px 3px 3px #00000040);
     animation: carga 2s infinite;
 }
@@ -7,7 +7,7 @@
     position: absolute;
     top: 20%;
     left: 35%;
-    width: 400px;
+    width: 300px;
     transform: translate(-50%, -50%);
     opacity: 1;
    
@@ -45,13 +45,13 @@
 }
 @media only screen and (max-width: 576px) {
     .cargando{
-        width: 250px;
+        width: 200px;
         filter: drop-shadow(4px 4px 4px #00000040);
         animation: carga 2.5s infinite;
     }
 
     .cargandologin{
-        width: 340px;
+        width: 200px;
         filter: drop-shadow(4px 4px 4px #00000040);
         animation: carga 2.5s infinite;
         top: 25%;

@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
-
-
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModalEdit from "../Formularios-edit/ModalEdit";
 import { API_ENDPOINT } from '../../ConfigAPI';
 import Cargando from "../Carga/carga";
@@ -31,7 +31,7 @@ const FORM_Torneos = () => {
     try {
       await axios.put(`${API_ENDPOINT}torneo/${updatedTorneo.id}`, updatedTorneo);
       setAlerta({ mensaje: "Torneo actualizado correctamente!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setTorneos((prevTorneos) =>
         prevTorneos.map((t) => (t.id === updatedTorneo.id ? updatedTorneo : t))
       
@@ -39,7 +39,7 @@ const FORM_Torneos = () => {
     } catch (error) {
       console.error("Error al actualizar el torneo:", error);
       setAlerta({ mensaje: "Error al actualizar el torneo!", tipo: "danger" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     }
   };
 
@@ -56,11 +56,11 @@ const FORM_Torneos = () => {
         InfoTorneos();
         setNombre("");
         setAlerta({ mensaje: "Torneo registrado con éxito!", tipo: "success" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       } catch (error) {
         console.error("Error al guardar el torneo", error);
         setAlerta({ mensaje: "Error al registrar el torneo.", tipo: "danger" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       } finally {
         setIsLoading(false); // Detén el estado de carga
       }
@@ -77,13 +77,13 @@ const FORM_Torneos = () => {
       try {
         await axios.delete(`${endpoint}/${id}`);
         setTorneos(Torneos.filter((Torneo) => Torneo.id !== id));
-        setAlerta({ mensaje: "Torneo eliminada con éxito!", tipo: "success" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setAlerta({ mensaje: "Torneo eliminado con éxito!", tipo: "success" });
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         // Mostrar un mensaje de éxito más amigable, por ejemplo, usando un toast o snackbar
       } catch (error) {
         console.error('Error al eliminar el torneo', error);
         setAlerta({ mensaje: "Error al eliminar la categoría.", tipo: "danger" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
         // Mostrar un mensaje de error al usuario
       } finally {
         setIsLoading(false); // Asegúrate de establecerlo en false en ambos casos
@@ -150,7 +150,7 @@ const FORM_Torneos = () => {
             <div>
                 <h1 className="text-left">Registro de Torneos</h1>
                 <div>
-                  <form className="col-md-12" onSubmit={store}>
+                  <form className="col-md-12" onSubmit={store} autoComplete="off" >
                     {/* Nombre del torneo */}
                     <div className="form-group">
                       <label htmlFor="nombre">Nombre del Torneo:</label>
@@ -166,7 +166,7 @@ const FORM_Torneos = () => {
                     {/* Botón para enviar el formulario */}
                     <div className="d-flex mt-2 mb-2">
                       <button className="btn btn-outline-primary" type="submit">
-                        Enviar
+                      Registrar Torneo
                       </button>
                     </div>
                   </form>
@@ -179,14 +179,14 @@ const FORM_Torneos = () => {
                       <thead className="thead-light">
                         <tr>
                           <th className="center">Torneo</th>
-                          <th className="center">Acciones</th>
+                          <th className="text-center">Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
                         {Torneos.map((Torneo) => (
                           <tr key={Torneo.id}>
                             <td className="center">{Torneo.nombre}</td>
-                            <td className="center">
+                            <td className="text-center d-flex justify-content-evenly">
 
                               <button
                                 type="button"
@@ -194,13 +194,13 @@ const FORM_Torneos = () => {
                                 data-bs-toggle="modal"
                                 data-bs-target="#editModal"
                                 onClick={() => setSelectedTorneo(Torneo)}
-                              >Editar</button>
+                              ><CreateIcon/></button>
 
                               <button
                                 className="btn btn-danger far fa-trash-alt delete-btn"
                                 onClick={() => deleteTorneo(Torneo.id)}
                               >
-                                Borrar
+                              <DeleteOutlineIcon/>
                               </button>
                             </td>
                           </tr>

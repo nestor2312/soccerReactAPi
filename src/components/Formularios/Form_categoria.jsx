@@ -6,7 +6,8 @@ import "./index.css";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
 import ModalEdit from "../Formularios-edit/ModalEdit";
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CreateIcon from '@mui/icons-material/Create';
 const endpoint = `${API_ENDPOINT}categoria`;
 const InfoCategorias_endpoint = `${API_ENDPOINT}categorias`;
 const TorneosEndpoint = `${API_ENDPOINT}torneos`;
@@ -43,7 +44,7 @@ const FORM_Categoria = () => {
       await axios.put(`${API_ENDPOINT}categoria/${updatedCategoria.id}`, updatedCategoria);
       fetchCategorias(); 
       setAlerta({ mensaje: "Categoria actualizada correctamente!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setTorneos((prevCategorias) =>
         prevCategorias.map((c) => (c.id === updatedCategoria.id ? updatedCategoria : c))
       
@@ -51,7 +52,7 @@ const FORM_Categoria = () => {
     } catch (error) {
       console.error("Error al actualizar la categoria:", error);
       setAlerta({ mensaje: "Error al actualizar la categoria!", tipo: "danger" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     }
   };
 
@@ -95,7 +96,7 @@ const FORM_Categoria = () => {
       setNombre("");
       setTorneoID("");
       setAlerta({ mensaje: "¡Categoría registrada con éxito!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 3000);
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
     } catch (error) {
       console.error('Error al guardar la categoría', error);
       setAlerta({ mensaje: "Error al registrar la categoría.", tipo: "danger" });
@@ -151,7 +152,7 @@ const FORM_Categoria = () => {
 )}
       <h1 className="text-left">Registro de Categorías</h1>
       <div>
-        <form className="col-md-12" onSubmit={store}>
+        <form className="col-md-12" onSubmit={store} autoComplete="off">
           {/* Nombre de la categoría */}
           <div className="form-group">
             <label htmlFor="nombre">Nombre de la Categoría:</label>
@@ -188,7 +189,7 @@ const FORM_Categoria = () => {
           {/* Botón para enviar el formulario */}
           <div className="d-flex mt-2 mb-2">
             <button className="btn btn-outline-primary" type="submit">
-              Enviar
+            Registrar Categoría
             </button>
           </div>
         </form>
@@ -202,7 +203,7 @@ const FORM_Categoria = () => {
               <tr>
                 <th className="center">Torneo</th>
                 <th className="center">Categoría</th>
-                <th className="center">Acciones</th>
+                <th className="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -210,7 +211,7 @@ const FORM_Categoria = () => {
                 <tr key={Categoria.id}>
                   <td className="center">{Categoria.torneo.nombre}</td>
                   <td className="center">{Categoria.nombre}</td>
-                  <td className="center">
+                  <td className="text-center d-flex justify-content-evenly">
                    
                   <button
                                 type="button"
@@ -218,12 +219,12 @@ const FORM_Categoria = () => {
                                 data-bs-toggle="modal"
                                 data-bs-target="#editModal"
                                 onClick={() => setSelectedCategoria(Categoria)}
-                              >Editar</button>
+                              ><CreateIcon/></button>
                       <button
                       className="btn btn-danger far fa-trash-alt delete-btn"
                       onClick={() => deleteCategoria(Categoria.id)}
                     >
-                      Borrar
+                      <DeleteOutlineIcon/>
                     </button>
                    
                   </td>
@@ -236,7 +237,7 @@ const FORM_Categoria = () => {
   type="Categoría"
   fields={categoriasFields}
   onSave={saveCategoria}
-/>;
+/>
         </div>
       </div>
     </div>

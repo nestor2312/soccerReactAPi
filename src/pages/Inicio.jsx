@@ -6,7 +6,7 @@ import './../App.css'
 import Cargando from "../components/Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../ConfigAPI';
 import ErrorCarga from "../components/Error/Error";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 const endpoint = `${API_ENDPOINT}`;
 
 const Images = IMAGES_URL;
@@ -288,15 +288,18 @@ return<>
     <div className="card-body ">
       <div className="box-team">
         {Teams.map((team) => (
+           // eslint-disable-next-line react/jsx-key
           <div key={team.id} className="team-item">
             <div className="inner-card d-flex flex-wrap align-content-end justify-content-center">
               <div>
+            <Link  to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} >
                 <img
                   src={`${Images}/${team.archivo}`}
                   className="img-fluid d-block mx-auto my-3 logomovil"
                   alt={team.nombre}
                 />
                 <h6 className="text-center team">{team.nombre}</h6>
+          </Link>
               </div>
             </div>
           </div>

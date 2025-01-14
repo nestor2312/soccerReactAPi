@@ -25,7 +25,6 @@
 //         <Route path="/equipos" element={<Equipos />} />
 //         <Route path="/jugadores" element={<Jugadores />} />
 //         <Route path="/clasificacion" element={<Clasificacion />} />
-       
 
 //         <Route path="/torneo" element={<Torneo />} />
 //         <Route path="/torneo/:id/categorias" element={<Categoria />} />
@@ -63,7 +62,7 @@
 //  <Registrar />
 //                    </ProtectedRoute>
 //                  } />
-// {/* 
+// {/*
 //         <Route
 //           path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio"
 //           element={
@@ -73,8 +72,6 @@
 //           }
 //         /> */}
 
-
-        
 //         {/* Puedes agregar más rutas protegidas como esta */}
 //       </Routes>
 //     </Router>
@@ -83,11 +80,11 @@
 
 // export default App;
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./components/Login/Login";
 import Inicio from "./pages/Inicio";
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from "./components/ProtectedRoute";
 import Partidos from "./components/Partidos/Partidos";
 import Equipos from "./components/Equipos/Equipos";
 import Jugadores from "./components/Jugadores/Jugadores";
@@ -98,23 +95,20 @@ import Estadisticas from "./components/estadisticas/Estadisticas";
 import Torneo from "./components/Torneo/Torneo";
 import Categoria from "./components/Categoria/Categoria";
 import Subcategoria from "./components/Subcategoria/Subcategoria";
-import Register from  "./components/Login/Registrar";
+import Register from "./components/Login/Registrar";
 
-
-
-
-
-import { useEffect, useState } from 'react';
-import Admin from './pages/Admin';
-import LogoutButton from './components/Login/CerrarSesion';
+import { useEffect, useState } from "react";
+import Admin from "./pages/Admin";
+import LogoutButton from "./components/Login/CerrarSesion";
+import JugadorShow from "./components/Jugadores/JugadoresShow";
+import JugadoresEquipo from "./components/Jugadores/JugadoresEquipo";
 
 function App() {
-  
   // eslint-disable-next-line no-unused-vars
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem("token");
     if (token) {
       // Verificar el token con el servidor
       // ...
@@ -125,13 +119,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-      {/* <Route path="/clasificacion" element={<Clasificacion />} /> */}
-      {/* <Route path="/equipos" element={<Equipos />} /> */}
-      {/* <Route path="/partidos" element={<Partidos />} /> */}
+        {/* <Route path="/clasificacion" element={<Clasificacion />} /> */}
+        {/* <Route path="/equipos" element={<Equipos />} /> */}
+        {/* <Route path="/partidos" element={<Partidos />} /> */}
 
-      <Route path="/" element={<Torneo />} />
+        <Route path="/" element={<Torneo />} />
         <Route path="/torneo/:id/categorias" element={<Categoria />} />
-      <Route
+        <Route
           path="/torneo/categoria/:categoriaId/subcategoria"
           element={<Subcategoria />}
         />
@@ -144,6 +138,11 @@ function App() {
           element={<Jugadores />}
         />
         <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores/:jugadorId"
+          element={<JugadorShow />}
+        />
+
+        <Route
           path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio"
           element={<Inicio />}
         />
@@ -155,19 +154,27 @@ function App() {
           path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/clasificacion"
           element={<Clasificacion />}
         />
-          <Route
-         path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/estadisticas"
-          element={<Estadisticas/>}
+        <Route
+          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/estadisticas"
+          element={<Estadisticas />}
         />
-      
-        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+ <Route
+        path="/torneo/categoria/:subcategoriaId/equipo/:equipoId/jugadores"
+        element={<JugadoresEquipo />}
+      />
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
         <Route path="/register" element={<Register />} />
-        <Route path="/logout" element={<LogoutButton setIsAuthenticated={setIsAuthenticated}/>} />
+        <Route
+          path="/logout"
+          element={<LogoutButton setIsAuthenticated={setIsAuthenticated} />}
+        />
         <Route
           path="/registrar_datos"
           element={
             <ProtectedRoute>
-             
               <Admin setIsAuthenticated={setIsAuthenticated} />
             </ProtectedRoute>
           }
@@ -178,10 +185,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
 
 // // import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
@@ -202,7 +205,7 @@ export default App;
 // import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // // import Bot from "./pages/Immg";
 // // import Login from "./components/Login/Login";
-// // import Register from "./components/Login/Registrar"; 
+// // import Register from "./components/Login/Registrar";
 // // import Inicio from "./pages/Inicio";
 // import ProtectedRoute from './components/ProtectedRoute';
 // import { useEffect, useState } from 'react';
@@ -219,7 +222,6 @@ export default App;
 //      setIsAuthenticated(true);  // Marcar como autenticado si existe el token
 //    }
 //  }, []);
-
 
 //   return (
 //     <BrowserRouter>
@@ -270,8 +272,6 @@ export default App;
 //           }
 //         />
 
-
-        
 //         {/* Puedes agregar más rutas protegidas como esta */}
 //       </Routes>
 //     </BrowserRouter>
