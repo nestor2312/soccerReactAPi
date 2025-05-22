@@ -1,11 +1,9 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable no-undef */
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
-import BackupTableIcon from '@mui/icons-material/BackupTable';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import TableViewIcon from '@mui/icons-material/TableView';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -25,86 +23,83 @@ import FORM_Players from '../components/Formularios/Formu_jugadores';
 import AdminClasificacion from '../components/Clasificacion/ClasificacionAdmin';
 import FORM_Eliminatorias from '../components/Formularios/Form_eliminatorias';
 import LogoutButton from '../components/Login/CerrarSesion';
-
+import Logo from "../assets/Frame 22.svg"
+import LogoutIcon from "@mui/icons-material/Logout";
+import GroupWorkIcon from '@mui/icons-material/GroupWork'; 
+import FolderIcon  from '@mui/icons-material/Folder';              
+import ListAltIcon from '@mui/icons-material/ListAlt';              
+import { FaProjectDiagram } from "react-icons/fa";
+            
 const NAVIGATION = [
   {
     kind: 'header',
     title: 'Configuraciones',
   },
+  
   {
     segment: 'torneos',
     title: 'Torneos',
-    icon: <GroupsIcon />,
-    link: <Link to="/torneos">Torneos</Link> 
-   
+    icon: <EmojiEventsIcon />, 
+    link: <Link to="/torneos">Torneos</Link>
   },
   {
     segment: 'categorias',
     title: 'Categorias',
-    icon: <GroupsIcon />,
-    link: <Link to="/categorias">Categorias</Link> 
-
+    icon: <FolderIcon  />, 
+    link: <Link to="/categorias">Categorias</Link>
   },
   {
     segment: 'subcategorias',
     title: 'Subcategorias',
-    icon: <GroupsIcon />,
-    link: <Link to="/Subcategorias">Subcategorias</Link> 
-   
+    icon: <ListAltIcon />,
+    link: <Link to="/subcategorias">Subcategorias</Link>
   },
   {
     segment: 'grupos',
     title: 'Grupos',
-    icon: <BackupTableIcon />,
+    icon: <GroupWorkIcon />, 
+    link: <Link to="/grupos">Grupos</Link> 
   },
   {
     segment: 'dashboard',
     title: 'Equipos',
-    icon: <GroupsIcon />,
-    link: <Link to="/dashboard">Equipos</Link> 
-   
+    icon: <GroupsIcon />, 
+    link: <Link to="/dashboard">Equipos</Link>
   },
   {
     segment: 'eliminatorias',
     title: 'Eliminatorias',
-    icon: <EmojiEventsIcon />,
+    icon:  <FaProjectDiagram />,
+    link: <Link to="/eliminatorias">Eliminatorias</Link> 
   },
   {
     segment: 'partidos',
     title: 'Partidos',
     icon: <SportsSoccerIcon />,
+    link: <Link to="/partidos">Partidos</Link>
   },
   {
     segment: 'clasificacion',
-    title: 'Clasificacion',
+    title: 'Clasificación',
     icon: <TableViewIcon />,
+    link: <Link to="/clasificacion">Clasificación</Link>
   },
   {
     segment: 'jugadores',
     title: 'Jugadores',
     icon: <GroupIcon />,
+    link: <Link to="/jugadores">Jugadores</Link>
   },
-  
- 
   {
     kind: 'divider',
   },
   {
     segment: 'logout',
     title: 'Cerrar sesión',
-    icon: <GroupIcon />,
-    link: (
-      <Typography
-        onClick={() => {
-          setIsAuthenticated(false);
-          localStorage.removeItem('token');
-        }}
-        sx={{ cursor: 'pointer', color: 'inherit' }}
-      >
-        Cerrar sesión
-      </Typography>
-    ),
+    icon: <LogoutIcon />,
+    link: <Link to="/logout">Cerrar sesión</Link>
   },
+
   
 ];
 
@@ -183,7 +178,7 @@ const demoTheme = createTheme({
 });
 
 // eslint-disable-next-line react/prop-types
-function DemoPageContent({ pathname }) {
+function DemoPageContent({ pathname, setIsAuthenticated }) {
   let content;
   switch (pathname) {
     case '/dashboard':
@@ -213,6 +208,12 @@ function DemoPageContent({ pathname }) {
             case '/eliminatorias':
               content = <FORM_Eliminatorias />;
               break;
+              case '/logout':
+                content = <LogoutButton setIsAuthenticated={setIsAuthenticated} />;
+                break;
+                case '/':
+                  content = <FORM_Eliminatorias  />;
+                  break;
     default:
       content = <Typography><h3>Selecciona una opción del menú</h3></Typography>;
   }
@@ -233,105 +234,48 @@ function DemoPageContent({ pathname }) {
   );
 }
 
-function DashboardLayoutBasic(props ) {
-  const { window, setIsAuthenticated } = props; 
+import { useNavigate } from 'react-router-dom';
+
+function DashboardLayoutBasic(props) {
+  const { window, setIsAuthenticated } = props;
   const [pathname, setPathname] = React.useState('/torneos');
+  const navigate = useNavigate(); // Agrega useNavigate
+
   const router = React.useMemo(() => {
     return {
       pathname,
       searchParams: new URLSearchParams(),
       navigate: (path) => {
         if (path === 'logout') {
-          // Lógica para cerrar sesión
           setIsAuthenticated(false);
-          localStorage.removeItem('token'); // O cualquier otro método de logout
-          navigate('/login'); // Redirige a login
+          localStorage.removeItem('token');
+          navigate('/login'); // Redirige correctamente
         } else {
           setPathname(String(path));
         }
       },
     };
-  }, [pathname, setIsAuthenticated]);
-
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window !== undefined ? window() : undefined;
+  }, [pathname, setIsAuthenticated, navigate]); // Asegúrate de incluir navigate en las dependencias
 
   return (
-    // preview-start
     <AppProvider
     branding={{
-      // logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+      logo: <img src={Logo} alt="Logo" />,
       title: 'Panel Admin',
-      actions: [
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {/* Cambiar a modo oscuro */}
-          <button 
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              background: '#09537E',
-              color: '#fff',
-            }}
-            onClick={() => {
-              // Cambia entre los modos claro/oscuro
-              const themeMode = document.documentElement.getAttribute('data-toolpad-color-scheme');
-              document.documentElement.setAttribute(
-                'data-toolpad-color-scheme',
-                themeMode === 'light' ? 'dark' : 'light'
-              );
-            }}
-          >
-            Cambiar a modo oscuro
-          </button>
-  
-          {/* Botón de Cerrar Sesión */}
-          <button
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              background: '#e61010',
-              color: '#fff',
-            }}
-            onClick={() => {
-              // Lógica para cerrar sesión
-              setIsAuthenticated(false);
-              localStorage.removeItem('token');
-            }}
-          >
-            Cerrar sesión
-          </button>
-        </Box>,
-      ],
+    
     }}
-    navigation={NAVIGATION}
-    router={router}
-    theme={demoTheme}  
-    window={demoWindow}
+      navigation={NAVIGATION}
+      router={router}
+      theme={demoTheme}
+      window={window}
     >
       <DashboardLayout>
-     
-      {/* <RoutessComponent /> */}
-
-        <DemoPageContent pathname={pathname} />
-      </DashboardLayout>  
-      <Box
-    sx={{
-      position: 'absolute',
-      top: 80,
-      right: 10,
-      zIndex: 10,
-    }}
-  >
-    <LogoutButton setIsAuthenticated={setIsAuthenticated} />
-  </Box>
+        <DemoPageContent pathname={pathname} setIsAuthenticated={setIsAuthenticated} />
+      </DashboardLayout>
     </AppProvider>
-  
   );
 }
+
 DashboardLayoutBasic.propTypes = {
 
   window: PropTypes.func,

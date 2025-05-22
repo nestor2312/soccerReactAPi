@@ -93,8 +93,10 @@ const AdminClasificacion = () => {
                     <td>
                       <img
                         src={`${Images}/${equipo.archivo}`}
-                        width="50%"
-                        className="d-block mx-auto my-3 logomovil"
+                        width="5%"
+                     
+                      
+                        className="d-block mx-auto my-3 logo logomovil"
                         alt={equipo.nombre}
                       />
                     </td>

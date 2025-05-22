@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import EditPlayOffsModal from "../Formularios-edit/ModalEditPlayOffs";
-
+import Swal from "sweetalert2";
 import CreateIcon from '@mui/icons-material/Create';
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 const endpoint = `${API_ENDPOINT}eliminatoria`;
@@ -196,7 +196,13 @@ const store = async (e) => {
 
   // Validar el límite de registros antes de proceder
   if (registrosFiltrados.length >= maxRegistros) {
-    alert(`No puedes registrar más de ${maxRegistros} partidos para esta ronda en la subcategoría seleccionada.`);
+    Swal.fire({
+      title: "Advertencia",
+      text: `No puedes registrar más de ${maxRegistros} partidos para esta ronda en la subcategoría seleccionada.`,
+      icon: "warning",
+      confirmButtonText: "OK",
+    
+    })
     return;
   }
 
@@ -227,6 +233,10 @@ const store = async (e) => {
     setEliminatoriasFinal(updatedEliminatorias.final || []);
 
     setAlerta({ mensaje: "¡Partido registrado correctamente!", tipo: "success" });
+    setMarcadores("");
+    setEquipoVisitante("");
+    setEquipoLocal("");
+   
     setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
   } catch (error) {
     console.error("Error al enviar los datos:", error);
@@ -312,203 +322,220 @@ const saveEliminatoria = async (updatedEliminatoria) => {
       )}
 
       <h1 className="text-left">Registro de Eliminatorias</h1>
-      <form className="col s12" onSubmit={store}>
-        <div className="row">
-          {/* subcategoria */}
+      <form className="mt-2 mb-4" onSubmit={store}>
+  <div className="row">
+    {/* Subcategoría */}
+    <div className="col-12 mb-3">
+      <label htmlFor="subcategoria_id">Selecciona una Subcategoría:</label>
+      <select
+        id="subcategoria_id"
+        className="form-control"
+        value={SubcategoriaID}
+        onChange={(e) => setSubcategoriaID(e.target.value)}
+      >
+        <option value="" disabled>
+          Selecciona una subcategoría
+        </option>
+        {subcategorias.map((subcategoria) => (
+          <option key={subcategoria.id} value={subcategoria.id} className="text-capitalize">
+            {subcategoria.nombre} -  {subcategoria.categoria?.torneo?.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          <div className="form-group mt-3">
-            <label htmlFor="subcategoria_id">
-              Selecciona una Subcategoría:
-            </label>
+    {/* Equipo Local */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="equipo_local" className="form-label">
+        Selecciona Equipo Local
+      </label>
+      <select
+        id="equipo_local"
+        name="equipo_local"
+        className="form-control validate"
+        onChange={(e) => setEquipoLocal(e.target.value)}
+        value={equipoLocalID}
+      >
+        <option value="" disabled>
+          Selecciona un Equipo
+        </option>
+        {equiposFiltrados.map((equipo) => (
+          <option key={equipo.id} value={equipo.id}>
+            {equipo.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-            <select
-              id="subcategoria_id"
-              className="form-control"
-              value={SubcategoriaID}
-              onChange={(e) => setSubcategoriaID(e.target.value)}
-            >
-              <option value="" disabled>
-                Selecciona una subcategoría
-              </option>
-              {subcategorias.map((subcategoria) => (
-                <option key={subcategoria.id} value={subcategoria.id}>
-                  {subcategoria.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          {/* Equipo Local */}
-          <div className="input-field col s12 m6">
-            <label htmlFor="equipo_local" className="form-label">
-              Selecciona Equipo Local
-            </label>
-            <select
-              id="equipo_local"
-              name="equipo_local"
-              className="form-control validate"
-              onChange={(e) => setEquipoLocal(e.target.value)}
-              value={equipoLocalID}
-            >
-              <option value="" disabled>
-                Selecciona un Equipo
-              </option>
-              {equiposFiltrados.map((equipo) => (
-                <option key={equipo.id} value={equipo.id}>
-                  {equipo.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+    {/* Equipo Visitante */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="equipo_visitante" className="form-label">
+        Selecciona Equipo Visitante
+      </label>
+      <select
+        id="equipo_visitante"
+        name="equipo_visitante"
+        className="form-control validate"
+        onChange={(e) => setEquipoVisitante(e.target.value)}
+        value={equipoVisitanteID}
+      >
+        <option value="" disabled>
+          Selecciona un Equipo
+        </option>
+        {equiposFiltrados.map((equipo) => (
+          <option key={equipo.id} value={equipo.id}>
+            {equipo.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          {fieldsToShow.ida && (
-          <>
-            <label className="form-label mt-3">Marcador Local (Ida)</label>
-            <input
-              className="form-control validate"
-              name="marcador1_ida"
-              type="number"
-    min={0}
-    max={100} 
-              placeholder="Marcador Local (Ida)"
-              value={marcadores.marcador1_ida}
-              onChange={handleMarcadorChange}
-            />
-            <label className="form-label  mt-3">Marcador Visitante (Ida)</label>
-            <input
-              className="form-control validate"
-              name="marcador2_ida"
-              type="number"
-    min={0}
-    max={100} 
-              placeholder="Marcador Visitante (Ida)"
-              value={marcadores.marcador2_ida}
-              onChange={handleMarcadorChange}
-            />
-          </>
-        )}
+    {/* Número de Partido */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="numPartido">Número de Partido</label>
+      <input
+        id="numPartido"
+        name="numPartido"
+        type="number"
+        min={1}
+        max={4}
+        placeholder="Número de Partido"
+        className="form-control validate light-blue-text"
+        onChange={(e) => setNumPartido(e.target.value)}
+        value={numPartido}
+      />
+    </div>
 
-        {/* Campo Marcador Vuelta */}
-        {fieldsToShow.vuelta && (
-          <>
-            <label className="form-label mt-3">Marcador Local (Vuelta)</label>
-            <input
-              className="form-control validate"
-              name="marcador1_vuelta"
-              type="number"
-              min={0}
-              max={20} 
-              placeholder="Marcador Local (Vuelta)"
-              value={marcadores.marcador1_vuelta}
-              onChange={handleMarcadorChange}
-            />
-            <label className="form-label mt-3">Marcador Visitante (Vuelta)</label>
-            <input
-              className="form-control validate"
-              name="marcador2_vuelta"
-              type="number"
-    min={0}
-    max={100} 
-              placeholder="Marcador Visitante (Vuelta)"
-              value={marcadores.marcador2_vuelta}
-              onChange={handleMarcadorChange}
-            />
-          </>
-        )}
+    {/* Tipo de Eliminatoria */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="tipo_eliminatoria" className="form-label">
+        Tipo de Eliminatoria
+      </label>
+      <select
+        id="tipo_eliminatoria"
+        name="tipo_eliminatoria"
+        className="form-control validate"
+        onChange={(e) => setTipoEliminatoria(e.target.value)}
+        value={tipoEliminatoria}
+      >
+        <option value="solo_ida">Solo Ida</option>
+        <option value="ida_vuelta">Ida y Vuelta</option>
+        <option value="penales">Penales</option>
+      </select>
+    </div>
+  </div>
 
-        {/* Campo Penales */}
-        {fieldsToShow.penales && (
-          <>
-            <label className="form-label mt-3">Penales Local</label>
-            <input
-              className="form-control validate "
-              name="marcador1_penales"
-              type="number"
-              min={0}
-              max={20} 
-              placeholder="Penales Local"
-              value={marcadores.marcador1_penales}
-              onChange={handleMarcadorChange}
-            />
-            <label className="form-label mt-3">Penales Visitante</label>
-            <input
-              className="form-control validate"
-              name="marcador2_penales"
-              type="number"
-    min={0}
-    max={100} 
-              placeholder="Penales Visitante"
-              value={marcadores.marcador2_penales}
-              onChange={handleMarcadorChange}
-            />
-          </>
-        )}
-
-          {/* Equipo Visitante */}
-          <div className="input-field col s12 m6">
-            <label htmlFor="equipo_visitante" className="form-label">
-              Selecciona Equipo Visitante
-            </label>
-            <select
-              id="equipo_visitante"
-              name="equipo_visitante"
-              className="form-control validate"
-              onChange={(e) => setEquipoVisitante(e.target.value)}
-              value={equipoVisitanteID}
-            >
-              <option value="" disabled>
-                Selecciona un Equipo
-              </option>
-              {equiposFiltrados.map((equipo) => (
-                <option key={equipo.id} value={equipo.id}>
-                  {equipo.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Número de Partido */}
-          <div className="input-field col s12 m6">
-            <label>Número de Partido</label>
-            <input
-              id="numPartido"
-              name="numPartido"
-              type="number"
-              min={1}
-              max={4} 
-              placeholder="Número de Partido"
-              className="form-control validate light-blue-text"
-              onChange={(e) => setNumPartido(e.target.value)}
-              value={numPartido} />
-          </div>
-
-          {/* Tipo de Eliminatoria */}
-          <div className="input-field col s12 m6">
-            <label htmlFor="tipo_eliminatoria" className="form-label">
-              Tipo de Eliminatoria
-            </label>
-            <select
-              id="tipo_eliminatoria"
-              name="tipo_eliminatoria"
-              className="form-control validate"
-              onChange={(e) => setTipoEliminatoria(e.target.value)}
-              value={tipoEliminatoria}
-            >
-              <option value="solo_ida">Solo Ida</option>
-              <option value="ida_vuelta">Ida y Vuelta</option>
-              <option value="penales">Penales</option>
-            </select>
-          </div>
-
-         
-
-          {/* Botón Enviar */}
-          <div className="col s12 m12 mt-3">
-            <button className="btn btn-outline-info" type="submit">
-            Registrar Partido
-            </button>
-          </div>
+  {/* Sección de Marcadores */}
+  <div className="row">
+    {/* Si se muestran campos para ida */}
+    {fieldsToShow.ida && (
+      <>
+        <div className="col-12 mb-3">
+          <label className="form-label">Marcador Local (Ida)</label>
+          <input
+            className="form-control validate"
+            name="marcador1_ida"
+            type="number"
+            min={0}
+            max={100}
+            placeholder="Marcador Local (Ida)"
+            value={marcadores.marcador1_ida}
+            onChange={handleMarcadorChange}
+          />
         </div>
-      </form>
+        <div className="col-12 mb-3">
+          <label className="form-label">Marcador Visitante (Ida)</label>
+          <input
+            className="form-control validate"
+            name="marcador2_ida"
+            type="number"
+            min={0}
+            max={100}
+            placeholder="Marcador Visitante (Ida)"
+            value={marcadores.marcador2_ida}
+            onChange={handleMarcadorChange}
+          />
+        </div>
+      </>
+    )}
+
+    {/* Si se muestran campos para vuelta */}
+    {fieldsToShow.vuelta && (
+      <>
+        <div className="col-12 mb-3">
+          <label className="form-label">Marcador Local (Vuelta)</label>
+          <input
+            className="form-control validate"
+            name="marcador1_vuelta"
+            type="number"
+            min={0}
+            max={20}
+            placeholder="Marcador Local (Vuelta)"
+            value={marcadores.marcador1_vuelta}
+            onChange={handleMarcadorChange}
+          />
+        </div>
+        <div className="col-12 mb-3">
+          <label className="form-label">Marcador Visitante (Vuelta)</label>
+          <input
+            className="form-control validate"
+            name="marcador2_vuelta"
+            type="number"
+            min={0}
+            max={100}
+            placeholder="Marcador Visitante (Vuelta)"
+            value={marcadores.marcador2_vuelta}
+            onChange={handleMarcadorChange}
+          />
+        </div>
+      </>
+    )}
+
+    {/* Si se muestran campos para penales */}
+    {fieldsToShow.penales && (
+      <>
+        <div className="col-12 mb-3">
+          <label className="form-label">Penales Local</label>
+          <input
+            className="form-control validate"
+            name="marcador1_penales"
+            type="number"
+            min={0}
+            max={20}
+            placeholder="Penales Local"
+            value={marcadores.marcador1_penales}
+            onChange={handleMarcadorChange}
+          />
+        </div>
+        <div className="col-12 mb-3">
+          <label className="form-label">Penales Visitante</label>
+          <input
+            className="form-control validate"
+            name="marcador2_penales"
+            type="number"
+            min={0}
+            max={100}
+            placeholder="Penales Visitante"
+            value={marcadores.marcador2_penales}
+            onChange={handleMarcadorChange}
+          />
+        </div>
+      </>
+    )}
+  </div>
+
+  
+
+  {/* Botón Enviar */}
+  <div className="row">
+    <div className="col-12 mt-3">
+      <button className="btn btn-outline-primary " type="submit">
+        Registrar Partido
+      </button>
+    </div>
+  </div>
+</form>
+
     </div>
     <div>
 
@@ -521,7 +548,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
           <option value="">Seleccione una subcategoría</option>
           {subcategorias.map((subcategoria) => (
             <option key={subcategoria.id} value={subcategoria.id}>
-              {subcategoria.nombre}
+              {subcategoria.nombre} - {subcategoria.categoria?.torneo?.nombre}
             </option>
           ))}
         </select>
@@ -975,7 +1002,7 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
             {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
             </span>
             <span className="goles">
-            {marcador1_ida} {marcador1_vuelta || " "}
+            {marcador1_ida} {marcador1_vuelta || ""}
             {/* Goles Globales solo si hay marcador de vuelta */}
             {marcador1_vuelta && ` (${marcador1_global})`}
             {/* Penales solo si están definidos */}

@@ -11,41 +11,91 @@
     padding: 0.5rem 0.5rem !important;
   }
 
-  @media (max-width: 1366px) {
-    .margen{
-      margin: auto 58px;
-    }
+  /* .ftfooter {
+    height: 48px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: static; 
+    background: linear-gradient(180deg, #152039 90%, #152039cc 100%);
+    padding: 10px 0;
+    margin-top: 50px;
+  } */
+  
+
+/* Para pantallas hasta 1366px */
+@media (max-width: 1366px) {
+  .margen {
+    margin: auto 58px;
+  }
+  /* footer {
+    position: relative;
+  } */
+}
+
+/* Para pantallas mayores a 769px */
+@media (max-width: 769px) {
+  /* footer {
+    position: relative;
+  } */
+}
+
+/* Para dispositivos pequeños en orientación vertical (portrait) */
+@media (max-width: 768px) and (orientation: portrait) {
+  /* footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  } */
+}
+
+/* Para pantallas hasta 576px */
+@media only screen and (max-width: 576px) {
+  .logomovil {
+    width: 30%;
   }
 
-  @media only screen and (max-width: 576px) {
-        .logomovil{
-      width: 30%;
-    }
-    .margen{
-        margin: auto 10px;
-      }
+  .margen {
+    margin: auto 10px;
+  }
 }
-.fondo-card-admin{
-  background-color: #e9ecef!important;
+
+/* Fondo y estilos generales */
+.fondo-card-admin {
+  background-color: #e9ecef !important;
 }
-.TITULO-admin{
+
+.TITULO-admin {
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+}
 
+.card-header {
+  padding: 11px !important;
 }
-.card-header{
-padding: 11px !important;
-}
-.data{
+
+.data {
   color: #000;
-text-align: center;
-font-family: 'Roboto Condensed', sans-serif;
-font-size: 15px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
+  text-align: center;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
+
+/* Para tablets en landscape (horizontal) */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .margen {
+    margin: auto 8px;
+  }
+}
+

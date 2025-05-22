@@ -4,7 +4,7 @@ import './index.css'
 const Cargando=()=>{
     return<>
     <div>
-        <img  className="cargando" src={cargando} alt="" />
+        <img  className="cargando" src={cargando} alt="cargando..." />
     </div>
     </>
 

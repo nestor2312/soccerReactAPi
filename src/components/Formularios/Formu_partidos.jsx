@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import ModalEditMatches from "../Formularios-edit/ModalEditMatches";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CreateIcon from '@mui/icons-material/Create';
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CreateIcon from "@mui/icons-material/Create";
+import Swal from "sweetalert2";
+import Cargando from "../Carga/carga";
+import ErrorCarga from "../Error/Error";
 const endpoint = `${API_ENDPOINT}partido`;
 
 const FORM_Matches = () => {
@@ -16,17 +19,20 @@ const FORM_Matches = () => {
   const [subcategoriaId, setSubcategoriaId] = useState("");
   const [grupoId, setGrupoId] = useState("");
   // eslint-disable-next-line no-unused-vars
+  const [isLoading, setIsLoading] = useState(true);
   const [equipos, setEquipos] = useState([]);
   const [partidos, setPartidos] = useState([]);
   const [marcador1, setMarcador1] = useState("");
   const [marcador2, setMarcador2] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [hora, setHora] = useState("");
   const [equipoLocalID, setEquipoLocal] = useState("");
   const [equipoVisitanteID, setEquipoVisitante] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
   const [selectedPartido, setSelectedPartido] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [error] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const handleEditClick = (partido) => {
     setSelectedPartido(partido); // Asignar los datos del partido al estado
@@ -38,6 +44,15 @@ const FORM_Matches = () => {
     setSelectedPartido(null); // Limpiar los datos del partido
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [lastPage, setLastPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setIsLoading(true);
+  };
+
   const savePartido = async (updatedPartido) => {
     try {
       console.log("Datos enviados al backend:", updatedPartido);
@@ -47,8 +62,7 @@ const FORM_Matches = () => {
         updatedPartido
       );
 
-      // Actualizar localmente el estado de partidos
-
+      fetchPartidos();
       // Mostrar alerta de éxito
       setAlerta({
         mensaje: "¡Partido actualizado correctamente!",
@@ -67,6 +81,7 @@ const FORM_Matches = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     document.title = "Admin - Partidos";
   }, []);
 
@@ -168,22 +183,29 @@ const FORM_Matches = () => {
 
   const fetchPartidos = async () => {
     try {
-      const response = await axios.get(`${API_ENDPOINT}partidos`);
-      setPartidos(response.data);
+      const response = await axios.get(
+        `${API_ENDPOINT}partidos?page=${currentPage}`
+      );
+      setPartidos(response.data.data);
+      setLastPage(response.data.last_page);
     } catch (error) {
       console.error("Error al cargar los partidos:", error);
+    }finally {
+      setIsLoading(false); // Se asegura de ocultar la carga cuando finaliza la petición
     }
   };
 
   const store = async (e) => {
     e.preventDefault();
-
+  
     if (equipoLocalID === equipoVisitanteID) {
-      alert("Los equipos no pueden ser el mismo.");
-      return;
-    }
-    if (!marcador1 || !marcador2) {
-      alert("Por favor, ingrese los marcadores.");
+      Swal.fire({
+        title: "Los equipos no pueden ser el mismo!",
+        text: "Seleccione 2 equipos diferentes para registrar el partido",
+        icon: "warning",
+
+        cancelButtonText: "Cancelar",
+      });
       return;
     }
 
@@ -192,6 +214,8 @@ const FORM_Matches = () => {
     formData.append("marcador2", marcador2);
     formData.append("equipoA_id", equipoLocalID);
     formData.append("equipoB_id", equipoVisitanteID);
+    formData.append("fecha", fecha);
+    formData.append("hora", hora);
 
     try {
       await axios.post(endpoint, formData, {
@@ -218,33 +242,53 @@ const FORM_Matches = () => {
 
   useEffect(() => {
     fetchPartidos();
-  }, []);
+   
+  }, [currentPage]);
 
   // Eliminar partido
   const deletePartidos = async (id) => {
-    if (window.confirm("¿Estás seguro de eliminar este partido?")) {
-      try {
-        await axios.delete(`${API_ENDPOINT}partido/${id}`);
-        // Actualizar lista de partidos
-        setAlerta({
-          mensaje: "¡Partido eliminado correctamente!",
-          tipo: "success",
-        });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-        const response = await axios.get(`${API_ENDPOINT}partidos`);
-        setPartidos(response.data);
-      } catch (error) {
-        setAlerta({
-          mensaje: "¡Error al eliminar el partido!",
-          tipo: "success",
-        });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-        console.error("Error al eliminar el partido:", error);
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar este partido después de eliminarlo.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+          setPartidos(partidos.filter((partido) => partido.id !== id));
+          setAlerta({
+            mensaje: "Partido eliminado correctamente!",
+            tipo: "success",
+          });
+          fetchPartidos();
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+        } catch (error) {
+          console.error("Error al eliminar el partido", error);
+          setAlerta({
+            mensaje: "Error al eliminar el partido!",
+            tipo: "success",
+          });
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+          Swal.fire("Error", "No se pudo eliminar el partido.", "error");
+        }
       }
-    }
+    });
   };
 
   return (
+    <>
+    {isLoading ? (
+      <div className="loading-container">
+        <Cargando/>
+      </div>
+    ) :  error ? (
+      <div className="loading-container">
+         <ErrorCarga/>
+      </div>
+    ) : (
     <div>
       {alerta.mensaje && (
         <div
@@ -263,183 +307,241 @@ const FORM_Matches = () => {
       )}
 
       <h1 className="text-left">Registro de Partidos</h1>
-      <form onSubmit={store}>
-        {/* Form Fields */}
-        <div>
-          <div className="form-group">
-            <label htmlFor="torneo_id">Selecciona un Torneo:</label>
-            <select
-              id="torneo_id"
-              className="form-control"
-              value={torneoId}
-              onChange={(e) => setTorneoId(e.target.value)}
-            >
-              <option value="" disabled>
-                Selecciona un torneo
-              </option>
-              {torneos.map((torneo) => (
-                <option key={torneo.id} value={torneo.id}>
-                  {torneo.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+      
 
-          <div className="form-group">
-            <label htmlFor="torneo_id">Selecciona Categoría:</label>
-            <select
-              id="torneo_id"
-              className="form-control"
-              value={categoriaId}
-              onChange={(e) => setCategoriaId(e.target.value)}
-              disabled={!torneoId}
-            >
-              <option value="" disabled>
-                Selecciona una categoría
-              </option>
-              {categorias.map((categoria) => (
-                <option key={categoria.id} value={categoria.id}>
-                  {categoria.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+      <form onSubmit={store} className="mt-2 mb-4">
+  <div className="row">
+    {/* Selecciona un Torneo */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="torneo_id">Selecciona un Torneo:</label>
+      <select
+        id="torneo_id"
+        className="form-control"
+        value={torneoId}
+        required
+        onChange={(e) => setTorneoId(e.target.value)}
+      >
+        <option value="" disabled>
+          Selecciona un torneo
+        </option>
+        {torneos.map((torneo) => (
+          <option key={torneo.id} value={torneo.id}>
+            {torneo.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          <div className="form-group">
-            <label htmlFor="torneo_id">Selecciona Subcategoría:</label>
-            <select
-              id="subcategoria_id"
-              className="form-control"
-              value={subcategoriaId}
-              onChange={(e) => setSubcategoriaId(e.target.value)}
-              disabled={!categoriaId}
-            >
-              <option value="" disabled>
-                Selecciona una Subcategoría
-              </option>
-              {subcategorias.map((subcategoria) => (
-                <option key={subcategoria.id} value={subcategoria.id}>
-                  {subcategoria.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+    {/* Selecciona Categoría */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="categoria_id">Selecciona Categoría:</label>
+      <select
+        required
+        id="categoria_id"
+        className="form-control"
+        value={categoriaId}
+        onChange={(e) => setCategoriaId(e.target.value)}
+        disabled={!torneoId}
+      >
+        <option value="" disabled>
+          Selecciona una categoría
+        </option>
+        {categorias.map((categoria) => (
+          <option key={categoria.id} value={categoria.id}>
+            {categoria.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          <div className="form-group">
-            <label htmlFor="torneo_id">Selecciona Grupo:</label>
-            <select
-              id="torneo_id"
-              className="form-control"
-              value={grupoId}
-              onChange={(e) => setGrupoId(e.target.value)}
-              disabled={!subcategoriaId}
-            >
-              <option value="" disabled>
-                Seleccione un grupo
-              </option>
-              {grupos.map((grupo) => (
-                <option key={grupo.id} value={grupo.id}>
-                  {grupo.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+    {/* Selecciona Subcategoría */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="subcategoria_id">Selecciona Subcategoría:</label>
+      <select
+        required
+        id="subcategoria_id"
+        className="form-control"
+        value={subcategoriaId}
+        onChange={(e) => setSubcategoriaId(e.target.value)}
+        disabled={!categoriaId}
+      >
+        <option value="" disabled>
+          Selecciona una Subcategoría
+        </option>
+        {subcategorias.map((subcategoria) => (
+          <option key={subcategoria.id} value={subcategoria.id}>
+            {subcategoria.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          <div className="row">
-            <div className="input-field col-4 s12 m6">
-              <label htmlFor="equipo_local" className="form-label">
-                Selecciona Equipo Local
-              </label>
-              <select
-                id="equipo_local"
-                name="equipo_local"
-                className="form-control validate required"
-                onChange={(e) => setEquipoLocal(e.target.value)}
-                value={equipoLocalID}
-              >
-                <option value="" disabled>
-                  Selecciona un Equipo
-                </option>
-                {equipos.map((equipo) => (
-                  <option key={equipo.id} value={equipo.id}>
-                    {equipo.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="input-field col-2 s12 m6">
-              <label>marcador</label>
-              <input
-                id="icon_prefix"
-                name="marcador1"
-                type="number"
-                min={0}
-                max={50} 
-                placeholder="marcador Local"
-                className="form-control validate required light-blue-text"
-                onChange={(e) => setMarcador1(e.target.value)}
-                value={marcador1}
-              />
-            </div>
-            <div className="input-field col-2 s12 m6">
-              <label>marcador</label>
-              <input
-                id="icon_prefix"
-                name="marcador1"
-                type="number"
-    min={0}
-    max={50} 
-                placeholder="marcador Local"
-                className="form-control validate required light-blue-text"
-                onChange={(e) => setMarcador2(e.target.value)}
-                value={marcador2}
-              />
-            </div>
+    {/* Selecciona Grupo */}
+    <div className="col-12 col-md-6 mb-3">
+      <label htmlFor="grupo_id">Selecciona Grupo:</label>
+      <select
+        required
+        id="grupo_id"
+        className="form-control"
+        value={grupoId}
+        onChange={(e) => setGrupoId(e.target.value)}
+        disabled={!subcategoriaId}
+      >
+        <option value="" disabled>
+          Seleccione un grupo
+        </option>
+        {grupos.map((grupo) => (
+          <option key={grupo.id} value={grupo.id}>
+            {grupo.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
 
-            <div className="input-field col-4 s12 m6">
-              <label htmlFor="equipo_local" className="form-label">
-                Selecciona Equipo Visitante
-              </label>
-              <select
-                id="equipo_Visitante"
-                name="equipo_Visitante"
-                className="form-control validate required"
-                onChange={(e) => setEquipoVisitante(e.target.value)}
-                value={equipoVisitanteID}
-              >
-                <option value="" disabled>
-                  Selecciona un Equipo
-                </option>
-                {equipos.map((equipo) => (
-                  <option key={equipo.id} value={equipo.id}>
-                    {equipo.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className="col s12 m12 mt-3">
-          <button className="btn btn-outline-info" type="submit">
-            Registrar Partido
-          </button>
-        </div>
-      </form>
+  {/* Datos de Equipos y Marcadores */}
+  <div className="row">
+    {/* Equipo Local */}
+    <div className="col-12 col-md-4 mb-3">
+      <label htmlFor="equipo_local" className="form-label">
+        Selecciona Equipo Local
+      </label>
+      <select
+        required
+        id="equipo_local"
+        name="equipo_local"
+        className="form-control"
+        onChange={(e) => setEquipoLocal(e.target.value)}
+        value={equipoLocalID}
+      >
+        <option value="" disabled>
+          Selecciona un Equipo
+        </option>
+        {equipos.map((equipo) => (
+          <option key={equipo.id} value={equipo.id}>
+            {equipo.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Marcador Local */}
+    <div className="col-12 col-md-2 mb-3">
+      <label htmlFor="marcador1">Marcador</label>
+      <input
+        id="marcador1"
+        name="marcador1"
+        type="number"
+        min={0}
+        max={50}
+        placeholder="Local"
+        className="form-control"
+        onChange={(e) => setMarcador1(e.target.value)}
+        value={marcador1}
+      />
+    </div>
+
+    {/* Marcador Visitante */}
+    <div className="col-12 col-md-2 mb-3">
+      <label htmlFor="marcador2">Marcador</label>
+      <input
+        id="marcador2"
+        name="marcador2"
+        type="number"
+        min={0}
+        max={50}
+        placeholder="Visitante"
+        className="form-control"
+        onChange={(e) => setMarcador2(e.target.value)}
+        value={marcador2}
+      />
+    </div>
+
+    {/* Equipo Visitante */}
+    <div className="col-12 col-md-4 mb-3">
+      <label htmlFor="equipo_Visitante" className="form-label">
+        Selecciona Equipo Visitante
+      </label>
+      <select
+        required
+        id="equipo_Visitante"
+        name="equipo_Visitante"
+        className="form-control"
+        onChange={(e) => setEquipoVisitante(e.target.value)}
+        value={equipoVisitanteID}
+      >
+        <option value="" disabled>
+          Selecciona un Equipo
+        </option>
+        {equipos.map((equipo) => (
+          <option key={equipo.id} value={equipo.id}>
+            {equipo.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Fecha y Hora */}
+  <div className="row">
+    <div className="col-12 col-md-2 mb-3">
+      <label htmlFor="fecha">Fecha</label>
+      <input
+        id="fecha"
+        name="fecha"
+        type="date"
+        className="form-control"
+        onChange={(e) => setFecha(e.target.value)}
+        value={fecha}
+      />
+    </div>
+    <div className="col-12 col-md-2 mb-3">
+      <label htmlFor="hora">Hora</label>
+      <input
+        id="hora"
+        name="hora"
+        type="time"
+        className="form-control"
+        onChange={(e) => setHora(e.target.value)}
+        value={hora}
+      />
+    </div>
+  </div>
+
+  {/* Botón de Envío */}
+  <div className="row">
+    <div className="col-12 mt-3">
+      <button className="btn btn-outline-primary " type="submit">
+        Registrar Partido
+      </button>
+    </div>
+  </div>
+</form>
+
+
+
+      
       {/* Table of Matches */}
       <div className="table-responsive card my-2">
         <table className="table ">
           <thead className="thead-light">
             <tr>
+              <th className="text-center">Fecha</th>
               <th className="text-center">Local</th>
               <th className="text-center">marcador</th>
               <th className="text-center">Visitante</th>
+              <th className="text-center">Hora</th>
               <th className="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {partidos.map((partido) => (
               <tr key={partido.id}>
+ <td className="text-center">
+                  {partido.fecha}
+                </td>
                 <td className="text-left">
+                  
                   {/* <img
                            src={${Images}/${partido.equipo_a.archivo}} 
                            className="logo2"
@@ -459,12 +561,16 @@ const FORM_Matches = () => {
                            alt={partido.equipo_a.nombre}
                          /> */}
                 </td>
+               
+                <td className="text-center">
+                  {partido.hora}
+                </td>
                 <td className="text-center d-flex justify-content-evenly">
                   <button
                     className="btn btn-warning"
                     onClick={() => handleEditClick(partido)}
                   >
-                    <CreateIcon/>
+                    <CreateIcon />
                   </button>
                   <div>
                     <button
@@ -474,7 +580,7 @@ const FORM_Matches = () => {
                         deletePartidos(partido.id);
                       }}
                     >
-                       <DeleteOutlineIcon/>
+                      <DeleteOutlineIcon />
                     </button>{" "}
                   </div>
                 </td>
@@ -490,7 +596,28 @@ const FORM_Matches = () => {
           onSave={savePartido} // Función para guardar el partido
         />
       </div>
+      <div className="pagination mb-4">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          aria-disabled={currentPage === 1}
+         
+        >
+          ← Anterior
+        </button>
+        <span className="mx-2">{`Página ${currentPage} de ${lastPage}`}</span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === lastPage}
+          aria-disabled={currentPage === lastPage}
+         
+        >
+          Siguiente →
+        </button>
+      </div>
     </div>
+      )}
+      </>
   );
 };
 

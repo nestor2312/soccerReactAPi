@@ -3,9 +3,10 @@
 }
 
 .card-matches { 
+    cursor: pointer;
     height: 130px!important;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    transition: 0.5s ease;
+    transition: transform 0.4s ease, box-shadow 0.3s ease, background 0.3s ease;
    
 }
 .TeamLocal{
@@ -19,31 +20,198 @@
 background: #ffffff!important;
 }
 
-.card-matches:hover {
-    scale: 1.04;
-    transition: 0.3s ease;
+
+/* Estilos base para el modal */
+
+@keyframes modalOpen {
+    0% {
+      opacity: 0;
+      transform: translateY(-30px) scale(0.9);
+    }
+    60% {
+      opacity: 0.9;
+      transform: translateY(5px) scale(1.03); /* Pequeño rebote */
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Estilos base para el modal */
+  dialog {
+    border-radius: 12px;
     background: linear-gradient(180deg, #ffff 0%, #ffff 100%) padding-box,
-    linear-gradient(180deg, #00BF63 0%, #09537E 100%)  border-box!important;
-    border: 2px solid #0000;
-    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.25);
+                linear-gradient(180deg, #00BF63 10%, #067089 90%) border-box !important;
+    border: 2px solid transparent;
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+    padding: 35px 30px;
+    box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
 }
+
+  
+  /* Cuando el modal está abierto */
+  dialog[open] {
+    animation: modalOpen 0.5s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+  
+
+  .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.close-button:hover {
+    transform: scale(1.2);
+}
+
+
+
+.card-matches:hover {
+    transform: translateY(-1px) scale(1.03); 
+   
+    background: 
+      linear-gradient(180deg, #fff 0%, #fff 100%) padding-box,
+      linear-gradient(180deg, #00BF63 0%, #09537E 100%) border-box !important;
+    border: 2px solid transparent;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+  }
+.scoremodal{
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600; 
+}
+
+
 .hiden{
     display: none;
 }
 .hiden-box{
     display: block;
 }
-
 .score {
     font-weight: bold;
+    text-align: center;
 }
 
+.fecha, .hora {
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block; 
+    text-align: center;
+}
+
+.fecha {
+    text-align: center;
+    color: #000;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.hora {
+    display: block;
+    text-align: center;
+    font-family: 'Days One', sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background: linear-gradient(180deg, rgba(0, 191, 99, 0.80) 0%, rgba(9, 83, 126, 0.80) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+
+dialog{
+    width: 50%!important;
+}
+.dialog-box{
+    width: 75%!important;
+}
+
+
 @media (max-width: 768px) {
-  
+    .scoremodal{
+        font-weight: bold;
+        text-align: center;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 700; 
+    }
     .hiden{
         display: block!important;
     }
     .hiden-box{
         display: none!important;
     }
+
+    .dialog-box{
+        width: 101%!important;
+    }
+    
+
+    
+.fecha {
+   
+    font-size: 11px;
+  
 }
+dialog{
+    width: 90%!important;
+}
+
+.hora {
+   
+    font-size: 12px;
+ 
+}
+
+}
+
+/* Para tablets en landscape (horizontal) */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+    .hiden{
+        display: block!important;
+        width: 95%!important;
+        margin: auto 20px;
+    }
+    .hiden-box{
+        display: none!important;
+    }
+   
+  
+  }
+
+  /* Para móviles en portrait (vertical) */
+@media (max-width: 768px) and (orientation: portrait) {
+    dialog {
+        padding: 55px 20px; 
+    }
+
+    .hiden{
+        display: block!important;
+        width: 99%!important;
+        margin: auto auto;
+    }
+    .hiden-box{
+        display: none!important;
+    }
+  }

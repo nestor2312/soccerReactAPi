@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import "./index.css";
-
+import Logo from "../../assets/Frame 22.svg"
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -14,12 +15,12 @@ const Menu = () => {
   return (
     <nav className="navbar">
     <div className="navbar-logo">
-      <h1>Logo</h1>
+    <img  className="LOGO" src={Logo} alt="LOGO" />
     </div>
   
     <div className={`navbar-links ${isOpen ? "open" : ""}`}>
       <Link to={`/`} className="nv">
-        ← Copas
+      <ArrowBackOutlinedIcon/> Torneos
       </Link>
       <Link
         to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/inicio`}

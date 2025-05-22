@@ -8,6 +8,7 @@ import ErrorCarga from "../Error/Error";
 import { useParams } from "react-router-dom";
 import TablaEstadisticas from "../estadisticas/TablaEstadisticas"; // Asegúrate de importar el componente
 
+
 const endpoint = API_ENDPOINT;
 
 const Estadisticas = () => {
@@ -62,18 +63,21 @@ const Estadisticas = () => {
   }, []);
 
   return (
-    <>
-      <Menu />
-      {isLoading ? (
-        <div className="loading-container">
-          <Cargando />
-        </div>
-      ) : error ? (
-        <div className="loading-container">
-          <ErrorCarga />
-        </div>
-      ) : jugadores.rojas ? ( // Asegúrate de verificar el contenido del objeto
-        <>
+    <div className="layout">
+    <Menu/>
+    {isLoading ? (
+          <div className="loading-container">
+            <Cargando/>
+          </div>
+        ) : error ? (
+          <div className="loading-container">
+             <ErrorCarga/>
+          </div>
+        )  : jugadores.rojas ? ( 
+          <main className="main-content">
+      
+     
+      <section>
         <div className="margen">
 
           <div className="row ">
@@ -84,6 +88,13 @@ const Estadisticas = () => {
                 jugadores={jugadores.goles}
               />
             </div>
+            <div className="col-12 col-md-6 mb-1">
+              <TablaEstadisticas
+                titulo="Asistencias"
+                campo="asistencias"
+                jugadores={jugadores.asistencias}
+              />
+            </div>
             <div className="col-12 col-md-6">
               <TablaEstadisticas
                 titulo="Tarjetas rojas"
@@ -91,28 +102,25 @@ const Estadisticas = () => {
                 jugadores={jugadores.rojas}
               />
             </div>
-            <div className="col-12 col-md-6">
+            <div className="col-12 col-md-6 ">
               <TablaEstadisticas
                 titulo="Tarjetas amarillas"
                 campo="card_amarilla"
                 jugadores={jugadores.amarillas}
               />
             </div>
-            <div className="col-12 col-md-6 mb-5">
-              <TablaEstadisticas
-                titulo="Asistencias"
-                campo="asistencias"
-                jugadores={jugadores.asistencias}
-              />
-            </div>
+           
           </div>
         </div>
-        </>
+        <div style={{ height: "15px" }}></div>
+        </section>
+        </main>
       ) : (
         <p className="no-datos">No hay Estadisticas disponibles en este momento.</p>
       )}
-      <Footer />
-    </>
+     {!isLoading  && !error && <Footer/>}
+     </div>
+    
   );
 };
 

@@ -7,7 +7,7 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
     <section className=" Jugadores mt-2 mb-2">
       <div className="container-fluid">
         <div className="row ">
-          <div className="mt-4">
+          <div className="mt-3">
             <div className="card border-0 shadow">
               <div className="card-header fondo-card TITULO border-0">
                 {titulo}
@@ -32,7 +32,7 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                         /> 
                         </td>
                          
-                        <td>{Player.nombre} {Player.apellido}</td>
+                        <td className="text-capitalize">{Player.nombre} {Player.apellido}</td>
                         <td className="text-center data">{Player[campo]}</td>
                       </tr>
                     ))}

@@ -9,21 +9,38 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
   const [subcategorias, setSubcategorias] = useState([]);
   const [grupos, setGrupos] = useState([]);
   const [equipos, setEquipos] = useState([]);
-
+  const [fecha, setFecha] = useState("");
+  const [hora, setHora] = useState("");
   const [torneoId, setTorneoId] = useState(matchData?.torneoId || "");
   const [categoriaId, setCategoriaId] = useState(matchData?.categoriaId || "");
   const [subcategoriaId, setSubcategoriaId] = useState(
     matchData?.subcategoriaId || ""
   );
   const [grupoId, setGrupoId] = useState(matchData?.grupoId || "");
-  const [equipoLocalID, setEquipoLocal] = useState(
-    matchData?.equipoLocalID || ""
+  const [equipoA_id, setEquipoLocal] = useState(
+    matchData?.equipoA_id || ""
   );
-  const [equipoVisitanteID, setEquipoVisitante] = useState(
-    matchData?.equipoVisitanteID || ""
+  const [equipoB_id, setEquipoVisitante] = useState(
+    matchData?.equipoB_id || ""
   );
   const [marcador1, setMarcador1] = useState(matchData?.marcador1 || 0);
   const [marcador2, setMarcador2] = useState(matchData?.marcador2 || 0);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let newErrors = {};
+    if (!torneoId) newErrors.torneoId = "Selecciona un torneo";
+    if (!categoriaId) newErrors.categoriaId = "Selecciona una categoría";
+    if (!subcategoriaId) newErrors.subcategoriaId = "Selecciona una subcategoría";
+    if (!grupoId) newErrors.grupoId = "Selecciona un grupo";
+    if (!equipoA_id) newErrors.equipoAId = "Selecciona el equipo local";
+    if (!equipoB_id) newErrors.equipoBId = "Selecciona el equipo visitante";
+    if (equipoA_id === equipoB_id) newErrors.equipos = "Los equipos no pueden ser iguales";
+    if (!fecha) newErrors.fecha = "Selecciona una fecha";
+    if (!hora) newErrors.hora = "Selecciona una hora";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
 
   useEffect(() => {
     const fetchTorneos = async () => {
@@ -114,15 +131,26 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
   }, [grupoId, API_ENDPOINT]);
 
   const handleSave = () => {
+    if (!validateForm()) {
+      console.log("Errores en el formulario:", errors); // Para depuración
+      return; // Detiene la ejecución si hay errores
+    }
+  
     const updatedMatch = {
       id: matchData?.id,
-      equipoLocalID,
-      equipoVisitanteID,
+      equipoA_id,
+      equipoB_id,
       marcador1,
       marcador2,
+      fecha,
+      hora,
     };
+  
     onSave(updatedMatch);
+    onClose();
   };
+  
+  
 
   useEffect(() => {
     if (matchData) {
@@ -130,19 +158,22 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
       setCategoriaId(matchData.categoriaId || "");
       setSubcategoriaId(matchData.subcategoriaId || "");
       setGrupoId(matchData.grupoId || "");
-      setEquipoLocal(matchData.equipoLocalID || "");
-      setEquipoVisitante(matchData.equipoVisitanteID || "");
+      setEquipoLocal(matchData.equipoA_id || "");
+      setEquipoVisitante(matchData.equipoB_id || "");
       setMarcador1(matchData.marcador1 || 0);
       setMarcador2(matchData.marcador2 || 0);
+      setFecha(matchData.fecha || "");
+      setHora(matchData.hora || "");
     }
   }, [matchData]);
 
   if (!showModal) return null;
 
   return (
-    <div className="modal z-index" style={{ display: "block" }}>
+    <div className="modal"  style={{ display: "block" }}>
       <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content">
+        <div className="modal-content"   id="editModal"
+      tabIndex="-1">
           <div className="modal-header">
             <h5 className="modal-title">Editar Partido</h5>
             <button type="button" className="close" onClick={onClose}>
@@ -151,7 +182,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
           </div>
 
           <div className="modal-body">
-            <form>
+            <form autoComplete="off">
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-md-6 ml-auto ">
@@ -181,6 +212,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                           </option>
                         )}
                       </select>
+                      {errors.torneoId && <small className="text-danger">{errors.torneoId}</small>}
                     </div>
                   </div>
 
@@ -217,6 +249,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                           ))
                         )}
                       </select>
+                      {errors.categoriaId && <small className="text-danger">{errors.categoriaId}</small>}
                     </div>
                   </div>
 
@@ -254,6 +287,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                           ))
                         )}
                       </select>
+                      {errors.subcategoriaId && <small className="text-danger">{errors.subcategoriaId}</small>}
                     </div>
                   </div>
 
@@ -286,6 +320,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                           ))
                         )}
                       </select>
+                      {errors.grupoId && <small className="text-danger">{errors.grupoId}</small>}
                     </div>
                   </div>
 
@@ -296,7 +331,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                         id="equipo_local"
                         className="form-control"
                         onChange={(e) => setEquipoLocal(e.target.value)}
-                        value={equipoLocalID}
+                        value={equipoA_id}
                         disabled={equipos.length === 0}
                       >
                         <option value="" disabled>
@@ -316,6 +351,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                           ))
                         )}
                       </select>
+                      {errors.equipoA_id && <small className="text-danger">{errors.equipoA_id}</small>}
                     </div>
                   </div>
 
@@ -354,7 +390,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                         id="equipo_visitante"
                         className="form-control"
                         onChange={(e) => setEquipoVisitante(e.target.value)}
-                        value={equipoVisitanteID}
+                        value={equipoB_id}
                         disabled={equipos.length === 0}
                       >
                         <option value="" disabled>
@@ -374,22 +410,52 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
                           ))
                         )}
                       </select>
+                      {errors.equipoB_id && <small className="text-danger">{errors.equipoB_id}</small>}
+                      {errors.equipos && <small className="text-danger">{errors.equipos}</small>}
                     </div>
                   </div>
+                  {/* Fecha y Hora */}
+  <div className="row">
+    <div className="col-12 col-md-3 mb-3">
+      <label htmlFor="fecha">Fecha</label>
+      <input
+        id="fecha"
+        name="fecha"
+        type="date"
+        className="form-control"
+        onChange={(e) => setFecha(e.target.value)}
+        value={fecha}
+      />
+       {errors.fecha && <small className="text-danger">{errors.fecha}</small>}
+    </div>
+    <div className="col-12 col-md-3 mb-3">
+      <label htmlFor="hora">Hora</label>
+      <input
+        id="hora"
+        name="hora"
+        type="time"
+        className="form-control"
+        onChange={(e) => setHora(e.target.value)}
+        value={hora}
+      />
+       {errors.hora && <small className="text-danger">{errors.hora}</small>}
+    </div>
+  </div>
                 </div>
               </div>
             </form>
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="button" className="btn btn-danger"  data-bs-dismiss="modal" onClick={onClose}>
               Cerrar
             </button>
             <button
+            
               type="button"
               className="btn btn-primary"
               onClick={handleSave}
-              data-bs-dismiss="modal">
+              >
               Guardar
             </button>
           </div>

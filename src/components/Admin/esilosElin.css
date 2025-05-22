@@ -557,9 +557,9 @@
     width: 95px;
     font-size: 10px;
   }
-  .equipo{
-    font-size: 10px;
-    background-color: red;
+  .equipog{
+    font-size: 50px;
+    background-color: rgb(0, 255, 30);
   }
   .goles{
     font-size: 11px;

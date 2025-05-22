@@ -7,9 +7,18 @@
 html, body {
   height: 100%;
   margin: 0;
- 
+  padding: 0;
+  overflow-x: hidden;
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height:100dvh;
 }
 
+.main-content {
+  flex-grow: 1; 
+}
 
 
 a {
@@ -22,7 +31,7 @@ a:hover {
 }
 
 body {
- display: grid;
+ display: math;
  min-height: 100dvh;
  background: #f5f5f5;
 

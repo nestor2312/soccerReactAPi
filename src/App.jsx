@@ -102,6 +102,7 @@ import Admin from "./pages/Admin";
 import LogoutButton from "./components/Login/CerrarSesion";
 import JugadorShow from "./components/Jugadores/JugadoresShow";
 import JugadoresEquipo from "./components/Jugadores/JugadoresEquipo";
+import NotFound from "./pages/NotFound";
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -119,10 +120,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
         {/* <Route path="/clasificacion" element={<Clasificacion />} /> */}
         {/* <Route path="/equipos" element={<Equipos />} /> */}
         {/* <Route path="/partidos" element={<Partidos />} /> */}
-
         <Route path="/" element={<Torneo />} />
         <Route path="/torneo/:id/categorias" element={<Categoria />} />
         <Route
@@ -175,11 +176,14 @@ function App() {
           path="/registrar_datos"
           element={
             <ProtectedRoute>
+            
               <Admin setIsAuthenticated={setIsAuthenticated} />
             </ProtectedRoute>
           }
         />
+          <Route path="*" element={<NotFound />} />
       </Routes>
+    
     </BrowserRouter>
   );
 }

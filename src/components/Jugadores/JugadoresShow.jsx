@@ -1,122 +1,185 @@
+// JugadorShow.jsx
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import Menu from "../Menu/Menu";
 import { useEffect, useState } from "react";
 import Cargando from "../Carga/carga";
-import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
+import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import ErrorCarga from "../Error/Error";
-import { useParams } from "react-router-dom"; 
-import "./index.css";
+import { useParams } from "react-router-dom";
+import "./index.css"; // aquí están los estilos de .layout, .main-content, .loading-container, footer
 
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
 const JugadorShow = () => {
-  const { jugadorId } = useParams(); 
+  const { jugadorId } = useParams();
   const [jugador, setJugador] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleFlip = () => {
-    setIsFlipped(!isFlipped);
-  };
+  const handleFlip = () => setIsFlipped((f) => !f);
 
   useEffect(() => {
     const getJugador = async () => {
       try {
-        const response = await axios.get(`${endpoint}jugadores/${jugadorId}`);
-        setJugador(response.data); 
-        setIsLoading(false);  
-      } catch (error) {
-        setIsLoading(false);
+        const { data } = await axios.get(`${endpoint}jugadores/${jugadorId}`);
+        setJugador(data);
+      } catch (err) {
+        console.error(err);
         setError("Error al cargar el jugador.");
-        console.error("Error al obtener el jugador:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
-    if (jugadorId) {
-      getJugador(); 
-    }
-  }, [jugadorId]); 
+    if (jugadorId) getJugador();
+  }, [jugadorId]);
 
   useEffect(() => {
     document.title = "Jugador detalles";
   }, []);
 
   return (
-    <>
+    <div className="layout">
       <Menu />
-      {isLoading ? (
-        <div className="loading-container">
-          <Cargando />
-        </div>
-      ) : error ? (
-        <div className="loading-container">
-          <ErrorCarga />
-        </div>
-      ) : jugador ? (
-        <section className="margen Jugadores mt-4">
-          <div className="container">
-            <div className="row d-flex justify-content-center align-items-center">
-              <div className="col-12">
+
+      <main className="main-content">
+        {isLoading ? (
+          <div className="loading-container">
+            <Cargando />
+          </div>
+        ) : error ? (
+          <div className="loading-container">
+            <ErrorCarga />
+          </div>
+        ) : jugador ? (
+          <section className="margen Jugadores mt-4">
+            <div className="container">
+              <div className="row justify-content-center">
                 <div className="col-12 col-md-6 mt-5 mb-5">
                   <div className="card border-0 shadow flashcard d-flex align-items-center">
                     <div className={`card-body ${isFlipped ? "flipped" : ""}`}>
+                      {/* Front */}
                       <div className="front">
-                        <img
-                          src={`${Images}/${jugador.equipo?.archivo}`}
-                          className="logo"
-                          alt={jugador.equipo?.nombre}
-                        />
-                        <div className="row">
-                          <div className="col-md-6">
-                            <ul className="list-group list-group-flush text-right">
-                              <li className="list-group-item border-0 titulo2">Nombre:</li>
-                              <li className="list-group-item border-0 titulo2">Equipo:</li>
-                              <li className="list-group-item border-0 titulo2">Edad:</li>
-                              <li className="list-group-item border-0 titulo2">Número:</li>
-                            </ul>
+                        <div className="row mt-3 justify-content-center">
+                          <div className="col-md-8 text-center">
+                            <img
+                              src={`${Images}/${jugador.equipo?.archivo}`}
+                              className="logo w-25"
+                              alt={jugador.equipo?.nombre}
+                            />
                           </div>
-                          <div className="col-md-6">
-                            <ul className="list-group list-group-flush text-right">
-                              <li className="list-group-item border-0 score text-capitalize">{jugador.nombre}</li>
-                              <li className="list-group-item border-0 score text-capitalize">{jugador.equipo.nombre}</li>
-                              <li className="list-group-item border-0 score">{jugador.edad}</li>
-                              <li className="list-group-item border-0 score">{jugador.numero}</li>
-                            </ul>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                          <div className="text-center w-75">
+                            <table className="table table-borderless w-100">
+                              <tbody>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    Nombre:
+                                  </th>
+                                  <td className="text-right text-flip-card text-capitalize">
+                                    {jugador.nombre} {jugador.apellido}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    Equipo:
+                                  </th>
+                                  <td className="text-right text-flip-card text-capitalize">
+                                    {jugador.equipo.nombre}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    Edad:
+                                  </th>
+                                  <td className="text-right text-flip-card">
+                                    {jugador.edad}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    Número:
+                                  </th>
+                                  <td className="text-right text-flip-card">
+                                    {jugador.numero}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                         <div className="row mt-3 justify-content-center">
                           <div className="col-md-8 text-center">
-                            <button className="btn-flip  flip" onClick={handleFlip}>
+                            <button
+                              className="btn-flip flip"
+                              onClick={handleFlip}
+                            >
                               <span>Estadísticas</span>
                             </button>
                           </div>
                         </div>
                       </div>
+
+                      {/* Back */}
                       <div className="back">
-                        <div className="row">
-                          <div className="col-md-6">
-                            <ul className="list-group list-group-flush text-right">
-                              <li className="list-group-item border-0 text-flip-card-title ">Goles:</li>
-                              <li className="list-group-item border-0 text-flip-card-title">Asistencias:</li>
-                              <li className="list-group-item border-0 text-flip-card-title">T. Amarillas:</li>
-                              <li className="list-group-item border-0 text-flip-card-title">T. Rojas:</li>
-                            </ul>
+                        <div className="row mt-3 justify-content-center">
+                          <div className="col-md-8 text-center">
+                            <img
+                              src={`${Images}/${jugador.equipo?.archivo}`}
+                              className="logo w-25"
+                              alt={jugador.equipo?.nombre}
+                            />
                           </div>
-                          <div className="col-md-6">
-                            <ul className="list-group list-group-flush text-right">
-                              <li className="list-group-item border-0 score text-flip-card text-capitalize">{jugador.goles}</li>
-                              <li className="list-group-item border-0 score text-capitalize">{jugador.asistencias}</li>
-                              <li className="list-group-item border-0 score">{jugador.card_amarilla}</li>
-                              <li className="list-group-item border-0 score">{jugador.card_roja}</li>
-                            </ul>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                          <div className="text-center w-75">
+                            <table className="table table-borderless w-100">
+                              <tbody>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    Goles:
+                                  </th>
+                                  <td className="text-right text-flip-card text-capitalize">
+                                    {jugador.goles}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    Asistencias:
+                                  </th>
+                                  <td className="text-right text-flip-card text-capitalize">
+                                    {jugador.asistencias}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    T. Amarillas:
+                                  </th>
+                                  <td className="text-right text-flip-card">
+                                    {jugador.card_amarilla}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th className="text-left text-flip-card-title">
+                                    T. Rojas:
+                                  </th>
+                                  <td className="text-right text-flip-card">
+                                    {jugador.card_roja}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                         <div className="row mt-3 justify-content-center">
                           <div className="col-md-12 text-center">
-                            <button  className="btn-flip flip" onClick={handleFlip}>
+                            <button
+                              className="btn-flip flip"
+                              onClick={handleFlip}
+                            >
                               <span>Volver</span>
                             </button>
                           </div>
@@ -127,13 +190,16 @@ const JugadorShow = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      ) : (
-        <p className="no-datos">No hay Jugadores disponibles en este momento.</p>
-      )}
-      <Footer />
-    </>
+          </section>
+        ) : (
+          <p className="no-datos">
+            No hay Jugadores disponibles en este momento.
+          </p>
+        )}
+      </main>
+
+      {!isLoading && !error && <Footer />}
+    </div>
   );
 };
 

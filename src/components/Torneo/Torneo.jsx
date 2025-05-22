@@ -33,8 +33,9 @@ const Torneo = () => {
 
   return (
     <>
-  
+
     <h1 className="text-center text-title mt-2">torneos</h1>
+   
       {isLoading ? (
         <div className="loading-container">
           <Cargando />
@@ -44,12 +45,16 @@ const Torneo = () => {
           <ErrorCarga />
         </div>
       ) : (
+
+        
+        
         <div className="contenido">
+          
               {/* <h1>Torneo</h1> */}
           {torneos.map((torneo) => (
             
             <div key={torneo.id} className="box">
-              <Link to={`/torneo/${torneo.id}/categorias`}>
+              <Link to={`/torneo/${torneo.id}/categorias`} className="BoxCard">
                 <div className="card_torneo">
                   <button className="boton-torneo btn-button-general">
                     <span>{torneo.nombre}</span>
@@ -58,6 +63,7 @@ const Torneo = () => {
               </Link>
             </div>
           ))}
+          
         </div>
       )}
     </>

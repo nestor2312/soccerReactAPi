@@ -9,13 +9,14 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   const [numPartido, setNumPartido] = useState(PlayOffsData?.numPartido || 0);
   const [tipo_eliminatoria, setTipoEliminatoria] = useState(PlayOffsData?.tipo_eliminatoria || "solo_ida");
   const [marcadores, setMarcadores] = useState(PlayOffsData?.marcadores || {
-    marcador1_ida: null,
-    marcador2_ida: null,
-    marcador1_vuelta: null,
-    marcador2_vuelta: null,
-    marcador1_penales: null,
-    marcador2_penales: null,
+    marcador1_ida: 0,
+    marcador2_ida: 0,
+    marcador1_vuelta: 0,
+    marcador2_vuelta: 0,
+    marcador1_penales: 0,
+    marcador2_penales: 0,
   });
+  
 
   const [subcategorias, setSubcategorias] = useState([]);
   const [equiposFiltrados, setEquiposFiltrados] = useState([]);
@@ -28,12 +29,12 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
       setNumPartido(PlayOffsData.numPartido || 0);
       setTipoEliminatoria(PlayOffsData.tipo_eliminatoria || "solo_ida");
       setMarcadores({
-        marcador1_ida: PlayOffsData.marcador1_ida ?? null,
-        marcador2_ida: PlayOffsData.marcador2_ida ?? null,
-        marcador1_vuelta: PlayOffsData.marcador1_vuelta ?? null,
-        marcador2_vuelta: PlayOffsData.marcador2_vuelta ?? null,
-        marcador1_penales: PlayOffsData.marcador1_penales ?? null,
-        marcador2_penales: PlayOffsData.marcador2_penales ?? null,
+        marcador1_ida: PlayOffsData.marcador1_ida ?? "",
+        marcador2_ida: PlayOffsData.marcador2_ida ?? "",
+        marcador1_vuelta: PlayOffsData.marcador1_vuelta ?? "",
+        marcador2_vuelta: PlayOffsData.marcador2_vuelta ?? "",
+        marcador1_penales: PlayOffsData.marcador1_penales ?? "",
+        marcador2_penales: PlayOffsData.marcador2_penales ?? "",
       });
     }
   }, [PlayOffsData]);
@@ -109,6 +110,8 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     }
   };
 
+  
+
   if (!showModal) return null;
 
   const mostrarCampo = (campo) => {
@@ -118,172 +121,205 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   };
 
   return (
-    <div className="modal" style={{ display: "block" }}>
-      <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Editar PlayOffs</h5>
-            <button type="button" className="close" onClick={onClose}>
-              &times;
-            </button>
+    <div 
+  className="modal show d-flex align-items-center justify-content-center" 
+  style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)", zIndex: 1050 }}
+>
+  <div className="modal-dialog modal-dialog-centered modal-lg">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title">Editar PlayOffs</h5>
+        <button type="button" className="close" onClick={onClose}>
+          &times;
+        </button>
+      </div>
+      <div className="modal-body">
+        {/* Subcategoría */}
+        <div className="row mb-3">
+          <div className="col-md-6">
+            <label>Subcategoría</label>
+            <select
+              name="subcategoriaId"
+              className="form-control"
+              value={subcategoria_id}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona una subcategoría</option>
+              {subcategorias.map((sub) => (
+                <option key={sub.id} value={sub.id}>
+                  {sub.nombre}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="modal-body">
-            {/* Subcategoría */}
-            <div className="form-group">
-              <label>Subcategoría</label>
-              <select
-                name="subcategoriaId"
-                className="form-control"
-                value={subcategoria_id}
-                onChange={handleChange}
-              >
-                <option value="">Selecciona una subcategoría</option>
-                {subcategorias.map((sub) => (
-                  <option key={sub.id} value={sub.id}>
-                    {sub.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="input-field col s12 m6">
+          <div className="col-md-6">
             <label>Número de Partido</label>
             <input
               id="numPartido"
               name="numPartido"
               type="number"
+              min={1}
+              max={4}
               placeholder="Número de Partido"
-              className="form-control validate light-blue-text"
+              className="form-control"
+              value={numPartido}
               onChange={handleChange}
-              value={numPartido} />
+            />
           </div>
-            {/* Equipos */}
-            <div className="form-group">
-              <label>Equipo Local</label>
-              <select
-                name="equipoLocal"
-                className="form-control"
-                value={equipoLocal}
-                onChange={handleChange}
-              >
-                <option value="">Selecciona Equipo Local</option>
-                {equiposFiltrados.map((team) => (
-                  <option key={team.id} value={team.id}>
-                    {team.nombre}
-                  </option>
-                ))}
-              </select>
+        </div>
 
-              <label>Equipo Visitante</label>
-              <select
-                name="equipoVisitante"
+        {/* Equipos */}
+        <div className="row mb-3">
+          <div className="col-md-6">
+            <label>Equipo Local</label>
+            <select
+              name="equipoLocal"
+              className="form-control"
+              value={equipoLocal}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona Equipo Local</option>
+              {equiposFiltrados.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-6">
+            <label>Equipo Visitante</label>
+            <select
+              name="equipoVisitante"
+              className="form-control"
+              value={equipoVisitante}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona Equipo Visitante</option>
+              {equiposFiltrados.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Tipo de Eliminatoria */}
+        <div className="row mb-3">
+          <div className="col-12">
+            <label>Tipo de Eliminatoria</label>
+            <select
+              name="tipoEliminatoria"
+              className="form-control"
+              value={tipo_eliminatoria}
+              onChange={handleChange}
+            >
+              <option value="solo_ida">Solo Ida</option>
+              <option value="ida_vuelta">Ida y Vuelta</option>
+              <option value="penales">Penales</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Marcadores */}
+        {mostrarCampo("ida") && (
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label>Marcador Local (Ida)</label>
+              <input
                 className="form-control"
-                value={equipoVisitante}
+                name="marcador1_ida"
+                type="number"
+                min="0"
+                value={marcadores.marcador1_ida != null ? marcadores.marcador1_ida : ""}
                 onChange={handleChange}
-              >
-                <option value="">Selecciona Equipo Visitante</option>
-                {equiposFiltrados.map((team) => (
-                  <option key={team.id} value={team.id}>
-                    {team.nombre}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
-
-            {/* Tipo Eliminatoria */}
-            <div className="form-group">
-              <label>Tipo de Eliminatoria</label>
-              <select
-                name="tipoEliminatoria"
+            <div className="col-md-6">
+              <label>Marcador Visitante (Ida)</label>
+              <input
                 className="form-control"
-                value={tipo_eliminatoria}
+                name="marcador2_ida"
+                type="number"
+                min="0"
+                value={marcadores.marcador2_ida != null ? marcadores.marcador2_ida : ""}
                 onChange={handleChange}
-              >
-                <option value="solo_ida">Solo Ida</option>
-                <option value="ida_vuelta">Ida y Vuelta</option>
-                <option value="penales">Penales</option>
-              </select>
+              />
             </div>
+          </div>
+        )}
 
-            {/* Marcadores */}
-            {mostrarCampo("ida") && (
-              <>
-                <label>Marcador Local (Ida)</label>
-                <input
-                  className="form-control"
-                  name="marcador1_ida"
-                  type="number"
-                  min="0"
-                  value={marcadores.marcador1_ida !== null ? marcadores.marcador1_ida : ""}
-                  onChange={handleChange}
-                />
-                <label>Marcador Visitante (Ida)</label>
-                <input
-                  className="form-control"
-                  name="marcador2_ida"
-                  type="number"
-                  min="0"
-                  value={marcadores.marcador2_ida !== null ? marcadores.marcador2_ida : ""}
-                  onChange={handleChange}
-                />
-              </>
-            )}
 
-            {mostrarCampo("vuelta") && (
-              <>
-                <label>Marcador Local (Vuelta)</label>
-                <input
-                  className="form-control"
-                  name="marcador1_vuelta"
-                  type="number"
-                  min="0"
-                  value={marcadores.marcador1_vuelta !== null ? marcadores.marcador1_vuelta : ""}
-                  onChange={handleChange}
-                />
-                <label>Marcador Visitante (Vuelta)</label>
-                <input
-                  className="form-control"
-                  name="marcador2_vuelta"
-                  type="number"
-                  min="0"
-                  value={marcadores.marcador2_vuelta !== null ? marcadores.marcador2_vuelta : ""}
-                  onChange={handleChange}
-                />
-              </>
-            )}
 
-            {mostrarCampo("penales") && (
-              <>
-                <label>Penales Local</label>
-                <input
-                  className="form-control"
-                  name="marcador1_penales"
-                  type="number"
-                  min="0"
-                  value={marcadores.marcador1_penales !== null ? marcadores.marcador1_penales : ""}
+         {mostrarCampo("vuelta") && (
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label>Marcador Local (Vuelta)</label>
+              <input
+                className="form-control"
+                name="marcador1_vuelta"
+                type="number"
+                min="0"
+                value={marcadores.marcador1_vuelta != null ? marcadores.marcador1_vuelta : ""}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label>Marcador Visitante (Vuelta)</label>
+              <input
+                className="form-control"
+                name="marcador2_vuelta"
+                type="number"
+                min="0"
+                value={marcadores.marcador2_vuelta != null ? marcadores.marcador2_vuelta : ""}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        )}
 
-                  onChange={handleChange}
-                />
-                <label>Penales Visitante</label>
-                <input
-                  className="form-control"
-                  name="marcador2_penales"
-                  type="number"
-                  min="0"
-                  value={marcadores.marcador2_penales !== null ? marcadores.marcador2_penales : ""}
+{mostrarCampo("penales") && (
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label>Penales Local</label>
+              <input
+                className="form-control"
+                name="marcador1_penales"
+                type="number"
+                min="0"
+                value={marcadores.marcador1_penales != null ? marcadores.marcador1_penales : ""}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label>Penales Visitante</label>
+              <input
+                className="form-control"
+                name="marcador2_penales"
+                type="number"
+                min="0"
+                value={marcadores.marcador2_penales != null ? marcadores.marcador2_penales : ""}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        )}
 
-                  onChange={handleChange}
-                />
-              </>
-            )}
-
-            {/* Botón Guardar */}
-            <button className="btn btn-primary mt-3" onClick={handleSave}>
+        <div className="row">
+          <div className="col-12 text-right ">
+          <button type="button" className="mx-2 btn btn-danger"  data-bs-dismiss="modal" onClick={onClose}>
+              Cerrar
+            </button>
+            <button className="btn btn-primary" onClick={handleSave}>
               Guardar
             </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 };
 

@@ -4,7 +4,7 @@ import './index.css'
 const CargaSesion=()=>{
     return<>
     <div>
-        <img  className="cargandologin" src={cargandosesion} alt="cargando sesion" />
+        <img  className="cargandologin" src={cargandosesion} alt="cargando sesion..." />
     </div>
     </>
 

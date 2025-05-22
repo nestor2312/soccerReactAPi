@@ -71,6 +71,42 @@ text-transform: capitalize;
     z-index: 2; 
 }
 
+
+
+.table-container table {
+  min-width: 900px; /* Ajusta este valor según la cantidad de columnas */
+  border-collapse: collapse!important;
+}
+
+
+/* Personalización del scrollbar */
+.table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #2271D1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #2271d198;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+  -webkit-overflow-scrolling: auto; /* Stops scrolling immediately */
+  /* -webkit-overflow-scrolling: touch; Scroll suave en iOS */
+}
+
+@media (max-width: 368px) {
+  .table-container table {
+    min-width: 900px; /* Ajusta según la cantidad de columnas */
+  }
+}
+
 /* .text-title{
     text-transform: uppercase;
     color: #FFF;
@@ -103,6 +139,18 @@ letter-spacing: 6px;
 }
 
 @media (max-width: 1366px) {
+
+  .text-title{
+    text-transform: uppercase;
+    color: #09537E; 
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: "Days One", sans-serif;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 6px;
+    }
 
   .boton-torneo::after {
     content: "";
@@ -137,6 +185,18 @@ button.boton-torneo.btn-button-general:last-child {
 }
 
 @media (max-width: 768px) {
+
+  .text-title{
+    text-transform: uppercase;
+    color: #09537E; 
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: "Days One", sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 6px;
+    }
     .contenido {
       justify-content: center;
     }
@@ -163,6 +223,17 @@ button.boton-torneo.btn-button-general:last-child {
 /* Media query para pantallas más pequeñas (480px) */
 @media (max-width: 480px) {
 
+  .text-title{
+    text-transform: uppercase;
+    color: #09537E; 
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: "Days One", sans-serif;
+    font-size: 27px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 6px;
+    }
   .boton-torneo::after {
     content: "";
     position: absolute;
@@ -192,10 +263,16 @@ button.boton-torneo.btn-button-general:last-child {
     button.boton-torneo.btn-button-general:last-child {
         margin-bottom: 30px !important;
       }
+      .BoxCard{
+        display: contents !important;
+        }
   }
   
   /* Media query para pantallas aún más pequeñas (360px) */
   @media (max-width: 360px) {
+    .BoxCard{
+      display: contents!important;
+      }
     .contenido{
         display: block;
     }
@@ -215,6 +292,8 @@ button.boton-torneo.btn-button-general:last-child {
   
   /* Media query para pantallas extremadamente pequeñas (320px) */
   @media (max-width: 320px) {
+  
+    
     .contenido{
         display: block;
     }

@@ -106,17 +106,27 @@ const Inicio = ()=>{
 
       const getclasificacion = async () => {
         try {
-          // const response = await axios.get(`${endpoint}clasificacion`);
-          const response = await axios.get(
-            `${API_ENDPOINT}subcategoria/${subcategoriaId}/Inicioclasificacion`
-          );
-          const filteredClasificacion = response.data.slice(0, 1);
-          setclasificacion(filteredClasificacion);
+            const response = await axios.get(
+                `${API_ENDPOINT}subcategoria/${subcategoriaId}/Inicioclasificacion`
+            );
+    
+            // Obtener el primer elemento de data
+            const primerGrupo = response.data[0];
+    
+            // Obtener los primeros 4 equipos del primer grupo
+            if (primerGrupo && primerGrupo.equipos) {
+                primerGrupo.equipos = primerGrupo.equipos.slice(0, 4);
+            }
+    
+            // Crear array que contenga solo el primer elemento modificado
+            const filteredClasificacion = primerGrupo ? [primerGrupo] : [];
+    
+            setclasificacion(filteredClasificacion);
         } catch (error) {
-          setError("Error al cargar los partidos");
-          console.error("Error  clasificacion:", error);
+            setError("Error al cargar los partidos");
+            console.error("Error clasificacion:", error);
         }
-      };
+    };
 
       getEliminatorias();
       getclasificacion();
@@ -124,7 +134,10 @@ const Inicio = ()=>{
       getTeamsAll();
     }, [subcategoriaId]);
 
-    
+    const formatearHora = (hora) => {
+      return hora.slice(0, 5); 
+    };
+
     const abreviarNombre = (nombre) => {
       if (!nombre) return "por definir";
     
@@ -153,7 +166,9 @@ const Inicio = ()=>{
 useEffect(() => {
   document.title = "Inicio";
 }, []);
-return<>
+return(
+
+<div className="layout">
 <Menu/>
 {isLoading ? (
       <div className="loading-container">
@@ -164,9 +179,11 @@ return<>
          <ErrorCarga/>
       </div>
     ) : (
-
+      <main className="main-content">
+     
 <section className="Subcategoria">
       <div className="margen">
+
     <div className="row">
     {clasificacion.map((datosGrupo) => (
       <div className="col-sm-12 col-md-6 mt-4"  key={datosGrupo.id}>
@@ -190,9 +207,9 @@ return<>
               </tr>
               </thead> 
               <tbody>
-              {datosGrupo.equipos.map((equipo, index) => (
-                    <tr key={equipo.id =1}   className={index < 2 ? "fila-resaltada" : ""} >
-        
+              {datosGrupo.equipos.map((equipo ) => (
+                    <tr key={equipo.id}   >
+      
                     <th>
                     <img
                       src={`${Images}/${equipo.archivo}`}
@@ -229,50 +246,71 @@ return<>
     <div className="card border-0 shadow">
       <div className="card-header fondo-card TITULO border-0">Partidos</div>
       <div className="card table-responsive border-0 table-sm">
-        <table className="table-borderless">
-          <thead>
-            <tr>
-              <th></th>
-              <th className="titulo2 text-left">Local</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th className="titulo2 text-right">Visitante</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {Matches.map((partido) => (
-              <tr key={partido.id}>
-                <td width="10%">
-                  <img
-                    src={`${Images}/${partido.equipo_a.archivo}`}
-                    className="logo"
-                    width="100%"
-                    alt={partido.equipo_a.nombre}
-                  />
-                </td>
-                <td className="text-left team" width="40%">
-                  {partido.equipo_a.nombre}
-                </td>
-                <td className="data">{partido.marcador1}</td>
-                <th className="data">-</th>
-                <td className="data">{partido.marcador2}</td>
-                <td className="text-right team" width="40%">
-                  {partido.equipo_b.nombre}
-                </td>
-                <td width="10%">
-                  <img
-                    src={`${Images}/${partido.equipo_b.archivo}`}
-                    className="logo"
-                    width="100%"
-                    alt={partido.equipo_b.nombre}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <table className="table-borderless">
+  <thead>
+    <tr>
+      <th></th>
+      <th className="titulo2 text-left">Local</th>
+     
+      
+      <th></th>
+      <th className="titulo2 text-right">Visitante</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {Matches.map((partido) => (
+      <tr key={partido.id}>
+        {/* Logo equipo A */}
+        <td width="10%">
+          <img
+            src={`${Images}/${partido.equipo_a.archivo}`}
+            className="logo"
+            width="100%"
+            alt={partido.equipo_a.nombre}
+          />
+        </td>
+
+      
+        <td className="text-left team" width="30%">
+          {partido.equipo_a.nombre}
+        </td>
+
+      
+        <td className="text-center" width="20%">
+          {partido.marcador1 == null || partido.marcador2 == null ? (
+            <div>
+              <span className="fecha">{partido.fecha}</span>
+              <span className="hora">{formatearHora(partido.hora)}</span>
+            </div>
+          ) : (
+            <div >
+              <span className="data text-right">{partido.marcador1}</span>
+              <span className=" data"> - </span> 
+              <span className="data text-left">{partido.marcador2}</span>
+            </div>
+          )}
+        </td>
+
+      
+        <td className="text-right team" width="30%">
+          {partido.equipo_b.nombre}
+        </td>
+
+      
+        <td width="10%">
+          <img
+            src={`${Images}/${partido.equipo_b.archivo}`}
+            className="logo"
+            width="100%"
+            alt={partido.equipo_b.nombre}
+          />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
       </div>
     </div>
   </div>
@@ -295,7 +333,7 @@ return<>
             <Link  to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} >
                 <img
                   src={`${Images}/${team.archivo}`}
-                  className="img-fluid d-block mx-auto my-3 logomovil"
+                  className="img-fluid d-block mx-auto my-2 logomovil"
                   alt={team.nombre}
                 />
                 <h6 className="text-center team">{team.nombre}</h6>
@@ -311,7 +349,7 @@ return<>
 
      {/* Esquema de eliminatorias */}
 
-     <div className="col-sm-12 col-md-12 mt-4 mb-5">
+     <div className="col-sm-12 col-md-12 mt-4 mb-3">
           <div className="card mt-2 border-0 shadow">
             <div className="card-header fondo-card TITULO border-0">
               Eliminatorias
@@ -602,6 +640,7 @@ return<>
                                   (marcador2_global === marcador1_global && partidoFinal[0].marcador2_penales > partidoFinal[0].marcador1_penales);
 
         // Asignar el equipo ganador
+        // partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre)
         const equipoGanador = isLocalWinner ? partidoFinal[0].equipo_aa : isVisitanteWinner ? partidoFinal[0].equipo_b : null;
 
         return equipoGanador ? (
@@ -611,7 +650,7 @@ return<>
               className="logo"
               alt={equipoGanador.nombre}
             />
-            <span className="equipo">{equipoGanador.nombre}</span>
+            <span className="equipo fw-bold">{abreviarNombre(equipoGanador.nombre)}</span>
           </div>
         ) : (
           <div className="jugador">
@@ -636,8 +675,11 @@ return<>
     </div>
   
     </section>
+    </main>
+
         )}
-<Footer/>
-</>
+ {!isLoading &&  !error && <Footer/>}
+</div>
+);
 }
 export default Inicio

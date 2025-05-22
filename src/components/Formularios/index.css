@@ -227,7 +227,7 @@ input{
     margin-top: 20px; 
   }
   .titulo {
-    padding: 5px;
+  padding: 8px 15px;
     text-align: center;
     font-feature-settings: 'clig' off, 'liga' off;
     font-family: 'Days One', sans-serif;
@@ -239,14 +239,17 @@ input{
     letter-spacing: 0.263px;
     text-transform: uppercase;
     width: 155px;
-    background: #152039;
+    background: linear-gradient(180deg, #152039 0%, #0F162A 100%);
     color: #FFF;
     border-radius: 3px;
-    border: 1px solid #ffffff78;
+    /* border: 1px solid #ffffff78; */
+     border: 1px solid #4A5C7F;
+
+    text-shadow: 0px 2px 3px #4a5c7f;
   }
   
   .win {
-    background: linear-gradient(180deg, #152039 30%, #00bf638b 100%);
+    background: linear-gradient(180deg, #152039 0%, rgba(0, 191, 99, 0.65) 100%)!important;
   }
   
   .win .goles {
@@ -272,7 +275,8 @@ input{
     color: #fff;
   }
 
- 
+
+  
   
   
   /* Media//////////////////////////////////////////////////////////////////////// */
@@ -341,7 +345,7 @@ input{
       color: #000;
       font-family: 'Roboto Condensed', sans-serif;
    
-    font-size: 12px;
+    font-size: 13px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -389,7 +393,6 @@ input{
     .titulo2{
       text-align: center;
        font-family: 'Days One', sans-serif;
-     
       font-size: 11px;
       font-style: normal;
       font-weight: 400;
@@ -487,7 +490,11 @@ input{
         -webkit-text-fill-color: transparent;
       text-transform: uppercase;
     }
+
+   
   
+
+    
   
     /* cuadro */
      .conectores .conector .conector_doble {
@@ -585,7 +592,7 @@ input{
     width: 74px;
   }
   .logo{
-    width: 23px;
+    width: 31px;
   }
   .partido{
     padding: 0px;
@@ -612,7 +619,7 @@ input{
   
   }
   .jornada_contenedor .jornada .jugador{
-    width: 80px;
+    width: 95px;
     border: 1px solid #000;
   }
   .conectores .conector .conector_simple{
@@ -633,13 +640,12 @@ input{
     width: 95px;
     font-size: 10px;
   }
-  .equipo{
-    font-size: 10px;
-    background-color: red;
-  }
+
+  
+
   .goles{
-    font-size: 11px;
-    margin-right: 2px;
+    font-size: 10px;
+    margin-right: 6px;
   }
   
   .esquema .ganador .jugador{
@@ -694,9 +700,7 @@ input{
     
   }
 
-  .colsa{
-    background: red;
-  }
+  
   
   
   

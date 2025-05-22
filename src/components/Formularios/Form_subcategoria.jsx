@@ -6,22 +6,38 @@ import "./index.css";
 import ModalEdit from "../Formularios-edit/ModalEdit";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CreateIcon from '@mui/icons-material/Create';
+import Swal from "sweetalert2";
+import Cargando from "../Carga/carga";
+import ErrorCarga from "../Error/Error";
 const endpoint = `${API_ENDPOINT}subcategoria`;
 const InfoSubCategorias_endpoint = `${API_ENDPOINT}subcategorias`;
 const CategoriaEndpoint = `${API_ENDPOINT}categorias`;
 const TorneoEndpoint = `${API_ENDPOINT}torneos`;
-
+const InfoSubCategorias_endpoint_paginador = `${API_ENDPOINT}subcategoriasp`;
 
 
 const FORM_Subcategoria = () => {
   const [nombre, setNombre] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [CategoriaID, setCategoriaID] = useState("");
   const [Categorias, setCategorias] = useState([]);
   const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
   const [Subcategorias, setSubcategorias] = useState([]);
   const [Torneos, setTorneos] = useState([]);
+ 
   const [setError] = useState(null);
+  const [error] = useState(null);
   const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [lastPage, setLastPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setIsLoading(true);
+  };
+
 
   const subcategoriaFields = [
     { name: "nombre", label: "Nombre de la Subcategoria", required: true },
@@ -41,7 +57,7 @@ const FORM_Subcategoria = () => {
     console.log('datos enviados al back en update =', updatedSubcategoria)
     try {
       await axios.put(`${API_ENDPOINT}subcategoria/${updatedSubcategoria.id}`, updatedSubcategoria);
-      InfoSubcategorias(); 
+      InfoSubcategoriasp(); 
       setAlerta({ mensaje: "Subcategoria actualizada correctamente!", tipo: "success" });
       setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setTorneos((prevSubcategorias) =>
@@ -61,6 +77,7 @@ const FORM_Subcategoria = () => {
       try {
         const response = await axios.get(CategoriaEndpoint);
         setCategorias(response.data);
+
       } catch (error) {
         setError("Error al cargar los categorias.");
         console.error("Error al obtener los categorias:", error);
@@ -92,39 +109,90 @@ const FORM_Subcategoria = () => {
       console.error("Error al obtener los subcategorias:", error);
     }
   };
+
+  const InfoSubcategoriasp = async () => {
+    try {
+      const response = await axios.get(`${InfoSubCategorias_endpoint_paginador}?page=${currentPage}`);
+      setSubcategorias(response.data.data);
+      setLastPage(response.data.last_page);
+      setIsLoading(false);
+      // setLastPage(response.data.last_page);
+    } catch (error) {
+      setIsLoading(false);
+      setError("Error al cargar los subcategorias.");
+      console.error("Error al obtener los subcategorias:", error);
+    }
+  };
   // Manejo del envío del formulario
   const store = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await axios.post(endpoint, { nombre, categoria_id: CategoriaID });
-      InfoSubcategorias();
+      InfoSubcategoriasp();
       setAlerta({ mensaje: "Subcategoria registrada con éxito!", tipo: "success" });
       setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
       setNombre("");
       setCategoriaID("");
     } catch (error) {
       console.error('Error al guardar la subcategoría', error);
+    }finally {
+      setIsLoading(false); 
     }
   };
 
   const deleteSubcategoria = async (id) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar esta Subcategoria?')) {
-      try {
-        await axios.delete(`${endpoint}/${id}`);
-        setAlerta({ mensaje: "Subcategoria eliminada correctamente!", tipo: "danger" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-        setSubcategorias(Subcategorias.filter((Subcategoria) => Subcategoria.id !== id));
-      } catch (error) {
-        console.error('Error al eliminar el Subcategoria', error);
-      } 
-    }
+
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar esta subcategoria después de eliminarla.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+  setSubcategorias(Subcategorias.filter((Subcategoria) => Subcategoria.id !== id));
+  setAlerta({ mensaje: "Subcategoria eliminada correctamente!", tipo: "success" });
+  InfoSubcategoriasp();
+  setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+        
+        } catch (error) {
+          console.error("Error al eliminar el torneo", error);
+          setAlerta({ mensaje: "Error al eliminar la Subcategoria!", tipo: "success" });
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+          Swal.fire("Error", "No se pudo eliminar el torneo.", "error");
+        } 
+      }
+    });
+
+  
   };
 
   useEffect(() => {
     document.title = "Admin - Subcategoria";
   }, []);
 
+
+  useEffect(() => {
+
+    InfoSubcategoriasp();
+  }, [currentPage]);
+
+
   return (
+    <>
+    {isLoading ? (
+      <div className="loading-container">
+        <Cargando/>
+      </div>
+    ) :  error ? (
+      <div className="loading-container">
+         <ErrorCarga/>
+      </div>
+    ) : (
     <div>
          {alerta.mensaje && (
   <div className={`alert alert-${alerta.tipo} alert-dismissible fade show`} role="alert">
@@ -140,10 +208,11 @@ const FORM_Subcategoria = () => {
 )}
       <h1 className="text-left ">Registro de Subcategorias</h1>
       <div>
-        <form className="col-md-12" onSubmit={store} autoComplete="off">
+        <form className="col-md-12 mt-2 mb-4" onSubmit={store} autoComplete="off">
           <div className="form-group">
             <label htmlFor="nombre">Nombre de la Subcategoria:</label>
             <input
+             required
               type="text"
               className="form-control form-input-admin"
               id="nombre"
@@ -157,6 +226,7 @@ const FORM_Subcategoria = () => {
           <div className="form-group mt-3">
             <label htmlFor="grupo_id">Selecciona una categoría:</label>
             <select
+             required
               id="grupo_id"
               className="form-control"
               value={CategoriaID}
@@ -183,15 +253,19 @@ const FORM_Subcategoria = () => {
       </div>
 
       {/* Tabla para mostrar las subcategorías */}
+
+     
+
+
       <div>  
         <div className="table-responsive card my-2">   
           <table className="table ">
             <thead className="thead-light">
               <tr>
-                <th className="text-center">Subcategoria</th>
-                <th className="text-center">Categoria</th>
-                <th className="text-center">Torneo</th>
-                <th className="text-center">Acciones</th>
+                <th className="text-left">Subcategoria</th>
+                <th className="text-left">Categoria</th>
+                <th className="text-left">Torneo</th>
+                <th className="text-left">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -230,8 +304,30 @@ const FORM_Subcategoria = () => {
 />
         </div>
       </div>
+      <div className="pagination mb-4">
+  <button
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+    aria-disabled={currentPage === 1}
+    className="btn btn-outline-primary"
+  >
+    ← Anterior
+  </button>
+  <span className="mx-2">{`Página ${currentPage} de ${lastPage}`}</span>
+  <button
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === lastPage}
+    aria-disabled={currentPage === lastPage}
+    className="btn btn-outline-primary"
+  >
+    Siguiente →
+  </button>
+</div>
     </div>
-  );
+ )}
+ </>
+);
 };
+
 
 export default FORM_Subcategoria;

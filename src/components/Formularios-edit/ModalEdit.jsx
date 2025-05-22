@@ -3,36 +3,61 @@ import { useEffect, useState } from "react";
 
 const ModalEdit = ({ data, type, fields, onSave }) => {
   const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (data) {
-      // Inicializa el formData con los valores de data
       setFormData({ ...data });
     }
   }, [data]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    // Actualiza el valor del campo en el estado
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+
+    // Si es un campo numérico, restringe a 2 caracteres y solo números
+    let newValue = value;
+    if (type === "number") {
+      newValue = value.replace(/[^0-9]/g, "").slice(0, 2);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
+
+    // Limpiar el error cuando el usuario modifica el valor
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSave = () => {
-    // Filtra los campos vacíos obligatorios
-    const emptyFields = fields.filter(
-      (field) =>
-        field.required &&
-        (!formData[field.name] ||
-          (typeof formData[field.name] === "string" && !formData[field.name].trim()))
-    );
+    let hasErrors = false;
+    let newErrors = {};
 
-    if (emptyFields.length > 0) {
-      alert("Por favor, completa todos los campos obligatorios.");
-      return;
+    // Validar campos
+    fields.forEach((field) => {
+      const value = formData[field.name];
+
+      // Validar si es obligatorio y está vacío
+      if (field.required && (!value || (typeof value === "string" && !value.trim()))) {
+        newErrors[field.name] = "Este campo es obligatorio";
+        hasErrors = true;
+      }
+
+      // Validar campos numéricos
+      if (field.type === "number") {
+        if (value && (value < field.min || value > field.max)) {
+          newErrors[field.name] = `El numero de clasificados debe estar entre ${field.min} y ${field.max}`;
+          hasErrors = true;
+        }
+      }
+    });
+
+    if (hasErrors) {
+      setErrors(newErrors);
+      return; // No enviar 
     }
 
-    // Llama a onSave con los datos actualizados
+    // Si no hay errores, guardar 
     onSave(formData);
+    setErrors({});
+    document.getElementById("closeModalButton").click(); 
   };
 
   return (
@@ -57,7 +82,7 @@ const ModalEdit = ({ data, type, fields, onSave }) => {
             ></button>
           </div>
           <div className="modal-body">
-            <form>
+            <form autoComplete="off">
               {fields.map((field) => (
                 <div className="mb-3" key={field.name}>
                   <label htmlFor={field.name} className="form-label">
@@ -65,7 +90,7 @@ const ModalEdit = ({ data, type, fields, onSave }) => {
                   </label>
                   {field.type === "select" ? (
                     <select
-                      className="form-select"
+                      className={`form-select ${errors[field.name] ? "is-invalid" : ""}`}
                       id={field.name}
                       name={field.name}
                       value={formData[field.name] || ""}
@@ -82,13 +107,20 @@ const ModalEdit = ({ data, type, fields, onSave }) => {
                   ) : (
                     <input
                       type={field.type || "text"}
-                      className="form-control"
+                      className={`form-control ${errors[field.name] ? "is-invalid" : ""}`}
                       id={field.name}
                       name={field.name}
                       value={formData[field.name] || ""}
                       onChange={handleChange}
                       required={field.required}
+                      min={field.min}
+                      max={field.max}
+                      maxLength={field.type === "number" ? "2" : undefined}
+                      inputMode={field.type === "number" ? "numeric" : undefined} 
                     />
+                  )}
+                  {errors[field.name] && (
+                    <div className="invalid-feedback">{errors[field.name]}</div>
                   )}
                 </div>
               ))}
@@ -99,12 +131,12 @@ const ModalEdit = ({ data, type, fields, onSave }) => {
               type="button"
               className="btn btn-danger"
               data-bs-dismiss="modal"
+              id="closeModalButton"
             >
               Cancelar
             </button>
             <button
               type="button"
-              data-bs-dismiss="modal"
               className="btn btn-primary"
               onClick={handleSave}
             >

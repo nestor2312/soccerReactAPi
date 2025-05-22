@@ -5,15 +5,26 @@
   background-color: #F5F5F5;
   box-shadow: 0px 4px 4px 0px #00000040;
   border-radius: 3px;
+  transition: transform 0.2s ease-out,
+  box-shadow 0.2s ease-out,
+  background 0.2s ease-out,
+  filter 0.2s ease-out;
 }
 
 .inner-card:hover {
   font-weight: 600;
-  border: 1px solid #152039e6;
-  scale: 1.05;
-  transition: 0.3s ease;
-  background-color: #D9D9D9;
+  background: linear-gradient(180deg, #E0E0E0 0%, #F5F5F5 100%) padding-box,
+              linear-gradient(180deg, #00BF63 0%, #09537E 100%) border-box;
+  border: 1px solid transparent;
+  transform: translateY(-3px) scale(1.03); /* elevación */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35); /* Sombra más profunda */
+  filter: brightness(1.05); /* Ligero brillo */
+  transition: transform 0.3s ease-out,
+              box-shadow 0.3s ease-out,
+              background 0.3s ease-out,
+              filter 0.3s ease-out;
 }
+
 
 .shadow {
   border-radius: 4px;
@@ -96,6 +107,7 @@ a {
   justify-content: space-evenly;
   align-items: center;
   margin-top: 20px;
+  
 }
 
 .pagination button {
@@ -103,15 +115,18 @@ a {
   font-family: 'Roboto Condensed', sans-serif;
   margin: 0 10px;
   padding: 5px 15px;
-  background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);
+  /* background: linear-gradient(180deg, #152039 30%, #00bf638b 90%); */
+  background: linear-gradient(180deg, #152039 0%, rgba(0, 191, 99, 0.65) 100%)!important;
+
   color: white;
   border: none;
   cursor: pointer;
   border-radius: 6px;
+  border-bottom: 2px solid #79a08d;
 }
 
 .pagination button:hover {
-  border-bottom: 2px solid #79a08d;
+  border-bottom: 1px solid #79a08d;
 }
 
 .pagination button:disabled {
@@ -164,9 +179,7 @@ a {
   
     /* object-fit: contain; */
   }
-  .margen-mobile {
-    margin: auto -10px!important;
-  }
+
   .pagination {
     display: flex;
     justify-content: space-between;
@@ -184,6 +197,12 @@ a {
     border: none;
     cursor: pointer;
     border-radius: 6px;
+    border-bottom: 2px solid #79a08d;
   }
+
+  
+.pagination button:hover {
+  border-bottom: 1px solid #79a08d;
+}
   
 }

@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import { Link, useNavigate } from "react-router-dom";
 import CargaSesion from "../Carga/carga_sesion";
-
+import Logo from "../../assets/Frame 22.svg"
 const endpoint = API_ENDPOINT;
 
 // eslint-disable-next-line react/prop-types
@@ -63,6 +63,7 @@ const Login = ({ setIsAuthenticated }) => {
     <>
       <div className="posicion">
         <div className="caja">
+           <img  className="mb-3" src={Logo} alt="LOGO" />
           <h2 className="text-login">Iniciar sesión</h2>
           <form onSubmit={handleLogin}>
             <input
@@ -83,13 +84,13 @@ const Login = ({ setIsAuthenticated }) => {
               required
             />
             {errors.password && <h6 className="error-message">{errors.password}</h6>}
-            <p className="text-black">
+            <p className="text-black ">
               ¿No tienes cuenta?{" "}
               <Link to="/register" className="link-login">
                 Registrarse
               </Link>
             </p>
-            <button type="submit" className="btn-button-general" disabled={isLoading}>
+            <button type="submit" className="btn-button-general text-center" disabled={isLoading}>
               {isLoading ? "Cargando..." : "Ingresar"}
             </button>
           </form>

@@ -50,7 +50,7 @@ const Categoria = () => {
            <div className="contenido">
            {categorias.map((categoria) => (
             <div key={categoria.id} className="box">
-              <Link to={`/torneo/categoria/${categoria.id}/subcategoria`}>
+              <Link to={`/torneo/categoria/${categoria.id}/subcategoria`}  className="BoxCard">
                 <div className="card_torneo">
                   <button className="boton-torneo btn-button-general">
                     <span>{categoria.nombre}</span>

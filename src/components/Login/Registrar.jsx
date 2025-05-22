@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_ENDPOINT } from '../../ConfigAPI';
-
+import Logo from "../../assets/Frame 22.svg"
 const endpoint = API_ENDPOINT;
 
 const Register = () => {
@@ -36,10 +36,10 @@ const Register = () => {
 
             // Si el registro es exitoso, puedes iniciar sesión o redirigir al login
             sessionStorage.setItem('token', response.data.token);  // Si el backend envía un token
-            navigate('/profile');  // Redirigir al perfil o a la página que prefieras
+            navigate('/registrar_datos');  // Redirigir al perfil o a la página que prefieras
         } catch (error) {
             console.log(error);
-            setError('Registration failed. Please check your input.');
+            setError('Solo se puede registrar un usuario y ya fue registrado.');
         }
     };
 
@@ -56,6 +56,7 @@ const Register = () => {
         <div>
             <div className="posicion">
             <div className="caja2">
+                 <img  className="mb-3" src={Logo} alt="LOGO" />
             <h2 className="text-login">Crear una cuenta</h2>
             <form onSubmit={handleRegister} className='form-registro'>
                 <div>

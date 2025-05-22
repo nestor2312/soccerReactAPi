@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import Cargando from "../Carga/carga";
+import ErrorCarga from "../Error/Error";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import Alert from "../Alerta/Alerta";
 import "./index.css";
 import EditTeamModal from "../Formularios-edit/ModalEditTeams";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CreateIcon from '@mui/icons-material/Create';
-
+import Swal from "sweetalert2";
 const FORM_Teams = () => {
   const [nombre, setNombre] = useState("");
   const [archivo, setArchivo] = useState(null);
@@ -22,6 +23,16 @@ const FORM_Teams = () => {
   const Infoendpoint = `${API_ENDPOINT}equipos`;
   const gruposEndpoint = `${API_ENDPOINT}grupos`;
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const [error] = useState(null);
+  const [lastPage, setLastPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setIsLoading(true);
+  };
 
   const handleUpdateTeam = async (team) => {
     try {
@@ -84,34 +95,57 @@ const FORM_Teams = () => {
 
   const InfoEquipos = async () => {
     try {
-      const response = await axios.get(Infoendpoint);
-      setTeams(response.data);
+      const response = await axios.get(`${Infoendpoint}?page=${currentPage}`);
+      setTeams(response.data.data);
+      setLastPage(response.data.last_page);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       setError("Error al cargar los equipos.");
       console.error("Error al obtener los equipos:", error);
     }
   };
 
   useEffect(() => {
-    InfoEquipos();
     document.title = "Admin - Equipos";
-  }, []);
+    InfoEquipos();
+  }, [currentPage]);
 
   const deleteEquipos = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este equipo?")) {
-      try {
-        await axios.delete(`${endpoint}/${id}`);
-        setAlerta({ mensaje: "Equipo eliminado correctamente.", tipo: "success" });
-        setTeams((prevTeams) => prevTeams.filter((team) => team.id !== id));
-      } catch (error) {
-        setError("Error al eliminar el equipo.");
-        console.error("Error al eliminar el equipo:", error);
+
+    
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar este equipo después de eliminarlo.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+  setTeams(Teams.filter((Team) => Team.id !== id));
+  setAlerta({ mensaje: "Equipo eliminado correctamente!", tipo: "success" });
+  InfoEquipos();
+  setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+        
+        } catch (error) {
+          console.error("Error al eliminar el equipo", error);
+          setAlerta({ mensaje: "Error al eliminar el equipo!", tipo: "success" });
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+          Swal.fire("Error", "No se pudo eliminar el equipo.", "error");
+        } 
       }
-    }
+    });
+
+   
   };
 
   const store = async (e) => {
+    
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("nombre", nombre);
     formData.append("grupo_id", GrupoID);
@@ -123,14 +157,28 @@ const FORM_Teams = () => {
       });
       InfoEquipos();
       setAlerta({ mensaje: "Equipo registrado exitosamente.", tipo: "success" });
+      setNombre("");
+      setArchivo("");
     } catch (error) {
       setAlerta({ mensaje: "Error al agregar el equipo.", tipo: "danger" });
       console.error("Error al enviar los datos:", error);
       setError("Error al enviar los datos.");
+    }finally {
+      setIsLoading(false); 
     }
   };
 
   return (
+    <>
+    {isLoading ? (
+      <div className="loading-container">
+        <Cargando/>
+      </div>
+    ) :  error ? (
+      <div className="loading-container">
+         <ErrorCarga/>
+      </div>
+    ) : (
     <div>
 {alerta.mensaje && (
   <Alert
@@ -141,11 +189,12 @@ const FORM_Teams = () => {
 )}
       <h1 className="text-left">Registro de Equipos</h1>
     
-      <form className="col-md-12" onSubmit={store}>
+      <form className="col-md-12 mt-2 mb-4" onSubmit={store} autoComplete="off">
           {/* Nombre del equipo */}
           <div className="form-group">
             <label htmlFor="nombre">Nombre del Equipo:</label>
             <input
+            required
               type="text"
               className="form-control form-input-admin"
               id="nombre"
@@ -157,6 +206,7 @@ const FORM_Teams = () => {
           <div className="form-group mt-3">
             <label htmlFor="grupo_id">Selecciona un grupo:</label>
             <select
+              required
               id="grupo_id"
               className="form-control"
               value={GrupoID}
@@ -176,6 +226,7 @@ const FORM_Teams = () => {
           <div className="form-group mt-3">
             <label htmlFor="archivo">Añadir Archivo:</label>
             <input
+              required
               type="file"
               className="form-control  form-input-admin"
               id="archivo"
@@ -218,7 +269,7 @@ const FORM_Teams = () => {
                 <td className="text-center align-middle justify-content-md-center ">
                 <button
   type="button"
-  className="btn btn-warning "
+  className="btn btn-warning mx-3"
   data-bs-toggle="modal"
   data-bs-target="#editModal"
   onClick={() => {
@@ -247,9 +298,30 @@ const FORM_Teams = () => {
         onUpdate={handleUpdateTeam} 
         grupos={grupos} />
       </div>
+      <div className="pagination mb-4">
+  <button
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+    aria-disabled={currentPage === 1}
+    className="btn btn-outline-primary"
+  >
+    ← Anterior
+  </button>
+  <span className="mx-2">{`Página ${currentPage} de ${lastPage}`}</span>
+  <button
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === lastPage}
+    aria-disabled={currentPage === lastPage}
+    className="btn btn-outline-primary"
+  >
+    Siguiente →
+  </button>
+</div>
     </div>
-  );
-};
-
+   
+  )}
+  </>
+ );
+ };
 export default FORM_Teams;
 

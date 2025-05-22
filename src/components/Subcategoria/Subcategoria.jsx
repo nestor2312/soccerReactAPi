@@ -51,7 +51,7 @@ const Subcategoria = () => {
           <div className="contenido">
             {subcategorias.map((subcategoria) => (
               <div key={subcategoria.id} className="box">
-                <Link
+                <Link  className="BoxCard"
                   to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoria.id}/inicio`}
                 >
                   <div className="card_torneo">

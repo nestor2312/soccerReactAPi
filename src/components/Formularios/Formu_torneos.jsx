@@ -8,10 +8,12 @@ import ModalEdit from "../Formularios-edit/ModalEdit";
 import { API_ENDPOINT } from '../../ConfigAPI';
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
+import Swal from "sweetalert2";
+
 
 const endpoint = `${API_ENDPOINT}torneo`;
-const Infoendpoint = `${API_ENDPOINT}torneos`;
 
+const Infoendpointp = `${API_ENDPOINT}torneosp`;
 const torneoFields = [
   { name: "nombre", label: "Nombre del Torneo", required: true },
 ];
@@ -26,6 +28,14 @@ const FORM_Torneos = () => {
   const [Torneos, setTorneos] = useState([]);
   const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [lastPage, setLastPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setIsLoading(true);
+  };
 
   const saveTorneo = async (updatedTorneo) => {
     try {
@@ -53,7 +63,7 @@ const FORM_Torneos = () => {
       try {
         await axios.post(endpoint, formData);
         // Actualizar la lista de torneos después de agregar un nuevo torneo
-        InfoTorneos();
+        InfoTorneosp();
         setNombre("");
         setAlerta({ mensaje: "Torneo registrado con éxito!", tipo: "success" });
         setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
@@ -67,48 +77,61 @@ const FORM_Torneos = () => {
     
     };
 
-  
- 
-
- 
 
   const deleteTorneo = async (id) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este torneo?')) {
-      try {
-        await axios.delete(`${endpoint}/${id}`);
-        setTorneos(Torneos.filter((Torneo) => Torneo.id !== id));
-        setAlerta({ mensaje: "Torneo eliminado con éxito!", tipo: "success" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-        // Mostrar un mensaje de éxito más amigable, por ejemplo, usando un toast o snackbar
-      } catch (error) {
-        console.error('Error al eliminar el torneo', error);
-        setAlerta({ mensaje: "Error al eliminar la categoría.", tipo: "danger" });
-        setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-        // Mostrar un mensaje de error al usuario
-      } finally {
-        setIsLoading(false); // Asegúrate de establecerlo en false en ambos casos
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar este torneo después de eliminarlo.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+          setTorneos(Torneos.filter((Torneo) => Torneo.id !== id));
+          setAlerta({ mensaje: "Torneo eliminado con éxito!", tipo: "success" });
+          InfoTorneosp();
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+        
+        } catch (error) {
+          console.error("Error al eliminar el torneo", error);
+          setAlerta({ mensaje: "Error al eliminar la categoría.", tipo: "danger" });
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+          Swal.fire("Error", "No se pudo eliminar el torneo.", "error");
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
+    });
   };
 
   // Función para obtener los torneos
-  const InfoTorneos = async () => {
-    try {
-      const response = await axios.get(Infoendpoint);
-      setTorneos(response.data);
-      setIsLoading(false); // Detenemos el estado de carga al obtener los datos correctamente
-    } catch (error) {
+
+
+const InfoTorneosp = async () => {
+  try {
+      const response = await axios.get(`${Infoendpointp}?page=${currentPage}`);
+      setTorneos(response.data.data); // Para acceder a los datos en `data`
+      setLastPage(response.data.last_page); // Usa `last_page` devuelto desde Laravel
+      setIsLoading(false);
+  } catch (error) {
       setError("Error al cargar los Torneos.");
       console.error("Error al obtener los Torneos:", error);
-      setIsLoading(false); // También lo detenemos si ocurre un error
-    }
-  };
+      setIsLoading(false);
+  }
+};
+
+
+
 
   // useEffect para cargar los torneos solo una vez al montar el componente
   useEffect(() => {
-    InfoTorneos();
     setIsLoading(true);
-  }, []);
+    InfoTorneosp();
+  }, [currentPage]);
+  
 
   useEffect(() => {
     document.title = "Admin - Torneos";
@@ -131,7 +154,7 @@ const FORM_Torneos = () => {
       <div className="loading-container">
          <ErrorCarga/>
       </div>
-    ) : (
+    ) : Torneos.length > 0 ? (
 
       <><div>
               {alerta.mensaje && (
@@ -148,9 +171,9 @@ const FORM_Torneos = () => {
               )}
             </div>
             <div>
-                <h1 className="text-left">Registro de Torneos</h1>
+                <h1 className="text-left ">Registro de Torneos</h1>
                 <div>
-                  <form className="col-md-12" onSubmit={store} autoComplete="off" >
+                  <form className="col-md-12 mt-2 mb-4" onSubmit={store} autoComplete="off" >
                     {/* Nombre del torneo */}
                     <div className="form-group">
                       <label htmlFor="nombre">Nombre del Torneo:</label>
@@ -160,6 +183,7 @@ const FORM_Torneos = () => {
                         id="nombre"
                         placeholder="Ingrese el nombre del torneo"
                         value={Nombre}
+                        required
                         onChange={(e) => setNombre(e.target.value)} />
                     </div>
 
@@ -219,8 +243,26 @@ const FORM_Torneos = () => {
                       torneo={selectedTorneo}
                       onSave={saveTorneo} /> */}
                   </div>
+                  <div className="pagination mb-4">
+                    <button
+                    
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                     ← Anterior
+                    </button>
+                    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === lastPage}
+                    >
+                      Siguiente →
+                    </button>
+                  </div>
                 </div>
               </div></>
+      ) : (
+        <p className="no-datos">No hay datos disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
       )}
     </>
   );

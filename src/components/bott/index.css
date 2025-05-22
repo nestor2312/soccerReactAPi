@@ -13,12 +13,12 @@
     width: 100%;
     /* Add any other styles you want for the footer */
   /* } */ 
-  .container {
+  /* .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-  }
+  } */
   /* .boxbot {
     display: flex;
     justify-content: center;
@@ -28,3 +28,22 @@
     left: 50%;
     transform: translate(-50%, -50%);
   } */
+
+
+
+.table-container::-webkit-scrollbar {
+  width: 10px; /* Ancho de la barra */
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #12b448; /* Color de fondo de la barra */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #0a0abf; /* Color del pulgar de la barra */
+  border-radius: 5px; /* Bordes redondeados (opcional) */
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #921d1d; /* Color del pulgar al pasar el mouse por encima */
+}

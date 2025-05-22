@@ -8,8 +8,10 @@ import ErrorCarga from "../Error/Error";
 import ModalEdit from "../Formularios-edit/ModalEdit";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CreateIcon from '@mui/icons-material/Create';
+import Swal from "sweetalert2";
 const endpoint = `${API_ENDPOINT}categoria`;
-const InfoCategorias_endpoint = `${API_ENDPOINT}categorias`;
+
+const InfoCategorias_endpoint_paginador = `${API_ENDPOINT}categoriasp`;
 const TorneosEndpoint = `${API_ENDPOINT}torneos`;
 
 
@@ -25,6 +27,15 @@ const FORM_Categoria = () => {
   const [error] = useState(null);
   const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
   
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [lastPage, setLastPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setIsLoading(true);
+  };
+
   const categoriasFields = [
     { name: "nombre", label: "Nombre de la Categoría", required: true },
     {
@@ -42,10 +53,10 @@ const FORM_Categoria = () => {
   const saveCategoria = async (updatedCategoria) => {
     try {
       await axios.put(`${API_ENDPOINT}categoria/${updatedCategoria.id}`, updatedCategoria);
-      fetchCategorias(); 
+      fetchCategoriasp(); 
       setAlerta({ mensaje: "Categoria actualizada correctamente!", tipo: "success" });
       setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-      setTorneos((prevCategorias) =>
+      setCategorias((prevCategorias) =>
         prevCategorias.map((c) => (c.id === updatedCategoria.id ? updatedCategoria : c))
       
       );
@@ -56,18 +67,19 @@ const FORM_Categoria = () => {
     }
   };
 
-  // Función para obtener las categorías
-  const fetchCategorias = async () => {
+
+  const fetchCategoriasp = async () => {
     try {
-      const response = await axios.get(`${InfoCategorias_endpoint}`);
-      setCategorias(response.data);
-      setIsLoading(false);
+        const response = await axios.get(`${InfoCategorias_endpoint_paginador}?page=${currentPage}`);
+        setCategorias(response.data.data)
+        setLastPage(response.data.last_page); // Usa `last_page` devuelto desde Laravel
+        setIsLoading(false);
     } catch (error) {
-      setError("Error al cargar las categorías.");
-      console.error("Error al obtener las categorías:", error);
-      setIsLoading(false);
+        setError("Error al cargar las categorías.");
+        console.error("Error al obtener las categorías:", error);
+        setIsLoading(false);
     }
-  };
+};
 
   // useEffect para cargar torneos y categorías solo cuando el componente se monta
   useEffect(() => {
@@ -82,7 +94,8 @@ const FORM_Categoria = () => {
     };
 
     fetchTorneos();
-    fetchCategorias();
+   
+   
   }, []); 
 
   // Manejo del envío del formulario
@@ -92,7 +105,7 @@ const FORM_Categoria = () => {
     try {
       await axios.post(endpoint, { nombre, torneo_id: TorneoID });
       // Actualiza las categorías después de agregar una nueva
-      fetchCategorias(); 
+      fetchCategoriasp();
       setNombre("");
       setTorneoID("");
       setAlerta({ mensaje: "¡Categoría registrada con éxito!", tipo: "success" });
@@ -107,23 +120,44 @@ const FORM_Categoria = () => {
 
   // borrar
   const deleteCategoria = async (id) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar esta categoria?')) {
-      try {
-        await axios.delete(`${endpoint}/${id}`);
-        setCategorias(Categorias.filter((Categoria) => Categoria.id !== id));
-        setAlerta({ mensaje: "¡Categoría eliminada con éxito!", tipo: "success" });
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar esta categoria después de eliminarla.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+          setCategorias(Categorias.filter((Categoria) => Categoria.id !== id));
+          setAlerta({ mensaje: "Categoria eliminada con éxito!", tipo: "success" });
+          fetchCategoriasp();
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
        
-      } catch (error) {
-        console.error('Error al eliminar la categoria', error);
-        setAlerta({ mensaje: "Error al eliminar la categoría.", tipo: "danger" });
-      } 
-    }
+        } catch (error) {
+          console.error("Error al eliminar la categoria", error);
+          setAlerta({ mensaje: "Error al eliminar la categoría.", tipo: "danger" });
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+          Swal.fire("Error", "No se pudo eliminar la categoria.", "error");
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    });
+
+
   };
 
   useEffect(() => {
     document.title = "Admin - Categorías";
   }, []);
-
+  useEffect(() => {
+    setIsLoading(true);
+ 
+    fetchCategoriasp();
+  }, [currentPage]);
 
   return (
     <>
@@ -152,11 +186,12 @@ const FORM_Categoria = () => {
 )}
       <h1 className="text-left">Registro de Categorías</h1>
       <div>
-        <form className="col-md-12" onSubmit={store} autoComplete="off">
+        <form className="col-md-12 mt-2 mb-4" onSubmit={store} autoComplete="off">
           {/* Nombre de la categoría */}
           <div className="form-group">
             <label htmlFor="nombre">Nombre de la Categoría:</label>
             <input
+             required
               type="text"
               className="form-control form-input-admin"
               id="nombre"
@@ -170,6 +205,7 @@ const FORM_Categoria = () => {
           <div className="form-group mt-3">
             <label htmlFor="torneo_id">Selecciona un torneo:</label>
             <select
+             required
               id="torneo_id"
               className="form-control"
               value={TorneoID}
@@ -239,6 +275,26 @@ const FORM_Categoria = () => {
   onSave={saveCategoria}
 />
         </div>
+        <div className="pagination mb-4">
+  <button
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+    aria-disabled={currentPage === 1}
+    className="btn btn-outline-primary"
+  >
+    ← Anterior
+  </button>
+  <span className="mx-2">{`Página ${currentPage} de ${lastPage}`}</span>
+  <button
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === lastPage}
+    aria-disabled={currentPage === lastPage}
+    className="btn btn-outline-primary"
+  >
+    Siguiente →
+  </button>
+</div>
+
       </div>
     </div>
   )}

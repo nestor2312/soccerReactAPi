@@ -46,29 +46,31 @@ const Equipos = () => {
 
 
   return (
-    <>
-      <Menu />
-      <section>
-        {isLoading ? (
+    <div className="layout">
+    <Menu/>
+    {isLoading ? (
           <div className="loading-container">
-            <Cargando />
+            <Cargando/>
           </div>
-        ) :  error ? (
+        ) : error ? (
           <div className="loading-container">
              <ErrorCarga/>
           </div>
-        )  : Teams.length > 0 ? (
-    
+        ) : Teams.length > 0 ? (
+          <main className="main-content">
+      
+          
+          <section>
           <div className="margen margen-mobile">
             <div className="container-fluid">
-              <div className="col-12 col-sm-12 col-md-12 mt-4 mb-5">
+              <div className="col-12 col-sm-12 col-md-12 mt-4 mb-3">
                 <div className="card border-0 shadow">
                   <div className="card-header fondo-card TITULO border-0">
                     Equipos
                   </div>
                   <div className="card-body box-team">
                     {Teams.map((team) => (
-                      <div key={team.id} className="row justify-content-around">
+                      <div key={team.id} className="mx-1 ">
                       <Link 
         to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} // Navegar a jugadores del equipo seleccionado
         className="team-item2"
@@ -78,7 +80,7 @@ const Equipos = () => {
                               <img
                                 src={`${Images}/${team.archivo}`}
                                 width="50%"
-                                className="d-block mx-auto my-3 logomovil"
+                                className="d-block mx-auto my-2 logomovil"
                                 alt={team.nombre}
                               />
                               <h6 className="text-center team">{team.nombre}</h6>
@@ -89,7 +91,8 @@ const Equipos = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="pagination mb-4">
+                </div>
+                  <div className="pagination mt-4 mb-3">
                     <button
                     
                       onClick={() => handlePageChange(currentPage - 1)}
@@ -105,17 +108,17 @@ const Equipos = () => {
                       Siguiente →
                     </button>
                   </div>
-                </div>
               </div>
             </div>
           </div>
-         ) : (
-          <p className="no-datos">No hay Equipos disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
-        )}
       </section>
-      <Footer />
-    </>
-  );
+      </main>
+         ) : (
+          <p className="no-datos">No hay Equipos disponibles en este momento.</p> 
+        )}
+  {!isLoading  && !error && <Footer/>}
+     </div>
+     );
 };
 
 export default Equipos;

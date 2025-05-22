@@ -659,7 +659,7 @@ const FORM_Eliminatorias = () => {
                         className="logo"
                         alt="sin imagen"
                       />
-                      <span className="equipo">
+                      <span className="equipo equipog">
                         {partidoFinal[0]?.marcador1 > partidoFinal[0]?.marcador2
                           ? partidoFinal[0].equipo_aa?.nombre
                           : partidoFinal[0].equipo_b?.nombre}
