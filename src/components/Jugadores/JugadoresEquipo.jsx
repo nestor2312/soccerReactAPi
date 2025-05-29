@@ -65,7 +65,7 @@ const JugadoresEquipo = () => {
                 <div key={Player.id} className="col-md-4 mt-2 mb-2">
                   <div className="team-item2 show">
                     <Link
-                      to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/jugadores/${Player.id}`}
+                      to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/jugadoresteam/${Player.id}`}
                     >
                       <div className="card card-matches card-hover d-flex justify-content-center align-items-center">
                         <div className="card-body d-flex justify-content-center align-items-center">
@@ -82,7 +82,8 @@ const JugadoresEquipo = () => {
                             </div>
                             <div className="col-5 d-flex justify-content-center align-items-center">
                               <span className="team">
-                                {Player.nombre} <strong>{Player.apellido}</strong>
+                                {Player.nombre}{" "}
+                                <strong>{Player.apellido}</strong>
                               </span>
                             </div>
                           </div>
@@ -93,6 +94,16 @@ const JugadoresEquipo = () => {
                 </div>
               ))}
             </div>
+            <div className="text-center">
+              <Link
+                     to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/equipos`}
+                     className={`${location.pathname.includes('estadisticas') ? 'active' : ''}`}
+                   >
+                <button className="btn-flip flip">
+                  <span>Volver a equipos</span>
+                </button>
+              </Link>
+            </div>
           </div>
         ) : (
           <p className="text-center">
@@ -102,7 +113,7 @@ const JugadoresEquipo = () => {
       </main>
 
       {/* Puedes esconder el footer mientras carga */}
-      {!isLoading  && !error && <Footer />}
+      {!isLoading && !error && <Footer />}
     </div>
   );
 };

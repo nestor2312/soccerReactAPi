@@ -1,32 +1,63 @@
 
-/* flashcard */
-.card-body .back {
-    display: none;
-    transform: rotateY(-180deg);
-    direction: ltr;
-  }
-  .card-body.flipped .front {
-    display: none;
-  }
-  .card-body.flipped .back {
-    display: block;
-    transform: rotateY(-180deg);
-    direction: ltr;
-  }
-  .card-body {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-    margin-bottom: 5px;
-  }
-  .card-body.flipped {
-    transform: rotateY(180deg);
-    transform: rotateY(-180deg);
-    direction: ltr;
-  }
+.flashcard {
+  perspective: 1000px;
+}
 
+.flashcard .card-body{
+   min-height: 360px;
+   position: relative;
+   width: 100%;
+   height: 100%;
+   transform-style: preserve-3d;
+   transition: transform 0.6s ease;
+}
+
+
+.card-body .front,
+.card-body .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-body .back {
+  transform: rotateY(180deg);
+}
+
+.card-body.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-body:not(.flipped) .back {
+  /* opacity: 0; */
+  pointer-events: none;
+}
+
+.card-body.flipped .front {
+  /* opacity: 0; */
+  pointer-events: none;
+}
+
+.card-body.flipped .back {
+  /* opacity: 1; */
+  pointer-events: auto;
+}
+
+
+
+
+  
+
+
+  
   .show:last-child{
     margin-bottom: 50px;
   }
@@ -66,9 +97,16 @@
     text-transform: uppercase;
 
 }
-.btn-flip{
-  border-radius: 6px;
+.btn-flip {
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
+
+
 
 
 .optionselect{

@@ -101,6 +101,7 @@ import { useEffect, useState } from "react";
 import Admin from "./pages/Admin";
 import LogoutButton from "./components/Login/CerrarSesion";
 import JugadorShow from "./components/Jugadores/JugadoresShow";
+import JugadorShowTeam from "./components/Jugadores/JugadoresShowTeam";
 import JugadoresEquipo from "./components/Jugadores/JugadoresEquipo";
 import NotFound from "./pages/NotFound";
 
@@ -159,6 +160,11 @@ function App() {
           path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/estadisticas"
           element={<Estadisticas />}
         />
+<Route
+       path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadoresteam/:jugadorId"
+        element={<JugadorShowTeam />}
+      />
+
  <Route
         path="/torneo/categoria/:subcategoriaId/equipo/:equipoId/jugadores"
         element={<JugadoresEquipo />}

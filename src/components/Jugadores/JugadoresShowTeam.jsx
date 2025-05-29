@@ -12,9 +12,9 @@ import "./index.css"; // aquí están los estilos de .layout, .main-content, .lo
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
-const JugadorShow = () => {
-   const { categoriaId, subcategoriaId , jugadorId} = useParams();
+const JugadorShowTeam = () => {
 
+  const { subcategoriaId , jugadorId} = useParams();
   const [jugador, setJugador] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -59,7 +59,7 @@ const JugadorShow = () => {
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-12 col-md-6 mt-5 mb-5">
-                  <div className="flashcard d-flex align-items-center">
+                  <div className=" border-0  flashcard d-flex align-items-center">
                     <div className={`card-body ${isFlipped ? "flipped" : ""}`}>
                       {/* Front */}
                       <div className="front">
@@ -191,15 +191,15 @@ const JugadorShow = () => {
                 </div>
               </div>
             </div>
-            <div className="text-center">
-                          <Link 
-                                  to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/jugadores`}
-                                 className={` ${location.pathname.includes('estadisticas') ? 'active' : ''}`}
-                               >
-                            <button className="btn-flip flip">
-                              <span>Volver a jugadores</span>
-                            </button>
-                          </Link>
+              <div className="text-center">
+                         <Link
+    to={`/torneo/categoria/${subcategoriaId}/equipo/${jugador.equipo.id}/jugadores`}
+    className={` ${location.pathname.includes('estadisticas') ? 'active' : ''}`}
+>
+    <button className="btn-flip flip">
+        <span>Volver a jugadores</span>
+    </button>
+</Link>
                         </div>
           </section>
         ) : (
@@ -214,4 +214,4 @@ const JugadorShow = () => {
   );
 };
 
-export default JugadorShow;
+export default JugadorShowTeam;

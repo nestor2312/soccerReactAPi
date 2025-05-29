@@ -73,7 +73,7 @@ const Equipos = () => {
                       <div key={team.id} className="mx-1 ">
                       <Link 
         to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} // Navegar a jugadores del equipo seleccionado
-        className="team-item2"
+        className="team-item2 BoxCard"
       >
                           <div className="inner-card mt-3 d-flex flex-wrap align-content-end justify-content-center">
                             <div>

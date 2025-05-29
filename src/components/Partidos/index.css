@@ -85,14 +85,13 @@ background: #ffffff!important;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
   }
 .scoremodal{
-    font-weight: bold;
     text-align: center;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif; 
     font-size: 22px;
     font-style: normal;
     font-weight: 600; 
+    color: #152039;
 }
-
 
 .hiden{
     display: none;
@@ -131,7 +130,7 @@ background: #ffffff!important;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    background: linear-gradient(180deg, rgba(0, 191, 99, 0.80) 0%, rgba(9, 83, 126, 0.80) 100%);
+    background: linear-gradient(180deg, #00bf63cc 0%, #09537ecc 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -151,7 +150,7 @@ dialog{
     .scoremodal{
         font-weight: bold;
         text-align: center;
-        font-family: 'Roboto Condensed', sans-serif;
+     
         font-size: 18px;
         font-style: normal;
         font-weight: 700; 

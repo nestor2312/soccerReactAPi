@@ -73,7 +73,8 @@ const Jugadores = () => {
                   <label htmlFor="equipoFiltro">Filtrar por equipo:</label>
                   <select
                     id="equipoFiltro"
-                    className="form-control form-select border-secundary shadow-sm"
+                   className="form-select bg-light text-black border-0 shadow-sm"
+
                     value={equipoSeleccionado}
                     onChange={(e) => {
                       setEquipoSeleccionado(e.target.value);
@@ -125,7 +126,7 @@ const Jugadores = () => {
                           <td className="text-left team" width="40%">
                             {player.equipo.nombre}
                           </td>
-                          <td className="data text-center">
+                          <td className="text-center">
                             {player.nombre} <strong>{player.apellido}</strong>
                           </td>
                         </tr>
@@ -159,10 +160,12 @@ const Jugadores = () => {
                 {/* Filtro alternativa */}
                 <div className="row mb-4 form-group hiden2">
                   <div className="col-md-3">
-                    <label htmlFor="equipoFiltro">Filtrar por equipo:</label>
+                    <label htmlFor="equipoFiltro" className="form-label">
+                      Filtrar por equipo:
+                    </label>
                     <select
                       id="equipoFiltro"
-                      className="form-control form-select border-secundary shadow-sm"
+                      className="form-select bg-light text-black border-0 shadow-sm"
                       value={equipoSeleccionado}
                       onChange={(e) => {
                         setEquipoSeleccionado(e.target.value);
@@ -187,6 +190,7 @@ const Jugadores = () => {
                         <div className="card card-matches card-hover d-flex justify-content-center align-items-center">
                           <div className="card-body d-flex justify-content-center align-items-center">
                             <Link
+                              className="BoxCard"
                               to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/jugadores/${player.id}`}
                             >
                               <div className="row">

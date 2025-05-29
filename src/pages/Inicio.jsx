@@ -328,18 +328,18 @@ return(
         {Teams.map((team) => (
            // eslint-disable-next-line react/jsx-key
           <div key={team.id} className="team-item">
+            <Link  to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} className="BoxCard" >
             <div className="inner-card d-flex flex-wrap align-content-end justify-content-center">
               <div>
-            <Link  to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} >
                 <img
                   src={`${Images}/${team.archivo}`}
                   className="img-fluid d-block mx-auto my-2 logomovil"
                   alt={team.nombre}
                 />
                 <h6 className="text-center team">{team.nombre}</h6>
-          </Link>
               </div>
             </div>
+          </Link>
           </div>
         ))}
       </div>
