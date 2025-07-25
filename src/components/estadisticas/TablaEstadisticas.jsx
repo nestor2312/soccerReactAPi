@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 // TablaEstadisticas.js
 import { IMAGES_URL } from "../../ConfigAPI";
-
+import ErrorLogo from "../../assets/Vector.svg";
 const Images = IMAGES_URL;
 const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
     <section className=" Jugadores mt-2 mb-2">
@@ -29,6 +29,11 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                           src={`${Images}/${Player.equipo.archivo}`} 
                           className="logo"
                           alt={Player.equipo.nombre}
+                           onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                      
+                                                      }}
                         /> 
                         </td>
                          

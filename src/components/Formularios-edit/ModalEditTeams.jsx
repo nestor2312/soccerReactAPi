@@ -5,6 +5,7 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
   const [nombre, setNombre] = useState("");
   const [archivo, setArchivo] = useState(null);
   const [GrupoID, setGrupoID] = useState("");
+  const [color_hover, setcolor_hover] = useState(null);
   const [errors, setErrors] = useState({}); // Estado para manejar errores
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
       setNombre(team.nombre || "");
       setGrupoID(team.grupo_id || "");
       setArchivo(null);
+      setcolor_hover(team.color_hover || "");
       setErrors({}); // Reiniciar errores al abrir el modal
     }
   }, [team]);
@@ -57,6 +59,7 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
       nombre,
       grupo_id: GrupoID,
       archivo,
+      color_hover
     });
 
     document.getElementById("closeModalButton").click(); // Cierra el modal si todo está bien
@@ -130,6 +133,23 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
                 />
                 {errors.archivo && <div className="invalid-feedback">{errors.archivo}</div>}
               </div>
+
+                {/* color */}
+          <div className="form-group">
+ <label htmlFor="color_hover">Color de fondo</label>
+            <input
+             type="color"
+    id="color_hover"
+    name="color_hover"
+           
+            
+              className="form-control form-input-admin"
+            
+              placeholder="Ingrese el color del equipo"
+              value={color_hover}
+              onChange={(e) => setcolor_hover(e.target.value)} />
+          </div>
+              
             </div>
             <div className="modal-footer">
               <button

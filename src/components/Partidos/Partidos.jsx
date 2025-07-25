@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import ErrorCarga from "../Error/Error";
-
+import ErrorLogo from "../../assets/Vector.svg";
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
@@ -20,8 +20,6 @@ const Partidos = () => {
   const [lastPage, setLastPage] = useState(1);
   const [selectedPartido, setSelectedPartido] = useState(null);
   const modalRef = useRef(null);
-
- 
 
   useEffect(() => {
     const getPartidos = async () => {
@@ -68,22 +66,17 @@ const Partidos = () => {
 
   return (
     <div className="layout">
-    <Menu/>
-    {isLoading ? (
-          <div className="loading-container">
-            <Cargando/>
-          </div>
-        ) : error ? (
-          <div className="loading-container">
-             <ErrorCarga/>
-          </div>
-        ) : partidos.length > 0 ? ( 
-          <main className="main-content">
-
-
-         
-   
-     
+      <Menu />
+      {isLoading ? (
+        <div className="loading-container">
+          <Cargando />
+        </div>
+      ) : error ? (
+        <div className="loading-container">
+          <ErrorCarga />
+        </div>
+      ) : partidos.length > 0 ? (
+        <main className="main-content">
           <div className="col-sm-12 mt-4 hiden">
             <div className="card border-0 shadow ">
               <div className="card-header fondo-card TITULO border-0">
@@ -102,13 +95,21 @@ const Partidos = () => {
                   </thead>
                   <tbody>
                     {partidos.map((partido) => (
-                      <tr key={partido.id}  onClick={() => handleOpenModal(partido)}>
+                      <tr
+                        key={partido.id}
+                        onClick={() => handleOpenModal(partido)}
+                      >
                         <td width="10%">
                           <img
                             src={`${Images}/${partido.equipo_a?.archivo}`}
                             className="logo"
                             width="100%"
                             alt={partido.equipo_a?.nombre}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = ErrorLogo;
+                              e.target.classList.add("error-logo");
+                            }}
                           />
                         </td>
                         <td className="text-left team" width="30%">
@@ -144,6 +145,11 @@ const Partidos = () => {
                             className="logo"
                             width="100%"
                             alt={partido.equipo_b?.nombre}
+                             onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = ErrorLogo;
+                              e.target.classList.add("error-logo");
+                            }}
                           />
                         </td>
                       </tr>
@@ -169,10 +175,8 @@ const Partidos = () => {
                 Siguiente →
               </button>
             </div>
-            
           </div>
 
-         
           {/* Cards de partidos */}
           <section className="Partidos hiden-box">
             <div className="margen mt-4">
@@ -191,8 +195,15 @@ const Partidos = () => {
                               src={`${Images}/${partido.equipo_a?.archivo}`}
                               className="logo2 TeamLocal"
                               alt={partido.equipo_a?.nombre}
+                               onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = ErrorLogo;
+                              e.target.classList.add("error-logo");
+                            }}
                             />
-                            <span className="team">{partido.equipo_a?.nombre}</span>
+                            <span className="team">
+                              {partido.equipo_a?.nombre}
+                            </span>
                           </div>
                           <div className="col-4 d-flex flex-wrap align-content-around justify-content-center">
                             <span className="score">
@@ -210,103 +221,114 @@ const Partidos = () => {
                             </span>
                           </div>
                           <div className="col-4 d-flex justify-content-end align-items-center">
-                            <span className="team">{partido.equipo_b?.nombre}</span>
+                            <span className="team">
+                              {partido.equipo_b?.nombre}
+                            </span>
                             <img
                               src={`${Images}/${partido.equipo_b?.archivo}`}
                               className="logo2 TeamVisitante"
                               alt={partido.equipo_b?.nombre}
+                               onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = ErrorLogo;
+                              e.target.classList.add("error-logo");
+                            }}
                             />
                           </div>
                         </div>
                       </div>
                     </div>
-                    
                   </div>
                 ))}
               </div>
-               {/* Paginación */}
-            <div className="pagination mb-4">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                ← Anterior
-              </button>
-              <span>{`Página ${currentPage} de ${lastPage}`}</span>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === lastPage}
-              >
-                Siguiente →
-              </button>
+              {/* Paginación */}
+              <div className="pagination mb-4">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  ← Anterior
+                </button>
+                <span>{`Página ${currentPage} de ${lastPage}`}</span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === lastPage}
+                >
+                  Siguiente →
+                </button>
+              </div>
             </div>
-            </div>
-            
           </section>
 
           {/* Modal */}
           <dialog ref={modalRef}>
-  {selectedPartido && (
-    <>
-      {/* Botón de cierre mejorado */}
-      <button
-        type="button"
-        className="close-button btn btn-outline-danger"
-        onClick={handleCloseModal}
-      >
-        X
-      </button>
+            {selectedPartido && (
+              <>
+                {/* Botón de cierre mejorado */}
+                <button
+                  type="button"
+                  className="close-button btn btn-outline-danger"
+                  onClick={handleCloseModal}
+                >
+                  X
+                </button>
 
-      <div className="card-body d-flex flex-column justify-content-center align-items-center">
-        <div className="row dialog-box">
-          <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
-            <img
-              src={`${Images}/${selectedPartido.equipo_a?.archivo}`}
-              className="logo2 TeamLocal"
-              alt={selectedPartido.equipo_a?.nombre || "Equipo A"}
-            />
-            <span className="team">{selectedPartido.equipo_a?.nombre || "Equipo A"}</span>
-          </div>
-          <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
-            <span className="scoremodal">
-               
-            {selectedPartido.marcador1 == null ||
-                              selectedPartido.marcador2 == null ? (
-                                <>
-                                <h2 className="scoremodal">VS</h2>
-                                </>
-                              ) : (
-                                `${selectedPartido.marcador1} - ${selectedPartido.marcador2}`
-                              )}
-           
-            </span>
-          </div>
-          <div className="col-sm-4 col-4 d-flex justify-content-end align-items-center">
-            <span className="team">{selectedPartido.equipo_b?.nombre || "Equipo B"}</span>
-            <img
-              src={`${Images}/${selectedPartido.equipo_b?.archivo}`}
-              className="logo2 TeamVisitante"
-              alt={selectedPartido.equipo_b?.nombre || "Equipo B"}
-            />
-          </div>
-        </div>
-        <div className="text-center">
-          <h1 className="fecha">{selectedPartido.fecha}</h1>
-          <h4 className="hora">{selectedPartido.hora?.slice(0, 5)}</h4>
-        </div>
-      </div>
-    </>
-  )}
-</dialog>
-</main>
-
-       
+                <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                  <div className="row dialog-box">
+                    <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
+                      <img
+                        src={`${Images}/${selectedPartido.equipo_a?.archivo}`}
+                        className="logo2 TeamLocal"
+                        alt={selectedPartido.equipo_a?.nombre || "Equipo A"}
+                         onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = ErrorLogo;
+                              e.target.classList.add("error-logo");
+                            }}
+                      />
+                      <span className="team">
+                        {selectedPartido.equipo_a?.nombre || "Equipo A"}
+                      </span>
+                    </div>
+                    <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
+                      <span className="scoremodal">
+                        {selectedPartido.marcador1 == null ||
+                        selectedPartido.marcador2 == null ? (
+                          <>
+                            <h2 className="scoremodal">VS</h2>
+                          </>
+                        ) : (
+                          `${selectedPartido.marcador1} - ${selectedPartido.marcador2}`
+                        )}
+                      </span>
+                    </div>
+                    <div className="col-sm-4 col-4 d-flex justify-content-end align-items-center">
+                      <span className="team">
+                        {selectedPartido.equipo_b?.nombre || "Equipo B"}
+                      </span>
+                      <img
+                        src={`${Images}/${selectedPartido.equipo_b?.archivo}`}
+                        className="logo2 TeamVisitante"
+                        alt={selectedPartido.equipo_b?.nombre || "Equipo B"}
+                      />
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h1 className="fecha">{selectedPartido.fecha}</h1>
+                    <h4 className="hora">
+                      {selectedPartido.hora?.slice(0, 5)}
+                    </h4>
+                  </div>
+                </div>
+              </>
+            )}
+          </dialog>
+        </main>
       ) : (
         <p className="no-datos">No hay Partidos disponibles en este momento.</p>
       )}
-      {!isLoading && !error && <Footer/>}
-      </div>
-
+      {!isLoading && !error && <Footer />}
+    </div>
   );
 };
 

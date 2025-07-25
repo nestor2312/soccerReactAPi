@@ -8,6 +8,7 @@ import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from '../../ConfigAPI';
 import ErrorCarga from "../Error/Error";
 import { useParams } from 'react-router-dom';
+import ErrorLogo from "../../assets/Vector.svg";
 // import Navbar from "../nav/nav";
 const endpoint = API_ENDPOINT;
 const Images =IMAGES_URL;
@@ -40,6 +41,20 @@ const Equipos = () => {
     setIsLoading(true);
   };
 
+  function getTextColor(bgColor) {
+  if (!bgColor) return '#000000'; // color por defecto
+  const color = bgColor.replace('#', '');
+  const r = parseInt(color.substring(0, 2), 16);
+  const g = parseInt(color.substring(2, 4), 16);
+  const b = parseInt(color.substring(4, 6), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness < 128 ? '#ffffff' : '#000000';
+}
+
+
+
+
+
   useEffect(() => {
     document.title = "Equipos";
   }, []);
@@ -69,28 +84,45 @@ const Equipos = () => {
                     Equipos
                   </div>
                   <div className="card-body box-team">
-                    {Teams.map((team) => (
-                      <div key={team.id} className="mx-1 ">
-                      <Link 
-        to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} // Navegar a jugadores del equipo seleccionado
-        className="team-item2 BoxCard"
-      >
-                          <div className="inner-card mt-3 d-flex flex-wrap align-content-end justify-content-center">
-                            <div>
-                              <img
-                                src={`${Images}/${team.archivo}`}
-                                width="50%"
-                                className="d-block mx-auto my-2 logomovil"
-                                alt={team.nombre}
-                              />
-                              <h6 className="text-center team">{team.nombre}</h6>
-                              {/* <h6 className="text-center team">grupo = {team.grupo.nombre}</h6> */}
-                            </div>
-                          </div>
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
+  {Teams.map((team) => {
+    const textColor = getTextColor(team.color_hover); 
+
+    return (
+      <div key={team.id} className="mx-1">
+        <Link 
+          to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} 
+          className="team-item2 BoxCard"
+        >
+          <div 
+            className="inner-card mt-3 d-flex flex-wrap align-content-end justify-content-center"
+            style={{
+              '--hover-color': team.color_hover,
+              '--hover-text-color': textColor,
+               transition: 'background 0.4s ease, color 0.4s ease'
+            }}
+          >
+            <div>
+              <img
+                src={`${Images}/${team.archivo}`}
+                width="50%"
+                className="d-block mx-auto my-2 logomovil"
+                alt={team.nombre}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = ErrorLogo; 
+                  e.target.classList.add("error-logo");
+                }}
+              />
+              <h6 className="text-center team-hover ">{team.nombre}</h6>
+            </div>
+          </div>
+        </Link>
+      </div>
+    );
+  })}
+</div>
+
+
                 </div>
                   <div className="pagination mt-4 mb-3">
                     <button

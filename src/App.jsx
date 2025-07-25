@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "./App.css";
@@ -80,7 +81,7 @@
 
 // export default App;
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation  } from "react-router-dom";
 
 import Login from "./components/Login/Login";
 import Inicio from "./pages/Inicio";
@@ -104,6 +105,50 @@ import JugadorShow from "./components/Jugadores/JugadoresShow";
 import JugadorShowTeam from "./components/Jugadores/JugadoresShowTeam";
 import JugadoresEquipo from "./components/Jugadores/JugadoresEquipo";
 import NotFound from "./pages/NotFound";
+import Landing from "./pages/Landing";
+
+
+const RoutesWithAnalytics = ({ setIsAuthenticated }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag("event", "page_view", {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
+  return (
+    <Routes>
+      <Route path="landing" element={<Landing />} />
+      <Route path="/" element={<Torneo />} />
+      <Route path="/torneo/:id/categorias" element={<Categoria />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria" element={<Subcategoria />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/equipos" element={<Equipos />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores" element={<Jugadores />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores/:jugadorId" element={<JugadorShow />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio" element={<Inicio />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/partidos" element={<Partidos />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/clasificacion" element={<Clasificacion />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/estadisticas" element={<Estadisticas />} />
+      <Route path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadoresteam/:jugadorId" element={<JugadorShowTeam />} />
+      <Route path="/torneo/categoria/:subcategoriaId/equipo/:equipoId/jugadores" element={<JugadoresEquipo />} />
+      <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/logout" element={<LogoutButton setIsAuthenticated={setIsAuthenticated} />} />
+      <Route
+        path="/registrar_datos"
+        element={
+          <ProtectedRoute>
+            <Admin setIsAuthenticated={setIsAuthenticated} />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -112,89 +157,21 @@ function App() {
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     if (token) {
-      // Verificar el token con el servidor
-      // ...
       setIsAuthenticated(true);
     }
   }, []);
 
   return (
     <BrowserRouter>
-      <Routes>
-
-        {/* <Route path="/clasificacion" element={<Clasificacion />} /> */}
-        {/* <Route path="/equipos" element={<Equipos />} /> */}
-        {/* <Route path="/partidos" element={<Partidos />} /> */}
-        <Route path="/" element={<Torneo />} />
-        <Route path="/torneo/:id/categorias" element={<Categoria />} />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria"
-          element={<Subcategoria />}
-        />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/equipos"
-          element={<Equipos />}
-        />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores"
-          element={<Jugadores />}
-        />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadores/:jugadorId"
-          element={<JugadorShow />}
-        />
-
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/inicio"
-          element={<Inicio />}
-        />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/partidos"
-          element={<Partidos />}
-        />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/clasificacion"
-          element={<Clasificacion />}
-        />
-        <Route
-          path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/estadisticas"
-          element={<Estadisticas />}
-        />
-<Route
-       path="/torneo/categoria/:categoriaId/subcategoria/:subcategoriaId/jugadoresteam/:jugadorId"
-        element={<JugadorShowTeam />}
-      />
-
- <Route
-        path="/torneo/categoria/:subcategoriaId/equipo/:equipoId/jugadores"
-        element={<JugadoresEquipo />}
-      />
-        <Route
-          path="/login"
-          element={<Login setIsAuthenticated={setIsAuthenticated} />}
-        />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/logout"
-          element={<LogoutButton setIsAuthenticated={setIsAuthenticated} />}
-        />
-        <Route
-          path="/registrar_datos"
-          element={
-            <ProtectedRoute>
-            
-              <Admin setIsAuthenticated={setIsAuthenticated} />
-            </ProtectedRoute>
-          }
-        />
-          <Route path="*" element={<NotFound />} />
-      </Routes>
-    
+      <RoutesWithAnalytics setIsAuthenticated={setIsAuthenticated} />
     </BrowserRouter>
   );
 }
 
 export default App;
+
+
+
 
 // // import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";

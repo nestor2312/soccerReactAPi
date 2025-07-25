@@ -11,18 +11,33 @@
   filter 0.2s ease-out;
 }
 
+.inner-card {
+  --hover-color: #f5f5f5; /* color por defecto si no se pasa */
+   --hover-text-color: black; /* Color de texto por defecto */
+
+}
+
+.team-hover{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
 .inner-card:hover {
+
+  
   font-weight: 600;
-  background: linear-gradient(180deg, #E0E0E0 0%, #F5F5F5 100%) padding-box,
+  background: linear-gradient(180deg, #E0E0E0 0%, var(--hover-color) 100%) padding-box,
               linear-gradient(180deg, #00BF63 0%, #09537E 100%) border-box;
   border: 1px solid transparent;
-  transform: translateY(-3px) scale(1.03); /* elevación */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35); /* Sombra más profunda */
-  filter: brightness(1.05); /* Ligero brillo */
-  transition: transform 0.3s ease-out,
-              box-shadow 0.3s ease-out,
-              background 0.3s ease-out,
-              filter 0.3s ease-out;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+  filter: brightness(1.05);
+  transition: all 0.3s ease;
+ color: var(--hover-text-color) !important;
 }
 
 
@@ -42,9 +57,7 @@
   line-height: normal;
 }
 
-.fondo-card {
-  background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);
-}
+
 
 a {
   text-transform: capitalize;

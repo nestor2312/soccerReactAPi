@@ -7,8 +7,8 @@ import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import ErrorCarga from "../Error/Error";
 import { useParams, Link } from "react-router-dom";
-import "./index.css"; // aquí están los estilos de .layout, .main-content, .loading-container, footer
-
+import "./index.css"; 
+import ErrorLogo from "../../assets/Vector.svg";
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
@@ -64,11 +64,22 @@ const JugadorShowTeam = () => {
                       {/* Front */}
                       <div className="front">
                         <div className="row mt-3 justify-content-center">
-                          <div className="col-md-8 text-center">
+                          <div className="col-md-8 text-center color-hover-animado"  style={{
+    background: `linear-gradient(180deg, #E0E0E0 0%, ${jugador.equipo?.color_hover} 100%)`,
+    borderRadius: '0.375rem',
+    padding: '0.1rem',
+   
+   
+  
+  }}>
                             <img
                               src={`${Images}/${jugador.equipo?.archivo}`}
                               className="logo w-25"
                               alt={jugador.equipo?.nombre}
+                               onError={(e) => {
+  e.target.onerror = null;
+  e.target.src = ErrorLogo; 
+}}
                             />
                           </div>
                         </div>
@@ -127,12 +138,24 @@ const JugadorShowTeam = () => {
                       {/* Back */}
                       <div className="back">
                         <div className="row mt-3 justify-content-center">
-                          <div className="col-md-8 text-center">
-                            <img
-                              src={`${Images}/${jugador.equipo?.archivo}`}
-                              className="logo w-25"
-                              alt={jugador.equipo?.nombre}
-                            />
+                          <div className="col-md-8 text-center"  style={{
+    background: `linear-gradient(180deg, #E0E0E0 0%, ${jugador.equipo?.color_hover} 100%)`,
+    borderRadius: '0.375rem',
+    padding: '0.1rem',
+   
+                           }} >
+      <img
+  src={`${Images}/${jugador.equipo?.archivo}`}
+  className="logo w-25"
+  alt={jugador.equipo?.nombre}
+ onError={(e) => {
+  e.target.onerror = null;
+  e.target.src = ErrorLogo; 
+}}
+
+/>
+
+
                           </div>
                         </div>
                         <div className="d-flex justify-content-center">

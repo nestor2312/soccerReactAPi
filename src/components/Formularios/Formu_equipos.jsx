@@ -13,6 +13,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import Swal from "sweetalert2";
 const FORM_Teams = () => {
   const [nombre, setNombre] = useState("");
+  const [color_hover, setcolor_hover] = useState("");
   const [archivo, setArchivo] = useState(null);
   const [GrupoID, setGrupoID] = useState("");
   const [grupos, setGrupos] = useState([]);
@@ -40,6 +41,7 @@ const FORM_Teams = () => {
       const data = {
         nombre: team.nombre,
         grupo_id: team.grupo_id,
+        color_hover: team.color_hover,
       };
       // Si hay un archivo, convertirlo a base64
       if (team.archivo) {
@@ -149,6 +151,7 @@ const FORM_Teams = () => {
     const formData = new FormData();
     formData.append("nombre", nombre);
     formData.append("grupo_id", GrupoID);
+     formData.append("color_hover", color_hover);
     if (archivo) formData.append("archivo", archivo);
 
     try {
@@ -233,6 +236,21 @@ const FORM_Teams = () => {
               onChange={(e) => setArchivo(e.target.files[0])}
             />
           </div>
+           {/* color */}
+          <div className="form-group">
+ <label htmlFor="color_hover">Color de fondo</label>
+            <input
+             type="color"
+    id="color_hover"
+    name="color_hover"
+           
+            
+              className="form-control form-input-admin"
+            
+              placeholder="Ingrese el color del equipo"
+              value={color_hover}
+              onChange={(e) => setcolor_hover(e.target.value)} />
+          </div>
 
           {/* Botón para enviar el formulario */}
           <div className="d-flex mt-2 mb-2">
@@ -249,6 +267,7 @@ const FORM_Teams = () => {
               <th className="text-center">Logo</th>
               <th className="text-center">Grupo</th>
               <th className="text-center">Equipo</th>
+              <th className="text-center">Color de equipo</th>
               <th className="text-center">Acciones</th>
             </tr>
           </thead>
@@ -266,6 +285,7 @@ const FORM_Teams = () => {
                 </td>
                 <td className="text-center align-middle">{team.grupo.nombre}</td>
                 <td className="text-center align-middle">{team.nombre}</td>
+                 <td className="text-center align-middle">{team.color_hover}</td>
                 <td className="text-center align-middle justify-content-md-center ">
                 <button
   type="button"

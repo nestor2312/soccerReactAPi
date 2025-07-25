@@ -7,7 +7,7 @@ import Cargando from "../Carga/carga";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import ErrorCarga from "../Error/Error";
 import "./index.css"; // asegúrate de importar aquí también
-
+import ErrorLogo from "../../assets/Vector.svg";
 const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
@@ -73,8 +73,7 @@ const Jugadores = () => {
                   <label htmlFor="equipoFiltro">Filtrar por equipo:</label>
                   <select
                     id="equipoFiltro"
-                   className="form-select bg-light text-black border-0 shadow-sm"
-
+                    className="form-select bg-light text-black border-0 shadow-sm"
                     value={equipoSeleccionado}
                     onChange={(e) => {
                       setEquipoSeleccionado(e.target.value);
@@ -185,7 +184,7 @@ const Jugadores = () => {
                 {/* Cards de jugadores */}
                 <div className="row hiden2">
                   {jugadores.map((player) => (
-                    <div key={player.id} className="col-md-4 mb-2">
+                    <div key={player.id} className="col-md-4 mb-3">
                       <div className="team-item2">
                         <div className="card card-matches card-hover d-flex justify-content-center align-items-center">
                           <div className="card-body d-flex justify-content-center align-items-center">
@@ -199,6 +198,11 @@ const Jugadores = () => {
                                     src={`${Images}/${player.equipo.archivo}`}
                                     className="logo2"
                                     alt={player.equipo.nombre}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = ErrorLogo;
+                                      e.target.classList.add("error-logo");
+                                    }}
                                   />
                                   <span className="team">
                                     {player.equipo.nombre}

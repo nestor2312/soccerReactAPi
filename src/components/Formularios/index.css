@@ -340,7 +340,19 @@ input{
     .hiden2{
       display: none!important;
     }
+
+    .team-hover{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
    
+
+
     .team {
       color: #000;
       font-family: 'Roboto Condensed', sans-serif;
