@@ -115,7 +115,8 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
                   </option>
                   {grupos.map((grupo) => (
                     <option key={grupo.id} value={grupo.id}>
-                      {grupo.nombre} - {grupo.subcategoria.nombre}
+                     {grupo.nombre} - {grupo.subcategoria?.nombre} -{" "}
+          {grupo.subcategoria?.categoria?.torneo?.nombre}
                     </option>
                   ))}
                 </select>

@@ -190,75 +190,116 @@ const FORM_Teams = () => {
     onClose={() => setAlerta({ mensaje: "", tipo: "" })}
   />
 )}
-      <h1 className="text-left">Registro de Equipos</h1>
+    <h1 className="text-left">Registro de Equipos</h1>
+
+<form className="col-md-12 mt-2 mb-4" onSubmit={store} autoComplete="off">
+  {/* Nombre del equipo */}
+  <div className="form-group">
+    <label htmlFor="nombre">Nombre del Equipo:</label>
+    <input
+      required
+      type="text"
+      className="form-control form-input-admin"
+      id="nombre"
+      placeholder="Lobos FC"
+      value={nombre}
+      onChange={(e) => setNombre(e.target.value)}
+    />
+  </div>
+
+  {/* Selector de grupo */}
+  <div className="form-group mt-3">
+    <label htmlFor="grupo_id">Selecciona un grupo:</label>
+    <select
+      required
+      id="grupo_id"
+      className="form-control"
+      value={GrupoID}
+      onChange={(e) => setGrupoID(e.target.value)}
+    >
+      <option value="" disabled>
+        Selecciona un grupo
+      </option>
+      {grupos.map((grupo) => (
+        <option key={grupo.id} value={grupo.id}>
+          {grupo.nombre} - {grupo.subcategoria?.nombre} -{" "}
+          {grupo.subcategoria?.categoria?.torneo?.nombre}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  {/* Input para el archivo */}
+  <div className="form-group mt-3">
+    <label htmlFor="archivo">Añadir Logo del Equipo:</label>
+    <input
+      required
+      type="file"
+      className="form-control form-input-admin"
+      id="archivo"
+      onChange={(e) => setArchivo(e.target.files[0])}
+    />
+
+    {/* Vista previa de la imagen */}
+    {archivo && (
+      <div className="mt-3">
+        <p>Vista previa del logo:</p>
+        <img
+          src={URL.createObjectURL(archivo)}
+          alt="Logo del equipo"
+          width="120"
+          className="img-thumbnail"
+        />
+      </div>
+    )}
+  </div>
+
+  {/* Color */}
+  <div className="form-group mt-3">
+    <label htmlFor="color_hover">Color de fondo:</label>
+    <input
+      type="color"
+      id="color_hover"
+      name="color_hover"
+      className="form-control form-input-admin"
+      value={color_hover}
+      onChange={(e) => setcolor_hover(e.target.value)}
+    />
+
+    {/* Vista previa del color */}
+   
     
-      <form className="col-md-12 mt-2 mb-4" onSubmit={store} autoComplete="off">
-          {/* Nombre del equipo */}
-          <div className="form-group">
-            <label htmlFor="nombre">Nombre del Equipo:</label>
-            <input
-            required
-              type="text"
-              className="form-control form-input-admin"
-              id="nombre"
-              placeholder="Ingrese el nombre del equipo"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)} />
-          </div>
-          {/* Selector de grupo */}
-          <div className="form-group mt-3">
-            <label htmlFor="grupo_id">Selecciona un grupo:</label>
-            <select
-              required
-              id="grupo_id"
-              className="form-control"
-              value={GrupoID}
-              onChange={(e) => setGrupoID(e.target.value)}>
-              <option value="" disabled>
-                Selecciona un grupo
-              </option>
-              {grupos.map((grupo) => (
-                <option key={grupo.id} value={grupo.id}>
-                  {grupo.nombre} - {grupo.subcategoria.nombre} 
-                </option>
-              ))}
-            </select>
-          </div>
+      {color_hover ? (
+  <div className="mt-2">
+    <span
+      style={{
+        display: "inline-block",
+        width: "25px",
+        height: "15px",
+        borderRadius: "4px",
+        backgroundColor: color_hover,
+        border: "1px solid #ccc",
+      }}
+    ></span>{" "}
+    <strong>Color seleccionado:</strong> {color_hover}
+  </div>
+) : (
+  <div className="mt-2 text-muted">
+    Ningún color seleccionado
+  </div>
+)}
 
-          {/* Input para el archivo */}
-          <div className="form-group mt-3">
-            <label htmlFor="archivo">Añadir Archivo:</label>
-            <input
-              required
-              type="file"
-              className="form-control  form-input-admin"
-              id="archivo"
-              onChange={(e) => setArchivo(e.target.files[0])}
-            />
-          </div>
-           {/* color */}
-          <div className="form-group">
- <label htmlFor="color_hover">Color de fondo</label>
-            <input
-             type="color"
-    id="color_hover"
-    name="color_hover"
-           
-            
-              className="form-control form-input-admin"
-            
-              placeholder="Ingrese el color del equipo"
-              value={color_hover}
-              onChange={(e) => setcolor_hover(e.target.value)} />
-          </div>
+   
+  </div>
 
-          {/* Botón para enviar el formulario */}
-          <div className="d-flex mt-2 mb-2">
-            <button className="btn btn-outline-primary" type="submit">
-            Registrar Equipo
-            </button>
-          </div>
-        </form>
+  {/* Botón para enviar el formulario */}
+  <div className="d-flex mt-3 mb-2">
+    <button className="btn btn-outline-primary" type="submit">
+      Registrar Equipo
+    </button>
+  </div>
+</form>
+
 
       <div className="table-responsive card my-2">
         <table className="table">
@@ -267,6 +308,8 @@ const FORM_Teams = () => {
               <th className="text-center">Logo</th>
               <th className="text-center">Grupo</th>
               <th className="text-center">Equipo</th>
+                <th className="text-center">Subcategoría</th>
+                  <th className="text-center">Torneo</th>
               <th className="text-center">Color de equipo</th>
               <th className="text-center">Acciones</th>
             </tr>
@@ -285,7 +328,26 @@ const FORM_Teams = () => {
                 </td>
                 <td className="text-center align-middle">{team.grupo.nombre}</td>
                 <td className="text-center align-middle">{team.nombre}</td>
-                 <td className="text-center align-middle">{team.color_hover}</td>
+                    <td className="text-center align-middle"> {team.grupo.subcategoria?.nombre || "Sin subcategoría"}</td>
+                  <td className="text-center align-middle">{team.grupo.subcategoria?.categoria?.torneo?.nombre || "N/A"}</td>
+                 <td className="text-center align-middle">
+  {team.color_hover ? (
+    <span
+      title={`Color: ${team.color_hover}`}
+      style={{
+        display: "inline-block",
+        width: "25px",
+        height: "15px",
+        borderRadius: "4px",
+        backgroundColor: team.color_hover,
+        border: "1px solid #ccc",
+      }}
+    ></span>
+  ) : (
+    <span className="text-muted">Sin color</span>
+  )}
+</td>
+
                 <td className="text-center align-middle justify-content-md-center ">
                 <button
   type="button"

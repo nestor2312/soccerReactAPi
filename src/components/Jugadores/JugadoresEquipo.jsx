@@ -88,7 +88,7 @@ const JugadoresEquipo = () => {
                     width="100px"
                   
                   />
-                  <h2 className="text-capitalize ">{equipo.nombre}</h2>
+                  <h2 className="text-capitalize space">{equipo.nombre}</h2>
 </div>
                 </div>
 

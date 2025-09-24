@@ -226,7 +226,7 @@ const FORM_Players = () => {
                 </option>
                 {subcategorias.map((subcategoria) => (
                   <option key={subcategoria.id} value={subcategoria.id}>
-                    {subcategoria.nombre}
+                    {subcategoria.nombre} - {subcategoria.categoria?.torneo?.nombre}
                   </option>
                 ))}
               </select>
@@ -257,14 +257,15 @@ const FORM_Players = () => {
 
             {/* Campos de texto */}
             {[
-              { id: "nombre", label: "Nombre", placeholder: "Ingrese el nombre del jugador", state: nombre, setState: setnombre },
-              { id: "apellido", label: "Apellido", placeholder: "Ingrese el apellido del jugador", state: apellido, setState: setapellido },
-              { id: "edad", label: "Edad", placeholder: "Ingrese la edad", type: "number", min: 0, max: 90, state: edad, setState: setedad },
-              { id: "numero", label: "Número", placeholder: "Ingrese el número", type: "number", min: 1, max: 99, state: numero, setState: setnumero },
-              { id: "card_amarilla", label: "Tarjetas amarillas", placeholder: "Ingrese cantidad", type: "number", min: 0, state: card_amarilla, setState: setcard_amarilla },
-              { id: "card_roja", label: "Tarjetas rojas", placeholder: "Ingrese cantidad", type: "number", min: 0, state: card_roja, setState: setcard_roja },
-              { id: "goles", label: "Goles", placeholder: "Ingrese cantidad", type: "number", min: 0, state: goles, setState: setgoles },
-              { id: "asistencias", label: "Asistencias", placeholder: "Ingrese cantidad", type: "number", min: 0, state: asistencias, setState: setasistencias },
+             { id: "nombre", label: "Nombre", placeholder: "Juan", state: nombre, setState: setnombre },
+{ id: "apellido", label: "Apellido", placeholder: "Pérez", state: apellido, setState: setapellido },
+{ id: "edad", label: "Edad", placeholder: "22", type: "number", min: 0, max: 90, state: edad, setState: setedad },
+{ id: "numero", label: "Número", placeholder: "10", type: "number", min: 1, max: 99, state: numero, setState: setnumero },
+{ id: "card_amarilla", label: "Tarjetas amarillas", placeholder: "2", type: "number", min: 0, state: card_amarilla, setState: setcard_amarilla },
+{ id: "card_roja", label: "Tarjetas rojas", placeholder: "1", type: "number", min: 0, state: card_roja, setState: setcard_roja },
+{ id: "goles", label: "Goles", placeholder: "5", type: "number", min: 0, state: goles, setState: setgoles },
+{ id: "asistencias", label: "Asistencias", placeholder: "3", type: "number", min: 0, state: asistencias, setState: setasistencias },
+
             ].map(({ id, label, placeholder, type = "text", min, max, state, setState }) => (
               <div key={id} className="col-12 col-md-6 mb-3">
                 <label htmlFor={id} className="form-label">

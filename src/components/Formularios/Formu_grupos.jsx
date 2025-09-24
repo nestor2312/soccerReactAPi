@@ -43,7 +43,7 @@ const handlePageChange = (page) => {
       required: true,
       options: Subcategorias.map((Subcategoria) => ({
         value: Subcategoria.id,
-        label:`${Subcategoria.nombre} `,
+        label:`${Subcategoria.nombre} -  ${Subcategoria.categoria?.torneo?.nombre} `,
       })),
     },
     { name: "num_clasificados", label: "Numero de clasificados", required: true ,
@@ -75,7 +75,7 @@ const handlePageChange = (page) => {
   // Cargar subcategorías y grupos al cargar la página
   const fetchSubcategorias = async () => {
     try {
-      const response = await axios.get(subcategoriasEndpoint);
+    const response = await axios.get(`${subcategoriasEndpoint}`);
 
       setSubcategoria(response.data);
     } catch (error) {
@@ -209,14 +209,14 @@ const handlePageChange = (page) => {
             type="text"
             className="form-control form-input-admin"
             id="nombre"
-            placeholder="Ingrese el nombre del grupo"
+            placeholder="Grupo A, Grupo 1, Liga apertura"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="nombre">Numero de clasificados:</label>
+          <label htmlFor="nombre">Número de equipos que clasifican:</label>
           <input
            required
            type="number"
@@ -224,8 +224,8 @@ const handlePageChange = (page) => {
            max={50} 
             maxLength="2"
             className="form-control form-input-admin"
-            id="nombre"
-            placeholder="Ingrese el nombre del grupo"
+            id="num_clasificados"
+            placeholder="Ej: 2, 4"
             value={num_clasificados}
             onChange={(e) => setNum_clasificados(e.target.value)}
           />
@@ -235,19 +235,22 @@ const handlePageChange = (page) => {
           <label htmlFor="subcategoria_id">Selecciona una Subcategoría:</label>
           <select
           required
-            id="subcategoria_id"
-            className="form-control"
-            value={SubcategoriaID}
-            onChange={(e) => setSubcategoriaID(e.target.value)}
+          id="subcategoria_id"
+          className="form-control"
+          value={SubcategoriaID}
+          onChange={(e) => setSubcategoriaID(e.target.value)}
           >
             <option value="" disabled>
               Selecciona una subcategoría
             </option>
             {Subcategorias.map((subcategoria) => (
+             
+             
               <option key={subcategoria.id} value={subcategoria.id}>
                 {subcategoria.nombre} - {subcategoria.categoria?.torneo?.nombre}
 
               </option>
+             
             ))}
           </select>
         </div>
@@ -266,6 +269,7 @@ const handlePageChange = (page) => {
             <tr>
               <th className="text-left">Subcategoría</th>
              
+               <th className="text-left">Torneo</th>
               <th className="text-left">Grupo</th>
               <th className="text-center">Clasificados</th>
               <th className="text-center">Acciones</th>
@@ -274,7 +278,8 @@ const handlePageChange = (page) => {
           <tbody>
             {Grupos.map((Grupo) => (
               <tr key={Grupo.id}>
-                <td className="text-left">{Grupo.subcategoria.nombre}</td>
+                <td className="text-left">{Grupo.subcategoria.nombre} </td>
+                   <td className="text-left">{Grupo.subcategoria.categoria?.torneo?.nombre}</td>
                 <td className="text-left">{Grupo.nombre}</td>
                 <td className="text-center">{Grupo.num_clasificados}</td>
                 <td className="text-center d-flex justify-content-evenly">

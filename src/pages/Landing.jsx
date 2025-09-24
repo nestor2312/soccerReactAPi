@@ -7,7 +7,7 @@ import Img1 from "../assets/Img1.png";
 import Img2 from "../assets/Img2.png"; 
 import Img3 from "../assets/Img3.png"; 
 import Img4 from "../assets/Img4.png"; 
-import list_items from "../assets/Soccer.png"; 
+
 const Landing = () => {
 
  // Estado para la moneda seleccionada (COP por defecto)
@@ -16,19 +16,14 @@ const Landing = () => {
   const [isAnnualBilling, setIsAnnualBilling] = useState(false);
 
   // Datos de los planes de precios
-  const pricingPlans = [
+
+    const pricingPlans = [
     {
-      id: 'multi-torneo', // Nuevo ID
-      name: 'Plan Multi Torneo', // Nuevo nombre
-      description: 'Ideal para múltiples torneos, categorías y subcategorías', // Nueva descripción
+      id: 'economico',
+      name: 'Plan Económico',
+      description: 'Ideal para ligas barriales y colegios pequeños',
       features: [
-        'Torneos, categorías y subcategorías ilimitadas',
-        'Equipos ilimitados',
-        'Jugadores ilimitados',
-        'Clasificación automática',
-        'Partidos ilimitados',
-        'Fase final desde cuartos de final',
-        'Estadísticas (goles, asistencias, tarjetas)',
+        'Fixtures, tablas y estadísticas ilimitadas',
         'Personalización de diseño opcional',
         'Soporte básico',
         'Hosting + dominio + SSL',
@@ -40,37 +35,33 @@ const Landing = () => {
       },
       prices: {
         COP: { monthly: 180000, annual: 1800000, design: 200000, forms: 100000 },
-        USD: { monthly: 45, annual: 450, design: 50, forms: 25 },
-        EUR: { monthly: 40, annual: 400, design: 45, forms: 22 }
+        USD: { monthly: 45, annual: 450, design: 50, forms: 25 }, // Precios de ejemplo en USD
+        EUR: { monthly: 40, annual: 400, design: 45, forms: 22 }  // Precios de ejemplo en EUR
       }
     },
     {
-      id: 'unico-torneo', // Nuevo ID
-      name: 'Plan Único Torneo', // Nuevo nombre
-      description: 'Para un solo torneo', // Nueva descripción
+      id: 'corporativo',
+      name: 'Plan Corporativo',
+      description: 'Para universidades y empresas',
       features: [
-        'Un torneo',
-        'Equipos ilimitados',
-        'Jugadores ilimitados',
-        'Clasificación automática',
-        'Partidos ilimitados',
-        'Fase final desde cuartos de final',
-        'Estadísticas (goles, asistencias, tarjetas)',
-         'Soporte básico',
-        'Hosting + dominio + SSL',
-        'Mantenimiento básico'
+        'Todo lo del plan económico',
+        'Soporte prioritario',
+        'Actualizaciones a medida',
+        'Hosting + dominio + SSL', 
+        'Mantenimiento avanzado'
       ],
       additionalServices: {
         design: 'Diseño Personalizado',
         forms: 'Codificar Formularios'
       },
       prices: {
-        COP: { pagoUnico: 250000, design: 80000, forms: 100000 },
-        USD: { pagoUnico: 65, design: 20, forms: 25 }, // Estimaciones basadas en COP
-        EUR: { pagoUnico: 60, design: 18, forms: 22 }  // Estimaciones basadas en COP
+        COP: { monthly: 260000, annual: 2600000, design: 360000, forms: 180000 },
+        USD: { monthly: 65, annual: 650, design: 90, forms: 45 }, // Precios de ejemplo en USD
+        EUR: { monthly: 60, annual: 600, design: 80, forms: 40 }  // Precios de ejemplo en EUR
       }
     }
   ];
+ 
 
   // Función para formatear el precio según la moneda seleccionada
   const formatPrice = (amount, currency) => {
@@ -145,12 +136,7 @@ const Landing = () => {
     }
   };
 
-  useEffect(() => {
-    document.body.classList.add("custom-blue-bg");
-    return () => {
-      document.body.classList.remove("custom-blue-bg");
-    };
-  }, []);
+
 
   const getCarouselSlideStyles = (slideId, index) => {
     const activeIndex = slides.findIndex(slide => slide.id === checkedItem);
@@ -231,6 +217,23 @@ const Landing = () => {
     };
   }, []);
 
+
+  
+  document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in-view');
+        observer.unobserve(entry.target); // Opcional: dejar de observar después de animar
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate-fade-in-up, .animate-scale-in').forEach(el => {
+    observer.observe(el);
+  });
+});
+
   return (
     <>
       
@@ -249,7 +252,7 @@ const Landing = () => {
         </nav>
 
         {/* Hero Section */}
-        <section className="py-5 flex-grow-1 d-flex align-items-center justify-content-center">
+        <section className="py-5 flex-grow-1 d-flex align-items-center justify-content-center fade-in-on-load">
           <div className="container-fluid my-5 px-4">
             <div className="row align-items-center justify-content-center text-center text-md-start">
               {/* Columna de Contenido (Carrusel de Imágenes del Sistema) */}
@@ -305,7 +308,7 @@ const Landing = () => {
               {/* Columna de Texto y CTA */}
              <div className="col-md-6 order-1 order-md-2 ps-md-5">
                 <h1 className="display-4 fw-bold mb-3 text-font animate-fade-in-up is-in-view delay-100"> {/* Animación de entrada */}
-                  <strong className="text-fubol">Fúbol </strong>El Control Total de Tu Torneo.
+                  <strong className="text-fubol text-shadow-title ">Fúbol </strong>El Control Total de Tu Torneo.
                 </h1>
                <p className="color-text1 lead mb-4 text-left animate-fade-in-up is-in-view delay-200"> {/* Animación de entrada */}
                   Lleva el control de tu torneo paso a paso: crea tus encuentros, publica resultados y motiva a tu equipo con estadísticas en tiempo real.
@@ -375,9 +378,9 @@ const Landing = () => {
   
                 {/* Característica 5: Formularios Personalizados (¡Tu Diferenciador!) */}
                 <div className="col hc">
-                  <div className={`card h-100 text-center shadow-lg p-3 animate-fade-in-up ${featuresInView ? 'is-in-view delay-500' : ''}`}>
+                  <div className={`h5 card h-100 text-center shadow-lg p-3 animate-fade-in-up ${featuresInView ? 'is-in-view delay-500' : ''}`}>
                     {/* Aquí iría un <img src="/icons/form.svg" alt="Icono de Formulario" className="w-16 h-16 mb-4" /> */}
-                    <h3 className="h5 fw-semibold mb-2 text-font">Campos y Formularios a Tu Medida</h3>
+                    <h3 className="h5 fw-semibold mb-2 text-font text-shadow-title">Campos y Formularios a Tu Medida</h3>
                     <p className="text-muted color-text2">
                       Crea formularios de inscripción con campos personalizados para capturar todos los datos relevantes de jugadores y equipos.
                     </p>
@@ -391,120 +394,125 @@ const Landing = () => {
   
   
   
+  {/* Pricing Section */}
+          <section id="pricing" className="py-5 ">
+            <div className="container my-5 px-4 text-center">
+                          <h2 className={`h2 fw-bold mb-5 text-font text-fubol animate-fade-in-up ${pricingInView ? 'is-in-view' : ''}`}>Planessssss y Precios</h2>
+
   
-     {/* Pricing Section */}
-         <section  ref={pricingRef} id="pricing" className="py-5 bg-white"> {/* Añadido bg-white para consistencia */}
-          <div className="container my-5 px-4 text-center">
-             <h2 className={`h2 fw-bold mb-5 text-font text-fubol animate-fade-in-up ${pricingInView ? 'is-in-view' : ''}`}>Planes y Precios</h2>
+              {/* Selector de Moneda y Facturación */}
+              <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-4">
+  <div className="btn-group" role="group" aria-label="Selector de Moneda">
+    <button 
+      type="button" 
+      className={`btn btn-outline-success ${selectedCurrency === 'COP' ? 'active' : ''}`} 
+      onClick={() => setSelectedCurrency('COP')}
+    >
+      COP
+    </button>
+    <button 
+      type="button" 
+      className={`btn btn-outline-success ${selectedCurrency === 'USD' ? 'active' : ''}`} 
+      onClick={() => setSelectedCurrency('USD')}
+    >
+      USD
+    </button>
+    <button 
+      type="button" 
+      className={`btn btn-outline-success ${selectedCurrency === 'EUR' ? 'active' : ''}`} 
+      onClick={() => setSelectedCurrency('EUR')}
+    >
+      EUR
+    </button>
+  </div>
 
-            <div className={`d-flex justify-content-center mb-4 animate-fade-in-up ${pricingInView ? 'is-in-view delay-100' : ''}`}>
-              <div className="btn-group me-3" role="group" aria-label="Selector de Moneda">
-                <button
-                  type="button"
-                  className={`btn btn-outline-primary ${selectedCurrency === 'COP' ? 'active' : ''}`}
-                  onClick={() => setSelectedCurrency('COP')}
-                >
-                  COP
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn-outline-primary ${selectedCurrency === 'USD' ? 'active' : ''}`}
-                  onClick={() => setSelectedCurrency('USD')}
-                >
-                  USD
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn-outline-primary ${selectedCurrency === 'EUR' ? 'active' : ''}`}
-                  onClick={() => setSelectedCurrency('EUR')}
-                >
-                  EUR
-                </button>
-              </div>
-              {/* Solo mostrar el switch de facturación anual si el plan actual es el 'multi-torneo' */}
-              {pricingPlans.some(plan => plan.id === 'multi-torneo' && (plan.prices[selectedCurrency].monthly || plan.prices[selectedCurrency].annual)) && (
-                <div className="form-check form-switch d-flex align-items-center text-muted">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="annualBillingSwitch"
-                    checked={isAnnualBilling}
-                    onChange={() => setIsAnnualBilling(!isAnnualBilling)}
-                  />
-                  <label className="form-check-label ms-2" htmlFor="annualBillingSwitch">
-                    Ver Facturación Anual (¡Ahorra!)
-                  </label>
-                </div>
-              )}
-            </div>
+  <div className="custom-switch-container d-flex align-items-center">
+    <input 
+      type="checkbox"
+      id="annualBillingSwitch"
+      checked={isAnnualBilling}
+      onChange={() => setIsAnnualBilling(!isAnnualBilling)}
+      className="custom-switch"
+    />
+    <label className="ms-2" htmlFor="annualBillingSwitch">
+      Ver Facturación Anual (¡Ahorra!)
+    </label>
+  </div>
+</div>
 
-            <div className="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
-              {pricingPlans.map(plan => (
-                <div className="col d-flex" key={plan.id}>
-                  {/* Resaltar el Plan Multi Torneo */}
-                  <div className={`card h-100 pricing-card ${plan.id === 'multi-torneo' ? 'pricing-card-highlight' : ''}`}>
-                    <div className="card-body d-flex flex-column">
-                      <h3 className="h4 fw-semibold mb-3 text-font">{plan.name}</h3>
-                      <p className="text-muted mb-3">{plan.description}</p>
-                      
-                      {/* Lógica condicional para mostrar precios mensuales/anuales o pago único */}
-                      {plan.prices[selectedCurrency].monthly !== undefined || plan.prices[selectedCurrency].annual !== undefined ? (
-                        <p className="display-5 fw-bold mb-1 text-fubol">
-                          {formatPrice(isAnnualBilling ? plan.prices[selectedCurrency].annual : plan.prices[selectedCurrency].monthly, selectedCurrency)}
-                          <span className="fs-6 text-muted ">/{isAnnualBilling ? 'año' : 'mes'}</span>
+  
+              <div className="row row-cols-1 row-cols-md-2 g-4 mt-1">
+                {pricingPlans.map(plan => (
+                  <div className="col d-flex justify-content-center " key={plan.id}>
+                    <div className={`card card-price pricing-card ${plan.id === 'corporativo' ? 'pricing-card-highlight' : ''}`}>
+                      <div className="card-body d-flex flex-column">
+                        <h3 className="h4 fw-semibold mb-3 text-font ">{plan.name}</h3>
+                        <p className="text-muted mb-3 fw-semibold">{plan.description}</p>
+                        <p className="display-5 fw-bold mb-3 ">
+                          <strong className="text-prices"> {formatPrice(isAnnualBilling ? plan.prices[selectedCurrency].annual : plan.prices[selectedCurrency].monthly, selectedCurrency)}</strong>
+                          
+                          <span className="fs-6 text-muted text-price">/{isAnnualBilling ? 'año' : 'mes'}</span>
                         </p>
-                      ) : (
-                        <p className="display-5 fw-bold mb-1 text-fubol">
-                          {formatPrice(plan.prices[selectedCurrency].pagoUnico, selectedCurrency)}
-                          <span className="fs-6 text-muted "> (Pago Único)</span>
-                        </p>
-                      )}
-
-                      {/* Mostrar ahorro solo para planes con facturación anual y si isAnnualBilling es true */}
-                      {isAnnualBilling && plan.prices[selectedCurrency].annual !== undefined && (
-                        <p className="text-success fw-bold mb-3">
-                          ¡Ahorra {formatPrice((plan.prices[selectedCurrency].monthly * 12) - plan.prices[selectedCurrency].annual, selectedCurrency)} al año!
-                        </p>
-                      )}
-                      
-                      <ul className="list-unstyled text-start mb-4 flex-grow-1">
-                        {plan.features.map((feature, index) => (
-                          <li key={index} className="pricing-list-item">
-                           <img src={list_items} width="16" height="16" className="plus-circle"  alt="" />
-                           
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mb-4 text-start">
-                        <p className="fw-semibold mb-2">Servicios Adicionales (Costo Único):</p>
-                        <ul className="list-unstyled">
-                          <li className="pricing-list-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                            </svg>
-                            {plan.additionalServices.design}: {formatPrice(plan.prices[selectedCurrency].design, selectedCurrency)}
-                          </li>
-                          <li className="pricing-list-item">
-                            <svg xmlns="http://www.w3.org/2000s/ssvg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                            </svg>
-                            {plan.additionalServices.forms}: {formatPrice(plan.prices[selectedCurrency].forms, selectedCurrency)}
-                          </li>
+                         {isAnnualBilling && (
+                          <p className=" fw-bold mb-3 "> {/* Estilo para el mensaje de ahorro */}
+                           <strong className="text">¡Ahorra</strong>  <strong className="text-prices">{formatPrice((plan.prices[selectedCurrency].monthly * 12) - plan.prices[selectedCurrency].annual, selectedCurrency)}</strong> 
+                              <strong className="text"> al año!</strong>  
+                          </p>
+                        )}
+                        <h3 className="plan fw-bold mb-5 text-font">Elegir plan</h3>
+                        
+                        <ul className="list-unstyled text-start mb-4 flex-grow-1">
+                          {plan.features.map((feature, index) => (
+                            <li key={index} className="pricing-list-item">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                              </svg>
+                              {feature}
+                            </li>
+                          ))}
                         </ul>
-                      </div>
+  
+                        {/* Servicios Adicionales */}
+                        <div className="mb-4 ">
+                          <p className="fw-semibold mb-2 text">Servicios Adicionales (Costo Único):</p>
+                          <ul className="list-unstyled">
+                            <li className="pricing-list-item">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                              </svg>
+                              {plan.additionalServices.design}: {formatPrice(plan.prices[selectedCurrency].design, selectedCurrency)}
+                            </li>
+                            <li className="pricing-list-item">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                              </svg>
+                              {plan.additionalServices.forms}: {formatPrice(plan.prices[selectedCurrency].forms, selectedCurrency)}
+                            </li>
+                          </ul>
+                        </div>
                       
-                      <a href="#contact" className="btn btn-primary btn-lg mt-auto btn-custom-cta">
-                        {plan.id === 'unico-torneo' ? 'Contratar Plan' : 'Comenzar prueba'}
-                      </a>
+                      <a
+  href="#contact"
+  className="btn btn-success btn-lg mt-auto btn-custom-cta"
+  onClick={() =>
+    window.gtag && window.gtag('event', 'click_comenzar_prueba', {
+      event_category: 'interaccion',
+      event_label: 'Botón Comenzar Prueba',
+    })
+  }
+>
+  Comenzar prueba
+</a>
+
+                       
+                        
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
   
       {/* Contact Section */}
           <section id="contact" ref={contactRef} className="py-5 bg-light"> {/* py-20 */}

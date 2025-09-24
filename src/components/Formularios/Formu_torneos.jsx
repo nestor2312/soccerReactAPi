@@ -181,7 +181,7 @@ const InfoTorneosp = async () => {
                         type="text"
                         className="form-control form-input-admin"
                         id="nombre"
-                        placeholder="Ingrese el nombre del torneo"
+                        placeholder=" Copa tapita, Torneo Relámpago"
                         value={Nombre}
                         required
                         onChange={(e) => setNombre(e.target.value)} />

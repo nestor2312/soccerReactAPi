@@ -34,10 +34,33 @@ const FORM_Matches = () => {
   const [showModal, setShowModal] = useState(false);
   const [error] = useState(null);
   // eslint-disable-next-line no-unused-vars
-  const handleEditClick = (partido) => {
-    setSelectedPartido(partido); // Asignar los datos del partido al estado
-    setShowModal(true); // Mostrar el modal
-  };
+ const handleEditClick = async (partido) => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}partidos/${partido.id}`);
+    const data = response.data;
+
+    const mappedPartido = {
+      id: data.id,
+      torneoId: data.equipo_a?.grupo?.subcategoria?.categoria?.torneo?.id || "",
+      categoriaId: data.equipo_a?.grupo?.subcategoria?.categoria?.id || "",
+      subcategoriaId: data.equipo_a?.grupo?.subcategoria?.id || "",
+      grupoId: data.equipo_a?.grupo?.id || "",
+      equipoA_id: data.equipo_a?.id || "",
+      equipoB_id: data.equipo_b?.id || "",
+      marcador1: data.marcador1,
+      marcador2: data.marcador2,
+      fecha: data.fecha,
+      hora: data.hora,
+    };
+
+    setSelectedPartido(mappedPartido);
+    setShowModal(true);
+  } catch (error) {
+    console.error("Error al cargar datos del partido:", error);
+  }
+};
+
+
 
   const handleCloseModal = () => {
     setShowModal(false);

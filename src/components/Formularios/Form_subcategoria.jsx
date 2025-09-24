@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
 const endpoint = `${API_ENDPOINT}subcategoria`;
-const InfoSubCategorias_endpoint = `${API_ENDPOINT}subcategorias`;
+
 const CategoriaEndpoint = `${API_ENDPOINT}categorias`;
 const TorneoEndpoint = `${API_ENDPOINT}torneos`;
 const InfoSubCategorias_endpoint_paginador = `${API_ENDPOINT}subcategoriasp`;
@@ -97,18 +97,10 @@ const FORM_Subcategoria = () => {
     
     fetchCategorias();
     fetchTorneos();
-    InfoSubcategorias();
+   
   }, []);
   
-  const InfoSubcategorias = async () => {
-    try {
-      const response = await axios.get(InfoSubCategorias_endpoint);
-      setSubcategorias(response.data);
-    } catch (error) {
-      setError("Error al cargar los subcategorias.");
-      console.error("Error al obtener los subcategorias:", error);
-    }
-  };
+  
 
   const InfoSubcategoriasp = async () => {
     try {
@@ -216,7 +208,7 @@ const FORM_Subcategoria = () => {
               type="text"
               className="form-control form-input-admin"
               id="nombre"
-              placeholder="Ingrese el nombre de la subcategoría"
+              placeholder="Aficionado, Sub 17, Juvenil"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
             />

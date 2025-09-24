@@ -83,7 +83,7 @@ const Clasificacion = () => {
                   >
                     <div className="card border-0 shadow">
                       <div className="card-header fondo-card TITULO border-0 text-capitalize">
-                        {datosGrupo.grupo.nombre}
+                        {datosGrupo.grupo.nombre}  
                       </div>
                       <div className="card table-responsive border-0 table-sm">
                         <table className="table-borderless">

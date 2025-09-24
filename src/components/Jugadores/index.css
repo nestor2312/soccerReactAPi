@@ -99,6 +99,9 @@ h2{
     transform: scale(1.05);
     
   }
+  .space{
+   letter-spacing: 2px
+  }
 .color-hover-animado {
   opacity: 0;
   transform: scale(0.95);

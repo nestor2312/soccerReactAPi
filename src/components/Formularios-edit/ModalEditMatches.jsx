@@ -135,37 +135,79 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
       console.log("Errores en el formulario:", errors); // Para depuración
       return; // Detiene la ejecución si hay errores
     }
+    
   
-    const updatedMatch = {
-      id: matchData?.id,
-      equipoA_id,
-      equipoB_id,
-      marcador1,
-      marcador2,
-      fecha,
-      hora,
-    };
+   const updatedPartido = {
+  id: matchData.id,
+  equipoA_id,
+  equipoB_id,
+  marcador1,
+  marcador2,
+  fecha,
+  hora,
+};
+
   
-    onSave(updatedMatch);
+    onSave(updatedPartido);
     onClose();
+
+    
   };
   
-  
 
-  useEffect(() => {
-    if (matchData) {
-      setTorneoId(matchData.torneoId || "");
-      setCategoriaId(matchData.categoriaId || "");
-      setSubcategoriaId(matchData.subcategoriaId || "");
-      setGrupoId(matchData.grupoId || "");
-      setEquipoLocal(matchData.equipoA_id || "");
-      setEquipoVisitante(matchData.equipoB_id || "");
-      setMarcador1(matchData.marcador1 || 0);
-      setMarcador2(matchData.marcador2 || 0);
-      setFecha(matchData.fecha || "");
-      setHora(matchData.hora || "");
-    }
-  }, [matchData]);
+// Al montar el modal, precargar datos del partido
+useEffect(() => {
+  if (matchData) {
+    setFecha(matchData.fecha || "");
+    setHora(matchData.hora || "");
+    setMarcador1(matchData.marcador1 || 0);
+    setMarcador2(matchData.marcador2 || 0);
+
+    setTorneoId(matchData.torneoId || "");
+    setCategoriaId(matchData.categoriaId || "");
+    setSubcategoriaId(matchData.subcategoriaId || "");
+    setGrupoId(matchData.grupoId || "");
+    setEquipoLocal(matchData.equipoA_id || "");
+    setEquipoVisitante(matchData.equipoB_id || "");
+  }
+}, [matchData]);
+
+// Cuando torneos se cargan, fijar el torneo del partido
+useEffect(() => {
+  if (torneos.length > 0 && matchData?.torneoId) {
+    setTorneoId(matchData.torneoId);
+  }
+}, [torneos, matchData]);
+
+// Cuando categorías se cargan, fijar la categoría del partido
+useEffect(() => {
+  if (categorias.length > 0 && matchData?.categoriaId) {
+    setCategoriaId(matchData.categoriaId);
+  }
+}, [categorias, matchData]);
+
+// Cuando subcategorías se cargan, fijar la subcategoría
+useEffect(() => {
+  if (subcategorias.length > 0 && matchData?.subcategoriaId) {
+    setSubcategoriaId(matchData.subcategoriaId);
+  }
+}, [subcategorias, matchData]);
+
+// Cuando grupos se cargan, fijar el grupo
+useEffect(() => {
+  if (grupos.length > 0 && matchData?.grupoId) {
+    setGrupoId(matchData.grupoId);
+  }
+}, [grupos, matchData]);
+
+// Cuando equipos se cargan, fijar equipo A y B
+useEffect(() => {
+  if (equipos.length > 0) {
+    if (matchData?.equipoA_id) setEquipoLocal(matchData.equipoA_id);
+    if (matchData?.equipoB_id) setEquipoVisitante(matchData.equipoB_id);
+  }
+}, [equipos, matchData]);
+
 
   if (!showModal) return null;
 

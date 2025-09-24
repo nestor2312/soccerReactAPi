@@ -183,7 +183,7 @@ const store = async (e) => {
       registrosActuales = eliminatoriasFinal;
       break;
     default:
-      alert("El número de partido no corresponde a una fase válida.");
+      alert("El partido no corresponde a una fase válida.");
       return;
   }
 
@@ -247,7 +247,7 @@ const store = async (e) => {
 };
 
 const abreviarNombre = (nombre) => {
-  if (!nombre) return "por definir";
+  if (!nombre) return "Por Definir";
 
   // Dividir el nombre en palabras
   const palabras = nombre.split(" ");
@@ -391,20 +391,38 @@ const saveEliminatoria = async (updatedEliminatoria) => {
     </div>
 
     {/* Número de Partido */}
-    <div className="col-12 col-md-6 mb-3">
+    {/* <div className="col-12 col-md-6 mb-3">
       <label htmlFor="numPartido">Número de Partido</label>
       <input
         id="numPartido"
         name="numPartido"
         type="number"
         min={1}
-        max={4}
+        max={3}
         placeholder="Número de Partido"
         className="form-control validate light-blue-text"
         onChange={(e) => setNumPartido(e.target.value)}
         value={numPartido}
       />
-    </div>
+    </div> */}
+     <div className="col-12 col-md-6 mb-3">
+  <label htmlFor="numPartido">Ronda</label>
+  <select
+    id="numPartido"
+    name="numPartido"
+    className="form-control validate"
+    onChange={(e) => setNumPartido(e.target.value)}
+    value={numPartido}
+  >
+    <option value="" disabled>
+      Selecciona ronda
+    </option>
+    <option value="1">Cuartos</option>
+    <option value="2">Semifinal</option>
+    <option value="3">Final</option>
+  </select>
+</div>
+
 
     {/* Tipo de Eliminatoria */}
     <div className="col-12 col-md-6 mb-3">
@@ -615,9 +633,9 @@ const saveEliminatoria = async (updatedEliminatoria) => {
       return (
         <tr key={index} className="fondo-card-admin">
           <td className="text-center">
-            {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"} 
-            <span> VS </span>
-            {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_aa ? partido.equipo_aa.nombre : "Por Definir"} 
+            <strong> VS </strong>
+            {partido.equipo_b ? partido.equipo_b.nombre : "Por Definir"}
           </td>
           
           {/* Mostrar marcador de Ida solo si existe */}
@@ -711,9 +729,9 @@ const saveEliminatoria = async (updatedEliminatoria) => {
       return (
         <tr key={index} className="fondo-card-admin">
           <td className="text-center">
-            {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"} 
-            <span> VS </span>
-            {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_aa ? partido.equipo_aa.nombre : "Por Definir"} 
+            <strong> VS </strong>
+            {partido.equipo_b ? partido.equipo_b.nombre : "Por Definir"}
           </td>
           
           {/* Mostrar marcador de Ida solo si existe */}
@@ -804,9 +822,9 @@ const saveEliminatoria = async (updatedEliminatoria) => {
       return (
         <tr key={index} className="fondo-card-admin">
           <td className="text-center">
-            {partido.equipo_aa ? partido.equipo_aa.nombre : "por definir"} 
-            <span> VS </span>
-            {partido.equipo_b ? partido.equipo_b.nombre : "por definir"}
+            {partido.equipo_aa ? partido.equipo_aa.nombre : "Por Definir"} 
+            <strong> VS </strong>
+            {partido.equipo_b ? partido.equipo_b.nombre : "Por Definir"}
           </td>
           
           {/* Mostrar marcador de Ida solo si existe */}
@@ -902,7 +920,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             className="logo" 
           />
           <span className="equipo">
-          {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
+          {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "Por Definir"}
 
           
           </span>
@@ -925,7 +943,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             className="logo" 
           />
           <span className="equipo">
-          {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
+          {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "Por Definir"}
 
           </span>
           <span className="goles">
@@ -999,7 +1017,7 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               className="logo" 
             />
             <span className="equipo">
-            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
+            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "Por Definir"}
             </span>
             <span className="goles">
             {marcador1_ida} {marcador1_vuelta || ""}
@@ -1021,7 +1039,7 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               className="logo" 
             />
             <span className="equipo">
-            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
+            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "Por Definir"}
             </span>
             <span className="goles">
             {marcador2_ida} {marcador2_vuelta || " "}
@@ -1082,7 +1100,7 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               className="logo"
             />
             <span className="equipo">
-            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "por definir"}
+            {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "Por Definir"}
             </span>
             <span className="goles">
             {marcador1_ida} {marcador1_vuelta || " "}
@@ -1106,7 +1124,7 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               className="logo"
             />
             <span className="equipo">
-            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "por definir"}
+            {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "Por Definir"}
             </span>
             <span className="goles">
             {marcador2_ida} {marcador2_vuelta || " "}
@@ -1168,13 +1186,13 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
           </div>
         ) : (
           <div className="jugador">
-            <span className="equipo">Por definir ganador</span>
+            <span className="equipo">Por Definir ganador</span>
           </div>
         );
       })()
     ) : (
       <div className="jugador">
-        <span className="equipo">Por definir ganador</span>
+        <span className="equipo">Por Definir ganador</span>
       </div>
     )}
   </div>

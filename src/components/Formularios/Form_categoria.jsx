@@ -195,7 +195,7 @@ const FORM_Categoria = () => {
               type="text"
               className="form-control form-input-admin"
               id="nombre"
-              placeholder="Ingrese el nombre de la categoría"
+              placeholder="Maculino, Femenino, Mixto"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
             />
@@ -212,7 +212,7 @@ const FORM_Categoria = () => {
               onChange={(e) => setTorneoID(e.target.value)}
             >
               <option value="" disabled>
-                Selecciona un torneo
+                 Selecciona un torneo
               </option>
               {Torneos.map((torneo) => (
                 <option key={torneo.id} value={torneo.id}>
