@@ -5,8 +5,11 @@
 
 
 // http://ec2-3-94-53-43.compute-1.amazonaws.com/
-export const API_ENDPOINT = "http://ec2-3-94-53-43.compute-1.amazonaws.com/api/";
-export const IMAGES_URL = "http://ec2-3-94-53-43.compute-1.amazonaws.com/storage/uploads";
+// export const API_ENDPOINT = "http://ec2-3-94-53-43.compute-1.amazonaws.com/api/";
+// export const IMAGES_URL = "http://ec2-3-94-53-43.compute-1.amazonaws.com/storage/uploads";
+
+export const API_ENDPOINT = "https://soccer-api-back-production.up.railway.app/api/";
+export const IMAGES_URL = "https://soccer-api-back-production.up.railway.app/storage/uploads";
 
 
 
