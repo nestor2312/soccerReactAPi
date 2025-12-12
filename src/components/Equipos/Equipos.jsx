@@ -157,7 +157,7 @@ const Equipos = () => {
                   e.target.classList.add("error-logo");
                 }}
               />
-   <h6 className="text-center team-hover ">{team.nombre}</h6>
+   <h6 className="text-center team-hover l">{team.nombre}</h6>
     </div>
   </div>
         </Link>
