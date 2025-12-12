@@ -13,16 +13,29 @@ const endpoint = `${API_ENDPOINT}`;
 const Images = IMAGES_URL;
 
 const Inicio = () => {
+  const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
   const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
   const [eliminatoriasFinal, setEliminatoriasFinal] = useState([]);
+    const partidosEsperadosOctavos = 8;
   const partidosEsperadosCuartos = 4;
   const partidosEsperadosSemis = 2;
   const partidosEsperadosFinal = 1;
 
+     let partidosOctavos = [...eliminatoriasOctavos];
   let partidosCuartos = [...eliminatoriasCuartos];
   let partidosSemis = [...eliminatoriasSemis];
   let partidoFinal = [...eliminatoriasFinal];
+
+
+ while (partidosOctavos.length < partidosEsperadosOctavos) {
+    partidosOctavos.push({ 
+        equipo_a: null,
+      equipo_b: null,
+      marcador1: null,
+      marcador2: null,
+    });
+  }
 
   while (partidosCuartos.length < partidosEsperadosCuartos) {
     partidosCuartos.push({
@@ -94,6 +107,7 @@ const Inicio = () => {
         );
 
         const eliminatoriasData = response.data; // Almacenar la respuesta en una variable
+         setEliminatoriasOctavos(eliminatoriasData.octavos || []);
         setEliminatoriasCuartos(eliminatoriasData.cuartos || []);
         setEliminatoriasSemis(eliminatoriasData.semis || []);
         setEliminatoriasFinal(eliminatoriasData.final || []);
@@ -366,39 +380,51 @@ const Inicio = () => {
                     </div>
                     <div className="card-body ">
                       <div className="box-team">
-                        {Teams.map((team) => {
-                          const textColor = getTextColor(team.color_hover); 
+                         {Teams.map((team) => {
+                           const textColor = getTextColor(team.color_hover); 
+                       
                            return (
-                          // eslint-disable-next-line react/jsx-key
-                          <div key={team.id} className="team-item" >
-                            <Link
-                              to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`}
-                              className="BoxCard"
-                            >
-                              <div className="inner-card d-flex flex-wrap align-content-end justify-content-center"  style={{
-              '--hover-color': team.color_hover,
-              '--hover-text-color': textColor,
-               transition: 'background 0.4s ease, color 0.4s ease'
-            }}>
-                                <div>
-                                  <img
-                                    src={`${Images}/${team.archivo}`}
-                                    className="img-fluid d-block mx-auto my-2 logomovil"
-                                    alt={team.nombre}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      e.target.src = ErrorLogo;
-                                    }}
-                                  />
-                                  <h6 className="text-center team-hover">
-                                    {team.nombre}
-                                  </h6>
-                                </div>
-                              </div>
-                            </Link>
-                          </div>
+                             <div key={team.id} className="mx-1 team-item">
+
+                               <Link 
+                                 to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} 
+                                 className="team-item2 BoxCard"
+                               >
+                                
+                                  
+                               
+                                 <div className="caja1  mt-3 d-flex flex-wrap align-content-end justify-content-center" style={{
+                                     '--hover-color': team.color_hover,
+                                     '--hover-text-color': textColor,
+                                      transition: 'background 0.4s ease, color 0.4s ease'
+                                   }}>
+                           <div className="fondo">
+                       
+                           <img
+                                       src={`${Images}/${team.archivo}`}
+                                       width="50%"
+                                       className="d-block mx-auto my-2 logomovil"
+                                       alt={team.nombre}
+                                       onError={(e) => {
+                                         e.target.onerror = null;
+                                         e.target.src = ErrorLogo; 
+                                         e.target.classList.add("error-logo");
+                                       }}
+                                     />
+                          <h6 className="text-center team-hover ">{team.nombre}</h6>
+                           </div>
+                         </div>
+                               </Link>
+                       
+                        
+                         
+                       </div>
+                       
+                       
+                          
+                             
                            );
-                        })}
+                         })}
                       </div>
                     </div>
                   </div>
@@ -412,16 +438,191 @@ const Inicio = () => {
                       Eliminatorias
                     </div>
                     <div className="titulos">
-                      <div className="titulo">Cuartos</div>
-                      <div className="titulo">Semis</div>
-                      <div className="titulo">Final</div>
-                      <div className="titulo">Campeón</div>
+                       {eliminatoriasOctavos.length > 0 ? (
+                <div className="titulo">Octavos</div>
+                 ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+ {eliminatoriasCuartos.length > 0 ? (
+              <div className="titulo">Cuartos</div>
+                ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+                  {eliminatoriasSemis.length > 0 ? (
+              <div className="titulo">Semis</div>
+                ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+                    {eliminatoriasFinal.length > 0 ? (
+              <div className="titulo">Final</div>
+               ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+                   {eliminatoriasFinal.length > 0 ? (
+              <div className="titulo">Campeón</div>
+              ) : (
+    <div className="placeholder-conector"></div>
+  )}
                     </div>
                     <div>
                       <div className="esquema">
+
+<div className="jornada_contenedor">
+  {/* Octanos */}
+  {eliminatoriasOctavos.length > 0 ? (
+    partidosOctavos.map((partido, index) => {
+      const marcador1_ida = partido.marcador1_ida;
+      const marcador1_vuelta = partido.marcador1_vuelta;
+      const marcador2_ida = partido.marcador2_ida;
+      const marcador2_vuelta = partido.marcador2_vuelta;
+
+      const marcador1_global = marcador1_vuelta
+        ? marcador1_ida + marcador1_vuelta
+        : marcador1_ida;
+      const marcador2_global = marcador2_vuelta
+        ? marcador2_ida + marcador2_vuelta
+        : marcador2_ida;
+
+      const isLocalWinner =
+        marcador1_global > marcador2_global ||
+        (marcador1_global === marcador2_global &&
+          partido.marcador1_penales > partido.marcador2_penales);
+
+      const isVisitanteWinner =
+        marcador2_global > marcador1_global ||
+        (marcador2_global === marcador1_global &&
+          partido.marcador2_penales > partido.marcador1_penales);
+
+      return (
+        <div className="partido" key={index}>
+          <div className="jornada">
+            {/* Equipo Local */}
+            <div
+              className={`jugador ${
+                isLocalWinner ? "win" : isVisitanteWinner ? "lose" : ""
+              }`}
+            >
+              <img
+                src={`${Images}/${partido.equipo_aa?.archivo}`}
+                alt=""
+                className="logo"
+                 onError={(e) => {
+                                                                        e.target.onerror = null;
+                                                                        e.target.src = ErrorLogo;
+                                                                        e.target.classList.add(
+                                                                          "error-logoElim"
+                                                                        );
+                                                                      }}
+              />
+              <span className="equipo">
+                {partido.equipo_aa
+                  ? abreviarNombre(partido.equipo_aa.nombre)
+                  : "Por Definir"}
+              </span>
+              <span className="goles">
+                {marcador1_ida} {marcador1_vuelta || " "}
+                {marcador1_vuelta && ` (${marcador1_global})`}
+                {partido.marcador1_penales !== undefined &&
+                partido.marcador1_penales !== null
+                  ? ` (${partido.marcador1_penales})`
+                  : ""}
+              </span>
+            </div>
+
+            {/* Equipo Visitante */}
+            <div
+              className={`jugador ${
+                isVisitanteWinner ? "win" : isLocalWinner ? "lose" : ""
+              }`}
+            >
+              <img
+                src={`${Images}/${partido.equipo_b?.archivo}`}
+                alt=""
+                className="logo"
+                 onError={(e) => {
+                                                                        e.target.onerror = null;
+                                                                        e.target.src = ErrorLogo;
+                                                                        e.target.classList.add(
+                                                                          "error-logoElim"
+                                                                        );
+                                                                      }}
+              />
+              <span className="equipo">
+                {partido.equipo_b
+                  ? abreviarNombre(partido.equipo_b.nombre)
+                  : "Por Definir"}
+              </span>
+              <span className="goles">
+                {marcador2_ida} {marcador2_vuelta || ""}
+                {marcador2_vuelta && ` (${marcador2_global})`}
+                {partido.marcador2_penales !== undefined &&
+                partido.marcador2_penales !== null
+                  ? ` (${partido.marcador2_penales})`
+                  : ""}
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    })
+  ) : (
+    <div className="placeholder-fase"></div>
+  )}
+</div>
+
+
+  {/* {{-- Conectores de octavos a cuartos --}} */}
+ {eliminatoriasOctavos.length > 0 ? (
+               <div className={`conectores ${eliminatoriasCuartos.length > 0 ? 'siguiente-registradaa' : ''}`}>
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+                </div>
+                
+ ) : (
+    <div className="placeholder-conector"></div>
+  )}
+
+
                         <div className="jornada_contenedor">
                           {/* Cuartos */}
-                          {partidosCuartos.map((partido, index) => {
+                         {eliminatoriasCuartos.length > 0 ? (
+    partidosCuartos.map((partido, index) => {
                             const marcador1_ida = partido.marcador1_ida;
                             const marcador1_vuelta = partido.marcador1_vuelta;
                             const marcador2_ida = partido.marcador2_ida;
@@ -449,7 +650,8 @@ const Inicio = () => {
 
                             return (
                               <div className="partido" key={index}>
-                                <div className="jornada">
+                                           <div className={`jornada ${eliminatoriasOctavos.length > 0 ? 'jornada2' : ''}`}>
+
                                   {/* Equipo Local */}
                                   <div
                                     className={`jugador ${isLocalWinner ? "win" : isVisitanteWinner ? "lose" : ""}`}
@@ -526,35 +728,54 @@ const Inicio = () => {
                                 </div>
                               </div>
                             );
-                          })}
+    })
+  ) : (
+    <div className="placeholder-fase"></div>
+  )}
                         </div>
 
-                        {/* {{-- Conectores de octavos a cuartos --}} */}
-                        <div className="conectores">
+                         {/* {{-- Conectores de cuartos a semis --}} */}
+                              {eliminatoriasCuartos.length > 0 ? (
+        
+               <div className={`conectores ${eliminatoriasSemis.length > 0 ? 'siguiente-registradaa' : ''}`}>
+
                           <div className="conector">
-                            <div className="conector_doble"></div>
+                            <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+
                             <div className="conector_simple"></div>
                           </div>
 
                           <div className="conector">
-                            <div className="conector_doble"></div>
+                             <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+
                             <div className="conector_simple"></div>
                           </div>
 
                           <div className="conector">
-                            <div className="conector_doble"></div>
+                             <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+
                             <div className="conector_simple"></div>
                           </div>
 
                           <div className="conector">
-                            <div className="conector_doble"></div>
+                            <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+
                             <div className="conector_simple"></div>
                           </div>
                         </div>
+ ) : (
+    <div className="placeholder-conector"></div>
+  )}
+
+
+
+
 
                         {/* {{--semis --}} */}
                         <div className="jornada_contenedor">
-                          {partidosSemis.map((partido, index) => {
+                         {eliminatoriasSemis.length > 0 ? (
+  partidosSemis.map((partido, index) => {
+
                             const marcador1_ida = partido.marcador1_ida;
                             const marcador1_vuelta = partido.marcador1_vuelta;
                             const marcador2_ida = partido.marcador2_ida;
@@ -661,25 +882,54 @@ const Inicio = () => {
                                   </div>
                                 </div>
                               </>
-                            );
-                          })}
+                             );
+  })
+
+  ) : (
+    <div className="placeholder-fase-semis"></div>
+  )}
                         </div>
 
-                        {/* {{-- Conectores de cuartos a semifinal --}} */}
-                        <div className="conectores">
-                          <div className="conector">
-                            <div className="conector_doble conector_doble_semifinal"></div>
-                            <div className="conector_simple"></div>
-                          </div>
+     {/* {{-- Conectores de semis a final --}} */}
+{eliminatoriasSemis.length > 0 ? (
+  <div
+    className={`conectores ${
+      eliminatoriasFinal.length > 0
+        ? "siguiente-registradaa"
+        : eliminatoriasOctavos.length > 0
+        ? "siguiente-registrada"
+        : ""
+    }`}
+  >
+    <div className="conector">
+      {/* <div className="conector_doble conector_doble_semifinal"></div> */}
+       <div  className={`conector_doble ${
+          eliminatoriasOctavos.length > 0
+            ? "conector_doble_semifinal_octavos "
+            : "conector_doble_semifinal "
+        }`}
+      ></div>
+      <div className="conector_simple"></div>
+    </div>
 
-                          <div className="conector">
-                            <div className="conector_doble conector_doble_semifinal"></div>
-                            <div className="conector_simple"></div>
-                          </div>
-                        </div>
+    <div className="conector">
+       <div  className={`conector_doble ${
+          eliminatoriasOctavos.length > 0
+            ? "conector_doble_semifinal_octavos "
+            : "conector_doble_semifinal "
+        }`}
+      ></div>
+      <div className="conector_simple"></div>
+    </div>
+  </div>
+) : (
+  <div className="placeholder-conector"></div>
+)}
+
                         {/* {{-- final --}}     */}
                         <div className="jornada_contenedor">
-                          {partidoFinal.map((partido, index) => {
+                                    {eliminatoriasFinal.length > 0 ? (
+  partidoFinal.map((partido, index) => {
                             const marcador1_ida = partido.marcador1_ida;
                             const marcador1_vuelta = partido.marcador1_vuelta;
                             const marcador2_ida = partido.marcador2_ida;
@@ -790,17 +1040,36 @@ const Inicio = () => {
                                   </div>
                                 </div>
                               </>
-                            );
-                          })}
-                        </div>
+      );
+  })
 
-                        {/* {{-- Conectores de semifinal a ganador --}} */}
-                        <div className="conectores">
-                          <div className="conector">
-                            <div className="conector_doble conector_doble_ganador"></div>
-                            <div className="conector_simple"></div>
-                          </div>
-                        </div>
+  ) : (
+    <div className="placeholder-fase-semis"></div>
+  )}                 </div>
+
+                      {/* {{-- Conectores de final a campeon --}} */}
+{eliminatoriasFinal.length > 0 ? (
+  <div
+    className={`conectores ${
+      eliminatoriasOctavos.length > 0
+        ? "siguiente-registradaa"
+        : "siguiente-registrada"
+    }`}
+  >
+    <div className="conector">
+      <div
+        className={`conector_doble ${
+          eliminatoriasOctavos.length > 0
+            ? "conector_doble_final_octavos"
+            : "conector_doble_final"
+        }`}
+      ></div>
+      <div className="conector_simple"></div>
+    </div>
+  </div>
+) : (
+  <div className="placeholder-conector"></div>
+)}
 
                         {/* Ganador */}
                         <div className="ganador">
@@ -858,7 +1127,7 @@ const Inicio = () => {
                               ) : (
                                 <div className="jugador">
                                   <span className="equipo">
-                                    Por definir ganador
+                                    Por definir 🏆
                                   </span>
                                 </div>
                               );
@@ -866,7 +1135,7 @@ const Inicio = () => {
                           ) : (
                             <div className="jugador">
                               <span className="equipo">
-                                Por definir ganador
+                                Por definir 🏆
                               </span>
                             </div>
                           )}

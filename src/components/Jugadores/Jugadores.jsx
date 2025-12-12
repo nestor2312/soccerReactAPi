@@ -54,7 +54,7 @@ const Jugadores = () => {
     <div className="layout">
       <Menu />
 
-      <main className="main-content">
+      <main className="main-content mx-2" >
         {isLoading ? (
           <div className="loading-container">
             <Cargando />
@@ -68,8 +68,8 @@ const Jugadores = () => {
             {/* BLOQUE TABLA */}
             <div className="col-sm-12 mt-2 hiden ">
               {/* Filtro */}
-              <div className="row mb-4 form-group">
-                <div className="col-md-3 ">
+              <div className="mb-4 form-group">
+                <div className="col-md-3  col-12">
                   <label htmlFor="equipoFiltro">Filtrar por equipo:</label>
                   <select
                     id="equipoFiltro"

@@ -209,7 +209,7 @@ const handlePageChange = (page) => {
             type="text"
             className="form-control form-input-admin"
             id="nombre"
-            placeholder="Grupo A, Grupo 1, Liga apertura"
+            placeholder="Ej: Grupo A, Grupo 1, Liga apertura"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
           />
@@ -262,9 +262,13 @@ const handlePageChange = (page) => {
         </div>
       </form>
 
+
+     
+  
+
       {/* Tabla de grupos */}
-      <div className="table-responsive card my-2">
-        <table className="table">
+     <div className="scroll-container">
+    <table className="table table-striped">
           <thead className="thead-light">
             <tr>
               <th className="text-left">Subcategoría</th>

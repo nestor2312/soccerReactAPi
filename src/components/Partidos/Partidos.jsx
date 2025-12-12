@@ -76,7 +76,7 @@ const Partidos = () => {
           <ErrorCarga />
         </div>
       ) : partidos.length > 0 ? (
-        <main className="main-content">
+        <main className="main-content mx-2">
           <div className="col-sm-12 mt-4 hiden">
             <div className="card border-0 shadow ">
               <div className="card-header fondo-card TITULO border-0">

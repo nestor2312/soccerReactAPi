@@ -84,7 +84,7 @@ const Equipos = () => {
                     Equipos
                   </div>
                   <div className="card-body box-team">
-  {Teams.map((team) => {
+  {/* {Teams.map((team) => {
     const textColor = getTextColor(team.color_hover); 
 
     return (
@@ -94,7 +94,7 @@ const Equipos = () => {
           className="team-item2 BoxCard"
         >
           <div 
-            className="inner-card mt-3 d-flex flex-wrap align-content-end justify-content-center"
+            className="inner-card  mt-3 d-flex flex-wrap align-content-end justify-content-center"
             style={{
               '--hover-color': team.color_hover,
               '--hover-text-color': textColor,
@@ -117,7 +117,58 @@ const Equipos = () => {
             </div>
           </div>
         </Link>
+     
+  
+
+
       </div>
+      
+    );
+  })} */}
+
+  {Teams.map((team) => {
+    const textColor = getTextColor(team.color_hover); 
+
+    return (
+      <div key={team.id} className="mx-1">
+        {/* <h1>modificar</h1> */}
+        <Link 
+          to={`/torneo/categoria/${subcategoriaId}/equipo/${team.id}/jugadores`} 
+          className="team-item2 BoxCard"
+        >
+         
+           
+        
+          <div className="caja1  mt-3 d-flex flex-wrap align-content-end justify-content-center" style={{
+              '--hover-color': team.color_hover,
+              '--hover-text-color': textColor,
+               transition: 'background 0.4s ease, color 0.4s ease'
+            }}>
+    <div className="fondo">
+
+    <img
+                src={`${Images}/${team.archivo}`}
+                width="50%"
+                className="d-block mx-auto my-2 logomovil"
+                alt={team.nombre}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = ErrorLogo; 
+                  e.target.classList.add("error-logo");
+                }}
+              />
+   <h6 className="text-center team-hover ">{team.nombre}</h6>
+    </div>
+  </div>
+        </Link>
+
+ 
+  
+</div>
+
+
+   
+      
     );
   })}
 </div>

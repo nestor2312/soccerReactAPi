@@ -195,7 +195,7 @@ const FORM_Categoria = () => {
               type="text"
               className="form-control form-input-admin"
               id="nombre"
-              placeholder="Maculino, Femenino, Mixto"
+              placeholder="Ej: Maculino, Femenino, Mixto"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
             />
@@ -233,8 +233,8 @@ const FORM_Categoria = () => {
 
       {/* Tabla para mostrar las categorías */}
       <div>
-        <div className="table-responsive card my-2">
-          <table className="table">
+        <div className="scroll-container">
+    <table className="table table-striped">
             <thead className="thead-light">
               <tr>
                 <th className="center">Torneo</th>

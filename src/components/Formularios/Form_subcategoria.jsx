@@ -208,7 +208,7 @@ const FORM_Subcategoria = () => {
               type="text"
               className="form-control form-input-admin"
               id="nombre"
-              placeholder="Aficionado, Sub 17, Juvenil"
+              placeholder="Ej: Aficionado, Sub 17, Juvenil"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
             />
@@ -244,41 +244,39 @@ const FORM_Subcategoria = () => {
         </form>
       </div>
 
-      {/* Tabla para mostrar las subcategorías */}
-
-     
-
 
       <div>  
-        <div className="table-responsive card my-2">   
-          <table className="table ">
+       <div className="scroll-container">
+    <table className="table table-striped">
             <thead className="thead-light">
               <tr>
-                <th className="text-left">Subcategoria</th>
-                <th className="text-left">Categoria</th>
-                <th className="text-left">Torneo</th>
-                <th className="text-left">Acciones</th>
+                <th className="text-left w-auto" >Subcategoria</th>
+                <th className="text-left w-auto">Categoria</th>
+                <th className="text-left w-auto">Torneo</th>
+                <th className="text-center ">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {Subcategorias.map((subcategoria) => (
                 <tr key={subcategoria.id}>
-                  <td className="center">{subcategoria.nombre}</td>
-                  <td className="center">{subcategoria.categoria.nombre}</td>
-                  <td className="center">
+                  <td className="center w-auto">{subcategoria.nombre}</td>
+                  <td className="center w-auto">{subcategoria.categoria.nombre}</td>
+                  <td className="center w-auto">
                     {Torneos.find(torneo => torneo.id === subcategoria.categoria.torneo_id)?.nombre || "No disponible"}
                   </td>
-                  <td className="text-center d-flex justify-content-evenly">
+                  <td className="text-center d-flex justify-content-evenly ">
                   <button
                                 type="button"
-                                className="btn btn-warning"
+                                className="btn btn-warning 
+                                btn-sm "
                                 data-bs-toggle="modal"
                                 data-bs-target="#editModal"
                                 onClick={() => setSelectedSubcategoria(subcategoria)}
                               ><CreateIcon/></button>
                     
                     <button
-                      className="btn btn-danger far fa-trash-alt delete-btn"
+                      className="btn btn-danger  btn-sm far fa-trash-alt delete-btn"
+                      type="button"
                       onClick={() => deleteSubcategoria(subcategoria.id)}
                     > <DeleteOutlineIcon/>
                     

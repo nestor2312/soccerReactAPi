@@ -11,6 +11,11 @@ display:table-cell;
    transition: color 0.1s ease, border-bottom 0.1s ease;
   
 }
+
+.log{
+   color: white!important;
+    font-family: 'Roboto Condensed', sans-serif;
+}
 a:hover{
  
   /* scale: 1.03; */
@@ -173,6 +178,21 @@ margin-right: 8px;
     border-bottom: 1px solid white;
     text-align: center;
     font-size: 1.3rem;
+  }
+
+ .redirect-login {
+   
+    width: 25%;
+    text-align: center;
+    padding: 2px;
+    border-radius: 3px;
+    border: 2px solid gainsboro;
+    transition: transform 0.3s ease;
+  }
+
+  .redirect-login:hover {
+    transform: scale(1.01);
+    background: #dcdcdc28;
   }
 
   .nv {

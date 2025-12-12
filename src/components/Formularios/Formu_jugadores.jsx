@@ -6,150 +6,51 @@ import "./index.css";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
 import ModalJugadores from "../Formularios-edit/ModalEditPlayers";
-import card_red from "../../assets/yellow-card.png";
-import card_yellow from "../../assets/red-card.png";
-
+import card_red from "../../assets/red-card.png";
+import card_yellow from "../../assets/yellow-card.png";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CreateIcon from "@mui/icons-material/Create";
 import Swal from "sweetalert2";
 
 const endpoint = `${API_ENDPOINT}jugador`;
-
 const InfoJugadores_endpoint = `${API_ENDPOINT}jugadores`;
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 
 const FORM_Players = () => {
-  const [Jugadores, setJugadores] = useState([]);
-  const [SubcategoriaID, setSubcategoriaID] = useState("");
+  // ✅ Estados principales
+const [jugadores, setJugadores] = useState([]); // ✅ guarda todos los jugadores
+const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda los filtrados
+
   const [subcategorias, setSubcategorias] = useState([]);
-  const [equipoID, setequipo] = useState("");
-  const [nombre, setnombre] = useState("");
-  const [apellido, setapellido] = useState("");
-  const [edad, setedad] = useState("");
-  const [numero, setnumero] = useState("");
-  const [card_amarilla, setcard_amarilla] = useState("");
-  const [goles, setgoles] = useState("");
-  const [asistencias, setasistencias] = useState("");
-  const [card_roja, setcard_roja] = useState("");
   const [equiposFiltrados, setEquiposFiltrados] = useState([]);
-  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
+  const [SubcategoriaID, setSubcategoriaID] = useState("");
+  const [equipoID, setEquipoID] = useState("");
+
   const [selectedJugador, setSelectedJugador] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [edad, setEdad] = useState("");
+  const [numero, setNumero] = useState("");
+  const [card_amarilla, setCardAmarilla] = useState("");
+  const [card_roja, setCardRoja] = useState("");
+  const [goles, setGoles] = useState("");
+  const [asistencias, setAsistencias] = useState("");
+
+  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
   const [isLoading, setIsLoading] = useState(true);
+  const [error] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-  const [error] = useState(null);
-  const handleEditClick = (jugador) => {
-    setSelectedJugador(jugador);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedJugador(null);
-  };
-
-  const deleteJugadores = async (id) => {
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "No podrás recuperar este jugador después de eliminarlo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await axios.delete(`${endpoint}/${id}`);
-          setJugadores(Jugadores.filter((Jugador) => Jugador.id !== id));
-          setAlerta({ mensaje: "jugador eliminado correctamente!", tipo: "success" });
-          ListaInfojugadores();
-          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-        } catch (error) {
-          console.error("Error al eliminar el jugador", error);
-          setAlerta({ mensaje: "Error al eliminar el jugador!", tipo: "success" });
-          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-          Swal.fire("Error", "No se pudo eliminar el jugador.", "error");
-        }
-      }
-    });
-  };
-
-  const saveJugador = async (updatedJugador) => {
-    try {
-      await axios.put(`${API_ENDPOINT}jugador/${updatedJugador.id}`, updatedJugador);
-      ListaInfojugadores();
-      setAlerta({ mensaje: "jugador actualizado correctamente!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-    } catch (error) {
-      console.error("Error al actualizar jugador:", error);
-      setAlerta({ mensaje: "Error al actualizar jugador!", tipo: "danger" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-    }
-  };
 
   useEffect(() => {
-    const fetchequipos = async () => {
-      try {
-      
-        // No se usa el estado equipos en el formulario, solo se utiliza equiposFiltrados
-      } catch (error) {
-        console.error("Error al obtener los equipos:", error);
-      }
-    };
-    fetchequipos();
-    ListaInfojugadores();
-  }, []);
+    document.title = "Admin - Jugadores";
+  
+  });
 
-  const ListaInfojugadores = async () => {
-    try {
-      const response = await axios.get(`${InfoJugadores_endpoint}?page=${currentPage}`);
-      setJugadores(response.data.data);
-      setLastPage(response.data.last_page);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error al obtener los jugadores:", error);
-    }
-  };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    setIsLoading(true);
-  };
-
-  const store = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("equipo_id", equipoID);
-    formData.append("nombre", nombre);
-    formData.append("apellido", apellido);
-    formData.append("edad", edad);
-    formData.append("numero", numero);
-    formData.append("card_amarilla", card_amarilla);
-    formData.append("card_roja", card_roja);
-    formData.append("goles", goles);
-    formData.append("asistencias", asistencias);
-    try {
-      await axios.post(endpoint, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      ListaInfojugadores();
-      setnombre("");
-      setapellido("");
-      setedad("");
-      setnumero("");
-      setcard_amarilla("");
-      setcard_roja("");
-      setgoles("");
-      setasistencias("");
-      setAlerta({ mensaje: "Jugador registrado correctamente!", tipo: "success" });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
-    } catch (error) {
-      console.error("Error al enviar los datos:", error);
-      setAlerta({ mensaje: "Error al registrar el Jugador.", tipo: "danger" });
-    }
-  };
-
+  // 🔹 Obtener subcategorías
   useEffect(() => {
     const fetchSubcategorias = async () => {
       try {
@@ -162,196 +63,349 @@ const FORM_Players = () => {
     fetchSubcategorias();
   }, []);
 
+  // 🔹 Obtener equipos según subcategoría
   useEffect(() => {
-    const fetchEquiposPorSubcategoria = async () => {
+    const fetchEquipos = async () => {
       if (SubcategoriaID) {
         try {
           const response = await axios.get(`${API_ENDPOINT}subcategoria/${SubcategoriaID}/equipos`);
           setEquiposFiltrados(response.data);
         } catch (error) {
-          console.error("Error al obtener los equipos por subcategoría:", error);
+          console.error("Error al obtener los equipos:", error);
         }
+      } else {
+        setEquiposFiltrados([]);
       }
     };
-    fetchEquiposPorSubcategoria();
+    fetchEquipos();
   }, [SubcategoriaID]);
 
-  useEffect(() => {
-    ListaInfojugadores();
-    setIsLoading(true);
-    document.title = "Admin - Jugadores";
-  }, [currentPage]);
+  // 🔹 Cargar todos los jugadores (paginación base)
+  const fetchJugadores = async (page = 1) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${InfoJugadores_endpoint}?page=${page}`);
+      setJugadores(response.data.data);
+      setJugadoresFiltrados(response.data.data);
+      setLastPage(response.data.last_page);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error al obtener jugadores:", error);
+      setIsLoading(false);
+    }
+  };
+// 🔹 Cargar todos los jugadores solo si NO hay filtros activos
+useEffect(() => {
+  if (SubcategoriaID || equipoID) return; // 🔸 evita sobreescribir filtrados
+  fetchJugadores(currentPage);
+}, [currentPage, SubcategoriaID, equipoID]);
+
+
+
+ // 🔹 Filtrar jugadores (subcategoría + equipo)
+
+useEffect(() => {
+  const fetchJugadoresFiltrados = async () => {
+    try {
+      // 🧩 Si no hay filtros, muestra los jugadores originales con paginación
+      if (!SubcategoriaID && !equipoID) {
+        fetchJugadores(currentPage);
+        return;
+      }
+
+      setIsLoading(true);
+
+      // 🧩 Si hay subcategoría, consulta jugadores de esa subcategoría
+      const response = await axios.get(
+        `${API_ENDPOINT}subcategoria/${SubcategoriaID}/jugadores?page=${currentPage}`
+      );
+
+      let jugadoresData = response.data.data || response.data;
+      let totalPages = response.data.last_page || 1;
+
+      // 🧩 Si además hay equipo, filtra por ese equipo
+      if (equipoID) {
+        const filtrados = jugadoresData.filter(
+          (j) => j.equipo?.id === parseInt(equipoID)
+        );
+        jugadoresData = filtrados.slice(0, 10); // limitar a 10 por página
+        totalPages = 1; // solo una página de resultados filtrados
+      }
+
+      setJugadoresFiltrados(jugadoresData);
+      setLastPage(totalPages);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error al filtrar jugadores:", error);
+      setIsLoading(false);
+    }
+  };
+
+  fetchJugadoresFiltrados();
+}, [SubcategoriaID, equipoID, currentPage]);
+
+
+
+  // 🔹 Paginación
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= lastPage) {
+      setCurrentPage(page);
+    }
+  };
+
+  // 🔹 Eliminar jugador
+  const deleteJugador = async (id) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar este jugador después de eliminarlo.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+          fetchJugadores(currentPage);
+          Swal.fire("Eliminado", "Jugador eliminado correctamente.", "success");
+        } catch (error) {
+          console.error("Error al eliminar jugador:", error);
+          Swal.fire("Error", "No se pudo eliminar el jugador.", "error");
+        }
+      }
+    });
+  };
+
+  // 🔹 Registrar jugador nuevo
+  const store = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("equipo_id", equipoID);
+      formData.append("nombre", nombre);
+      formData.append("apellido", apellido);
+      formData.append("edad", edad);
+      formData.append("numero", numero);
+      formData.append("card_amarilla", card_amarilla);
+      formData.append("card_roja", card_roja);
+      formData.append("goles", goles);
+      formData.append("asistencias", asistencias);
+
+      await axios.post(endpoint, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setAlerta({ mensaje: "Jugador registrado correctamente!", tipo: "success" });
+      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 4000);
+      fetchJugadores(currentPage);
+
+      // Limpiar formulario
+      setNombre("");
+      setApellido("");
+      setEdad("");
+      setNumero("");
+      setCardAmarilla("");
+      setCardRoja("");
+      setGoles("");
+      setAsistencias("");
+    } catch (error) {
+      console.error("Error al registrar jugador:", error);
+      setAlerta({ mensaje: "Error al registrar jugador.", tipo: "danger" });
+    }
+  };
+
+  // 🔹 Modal de edición
+  const handleEditClick = async (jugador) => {
+    try {
+      const response = await axios.get(`${API_ENDPOINT}jugadores/${jugador.id}`);
+      setSelectedJugador(response.data);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error al obtener jugador:", error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedJugador(null);
+  };
+
+  const saveJugador = async (updatedJugador) => {
+    try {
+      await axios.put(`${API_ENDPOINT}jugador/${updatedJugador.id}`, updatedJugador);
+      fetchJugadores(currentPage);
+      setAlerta({ mensaje: "Jugador actualizado correctamente!", tipo: "success" });
+    } catch (error) {
+      console.error("Error al actualizar jugador:", error);
+      setAlerta({ mensaje: "Error al actualizar jugador!", tipo: "danger" });
+    }
+  };
 
   return (
     <>
-    {isLoading ? (
-      <div className="loading-container">
-        <Cargando/>
-      </div>
-    ) :  error ? (
-      <div className="loading-container">
-         <ErrorCarga/>
-      </div>
-    ) : (
-    <div>
-      {alerta.mensaje && (
-        <div className={`alert alert-${alerta.tipo} alert-dismissible fade show`} role="alert">
-          {alerta.mensaje}
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-            onClick={() => setAlerta({ mensaje: "", tipo: "" })}
-          ></button>
-        </div>
-      )}
-
-      <h1 className="col-12 col-md-6 mb-3">Registro de Jugadores</h1>
-      <div>
-        <form className="container mt-2 mb-4" onSubmit={store} autoComplete="off">
-          <div className="row">
-            {/* Subcategoría */}
-            <div className="col-12 col-md-6 mb-3">
-              <label htmlFor="subcategoria_id">Selecciona una Subcategoría:</label>
-              <select
-                required
-                id="subcategoria_id"
-                className="form-control"
-                value={SubcategoriaID}
-                onChange={(e) => setSubcategoriaID(e.target.value)}
-              >
-                <option value="" disabled>
-                  Selecciona una subcategoría
-                </option>
-                {subcategorias.map((subcategoria) => (
-                  <option key={subcategoria.id} value={subcategoria.id}>
-                    {subcategoria.nombre} - {subcategoria.categoria?.torneo?.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Equipo */}
-            <div className="col-12 col-md-6 mb-3">
-              <label htmlFor="equipo_nombre" className="form-label">
-                Selecciona Equipo
-              </label>
-              <select
-                required
-                id="equipo_nombre"
-                className="form-control"
-                onChange={(e) => setequipo(e.target.value)}
-                value={equipoID}
-              >
-                <option value="" disabled>
-                  Selecciona un Equipo
-                </option>
-                {equiposFiltrados.map((equipo) => (
-                  <option key={equipo.id} value={equipo.id}>
-                    {equipo.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Campos de texto */}
-            {[
-             { id: "nombre", label: "Nombre", placeholder: "Juan", state: nombre, setState: setnombre },
-{ id: "apellido", label: "Apellido", placeholder: "Pérez", state: apellido, setState: setapellido },
-{ id: "edad", label: "Edad", placeholder: "22", type: "number", min: 0, max: 90, state: edad, setState: setedad },
-{ id: "numero", label: "Número", placeholder: "10", type: "number", min: 1, max: 99, state: numero, setState: setnumero },
-{ id: "card_amarilla", label: "Tarjetas amarillas", placeholder: "2", type: "number", min: 0, state: card_amarilla, setState: setcard_amarilla },
-{ id: "card_roja", label: "Tarjetas rojas", placeholder: "1", type: "number", min: 0, state: card_roja, setState: setcard_roja },
-{ id: "goles", label: "Goles", placeholder: "5", type: "number", min: 0, state: goles, setState: setgoles },
-{ id: "asistencias", label: "Asistencias", placeholder: "3", type: "number", min: 0, state: asistencias, setState: setasistencias },
-
-            ].map(({ id, label, placeholder, type = "text", min, max, state, setState }) => (
-              <div key={id} className="col-12 col-md-6 mb-3">
-                <label htmlFor={id} className="form-label">
-                  {label}:
-                </label>
-                <input
-                  required
-                  id={id}
-                  placeholder={placeholder}
-                  name={id}
-                  type={type}
-                  min={min}
-                  max={max}
-                  className="form-control"
-                  onChange={(e) => setState(e.target.value)}
-                  value={state}
-                />
+      {isLoading ? (
+        <div className="loading-container"><Cargando /></div>
+      ) : error ? (
+        <div className="loading-container"><ErrorCarga /></div>
+      ) : (
+        <div className="container mt-3">
+           {alerta.mensaje && (
+  <div className={`alert alert-${alerta.tipo} alert-dismissible fade show`} role="alert">
+    {alerta.mensaje}
+    <button
+      type="button"
+      className="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      onClick={() => setAlerta({ mensaje: "", tipo: "" })}
+    ></button>
+  </div>
+)}
+  <h1 className="text-left">Registro de Jugadores</h1>
+          
+          <form onSubmit={store} className="mb-4">
+            <div className="row">
+              {/* Subcategoría */}
+              <div className="col-md-6 mb-3">
+                <label>Subcategoría:</label>
+                <select className="form-control" value={SubcategoriaID} onChange={(e) => setSubcategoriaID(e.target.value)}>
+                  <option value="">Seleccione una subcategoría</option>
+                  {subcategorias.map((sub) => (
+                    <option key={sub.id} value={sub.id}>
+                      {sub.nombre} - {sub.categoria?.torneo?.nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
-            ))}
 
-            <div className="col-12 text-left mt-3">
-              <button className="btn btn-outline-primary " type="submit">
-                Registrar Jugador
-              </button>
+              {/* Equipo */}
+              <div className="col-md-6 mb-3">
+                <label>Equipo:</label>
+                <select className="form-control" value={equipoID} onChange={(e) => setEquipoID(e.target.value)}>
+                  <option value="">Seleccione un equipo</option>
+                  {equiposFiltrados.map((eq) => (
+                    <option key={eq.id} value={eq.id}>{eq.nombre}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Campos del jugador */}
+              {[
+                { id: "nombre", label: "Nombre", placeholder: "Ej: Juan", state: nombre, set: setNombre },
+                { id: "apellido", label: "Apellido", placeholder: "Ej: Pérez", state: apellido, set: setApellido },
+                { id: "edad", label: "Edad", placeholder: "Ej: 22", state: edad, set: setEdad, type: "number" },
+                { id: "numero", label: "Número", placeholder: "Ej: 10", state: numero, set: setNumero, type: "number" },
+                { id: "card_amarilla", label: "Amarillas", placeholder: "Ej: 2", state: card_amarilla, set: setCardAmarilla, type: "number" },
+                { id: "card_roja", label: "Rojas",  placeholder: "Ej: 1", state: card_roja, set: setCardRoja, type: "number" },
+                { id: "goles", label: "Goles", placeholder: "Ej: 5", state: goles, set: setGoles, type: "number" },
+                { id: "asistencias", label: "Asistencias", placeholder: "Ej: 3", state: asistencias, set: setAsistencias, type: "number" },
+              ].map(({ id, label ,placeholder, state, set, type = "text" }) => (
+                <div key={id} className="col-md-3 mb-3">
+                  <label>{label}</label>
+                  <input type={type} className="form-control"  placeholder={placeholder} value={state} onChange={(e) => set(e.target.value)} />
+                </div>
+              ))}
+            </div>
+
+            <button className="btn btn-outline-primary" type="submit">Registrar Jugador</button>
+          </form>
+
+          <h3>Lista de jugadores</h3>
+
+
+          {/* 🔸 Filtros */}
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label>Subcategoría:</label>
+              <select className="form-control" value={SubcategoriaID} onChange={(e) => setSubcategoriaID(e.target.value)}>
+                <option value="">Ver todas las subcategorías</option>
+                {subcategorias.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.nombre} - {sub.categoria?.torneo?.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-md-6">
+              <label>Equipo:</label>
+              <select className="form-control" value={equipoID} onChange={(e) => setEquipoID(e.target.value)}>
+                 <option value="" disabled >Seleccione un equipo</option>
+                <option value="">Ver todos los jugadores</option>
+                {equiposFiltrados.map((eq) => (
+                  <option key={eq.id} value={eq.id}>{eq.nombre}</option>
+                ))}
+              </select>
             </div>
           </div>
-        </form>
-      </div>
 
-      <div className="card my-2 col-12 col-sm-11 col-md-12">
-        <div className="table-responsive responsive_table_admin">
-          <table className="table">
-            <thead className="thead-light">
-              <tr>
-                <th className="text-center">Equipo</th>
-                <th className="text-center">Nombre</th>
-                <th className="text-center">Apellido</th>
-                <th className="text-center">Edad</th>
-                <th className="text-center">Número</th>
-                <th className="text-center card-icon">
-                  Tarjeta{" "}
-                  <span>
-                    <img className="card_red" src={card_red} alt="Tarjeta Roja" />
-                  </span>
-                </th>
-                <th className="text-center card-icon">
-                  Tarjeta{" "}
-                  <span>
-                    <img className="card_red" src={card_yellow} alt="Tarjeta Amarilla" />
-                  </span>
-                </th>
-                <th className="text-center">Goles</th>
-                <th className="text-center">Asistencias</th>
-                <th className="text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Jugadores.map((jugador) => (
-                <tr key={jugador.id}>
-                  <td className="text-center">{jugador.equipo.nombre}</td>
-                  <td className="text-center">{jugador.nombre}</td>
-                  <td className="text-center">{jugador.apellido}</td>
-                  <td className="text-center">{jugador.edad}</td>
-                  <td className="text-center">{jugador.numero}</td>
-                  <td className="text-center">{jugador.card_amarilla}</td>
-                  <td className="text-center">{jugador.card_roja}</td>
-                  <td className="text-center">{jugador.goles}</td>
-                  <td className="text-center">{jugador.asistencias}</td>
-                  <td className="text-center d-flex justify-content-evenly">
-                    <button className="btn btn-warning" onClick={() => handleEditClick(jugador)}>
-                      <CreateIcon />
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteJugadores(jugador.id);
-                      }}
-                    >
-                      <DeleteOutlineIcon />
-                    </button>
-                  </td>
+          <h6 className="text-left">
+   Total jugadores::{" "}
+  <strong>
+    {SubcategoriaID || equipoID
+      ? jugadoresFiltrados.length
+      : jugadores.length}
+  </strong>
+</h6>
+
+          {/* 🔸 Tabla */}
+          <div className="scroll-container">
+    <table className="table table-striped">
+          <thead className="thead-light">
+                <tr>
+                  <th>Equipo</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Edad</th>
+                  <th>Número</th>
+                  <th>Tarjetas <img src={card_yellow} width="20" alt="Amarilla" /></th>
+                  <th>Tarjetas <img src={card_red} width="20" alt="Roja" /></th>
+                  <th>Goles</th>
+                  <th>Asistencias</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {jugadoresFiltrados.length === 0 ? (
+    <tr>
+      <td colSpan="10" className="text-center text-muted">
+        No hay jugadores registrados en el equipo.
+      </td>
+    </tr>
+  ) : (
+    jugadoresFiltrados.map((jug) => (
+      <tr key={jug.id}>
+        <td>{jug.equipo?.nombre}</td>
+        <td>{jug.nombre}</td>
+        <td>{jug.apellido}</td>
+        <td>{jug.edad}</td>
+        <td>{jug.numero}</td>
+        <td>{jug.card_amarilla}</td>
+        <td>{jug.card_roja}</td>
+        <td>{jug.goles}</td>
+        <td>{jug.asistencias}</td>
+        <td className="d-flex justify-content-evenly">
+          <button className="btn btn-warning" onClick={() => handleEditClick(jug)}>
+            <CreateIcon />
+          </button>
+          <button className="btn btn-danger" onClick={() => deleteJugador(jug.id)}>
+            <DeleteOutlineIcon />
+          </button>
+        </td>
+      </tr>
+    ))
+  )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 🔸 Paginación */}
+          <div className="pagination mb-4">
+            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>← Anterior</button>
+            <span>{`Página ${currentPage} de ${lastPage}`}</span>
+            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === lastPage}>Siguiente →</button>
+          </div>
+
           <ModalJugadores
             showModal={showModal}
             onClose={handleCloseModal}
@@ -360,30 +414,8 @@ const FORM_Players = () => {
             onSave={saveJugador}
           />
         </div>
-      </div>
-
-      <div className="col-12 col-sm-12 col-md-12 pagination mb-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          aria-disabled={currentPage === 1}
-        
-        >
-          ← Anterior
-        </button>
-        <span className="mx-2">{`Página ${currentPage} de ${lastPage}`}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === lastPage}
-          aria-disabled={currentPage === lastPage}
-         
-        >
-          Siguiente →
-        </button>
-      </div>
-    </div>
-  )}
-  </>
+      )}
+    </>
   );
 };
 

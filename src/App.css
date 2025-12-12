@@ -32,7 +32,7 @@
 
   }
     .error-logoElim{
-    width: 25px!important;
+    width: 16px!important;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-left: 6px;
@@ -385,14 +385,11 @@ background-clip: text;
         }
 
 input{
-  background-color: #e8f2ec!important;
+  background-color: #f3f3f3!important;
     font-family: 'Roboto Condensed', sans-serif;
 
 }
-input::placeholder{
-  color: #2e9f84!important;
-    font-family: 'Roboto Condensed', sans-serif;
-}
+
 
 
 /* animaciones */

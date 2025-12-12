@@ -79,7 +79,7 @@ input{
     align-items: center;
   }
   .conectores .conector .conector_doble {
-    width: 40px;
+    width: 35px;
     height: 50px;        
     padding: 10px;
     border-top: 2px solid rgb(0, 0, 0);
@@ -95,12 +95,64 @@ input{
   }
   
   .conectores .conector .conector_doble_semifinal {
-    height: 150px;
+    height: 160px;
+      /* background-color: rgb(18, 123, 215); */
   }
+
+    .conectores .conector .conector_doble_final {
+    height: 300px;
+      /* background-color: rgb(255, 0, 157); */
+  }
+
   
+
+    .conector_doble_semifinal_octavos {
+    height: 240px !important;  
+    /* background-color: rgb(146, 131, 207); */
+}
+
+
+ .conector_doble_final_octavos {
+    height: 485px !important;  
+    /* background-color: rgb(85, 79, 110); */
+}
+
   .conectores .conector .conector_doble_ganador {
     height: 300px;
   }
+
+
+
+  .conectores .conector .conector_doble_cuartos {
+    height: 70px;
+    /* background-color: #09537E; */
+  } 
+
+  .conectores .conector .conector_doble_cuartos_octavos {
+    height: 130px;
+    /* background-color: #000406; */
+  } 
+
+    .conectores .conector .conector_doble_octavos {
+    height: 80px;
+     /* background-color: #517e09; */
+  }
+  
+ .siguiente-registrada{
+     height: 600px;
+     /* background-color: red; */
+}
+
+ .siguiente-registrada_semifinal_octavos{
+   
+     /* background-color: rgb(0, 98, 255)!important; */
+}
+
+.siguiente-registradaa{
+     /* height: 600px; */
+      /* background-color: rgb(9, 255, 0); */
+}
+
   
   .equipo {
     font-size: 15px;
@@ -130,10 +182,10 @@ input{
   .partido {
    
     width: 100%;
-    height: 150px;
+    height: 120px;
     display: flex;
     align-items: center;    
-    padding: 10px 0 10px 10px;   
+    padding: 10px 0 10px 0px;   
   }
   
   .partido .jugador {
@@ -149,8 +201,16 @@ input{
    
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 40px;
   }
+
+  .partido .jornada2{
+   
+    display: flex;
+    flex-direction: column;
+    gap: 90px;
+  }
+  
   .partido .jornada:hover{
     scale: 1.02;
   }
@@ -275,10 +335,87 @@ input{
     color: #fff;
   }
 
+.error-logo {
+  width: 30px !important;
+  height: 30px !important;
+  opacity: 0.9;
+}
+.error-logo-info {
+  width: auto !important;
+ 
+  opacity: 0.9;
+}
+  .placeholder-fase-cuartos {
+  min-height: 600px; /* ajusta según tu altura real */
+  visibility: hidden; /* mantiene el espacio sin desaparecer */
+}
 
-  
-  
-  
+
+
+
+
+
+  .placeholder-fase-semis {
+  min-height: 600px; /* ajusta según tu altura real */
+  visibility: hidden; /* mantiene el espacio sin desaparecer */
+}
+.placeholder-conector {
+  height: 10px; /* misma altura exacta del bloque de conectores */
+  visibility: hidden;
+}
+
+
+
+ .scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* width: 100vw !important; ocupa todo el ancho visible */
+  max-width: 93vw !important;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-container table {
+  width: max-content;
+  min-width: 100%;
+}
+
+
+/* Scrollbar horizontal */
+/* scroll */
+.scroll-container::-webkit-scrollbar {
+  height: 8px; 
+}
+
+
+.scroll-container::-webkit-scrollbar-track {
+ 
+  margin-left: 2px;
+  margin-right: 2px;
+
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #09537E; 
+  border-radius: 6px; 
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: #00000098; 
+}
+
+
+
+
+@media (max-width: 768px) {
+  .scroll-container table {
+    min-width: 100%;
+  }
+}
+
+
   /* Media//////////////////////////////////////////////////////////////////////// */
   /* //////////////////////////////////////////////////////////////////////////// */
   
@@ -350,7 +487,7 @@ input{
   text-transform: capitalize;
 }
 
-   
+  
 
 
     .team {
@@ -460,6 +597,7 @@ input{
   
   
   @media (max-width: 720px) {
+   
   
     .TITULO{
       font-size: 17px;
@@ -504,9 +642,7 @@ input{
     }
 
    
-  
 
-    
   
     /* cuadro */
      .conectores .conector .conector_doble {
@@ -551,6 +687,9 @@ input{
   
   /* mi cel */
   @media (max-width: 480px) {
+    label{
+          font-size: 0.86rem;
+    }
     .number{
       font-size: 11px;
     }
@@ -620,6 +759,9 @@ input{
   }
   
   @media (max-width: 375px) {
+    label{
+          font-size: 0.92rem;
+    }
     .TITULO{
       font-size: 20px;
     }
@@ -674,6 +816,9 @@ input{
   }
   
   @media (max-width: 320px) {
+    label{
+          font-size: 0.80rem;
+    }
     .TITULO{
       font-size: 17px;
     }

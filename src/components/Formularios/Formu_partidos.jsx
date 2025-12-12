@@ -335,7 +335,7 @@ const FORM_Matches = () => {
       <form onSubmit={store} className="mt-2 mb-4">
   <div className="row">
     {/* Selecciona un Torneo */}
-    <div className="col-12 col-md-6 mb-3">
+    <div className="col-6 col-md-6 mb-3">
       <label htmlFor="torneo_id">Selecciona un Torneo:</label>
       <select
         id="torneo_id"
@@ -356,7 +356,7 @@ const FORM_Matches = () => {
     </div>
 
     {/* Selecciona Categoría */}
-    <div className="col-12 col-md-6 mb-3">
+    <div className="col-6 col-md-6 mb-3">
       <label htmlFor="categoria_id">Selecciona Categoría:</label>
       <select
         required
@@ -378,7 +378,7 @@ const FORM_Matches = () => {
     </div>
 
     {/* Selecciona Subcategoría */}
-    <div className="col-12 col-md-6 mb-3">
+    <div className="col-6 col-md-6 mb-3">
       <label htmlFor="subcategoria_id">Selecciona Subcategoría:</label>
       <select
         required
@@ -400,7 +400,7 @@ const FORM_Matches = () => {
     </div>
 
     {/* Selecciona Grupo */}
-    <div className="col-12 col-md-6 mb-3">
+    <div className="col-6 col-md-6 mb-3">
       <label htmlFor="grupo_id">Selecciona Grupo:</label>
       <select
         required
@@ -425,9 +425,9 @@ const FORM_Matches = () => {
   {/* Datos de Equipos y Marcadores */}
   <div className="row">
     {/* Equipo Local */}
-    <div className="col-12 col-md-4 mb-3">
+    <div className="col-6 col-md-4 mb-3">
       <label htmlFor="equipo_local" className="form-label">
-        Selecciona Equipo Local
+        Equipo Local
       </label>
       <select
         required
@@ -449,7 +449,7 @@ const FORM_Matches = () => {
     </div>
 
     {/* Marcador Local */}
-    <div className="col-12 col-md-2 mb-3">
+    <div className="col-6 col-md-2 mb-3">
       <label htmlFor="marcador1">Marcador</label>
       <input
         id="marcador1"
@@ -457,7 +457,7 @@ const FORM_Matches = () => {
         type="number"
         min={0}
         max={50}
-        placeholder="Local"
+        placeholder="Local Ej: 5"
         className="form-control"
         onChange={(e) => setMarcador1(e.target.value)}
         value={marcador1}
@@ -465,7 +465,7 @@ const FORM_Matches = () => {
     </div>
 
     {/* Marcador Visitante */}
-    <div className="col-12 col-md-2 mb-3">
+    <div className="col-6 col-md-2 mb-3">
       <label htmlFor="marcador2">Marcador</label>
       <input
         id="marcador2"
@@ -473,17 +473,16 @@ const FORM_Matches = () => {
         type="number"
         min={0}
         max={50}
-        placeholder="Visitante"
+        placeholder="Visitante Ej: 1"
         className="form-control"
         onChange={(e) => setMarcador2(e.target.value)}
         value={marcador2}
       />
     </div>
-
     {/* Equipo Visitante */}
-    <div className="col-12 col-md-4 mb-3">
+    <div className="col-6 col-md-4 mb-3">
       <label htmlFor="equipo_Visitante" className="form-label">
-        Selecciona Equipo Visitante
+        Equipo Visitante
       </label>
       <select
         required
@@ -505,9 +504,10 @@ const FORM_Matches = () => {
     </div>
   </div>
 
+
   {/* Fecha y Hora */}
   <div className="row">
-    <div className="col-12 col-md-2 mb-3">
+    <div className="col-6 col-md-2 mb-3">
       <label htmlFor="fecha">Fecha</label>
       <input
         id="fecha"
@@ -518,7 +518,7 @@ const FORM_Matches = () => {
         value={fecha}
       />
     </div>
-    <div className="col-12 col-md-2 mb-3">
+    <div className="col-6 col-md-2 mb-3">
       <label htmlFor="hora">Hora</label>
       <input
         id="hora"
@@ -545,8 +545,8 @@ const FORM_Matches = () => {
 
       
       {/* Table of Matches */}
-      <div className="table-responsive card my-2">
-        <table className="table ">
+     <div className="scroll-container">
+    <table className="table table-striped">
           <thead className="thead-light">
             <tr>
               <th className="text-center">Fecha</th>
@@ -586,11 +586,11 @@ const FORM_Matches = () => {
                 </td>
                
                 <td className="text-center">
-                  {partido.hora}
+                   {partido.hora?.slice(0, 5)}
                 </td>
                 <td className="text-center d-flex justify-content-evenly">
                   <button
-                    className="btn btn-warning"
+                    className="btn btn-warning btn-sm"
                     onClick={() => handleEditClick(partido)}
                   >
                     <CreateIcon />

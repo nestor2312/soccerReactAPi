@@ -293,7 +293,7 @@ const FORM_Eliminatorias = () => {
         </div>
       </form>
 
-      <h3 className="mt-4">informacion de eliminatorias</h3>
+      <h3 className="mt-4">informacion de eliminatoriasaaa</h3>
 
       <ul className="nav nav-pills">
         <li className="nav-item">

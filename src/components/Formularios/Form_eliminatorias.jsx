@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT, IMAGES_URL } from "../../ConfigAPI";
 import EditPlayOffsModal from "../Formularios-edit/ModalEditPlayOffs";
 import Swal from "sweetalert2";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CreateIcon from '@mui/icons-material/Create';
+import ErrorLogo from "./../../assets/Vector.svg";
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 const endpoint = `${API_ENDPOINT}eliminatoria`;
 const Images = IMAGES_URL;
@@ -25,10 +27,13 @@ const FORM_Eliminatorias = () => {
   const [equiposFiltrados, setEquiposFiltrados] = useState([]);
   const [equipoVisitanteID, setEquipoVisitante] = useState("");
   const [equipoLocalID, setEquipoLocal] = useState("");
-  const [equipos, setEquipos] = useState([]);
+ 
   const [SubcategoriaID, setSubcategoriaID] = useState("");
   const [subcategorias, setSubcategorias] = useState([]);
   const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
+
+ const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
+
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
   const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
   const [eliminatoriasFinal, setEliminatoriasFinal] = useState([]);
@@ -49,12 +54,20 @@ const FORM_Eliminatorias = () => {
   };
   
 
+   const partidosEsperadosOctavos = 8;
   const partidosEsperadosCuartos = 4;
   const partidosEsperadosSemis = 2;
   const partidosEsperadosFinal = 1;
+   let partidosOctavos = [...eliminatoriasOctavos];
   let partidosCuartos = [...eliminatoriasCuartos];
   let partidosSemis = [...eliminatoriasSemis];
   let partidoFinal = [...eliminatoriasFinal];
+
+  while (partidosOctavos.length < partidosEsperadosOctavos) {
+    partidosOctavos.push({ 
+    });
+  }
+
   while (partidosCuartos.length < partidosEsperadosCuartos) {
     partidosCuartos.push({ 
     });
@@ -71,26 +84,39 @@ const FORM_Eliminatorias = () => {
     setSelectedSubcategoria(e.target.value);
   };
 
-  useEffect(() => {
-    const getEliminatorias = async () => {
-      if (selectedSubcategoria) {
-        try {
-          const response = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${selectedSubcategoria}`);   
-          const eliminatoriasData = response.data; // Almacenar la respuesta en una variable
-          setEliminatoriasCuartos(eliminatoriasData.cuartos || []);
-          setEliminatoriasSemis(eliminatoriasData.semis || []);
-          setEliminatoriasFinal(eliminatoriasData.final || []);
-          console.log("Datos de eliminatorias:", eliminatoriasData);
-        } catch (error) {
-          console.error("Error al obtener los partidos:", error);
-          // Mostrar un mensaje de error al usuario
-          // eslint-disable-next-line no-undef
-          setError('Ocurrió un error al cargar los datos');
-        }
-      }
-    };
+
+
+
+const getEliminatorias = useCallback(async () => {
+  if (selectedSubcategoria) {
+    try {
+      const response = await axios.get(`${API_ENDPOINT}eliminatoria/subcategoria/${selectedSubcategoria}`);
+      const eliminatoriasData = response.data;
+      
+      // Asignaciones correctas
+      setEliminatoriasOctavos(eliminatoriasData.octavos || []);
+      setEliminatoriasCuartos(eliminatoriasData.cuartos || []);
+      setEliminatoriasSemis(eliminatoriasData.semis || []);
+      setEliminatoriasFinal(eliminatoriasData.final || []);
+      
+    } catch (error) {
+      console.error("Error al obtener los partidos:", error);
+      // eslint-disable-next-line no-undef
+      setError('Ocurrió un error al cargar los datos');
+    }
+  }
+}, [
+    selectedSubcategoria, 
+    setEliminatoriasOctavos, 
+    setEliminatoriasCuartos, 
+    setEliminatoriasSemis, 
+    setEliminatoriasFinal // Incluye todos los setters como dependencias
+]);
+
+  // El useEffect ahora es simple:
+useEffect(() => {
     getEliminatorias();
-  }, [selectedSubcategoria]);
+}, [getEliminatorias]); // La dependencia es la función misma
     
   useEffect(() => {
     const fetchSubcategorias = async () => {
@@ -150,6 +176,16 @@ const handleMarcadorChange = (e) => {
 const store = async (e) => {
   e.preventDefault();
 
+if (equipoLocalID !== "" && equipoVisitanteID !== "" && equipoLocalID === equipoVisitanteID) {
+      Swal.fire({
+        title: "Los equipos no pueden ser el mismo!",
+        text: "Seleccione 2 equipos diferentes para registrar el partido",
+        icon: "warning",
+        cancelButtonText: "Cancelar",
+      });
+      return;
+    }
+
   // Convertir numPartido a número y verificar que sea válido
   const partidoNumero = parseInt(numPartido, 10);
   if (isNaN(partidoNumero)) {
@@ -157,11 +193,12 @@ const store = async (e) => {
     return;
   }
 
-  // Definir los límites por fase (clave: numPartido)
+  // Definir los límites por fase ( numPartido)
   const limitesRondas = {
-    1: 4, // Cuartos de final
-    2: 2, // Semifinales
-    3: 1, // Final
+     1: 8, // Cuartos de final
+    2: 4, // Cuartos de final
+    3: 2, // Semifinales
+    4: 1, // Final
   };
 
   const maxRegistros = limitesRondas[partidoNumero];
@@ -174,12 +211,15 @@ const store = async (e) => {
   let registrosActuales = [];
   switch (partidoNumero) {
     case 1:
+   registrosActuales = eliminatoriasOctavos;
+   break;
+    case 2:
       registrosActuales = eliminatoriasCuartos;
       break;
-    case 2:
+    case 3:
       registrosActuales = eliminatoriasSemis;
       break;
-    case 3:
+    case 4:
       registrosActuales = eliminatoriasFinal;
       break;
     default:
@@ -228,6 +268,7 @@ const store = async (e) => {
     const updatedEliminatorias = getResponse.data;
 
     // Actualizar estados locales
+     setEliminatoriasOctavos(updatedEliminatorias.octavos || []);
     setEliminatoriasCuartos(updatedEliminatorias.cuartos || []);
     setEliminatoriasSemis(updatedEliminatorias.semis || []);
     setEliminatoriasFinal(updatedEliminatorias.final || []);
@@ -245,6 +286,40 @@ const store = async (e) => {
   
   }
 };
+
+
+  // borrar
+  const deleteEliminatoria = async (id) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar esta Eliminatoria después de eliminarla.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${endpoint}/${id}`);
+         
+          await getEliminatorias();
+
+          setAlerta({ mensaje: "Partido eliminado con éxito!", tipo: "success" });
+        
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+       
+        } catch (error) {
+          console.error("Error al eliminar el Partido", error);
+          setAlerta({ mensaje: "Error al eliminar el Partido.", tipo: "danger" });
+          setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 6000);
+          Swal.fire("Error", "No se pudo eliminar el Partido.", "error");
+        } 
+      }
+    });
+
+
+  };
+
 
 const abreviarNombre = (nombre) => {
   if (!nombre) return "Por Definir";
@@ -278,6 +353,9 @@ const abreviarNombre = (nombre) => {
 
 
 const saveEliminatoria = async (updatedEliminatoria) => {
+
+
+
   console.log('datos enviados al back son : ', updatedEliminatoria);
   try {
     await axios.put(`${API_ENDPOINT}eliminatoria/${updatedEliminatoria.id}`, updatedEliminatoria);
@@ -287,6 +365,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
     const updatedEliminatoriasData = response.data;
 
     // Actualiza el estado con los datos obtenidos de la nueva solicitud
+      setEliminatoriasOctavos(updatedEliminatoriasData.octavos || []);
     setEliminatoriasCuartos(updatedEliminatoriasData.cuartos || []);
     setEliminatoriasSemis(updatedEliminatoriasData.semis || []);
     setEliminatoriasFinal(updatedEliminatoriasData.final || []);
@@ -356,7 +435,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
         onChange={(e) => setEquipoLocal(e.target.value)}
         value={equipoLocalID}
       >
-        <option value="" disabled>
+        <option value="" >
           Selecciona un Equipo
         </option>
         {equiposFiltrados.map((equipo) => (
@@ -379,7 +458,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
         onChange={(e) => setEquipoVisitante(e.target.value)}
         value={equipoVisitanteID}
       >
-        <option value="" disabled>
+        <option value="" >
           Selecciona un Equipo
         </option>
         {equiposFiltrados.map((equipo) => (
@@ -417,9 +496,10 @@ const saveEliminatoria = async (updatedEliminatoria) => {
     <option value="" disabled>
       Selecciona ronda
     </option>
-    <option value="1">Cuartos</option>
-    <option value="2">Semifinal</option>
-    <option value="3">Final</option>
+      <option value="1">Octavos</option>
+    <option value="2">Cuartos</option>
+    <option value="3">Semifinal</option>
+    <option value="4">Final</option>
   </select>
 </div>
 
@@ -456,7 +536,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             type="number"
             min={0}
             max={100}
-            placeholder="Marcador Local (Ida)"
+            placeholder=" Ej: 5"
             value={marcadores.marcador1_ida}
             onChange={handleMarcadorChange}
           />
@@ -469,7 +549,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             type="number"
             min={0}
             max={100}
-            placeholder="Marcador Visitante (Ida)"
+            placeholder="Ej: 4"
             value={marcadores.marcador2_ida}
             onChange={handleMarcadorChange}
           />
@@ -488,7 +568,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             type="number"
             min={0}
             max={20}
-            placeholder="Marcador Local (Vuelta)"
+            placeholder="Ej: 2"
             value={marcadores.marcador1_vuelta}
             onChange={handleMarcadorChange}
           />
@@ -500,8 +580,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             name="marcador2_vuelta"
             type="number"
             min={0}
-            max={100}
-            placeholder="Marcador Visitante (Vuelta)"
+            max={20}
+            placeholder="Ej: 5"
             value={marcadores.marcador2_vuelta}
             onChange={handleMarcadorChange}
           />
@@ -520,7 +600,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             type="number"
             min={0}
             max={20}
-            placeholder="Penales Local"
+            placeholder="Ej: 5"
             value={marcadores.marcador1_penales}
             onChange={handleMarcadorChange}
           />
@@ -532,8 +612,8 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             name="marcador2_penales"
             type="number"
             min={0}
-            max={100}
-            placeholder="Penales Visitante"
+            max={20}
+            placeholder="Ej: 6"
             value={marcadores.marcador2_penales}
             onChange={handleMarcadorChange}
           />
@@ -574,25 +654,132 @@ const saveEliminatoria = async (updatedEliminatoria) => {
   
         <ul className="nav nav-pills mt-4 mb-3">
           <li className="nav-item">
-            <a className="nav-link active" data-bs-toggle="tab" href="#home">
+            <a className="nav-link active" data-bs-toggle="tab" href="#menu1">
+              Octavos
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link " data-bs-toggle="tab" href="#menu2">
               Cuartos
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" data-bs-toggle="tab" href="#menu1">
+           <a className="nav-link " data-bs-toggle="tab" href="#menu3">
               Semis
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" data-bs-toggle="tab" href="#menu2">
+           <a className="nav-link " data-bs-toggle="tab" href="#menu4">
               Final
             </a>
           </li>
         </ul>
 
         <div className="tab-content">
-        <div className="tab-pane container active" id="home">
-        <table className="table">
+
+
+   <div className="tab-pane fade scroll-container" id="menu1">
+          <table className="table">
+  <thead>
+    <tr>
+      <th className="text-center fondo-card-admin">Octavos de final</th>
+      
+      {/* Mostrar el encabezado de "Ida" solo si algún partido tiene marcadorIda (incluyendo 0) */}
+      {partidosOctavos.some(partido => partido.marcador1_ida !== undefined && partido.marcador1_ida !== null) && (
+        <th className="text-center fondo-card-admin">Ida</th>
+      )}
+      
+      {/* Mostrar el encabezado de "Vuelta" solo si algún partido tiene marcadorVuelta (incluyendo 0) */}
+      {partidosOctavos.some(partido => partido.marcador1_vuelta !== undefined && partido.marcador1_vuelta !== null) && (
+        <th className="text-center fondo-card-admin">Vuelta</th>
+      )}
+
+      {/* Mostrar el encabezado de "Global" solo si algún partido tiene marcadorVuelta (incluyendo 0) */}
+      {partidosOctavos.some(partido => partido.marcador1_vuelta !== undefined && partido.marcador1_vuelta !== null) && (
+        <th className="text-center fondo-card-admin">Global</th>
+      )}
+      
+      {/* Mostrar el encabezado de "Penales" solo si algún partido tiene marcadorPenales (incluyendo 0) */}
+      {partidosOctavos.some(partido => partido.marcador1_penales !== undefined && partido.marcador1_penales !== null) && (
+        <th className="text-center fondo-card-admin">Penales</th>
+      )}
+      
+      <th className="text-center fondo-card-admin">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {partidosOctavos.map((partido, index) => {
+      // Calcular marcador global solo si hay marcador de vuelta
+      const marcador1_global = (partido.marcador1_vuelta !== undefined && partido.marcador1_vuelta !== null)
+        ? partido.marcador1_ida + partido.marcador1_vuelta
+        : null;
+      const marcador2_global = (partido.marcador2_vuelta !== undefined && partido.marcador2_vuelta !== null)
+        ? partido.marcador2_ida + partido.marcador2_vuelta
+        : null;
+
+      return (
+        <tr key={index} className="fondo-card-admin">
+          <td className="text-center">
+            {partido.equipo_aa ? partido.equipo_aa.nombre : "Por Definir"} 
+            <strong> VS </strong>
+            {partido.equipo_b ? partido.equipo_b.nombre : "Por Definir"}
+          </td>
+          
+          {/* Mostrar marcador de Ida solo si existe */}
+          {partidosOctavos.some(p => p.marcador1_ida !== undefined && p.marcador1_ida !== null) && (
+            <td className="text-center">
+              {partido.marcador1_ida ?? ""} - {partido.marcador2_ida ?? ""}
+            </td>
+          )}
+          
+          {/* Mostrar marcador de Vuelta solo si existe */}
+          {partidosOctavos.some(p => p.marcador1_vuelta !== undefined && p.marcador1_vuelta !== null) && (
+            <td className="text-center">
+              {partido.marcador1_vuelta ?? ""} - {partido.marcador2_vuelta ?? ""}
+            </td>
+          )}
+          
+          {/* Mostrar marcador Global solo si marcador de vuelta existe */}
+          {partidosOctavos.some(p => p.marcador1_vuelta !== undefined && p.marcador1_vuelta !== null) && (
+            <td className="text-center">
+              {marcador1_global !== null ? marcador1_global : ""} - {marcador2_global !== null ? marcador2_global : ""}
+            </td>
+          )}
+          
+          {/* Mostrar marcador de Penales solo si existe */}
+          {partidosOctavos.some(p => p.marcador1_penales !== undefined && p.marcador1_penales !== null) && (
+            <td className="text-center">
+              {partido.marcador1_penales ?? ""} - {partido.marcador2_penales ?? ""}
+            </td>
+          )}
+          
+          <td className="text-center  d-flex justify-content-evenly">
+            <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
+ <button
+                                  className="btn btn-danger ml-4 far fa-trash-alt delete-btn"
+                                  type="button"
+                                  onClick={() => deleteEliminatoria(partido.id)}
+                                > <DeleteOutlineIcon/>
+                                
+                                </button>
+          </td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
+<EditPlayOffsModal
+      showModal={showModal}
+      onClose={handleCloseModal}
+      PlayOffsData={selectedPartido} // Pasa los datos del partido al modal
+      API_ENDPOINT={API_ENDPOINT} // Pasa el endpoint API
+      onSave={saveEliminatoria} // Función para guardar el partido
+    />
+          </div>
+
+
+        <div className="tab-pane  active scroll-container" id="menu2">
+        <table className="table rounded border ">
   <thead>
     <tr>
       <th className="text-center fondo-card-admin">Cuartos de final</th>
@@ -620,7 +807,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
       <th className="text-center fondo-card-admin">Acciones</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody className="shadow-sm ">
     {partidosCuartos.map((partido, index) => {
       // Calcular marcador global solo si hay marcador de vuelta
       const marcador1_global = (partido.marcador1_vuelta !== undefined && partido.marcador1_vuelta !== null)
@@ -632,7 +819,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
 
       return (
         <tr key={index} className="fondo-card-admin">
-          <td className="text-center">
+          <td className="text-center ">
             {partido.equipo_aa ? partido.equipo_aa.nombre : "Por Definir"} 
             <strong> VS </strong>
             {partido.equipo_b ? partido.equipo_b.nombre : "Por Definir"}
@@ -666,9 +853,15 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             </td>
           )}
           
-          <td className="text-center">
+          <td className="text-center  d-flex justify-content-evenly">
             <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
-
+ <button
+                                  className="btn btn-danger ml-4 far fa-trash-alt delete-btn"
+                                  type="button"
+                                  onClick={() => deleteEliminatoria(partido.id)}
+                                > <DeleteOutlineIcon/>
+                                
+                                </button>
           </td>
         </tr>
       );
@@ -687,7 +880,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
 </div>
 
 
-          <div className="tab-pane container fade" id="menu1">
+          <div className="tab-pane fade scroll-container" id="menu3">
           <table className="table">
   <thead>
     <tr>
@@ -762,9 +955,15 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             </td>
           )}
           
-          <td className="text-center">
+          <td className="text-center  d-flex justify-content-evenly">
             <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
-
+ <button
+                                  className="btn btn-danger ml-4 far fa-trash-alt delete-btn"
+                                  type="button"
+                                  onClick={() => deleteEliminatoria(partido.id)}
+                                > <DeleteOutlineIcon/>
+                                
+                                </button>
           </td>
         </tr>
       );
@@ -780,7 +979,7 @@ const saveEliminatoria = async (updatedEliminatoria) => {
     />
           </div>
           
-          <div className="tab-pane container fade" id="menu2">
+          <div className="tab-pane fade scroll-container" id="menu4">
           <table className="table">
   <thead>
     <tr>
@@ -855,8 +1054,15 @@ const saveEliminatoria = async (updatedEliminatoria) => {
             </td>
           )}
           
-          <td className="text-center">
+          <td className="text-center  d-flex justify-content-evenly">
             <button className="btn btn-warning" onClick={() => handleEditClick(partido)}>  <CreateIcon/></button>
+            <button
+                                  className="btn btn-danger ml-4 far fa-trash-alt delete-btn"
+                                  type="button"
+                                  onClick={() => deleteEliminatoria(partido.id)}
+                                > <DeleteOutlineIcon/>
+                                
+                                </button>
 
           </td>
         </tr>
@@ -882,112 +1088,335 @@ const saveEliminatoria = async (updatedEliminatoria) => {
               Eliminatorias
             </div>
             <div className="titulos">
+              {eliminatoriasOctavos.length > 0 ? (
+                <div className="titulo">Octavos</div>
+                 ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+ {eliminatoriasCuartos.length > 0 ? (
               <div className="titulo">Cuartos</div>
+                ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+                  {eliminatoriasSemis.length > 0 ? (
               <div className="titulo">Semis</div>
+                ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+                    {eliminatoriasFinal.length > 0 ? (
               <div className="titulo">Final</div>
+               ) : ( // Si no hay partidos registrados en cuartos, no se renderiza nada
+                 null 
+                  )}
+                   {eliminatoriasFinal.length > 0 ? (
               <div className="titulo">Campeón</div>
+              ) : (
+    <div className="placeholder-conector"></div>
+  )}
             </div>
             <div>
               <div className="esquema">
-                <div className="jornada_contenedor">
-                {/* Cuartos */}
-                {partidosCuartos.map((partido, index) => {
-  const marcador1_ida = partido.marcador1_ida;
-  const marcador1_vuelta = partido.marcador1_vuelta;
-  const marcador2_ida = partido.marcador2_ida;
-  const marcador2_vuelta = partido.marcador2_vuelta;
 
-  // Calcular los marcadores globales si hay marcador de vuelta
-  const marcador1_global = marcador1_vuelta ? marcador1_ida + marcador1_vuelta : marcador1_ida;
-  const marcador2_global = marcador2_vuelta ? marcador2_ida + marcador2_vuelta : marcador2_ida;
 
-  // Condiciones para determinar el ganador
-  const isLocalWinner = marcador1_global > marcador2_global || 
-                        (marcador1_global === marcador2_global && partido.marcador1_penales > partido.marcador2_penales);
-  const isVisitanteWinner = marcador2_global > marcador1_global || 
-                            (marcador2_global === marcador1_global && partido.marcador2_penales > partido.marcador1_penales);
 
-  return (
-    <div className="partido" key={index}>
-      <div className="jornada">
-        {/* Equipo Local */}
-        <div
-          className={`jugador ${isLocalWinner ? "win" : isVisitanteWinner ? "lose" : ""}`}
-        >
-          <img
-            src={`${Images}/${partido.equipo_aa?.archivo}`}
-            alt=""
-            className="logo" 
-          />
-          <span className="equipo">
-          {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "Por Definir"}
 
-          
-          </span>
-          <span className="goles">
-            {marcador1_ida} {marcador1_vuelta || " "}
-            {/* Goles Globales solo si hay marcador de vuelta */}
-            {marcador1_vuelta && ` (${marcador1_global})`}
-            {/* Penales solo si están definidos */}
-            {partido.marcador1_penales !== undefined && partido.marcador1_penales !== null ? `  (${partido.marcador1_penales})` : ""}
-          </span>
+  <div className="jornada_contenedor">
+  {/* Octanos */}
+  {eliminatoriasOctavos.length > 0 ? (
+    partidosOctavos.map((partido, index) => {
+      const marcador1_ida = partido.marcador1_ida;
+      const marcador1_vuelta = partido.marcador1_vuelta;
+      const marcador2_ida = partido.marcador2_ida;
+      const marcador2_vuelta = partido.marcador2_vuelta;
+
+      const marcador1_global = marcador1_vuelta
+        ? marcador1_ida + marcador1_vuelta
+        : marcador1_ida;
+      const marcador2_global = marcador2_vuelta
+        ? marcador2_ida + marcador2_vuelta
+        : marcador2_ida;
+
+      const isLocalWinner =
+        marcador1_global > marcador2_global ||
+        (marcador1_global === marcador2_global &&
+          partido.marcador1_penales > partido.marcador2_penales);
+
+      const isVisitanteWinner =
+        marcador2_global > marcador1_global ||
+        (marcador2_global === marcador1_global &&
+          partido.marcador2_penales > partido.marcador1_penales);
+
+      return (
+        <div className="partido" key={index}>
+          <div className="jornada">
+            {/* Equipo Local */}
+            <div
+              className={`jugador ${
+                isLocalWinner ? "win" : isVisitanteWinner ? "lose" : ""
+              }`}
+            >
+              <img
+                src={`${Images}/${partido.equipo_aa?.archivo}`}
+                alt=""
+                className="logo"
+                onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
+              />
+              <span className="equipo">
+                {partido.equipo_aa
+                  ? abreviarNombre(partido.equipo_aa.nombre)
+                  : "Por Definir"}
+              </span>
+              <span className="goles">
+                {marcador1_ida} {marcador1_vuelta || " "}
+                {marcador1_vuelta && ` (${marcador1_global})`}
+                {partido.marcador1_penales !== undefined &&
+                partido.marcador1_penales !== null
+                  ? ` (${partido.marcador1_penales})`
+                  : ""}
+              </span>
+            </div>
+
+            {/* Equipo Visitante */}
+            <div
+              className={`jugador ${
+                isVisitanteWinner ? "win" : isLocalWinner ? "lose" : ""
+              }`}
+            >
+              <img
+                src={`${Images}/${partido.equipo_b?.archivo}`}
+                alt=""
+                className="logo"
+                 onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
+             
+              />
+              <span className="equipo">
+                {partido.equipo_b
+                  ? abreviarNombre(partido.equipo_b.nombre)
+                  : "Por Definir"}
+              </span>
+              <span className="goles">
+                {marcador2_ida} {marcador2_vuelta || ""}
+                {marcador2_vuelta && ` (${marcador2_global})`}
+                {partido.marcador2_penales !== undefined &&
+                partido.marcador2_penales !== null
+                  ? ` (${partido.marcador2_penales})`
+                  : ""}
+              </span>
+            </div>
+          </div>
         </div>
+      );
+    })
+  ) : (
+    <div className="placeholder-fase"></div>
+  )}
+</div>
 
-        {/* Equipo Visitante */}
-        <div
-          className={`jugador ${isVisitanteWinner ? "win" : isLocalWinner ? "lose" : ""}`}
-        >
-          <img
-            src={`${Images}/${partido.equipo_b?.archivo}`}
-            alt=""
-            className="logo" 
-          />
-          <span className="equipo">
-          {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "Por Definir"}
 
-          </span>
-          <span className="goles">
-            {marcador2_ida} {marcador2_vuelta || ""}
-            {/* Goles Globales solo si hay marcador de vuelta */}
-            {marcador2_vuelta && ` (${marcador2_global})`}
-            {/* Penales solo si están definidos */}
-            {partido.marcador2_penales !== undefined && partido.marcador2_penales !== null ? `(${partido.marcador2_penales})` : ""}
-          </span>
+  {/* {{-- Conectores de octavos a cuartos --}} */}
+ {eliminatoriasOctavos.length > 0 ? (
+               <div className={`conectores ${eliminatoriasCuartos.length > 0 ? 'siguiente-registradaa' : ''}`}>
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                   <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                  <div className="conector">
+                    <div className="conector_doble conector_doble_octavos"></div>
+                    <div className="conector_simple"></div>
+                  </div>
+                </div>
+                
+ ) : (
+    <div className="placeholder-conector"></div>
+  )}
+
+
+
+
+               <div className="jornada_contenedor">
+  {/* Cuartos */}
+  {eliminatoriasCuartos.length > 0 ? (
+    partidosCuartos.map((partido, index) => {
+      const marcador1_ida = partido.marcador1_ida;
+      const marcador1_vuelta = partido.marcador1_vuelta;
+      const marcador2_ida = partido.marcador2_ida;
+      const marcador2_vuelta = partido.marcador2_vuelta;
+
+      const marcador1_global = marcador1_vuelta
+        ? marcador1_ida + marcador1_vuelta
+        : marcador1_ida;
+      const marcador2_global = marcador2_vuelta
+        ? marcador2_ida + marcador2_vuelta
+        : marcador2_ida;
+
+      const isLocalWinner =
+        marcador1_global > marcador2_global ||
+        (marcador1_global === marcador2_global &&
+          partido.marcador1_penales > partido.marcador2_penales);
+
+      const isVisitanteWinner =
+        marcador2_global > marcador1_global ||
+        (marcador2_global === marcador1_global &&
+          partido.marcador2_penales > partido.marcador1_penales);
+
+      return (
+        <div className="partido" key={index}>
+          {/* <div className="jornada"> */}
+            <div className={`jornada ${eliminatoriasOctavos.length > 0 ? 'jornada2' : ''}`}>
+
+            {/* Equipo Local */}
+            <div
+              className={`jugador ${
+                isLocalWinner ? "win" : isVisitanteWinner ? "lose" : ""
+              }`}
+            >
+              <img
+                src={`${Images}/${partido.equipo_aa?.archivo}`}
+                alt=""
+                className="logo"
+                 onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
+              />
+              <span className="equipo">
+                {partido.equipo_aa
+                  ? abreviarNombre(partido.equipo_aa.nombre)
+                  : "Por Definir"}
+              </span>
+              <span className="goles">
+                {marcador1_ida} {marcador1_vuelta || " "}
+                {marcador1_vuelta && ` (${marcador1_global})`}
+                {partido.marcador1_penales !== undefined &&
+                partido.marcador1_penales !== null
+                  ? ` (${partido.marcador1_penales})`
+                  : ""}
+              </span>
+            </div>
+
+            {/* Equipo Visitante */}
+            <div
+              className={`jugador ${
+                isVisitanteWinner ? "win" : isLocalWinner ? "lose" : ""
+              }`}
+            >
+              <img
+                src={`${Images}/${partido.equipo_b?.archivo}`}
+                alt=""
+                className="logo"
+                 onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
+              />
+              <span className="equipo">
+                {partido.equipo_b
+                  ? abreviarNombre(partido.equipo_b.nombre)
+                  : "Por Definir"}
+              </span>
+              <span className="goles">
+                {marcador2_ida} {marcador2_vuelta || ""}
+                {marcador2_vuelta && ` (${marcador2_global})`}
+                {partido.marcador2_penales !== undefined &&
+                partido.marcador2_penales !== null
+                  ? ` (${partido.marcador2_penales})`
+                  : ""}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  );
-})}
+      );
+    })
+  ) : (
+    <div className="placeholder-fase"></div>
+  )}
+</div>
 
 
+                {/* {{-- Conectores de cuartos a semis --}} */}
+       {eliminatoriasCuartos.length > 0 ? (
+        
+               <div className={`conectores ${eliminatoriasSemis.length > 0 ? 'siguiente-registradaa' : ''}`}>
+                  <div className="conector">
+                    <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                  <div className="conector">
+                    <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+                    <div className="conector_simple"></div>
+                  </div>
+                  <div className="conector">
+                    <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+                    <div className="conector_simple"></div>
+                  </div>
+
+                  <div className="conector">
+                    <div className={`conector_doble conector_doble_cuartos ${eliminatoriasOctavos.length > 0 ? 'conector_doble_cuartos_octavos' : ''}`}></div>
+                    <div className="conector_simple"></div>
+                  </div>
                 </div>
+                
+ ) : (
+    <div className="placeholder-conector"></div>
+  )}
 
-                {/* {{-- Conectores de octavos a cuartos --}} */}
-                <div className="conectores">
-                  <div className="conector">
-                    <div className="conector_doble"></div>
-                    <div className="conector_simple"></div>
-                  </div>
 
-                  <div className="conector">
-                    <div className="conector_doble"></div>
-                    <div className="conector_simple"></div>
-                  </div>
-
-                  <div className="conector">
-                    <div className="conector_doble"></div>
-                    <div className="conector_simple"></div>
-                  </div>
-
-                  <div className="conector">
-                    <div className="conector_doble"></div>
-                    <div className="conector_simple"></div>
-                  </div>
-                </div>
 
                 {/* {{--semis --}} */}
                 <div className="jornada_contenedor">
-  {partidosSemis.map((partido, index) => {
+
+   
+  {eliminatoriasSemis.length > 0 ? (
+  partidosSemis.map((partido, index) => {
 
 
 const marcador1_ida = partido.marcador1_ida;
@@ -1015,6 +1444,13 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               src={`${Images}/${partido.equipo_aa?.archivo}`}
               alt=""
               className="logo" 
+               onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
             />
             <span className="equipo">
             {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "Por Definir"}
@@ -1037,6 +1473,13 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               src={`${Images}/${partido.equipo_b?.archivo}`}
               alt=""
               className="logo" 
+               onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
             />
             <span className="equipo">
             {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "Por Definir"}
@@ -1052,25 +1495,56 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
         </div>
       </>
     );
-  })}
+  })
+
+  ) : (
+    <div className="placeholder-fase-semis"></div>
+  )}
 </div>
 
 
-                {/* {{-- Conectores de cuartos a semifinal --}} */}
-                <div className="conectores">
-                  <div className="conector">
-                    <div className="conector_doble conector_doble_semifinal"></div>
-                    <div className="conector_simple"></div>
-                  </div>
 
-                  <div className="conector">
-                    <div className="conector_doble conector_doble_semifinal"></div>
-                    <div className="conector_simple"></div>
-                  </div>
-                </div>
+                {/* {{-- Conectores de semis a final --}} */}
+{eliminatoriasSemis.length > 0 ? (
+  <div
+    className={`conectores ${
+      eliminatoriasFinal.length > 0
+        ? "siguiente-registradaa"
+        : eliminatoriasOctavos.length > 0
+        ? "siguiente-registrada"
+        : ""
+    }`}
+  >
+    <div className="conector">
+      {/* <div className="conector_doble conector_doble_semifinal"></div> */}
+       <div  className={`conector_doble ${
+          eliminatoriasOctavos.length > 0
+            ? "conector_doble_semifinal_octavos "
+            : "conector_doble_semifinal "
+        }`}
+      ></div>
+      <div className="conector_simple"></div>
+    </div>
+
+    <div className="conector">
+       <div  className={`conector_doble ${
+          eliminatoriasOctavos.length > 0
+            ? "conector_doble_semifinal_octavos "
+            : "conector_doble_semifinal "
+        }`}
+      ></div>
+      <div className="conector_simple"></div>
+    </div>
+  </div>
+) : (
+  <div className="placeholder-conector"></div>
+)}
+
+
                 {/* {{-- final --}}     */}
                 <div className="jornada_contenedor">
-  {partidoFinal.map((partido, index) => {
+                  {eliminatoriasFinal.length > 0 ? (
+  partidoFinal.map((partido, index) => {
      const marcador1_ida = partido.marcador1_ida;
      const marcador1_vuelta = partido.marcador1_vuelta;
      const marcador2_ida = partido.marcador2_ida;
@@ -1098,6 +1572,13 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               src={`${Images}/${partido.equipo_aa?.archivo}`}
               alt=""
               className="logo"
+               onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
             />
             <span className="equipo">
             {partido.equipo_aa ? abreviarNombre(partido.equipo_aa.nombre) : "Por Definir"}
@@ -1122,6 +1603,13 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
               src={`${Images}/${partido.equipo_b?.archivo}`}
               alt=""
               className="logo"
+               onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = ErrorLogo;
+                                                        e.target.classList.add(
+                                                          "error-logoElim"
+                                                        );
+                                                      }}
             />
             <span className="equipo">
             {partido.equipo_b ? abreviarNombre(partido.equipo_b.nombre) : "Por Definir"}
@@ -1136,21 +1624,44 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
           </div>
         </div>
       </>
-    );
-  })}
+   );
+  })
+
+  ) : (
+    <div className="placeholder-fase-semis"></div>
+  )}
 </div>
 
 
-                {/* {{-- Conectores de semifinal a ganador --}} */}
-                <div className="conectores">
-                  <div className="conector">
-                    <div className="conector_doble conector_doble_ganador"></div>
-                    <div className="conector_simple"></div>
-                  </div>
-                </div>
+                {/* {{-- Conectores de final a campeon --}} */}
+{eliminatoriasFinal.length > 0 ? (
+  <div
+    className={`conectores ${
+      eliminatoriasOctavos.length > 0
+        ? "siguiente-registradaa"
+        : "siguiente-registrada"
+    }`}
+  >
+    <div className="conector">
+      <div
+        className={`conector_doble ${
+          eliminatoriasOctavos.length > 0
+            ? "conector_doble_final_octavos"
+            : "conector_doble_final"
+        }`}
+      ></div>
+      <div className="conector_simple"></div>
+    </div>
+  </div>
+) : (
+  <div className="placeholder-conector"></div>
+)}
+
+
 
                 {/* Ganador */}
                 <div className="ganador_esquema">
+               {eliminatoriasFinal.length > 0 ? (    
   <div className="ganador">
     <div className="conector_doble"></div>
     <div className="conector_simple"></div>
@@ -1196,6 +1707,9 @@ const isVisitanteWinner = marcador2_global > marcador1_global ||
       </div>
     )}
   </div>
+ ) : (
+    <div className="placeholder-conector"></div>
+  )}
 </div>
 
               </div>

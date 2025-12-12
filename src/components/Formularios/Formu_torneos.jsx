@@ -76,7 +76,9 @@ const FORM_Torneos = () => {
       }
     
     };
-
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
 
   const deleteTorneo = async (id) => {
     Swal.fire({
@@ -154,7 +156,7 @@ const InfoTorneosp = async () => {
       <div className="loading-container">
          <ErrorCarga/>
       </div>
-    ) : Torneos.length > 0 ? (
+    ) : (
 
       <><div>
               {alerta.mensaje && (
@@ -181,7 +183,7 @@ const InfoTorneosp = async () => {
                         type="text"
                         className="form-control form-input-admin"
                         id="nombre"
-                        placeholder=" Copa tapita, Torneo Relámpago"
+                        placeholder="Ej: Copa tapita, Torneo Relámpago"
                         value={Nombre}
                         required
                         onChange={(e) => setNombre(e.target.value)} />
@@ -196,18 +198,20 @@ const InfoTorneosp = async () => {
                   </form>
                 </div>
 
-                {/* Tabla para mostrar los torneos */}
-                <div>
-                  <div className="table-responsive card my-2">
-                    <table className="table">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="center">Torneo</th>
-                          <th className="text-center">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Torneos.map((Torneo) => (
+
+               
+  {/* ✅ Scroll horizontal solo aquí */}
+  <div className="scroll-container">
+    <table className="table table-striped">
+      <thead>
+        <tr>
+           <th className="center">Torneo</th>
+           <th className="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Torneos.length > 0 ? (
+                        Torneos.map((Torneo) => (
                           <tr key={Torneo.id}>
                             <td className="center">{Torneo.nombre}</td>
                             <td className="text-center d-flex justify-content-evenly">
@@ -228,9 +232,24 @@ const InfoTorneosp = async () => {
                               </button>
                             </td>
                           </tr>
-                        ))}
+                       ))
+          ) : (
+             <tr>
+              <td colSpan="2" className="text-center">
+                No hay datos disponibles
+              </td>
+            </tr>
+          )}
                       </tbody>
-                    </table>
+    </table>
+  </div>
+
+
+
+                {/* Tabla para mostrar los torneos */}
+                <div>
+                  <div className="table-responsive my-2">
+                   
                     {/* Modal para editar torneos */}
 
                     <ModalEdit
@@ -261,8 +280,6 @@ const InfoTorneosp = async () => {
                   </div>
                 </div>
               </div></>
-      ) : (
-        <p className="no-datos">No hay datos disponibles en este momento.</p> // Mostrar este mensaje si no hay datos
       )}
     </>
   );

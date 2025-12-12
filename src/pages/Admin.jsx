@@ -103,6 +103,7 @@ const NAVIGATION = [
   
 ];
 
+  
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',

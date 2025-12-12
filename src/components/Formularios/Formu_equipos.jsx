@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 
 import { useEffect, useState } from "react";
@@ -10,6 +11,8 @@ import "./index.css";
 import EditTeamModal from "../Formularios-edit/ModalEditTeams";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CreateIcon from '@mui/icons-material/Create';
+import ErrorLogo from "../../assets/Vector.svg";
+
 import Swal from "sweetalert2";
 const FORM_Teams = () => {
   const [nombre, setNombre] = useState("");
@@ -23,12 +26,22 @@ const FORM_Teams = () => {
   const endpoint = `${API_ENDPOINT}equipo`;
   const Infoendpoint = `${API_ENDPOINT}equipos`;
   const gruposEndpoint = `${API_ENDPOINT}grupos`;
+  const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   
   const [error] = useState(null);
   const [lastPage, setLastPage] = useState(1);
+
+const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
+
+  const [subcategorias, setSubcategorias] = useState([]);
+
+   const handleSubcategoriaChange = (e) => {
+     const subcategoriaId = e.target.value;
+    setSelectedSubcategoria(e.target.value);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -78,7 +91,23 @@ const FORM_Teams = () => {
   };
   
   
-  
+  useEffect(() => {
+     if (!window.bootstrap) return;
+  const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+  const popoverList = [...popoverTriggerList].map(
+    (popoverTriggerEl) =>
+      new window.bootstrap.Popover(popoverTriggerEl, {
+        html: true,
+        sanitize: false,
+        placement: "bottom",
+        trigger: "focus",
+      })
+  );
+  return () => {
+    popoverList.forEach((p) => p.dispose && p.dispose());
+  };
+}, [grupos]);
+
   
 
 
@@ -144,6 +173,37 @@ const FORM_Teams = () => {
    
   };
 
+
+useEffect(() => {
+  const fetchGruposPorSubcategoria = async () => {
+    if (!selectedSubcategoria) return;
+    try {
+      const response = await axios.get(`${API_ENDPOINT}grupos/${selectedSubcategoria}`);
+      setGrupos(response.data);
+    } catch (error) {
+      console.error("Error al obtener los grupos y equipos:", error);
+    }
+  };
+
+  fetchGruposPorSubcategoria();
+}, [selectedSubcategoria]);
+
+
+
+    useEffect(() => {
+      const fetchSubcategorias = async () => {
+        try {
+          const response = await axios.get(subcategoriasEndpoint);
+          setSubcategorias(response.data);
+        } catch (error) {
+          console.error("Error al obtener las subcategorías:", error);
+        }
+      };
+      
+      fetchSubcategorias();
+    
+    }, []);
+
   const store = async (e) => {
     
     e.preventDefault();
@@ -201,7 +261,7 @@ const FORM_Teams = () => {
       type="text"
       className="form-control form-input-admin"
       id="nombre"
-      placeholder="Lobos FC"
+      placeholder="Ej: Lobos FC"
       value={nombre}
       onChange={(e) => setNombre(e.target.value)}
     />
@@ -233,7 +293,7 @@ const FORM_Teams = () => {
   <div className="form-group mt-3">
     <label htmlFor="archivo">Añadir Logo del Equipo:</label>
     <input
-      required
+     
       type="file"
       className="form-control form-input-admin"
       id="archivo"
@@ -246,9 +306,10 @@ const FORM_Teams = () => {
         <p>Vista previa del logo:</p>
         <img
           src={URL.createObjectURL(archivo)}
-          alt="Logo del equipo"
+          alt={ErrorLogo}
           width="120"
           className="img-thumbnail"
+          
         />
       </div>
     )}
@@ -300,9 +361,93 @@ const FORM_Teams = () => {
   </div>
 </form>
 
+ <h3 className="mt-4 mb-3">Informacion del grupo</h3>
 
-      <div className="table-responsive card my-2">
-        <table className="table">
+<div className="col-md-">
+
+       <select
+  id="subcategoria"
+  className="form-control mb-4 "
+  onChange={handleSubcategoriaChange}
+>
+  <option value="">Seleccione una subcategoría</option>
+  {subcategorias.map((subcategoria) => (
+    <option key={subcategoria.id} value={subcategoria.id}>
+      {subcategoria.nombre} - {subcategoria.categoria?.torneo?.nombre}
+    </option>
+  ))}
+</select>
+</div>
+
+{/* 🧩 Render condicional según el estado */}
+{!selectedSubcategoria ? (
+  <p className="text-muted mt-3">Sin búsqueda seleccionada.</p>
+) : grupos.length === 0 ? (
+  <p className="text-muted mt-3">
+    No hay grupos ni equipos registrados en esta subcategoría.
+  </p>
+) : (
+ 
+<div className="d-flex flex-wrap gap-3 mt-3 mb-4">
+  {grupos.map((grupo) => (
+    <div className="btn-group" key={grupo.id}>
+      <button
+        type="button"
+        className="btn btn-primary dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {grupo.nombre}
+      </button>
+
+      <ul className="dropdown-menu p-2" style={{ minWidth: "200px" }}>
+        <li >{grupo.nombre}</li>
+         <li><hr className="dropdown-divider"/></li>
+        {grupo.equipos && grupo.equipos.length > 0 ? (
+          grupo.equipos.map((equipo) => (
+          
+            <li key={equipo.id} className="dropdown-item d-flex align-items-center">
+             <img
+  src={
+    equipo.archivo
+      ? `${IMAGES_URL}/${equipo.archivo}`
+      : ErrorLogo
+  }
+  alt={equipo.nombre}
+  width="30"
+  height="30"
+  style={{
+    borderRadius: "5px",
+    objectFit: "cover",
+    marginRight: "10px",
+  }}
+  onError={(e) => {
+    e.target.src = ErrorLogo;
+    e.target.classList.add("error-logo-info");
+  }}
+/>
+{console.log("ARCHIVO:", equipo.archivo)}
+
+              <span>{equipo.nombre}</span>
+            </li>
+          ))
+        ) : (
+          <li className="dropdown-item text-muted text-center">
+            Sin equipos asignados
+          </li>
+        )}
+      </ul>
+    </div>
+  ))}
+</div>
+)}
+
+
+
+
+
+    <div className="scroll-container">
+    <table className="table table-striped">
           <thead className="thead-light">
             <tr>
               <th className="text-center">Logo</th>
@@ -318,13 +463,24 @@ const FORM_Teams = () => {
             {Teams.map((team) => (
               <tr key={team.id}>
                 <td className="text-center">
-                  <img
-                    src={`${IMAGES_URL}/${team.archivo}`}
-                    width="50%"
-                    className="d-block mx-auto my-3 logomovil"
-                    alt={team.nombre}
-                    onError={(e) => (e.target.src = "/ruta/a/imagen-defecto.png")}
-                  />
+                   {console.log("TEAM OBJETO:", team)}
+                   {console.log("RUTA FINAL:", `${IMAGES_URL}/${team.archivo}`)}
+
+                <img
+  src={
+    team.archivo
+      ? `${IMAGES_URL}/${team.archivo}`
+      : ErrorLogo
+  }
+  width="50%"
+  className="d-block mx-auto my-2 logo"
+  alt="team logo"
+  onError={(e) => {
+    e.target.src = ErrorLogo;
+    e.target.classList.add("error-logo");
+  }}
+/>
+
                 </td>
                 <td className="text-center align-middle">{team.grupo.nombre}</td>
                 <td className="text-center align-middle">{team.nombre}</td>

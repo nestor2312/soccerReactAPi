@@ -8,7 +8,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+
 }
 .layout {
   display: flex;
@@ -23,7 +23,7 @@ html, body {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #dcb505;
   text-decoration: inherit;
 }
 a:hover {
@@ -31,7 +31,7 @@ a:hover {
 }
 
 body {
- display: math;
+ display: block;
  min-height: 100dvh;
  background: #f5f5f5;
 

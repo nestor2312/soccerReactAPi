@@ -14,13 +14,15 @@ const Menu = () => {
 
   return (
     <nav className="navbar">
-    <div className="navbar-logo">
-    <img  className="LOGO" src={Logo} alt="LOGO" />
-    </div>
+   <div className="navbar-logo">
+  <Link to="/">
+    <img className="LOGO" src={Logo} alt="Nombre de la Web Logo" />
+  </Link>
+</div>
   
     <div className={`navbar-links ${isOpen ? "open" : ""}`}>
-      <Link to={`/`} className="nv">
-      <ArrowBackOutlinedIcon/> Torneos
+      <Link to={`/torneo/categoria/${categoriaId}/subcategoria`} className="nv">
+      <ArrowBackOutlinedIcon/> Subcategoria
       </Link>
       <Link
         to={`/torneo/categoria/${categoriaId}/subcategoria/${subcategoriaId}/inicio`}

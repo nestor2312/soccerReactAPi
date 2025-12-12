@@ -6,6 +6,8 @@
    
 }
 
+
+
 .boton-torneo {
   
     overflow: hidden;
@@ -85,6 +87,115 @@ text-transform: capitalize;
 }
 
 
+body.fondo-1 {
+  position: sticky;
+ 
+}
+
+body.fondo-2 {
+  position: sticky;
+ 
+}
+
+
+ body.fondo-1::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+  url("./../../assets/Group(1).png"),
+  url("./../../assets/Vector(3).png"),
+  url("./../../assets/Vector(4).png"),
+  url("./../../assets/Group.png");
+  background-repeat: no-repeat;
+  background-size: 13%, 12%, 12%, 11%;
+  background-position: -1% 18%, 0% 105%, 99% 99%, 100% 15%;
+  opacity: 0.5;
+  z-index: -1;
+ }
+
+  body.fondo-1::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+                    url("./../../assets/Soccer.png"),
+                    url("./../../assets/Soccer.png");
+  background-repeat: no-repeat;
+  background-size: 34%;
+  background-position:  25% 272%, 85% 290%;
+  opacity: 0.4;
+  z-index: -2;
+}
+
+
+
+
+/* body.fondo-1::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./../../assets/Ellipse1.svg"),
+                    url("./../../assets/Ellipse2.svg"),
+                    url("./../../assets/Ellipse2.svg"),
+                    url("./../../assets/Ellipse2.svg"),
+                     url("./../../assets/Ellipse1.svg");
+  background-repeat: no-repeat;
+  background-size: 25%, 10%, 20%, 15%, 25%;
+  background-position: -25% 15%, -1% 99%, 60% 120%, 105% 12%,  110% 135%;
+  opacity: 0.9;
+  z-index: -1;
+} */
+
+
+/* body.fondo-1::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./../../assets/Soccer.png"),
+                    url("./../../assets/Soccer.png"),
+                    url("./../../assets/Soccer.png"),
+                    url("./../../assets/Soccer.png");
+  background-repeat: no-repeat;
+  background-size: 34%;
+  background-position: -17% 35%, 25% 272%, 85% 290%, 110% 35%;
+  opacity: 0.3;
+  z-index: -1;
+} */
+
+
+
+ body.fondo-2::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+  url("./../../assets/Group(1).png"),
+  url("./../../assets/Vector(3).png"),
+  url("./../../assets/Vector(4).png"),
+  url("./../../assets/Group.png");
+  background-repeat: no-repeat;
+  background-size: 13%, 12%, 12%, 11%;
+  background-position: -1% 18%, 0% 105%, 99% 99%, 100% 15%;
+  opacity: 0.38;
+  z-index: -1;
+ }
+
 /* Personalización del scrollbar */
 .table-container::-webkit-scrollbar {
   height: 12px;
@@ -108,6 +219,17 @@ text-transform: capitalize;
 }
 
 @media (max-width: 368px) {
+
+body.fondo-1 {
+ display: block;
+ 
+}
+
+body.fondo-1::after {
+  display: none;
+  
+}
+
   .table-container table {
     min-width: 900px; /* Ajusta según la cantidad de columnas */
   }
@@ -192,6 +314,16 @@ button.boton-torneo.btn-button-general:last-child {
 
 @media (max-width: 768px) {
 
+  body.fondo-1 {
+ display: block;
+ 
+}
+
+body.fondo-1::after {
+  display: none;
+  
+}
+
   .text-title{
     text-transform: uppercase;
     color: #09537E; 
@@ -228,7 +360,9 @@ button.boton-torneo.btn-button-general:last-child {
 
 /* Media query para pantallas más pequeñas (480px) */
 @media (max-width: 480px) {
-
+ .btn-back{
+    margin: 10px 15px !important;
+  }
   .text-title{
     text-transform: uppercase;
     color: #09537E; 
@@ -298,7 +432,9 @@ button.boton-torneo.btn-button-general:last-child {
   
   /* Media query para pantallas extremadamente pequeñas (320px) */
   @media (max-width: 320px) {
-  
+  .btn-back{
+    margin: 10px 15px !important;
+  }
     
     .contenido{
         display: block;

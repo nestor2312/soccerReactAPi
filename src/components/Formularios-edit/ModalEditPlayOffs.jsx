@@ -73,7 +73,7 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   
 
   const handleSave = () => {
-    if (!subcategoria_id || !equipoLocal || !equipoVisitante || numPartido <= 0) {
+    if (!subcategoria_id || numPartido <= 0) {
       alert("Por favor, completa todos los campos requeridos.");
       return;
     }
@@ -147,25 +147,29 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
               <option value="">Selecciona una subcategoría</option>
               {subcategorias.map((sub) => (
                 <option key={sub.id} value={sub.id}>
-                  {sub.nombre}
+                  {sub.nombre} - {sub.categoria?.torneo?.nombre}
                 </option>
               ))}
             </select>
           </div>
-          <div className="col-md-6">
-            <label>Número de Partido</label>
-            <input
-              id="numPartido"
-              name="numPartido"
-              type="number"
-              min={1}
-              max={4}
-              placeholder="Número de Partido"
-              className="form-control"
-              value={numPartido}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="col-12 col-md-6 mb-3">
+  <label htmlFor="numPartido">Ronda</label>
+  <select
+    id="numPartido"
+    name="numPartido"
+    className="form-control validate"
+    onChange={(e) => setNumPartido(e.target.value)}
+    value={numPartido}
+  >
+    <option value="" disabled>
+      Selecciona ronda
+    </option>
+    <option value="1">Octavos</option>
+    <option value="2">Cuartos</option>
+    <option value="3">Semifinal</option>
+    <option value="4">Final</option>
+  </select>
+</div>
         </div>
 
         {/* Equipos */}

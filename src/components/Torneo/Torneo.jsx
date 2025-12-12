@@ -5,7 +5,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
-
+import Logo from "../../assets/Frame 22.svg"
 const Torneo = () => {
   const [torneos, setTorneos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,10 +30,33 @@ const Torneo = () => {
     document.title = "Torneos";
   }, []);
 
+     useEffect(() => {
+        document.body.classList.add("fondo-1");
+        return () => {
+          document.body.classList.remove("fondo-1");
+            document.body.classList.remove("login-background");
+        };
+      }, []);
+  
+
 
   return (
     <>
-
+    <div className=""> 
+<nav className="navbar navbar-expand-lg fondomenu start-0 end-0 p-1 ">
+          <div className="container-fluid ">
+          
+              <Link to="/">
+                  <img className="LOGO" src={Logo} alt="Nombre de la Web Logo" />
+                </Link>
+            <Link
+        to={`/login`}
+        className={`redirect-login log`}
+      >
+        Ingresar
+      </Link>
+          </div>
+        </nav>
     <h1 className="text-center text-title mt-2">torneos</h1>
    
       {isLoading ? (
@@ -47,8 +70,8 @@ const Torneo = () => {
       ) : (
 
         
+        <div className="contenido fondo-1">
         
-        <div className="contenido">
           
               {/* <h1>Torneo</h1> */}
           {torneos.map((torneo) => (
@@ -66,6 +89,7 @@ const Torneo = () => {
           
         </div>
       )}
+</div>
     </>
   );
 };
@@ -73,10 +97,3 @@ const Torneo = () => {
 export default Torneo;
 
 
-
-            // <div className="contenido">
-            //   <div className="box">
-            //     <div className="card_torneo">
-            //       <button className="boton-torneo"><span>ddd</span></button>
-            //     </div>
-            //   </div>

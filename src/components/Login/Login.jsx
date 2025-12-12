@@ -63,6 +63,8 @@ const Login = ({ setIsAuthenticated }) => {
     <>
       <div className="posicion">
         <div className="caja">
+          <div className="fondo">
+
            <img  className="mb-3" src={Logo} alt="LOGO" />
           <h2 className="text-login">Iniciar sesión</h2>
           <form onSubmit={handleLogin}>
@@ -89,12 +91,16 @@ const Login = ({ setIsAuthenticated }) => {
               <Link to="/register" className="link-login">
                 Registrarse
               </Link>
+               <Link to="/" className="link-login">
+               ir a torneos
+              </Link>
             </p>
             <button type="submit" className="btn-button-general text-center" disabled={isLoading}>
               {isLoading ? "Cargando..." : "Ingresar"}
             </button>
           </form>
           {error && <p className="error-message">{error}</p>}
+          </div>
         </div>
       </div>
       {isLoading && (
@@ -102,6 +108,7 @@ const Login = ({ setIsAuthenticated }) => {
           <CargaSesion />
         </div>
       )}
+     
     </>
   );
 };

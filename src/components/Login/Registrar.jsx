@@ -31,12 +31,12 @@ const Register = () => {
                 name,
                 email,
                 password,
-                password_confirmation: confirmPassword,  // Laravel requiere este campo
+                password_confirmation: confirmPassword,  
             });
 
-            // Si el registro es exitoso, puedes iniciar sesión o redirigir al login
+            // Si el registro es exitoso, puedes iniciar sesión o redirigir
             sessionStorage.setItem('token', response.data.token);  // Si el backend envía un token
-            navigate('/registrar_datos');  // Redirigir al perfil o a la página que prefieras
+            navigate('/registrar_datos');  // Redirigir al perfil o a la página 
         } catch (error) {
             console.log(error);
             setError('Solo se puede registrar un usuario y ya fue registrado.');

@@ -1,17 +1,18 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./index.css";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import ErrorCarga from "../Error/Error";
-
+import Logo from "../../assets/Frame 22.svg"
 const Subcategoria = () => {
   const { categoriaId } = useParams(); // Obtenemos el id de la categoría desde la URL
+  const location = useLocation();  
+   const torneoId = location.state?.torneoId; 
   const [subcategorias, setSubcategorias] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchSubcategorias = async () => {
       try {
@@ -34,9 +35,26 @@ const Subcategoria = () => {
     document.title = "Subcategorías";
   }, []);
 
+     useEffect(() => {
+        document.body.classList.add("fondo-1");
+        return () => {
+          document.body.classList.remove("fondo-1");
+        };
+      }, []);
+  
+
 
   return (
     <>
+    <nav className="navbar navbar-expand-lg fondomenu start-0 end-0 p-1 ">
+              <div className="container-fluid ">
+               
+                <Link to="/">
+                    <img className="LOGO" src={Logo} alt="Nombre de la Web Logo" />
+                  </Link>
+               
+              </div>
+            </nav>
       <h2 className="text-center text-title mt-2">Subcategorías</h2>
       {isLoading ? (
         <div className="loading-container">
@@ -63,6 +81,19 @@ const Subcategoria = () => {
               </div>
             ))}
           </div>
+          {torneoId ? (
+        <Link to={`/torneo/${torneoId}/categorias`} className='btn-back-h'>
+          <button className="btn-back">
+            <span>Volver a categorías</span>
+          </button>
+        </Link>
+      ) : (
+        <Link to={`/`}>
+          <button className="btn-back">
+            <span>Volver a torneos</span>
+          </button>
+        </Link>
+      )}
         </div>
       ) : (
         <p className="no-datos">No hay subcategorías disponibles.</p> // Mostrar este mensaje si no hay datos
