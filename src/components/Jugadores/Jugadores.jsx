@@ -23,28 +23,31 @@ const Jugadores = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const url = equipoSeleccionado
-          ? `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?equipo=${equipoSeleccionado}&page=${currentPage}`
-          : `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?page=${currentPage}`;
+  const getData = async () => {
+    setIsLoading(true);
+    setError(null);
 
-        const response = await axios.get(url);
-        setJugadores(response.data.jugadores.data);
-        setLastPage(response.data.jugadores.last_page);
-        setEquipos(response.data.equipos);
-      } catch (error) {
-        setError("Error al cargar los jugadores.");
-        console.error("Error al obtener los datos:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    try {
+      const url = equipoSeleccionado
+        ? `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?equipo=${equipoSeleccionado}&page=${currentPage}`
+        : `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?page=${currentPage}`;
 
-    getData();
-  }, [subcategoriaId, currentPage, equipoSeleccionado]);
+      const response = await axios.get(url);
+
+      setJugadores(response.data.data);
+      setLastPage(response.data.last_page);
+      setEquipos(response.data.equipos ?? []);
+    } catch (error) {
+      setError("Error al cargar los jugadores.");
+      console.error("Error al obtener los datos:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  getData();
+}, [subcategoriaId, currentPage, equipoSeleccionado]);
+
 
   useEffect(() => {
     document.title = "Jugadores";
