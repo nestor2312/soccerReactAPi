@@ -23,31 +23,28 @@ const Jugadores = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const getData = async () => {
-    setIsLoading(true);
-    setError(null);
+    const getData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const url = equipoSeleccionado
+          ? `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?equipo=${equipoSeleccionado}&page=${currentPage}`
+          : `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?page=${currentPage}`;
 
-    try {
-      const url = equipoSeleccionado
-        ? `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?equipo=${equipoSeleccionado}&page=${currentPage}`
-        : `${endpoint}subcategoria/${subcategoriaId}/jugadores/paginador?page=${currentPage}`;
+        const response = await axios.get(url);
+        setJugadores(response.data.jugadores.data);
+        setLastPage(response.data.jugadores.last_page);
+        setEquipos(response.data.equipos);
+      } catch (error) {
+        setError("Error al cargar los jugadores.");
+        console.error("Error al obtener los datos:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      const response = await axios.get(url);
-
-      setJugadores(response.data.data);
-      setLastPage(response.data.last_page);
-      setEquipos(response.data.equipos ?? []);
-    } catch (error) {
-      setError("Error al cargar los jugadores.");
-      console.error("Error al obtener los datos:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  getData();
-}, [subcategoriaId, currentPage, equipoSeleccionado]);
-
+    getData();
+  }, [subcategoriaId, currentPage, equipoSeleccionado]);
 
   useEffect(() => {
     document.title = "Jugadores";
@@ -176,9 +173,10 @@ const Jugadores = () => {
                     >
                       <option value="">Todos los equipos</option>
                       {equipos.map((equipo) => (
-                        <option key={equipo.id} value={equipo.nombre}>
-                          {equipo.nombre}
-                        </option>
+                       <option key={equipo.id} value={equipo.id}>
+  {equipo.nombre}
+</option>
+
                       ))}
                     </select>
                   </div>
