@@ -169,19 +169,17 @@ useEffect(() => {
  
   useEffect(() => {
     
-    if (!torneoId) {
-    
-      setCategorias([]);
-      setCategoriaId("");
-      setSubcategorias([]);
-      setSubcategoriaId("");
-      setGrupos([]);
-      setGrupoId("");
-      setEquipos([]);
-      setEquipoLocal("");
-      setEquipoVisitante("");
-      return;
-    }
+ if (!torneoId) {
+  setCategorias([]);
+  setCategoriaId("");
+  setSubcategorias([]);
+  setSubcategoriaId("");
+  setGrupos([]);
+  setGrupoId("");
+  setEquipos([]);
+  return;
+}
+
 
     const fetchCategorias = async () => {
       try {
@@ -196,8 +194,7 @@ useEffect(() => {
         setGrupos([]);
         setGrupoId("");
         setEquipos([]);
-        setEquipoLocal("");
-        setEquipoVisitante("");
+       
       } catch (err) {
         console.error("Error al cargar categorías:", err);
       }
@@ -207,16 +204,15 @@ useEffect(() => {
 
   useEffect(() => {
     if (isPreloading) return;
-    if (!categoriaId) {
-      setSubcategorias([]);
-      setSubcategoriaId("");
-      setGrupos([]);
-      setGrupoId("");
-      setEquipos([]);
-      setEquipoLocal("");
-      setEquipoVisitante("");
-      return;
-    }
+   if (!categoriaId) {
+  setSubcategorias([]);
+  setSubcategoriaId("");
+  setGrupos([]);
+  setGrupoId("");
+  setEquipos([]);
+  return;
+}
+
 
     const fetchSubcategorias = async () => {
       try {
@@ -228,8 +224,7 @@ useEffect(() => {
         setGrupos([]);
         setGrupoId("");
         setEquipos([]);
-        setEquipoLocal("");
-        setEquipoVisitante("");
+       
       } catch (err) {
         console.error("Error al cargar subcategorías:", err);
       }
@@ -237,57 +232,37 @@ useEffect(() => {
     fetchSubcategorias();
   }, [categoriaId, API_ENDPOINT, isPreloading]);
 
-  useEffect(() => {
-    if (isPreloading) return;
-    if (!subcategoriaId) {
-      setGrupos([]);
-      setGrupoId("");
-      setEquipos([]);
-      setEquipoLocal("");
-      setEquipoVisitante("");
-      return;
+
+
+
+
+
+useEffect(() => {
+  if (isPreloading) return;
+
+  if (!grupoId) {
+    setEquipos([]);
+   
+    return;
+  }
+
+  const fetchEquipos = async () => {
+    try {
+      const res = await axios.get(`${API_ENDPOINT}equipos/${grupoId}`);
+      setEquipos(res.data || []);
+    } catch (err) {
+      console.error("Error al cargar equipos:", err);
     }
+  };
 
-    const fetchGrupos = async () => {
-      try {
-        const res = await axios.get(`${API_ENDPOINT}grupos/${subcategoriaId}`);
-        setGrupos(res.data || []);
-        const exists = res.data?.some?.(g => String(g.id) === String(grupoId));
-        if (!exists) setGrupoId("");
-        // limpiar inferiores
-        setEquipos([]);
-        setEquipoLocal("");
-        setEquipoVisitante("");
-      } catch (err) {
-        console.error("Error al cargar grupos:", err);
-      }
-    };
-    fetchGrupos();
-  }, [subcategoriaId, API_ENDPOINT, isPreloading]);
+  fetchEquipos();
+}, [grupoId, API_ENDPOINT, isPreloading]);
 
-  useEffect(() => {
-    if (isPreloading) return;
-    if (!grupoId) {
-      setEquipos([]);
-      setEquipoLocal("");
-      setEquipoVisitante("");
-      return;
-    }
 
-    const fetchEquipos = async () => {
-      try {
-        const res = await axios.get(`${API_ENDPOINT}equipos/${grupoId}`);
-        setEquipos(res.data || []);
-        // mantener equipos seleccionados si siguen presentes en la lista
-        const ids = (res.data || []).map(e => String(e.id));
-        if (equipoA_id && !ids.includes(String(equipoA_id))) setEquipoLocal("");
-        if (equipoB_id && !ids.includes(String(equipoB_id))) setEquipoVisitante("");
-      } catch (err) {
-        console.error("Error al cargar equipos:", err);
-      }
-    };
-    fetchEquipos();
-  }, [grupoId, API_ENDPOINT, isPreloading]);
+
+
+
+
 
   // -----------------------
   // Guardar
@@ -309,6 +284,7 @@ useEffect(() => {
     onSave(updatedPartido);
     onClose();
   };
+
 
   if (!showModal) return null;
 
