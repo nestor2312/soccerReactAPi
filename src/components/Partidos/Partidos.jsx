@@ -310,6 +310,11 @@ const Partidos = () => {
                         src={`${Images}/${selectedPartido.equipo_b?.archivo}`}
                         className="logo2 TeamVisitante"
                         alt={selectedPartido.equipo_b?.nombre || "Equipo B"}
+                         onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = ErrorLogo;
+                              e.target.classList.add("error-logo");
+                            }}
                       />
                     </div>
                   </div>
