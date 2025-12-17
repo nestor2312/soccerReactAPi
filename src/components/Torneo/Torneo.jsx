@@ -5,7 +5,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
-import Logo from "../../assets/Frame 22.svg"
+import Logo from "../../assets/Frame_49.png"
 const Torneo = () => {
   const [torneos, setTorneos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

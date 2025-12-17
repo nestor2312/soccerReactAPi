@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import { Link, useNavigate } from "react-router-dom";
 import CargaSesion from "../Carga/carga_sesion";
-import Logo from "../../assets/Frame 22.svg"
+import Logo from "../../assets/Frame_49.png"
 const endpoint = API_ENDPOINT;
 
 // eslint-disable-next-line react/prop-types
@@ -65,7 +65,7 @@ const Login = ({ setIsAuthenticated }) => {
         <div className="caja">
           <div className="fondo">
 
-           <img  className="mb-3" src={Logo} alt="LOGO" />
+           <img  className="mb-3 LOGO" src={Logo} alt="LOGO" />
           <h2 className="text-login">Iniciar sesión</h2>
           <form onSubmit={handleLogin}>
             <input

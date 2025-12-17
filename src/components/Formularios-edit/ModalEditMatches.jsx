@@ -445,6 +445,7 @@ useEffect(() => {
                         type="number"
                         className="form-control"
                         value={marcador1}
+                                min={0}
                         onChange={(e) => setMarcador1(e.target.value)}
                       />
                     </div>
@@ -456,6 +457,7 @@ useEffect(() => {
                       <label>Marcador Visitante:</label>
                       <input
                         type="number"
+                                min={0}
                         className="form-control"
                         value={marcador2}
                         onChange={(e) => setMarcador2(e.target.value)}

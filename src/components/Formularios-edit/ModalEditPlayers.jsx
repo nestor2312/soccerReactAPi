@@ -160,6 +160,7 @@ const EditPlayerModal = ({ showModal, onClose, onSave, PlayerData, API_ENDPOINT 
                 type="number"
                 id="edad"
                 className="form-control"
+                        min={5}
                 value={edad}
                 onChange={(e) => setEdad(e.target.value)}
               />
@@ -172,6 +173,7 @@ const EditPlayerModal = ({ showModal, onClose, onSave, PlayerData, API_ENDPOINT 
                 type="number"
                 id="numero"
                 className="form-control"
+                        min={1}
                 value={numero}
                 onChange={(e) => setNumero(e.target.value)}
               />
@@ -186,6 +188,7 @@ const EditPlayerModal = ({ showModal, onClose, onSave, PlayerData, API_ENDPOINT 
                 type="number"
                 id="card_amarilla"
                 className="form-control"
+                        min={0}
                 value={card_amarilla}
                 onChange={(e) => setCardAmarilla(e.target.value)}
               />
@@ -200,6 +203,7 @@ const EditPlayerModal = ({ showModal, onClose, onSave, PlayerData, API_ENDPOINT 
                 type="number"
                 id="card_roja"
                 className="form-control"
+                        min={0}
                 value={card_roja}
                 onChange={(e) => setCardRoja(e.target.value)}
               />
@@ -212,6 +216,7 @@ const EditPlayerModal = ({ showModal, onClose, onSave, PlayerData, API_ENDPOINT 
                 type="number"
                 id="goles"
                 className="form-control"
+                        min={0}
                 value={goles}
                 onChange={(e) => setGoles(e.target.value)}
               />
@@ -224,6 +229,7 @@ const EditPlayerModal = ({ showModal, onClose, onSave, PlayerData, API_ENDPOINT 
                 type="number"
                 id="asistencias"
                 className="form-control"
+                        min={0}
                 value={asistencias}
                 onChange={(e) => setAsistencias(e.target.value)}
               />

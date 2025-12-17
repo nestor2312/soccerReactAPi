@@ -175,7 +175,9 @@ body.fondo-2 {
   z-index: -1;
 } */
 
-
+.LOGO{
+  width: 109px;
+}
 
  body.fondo-2::after {
   content: "";

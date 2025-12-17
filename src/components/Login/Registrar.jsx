@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_ENDPOINT } from '../../ConfigAPI';
-import Logo from "../../assets/Frame 22.svg"
+import Logo from "../../assets/Frame_49.png"
 const endpoint = API_ENDPOINT;
 
 const Register = () => {
@@ -56,7 +56,7 @@ const Register = () => {
         <div>
             <div className="posicion">
             <div className="caja2">
-                 <img  className="mb-3" src={Logo} alt="LOGO" />
+                 <img  className="mb-3 LOGO" src={Logo} alt="LOGO" />
             <h2 className="text-login">Crear una cuenta</h2>
             <form onSubmit={handleRegister} className='form-registro'>
                 <div>

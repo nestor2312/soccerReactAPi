@@ -5,7 +5,7 @@ import "./index.css";
 import Cargando from "../Carga/carga";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import ErrorCarga from "../Error/Error";
-import Logo from "../../assets/Frame 22.svg"
+import Logo from "../../assets/Frame_49.png"
 const Subcategoria = () => {
   const { categoriaId } = useParams(); // Obtenemos el id de la categoría desde la URL
   const location = useLocation();  

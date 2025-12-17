@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import "./index.css";
-import Logo from "../../assets/Frame 22.svg"
+import Logo from "../../assets/Frame_49.png"
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);

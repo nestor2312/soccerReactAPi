@@ -23,7 +23,7 @@ import FORM_Players from '../components/Formularios/Formu_jugadores';
 import AdminClasificacion from '../components/Clasificacion/ClasificacionAdmin';
 import FORM_Eliminatorias from '../components/Formularios/Form_eliminatorias';
 import LogoutButton from '../components/Login/CerrarSesion';
-import Logo from "../assets/Frame 22.svg"
+import Logo from "../assets/Frame_49.png"
 import LogoutIcon from "@mui/icons-material/Logout";
 import GroupWorkIcon from '@mui/icons-material/GroupWork'; 
 import FolderIcon  from '@mui/icons-material/Folder';              

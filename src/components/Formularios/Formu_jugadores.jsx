@@ -241,6 +241,8 @@ useEffect(() => {
     }
   };
 
+  
+
   return (
     <>
       {isLoading ? (
@@ -290,21 +292,37 @@ useEffect(() => {
               </div>
 
               {/* Campos del jugador */}
-              {[
-                { id: "nombre", label: "Nombre", placeholder: "Ej: Juan", state: nombre, set: setNombre },
-                { id: "apellido", label: "Apellido", placeholder: "Ej: Pérez", state: apellido, set: setApellido },
-                { id: "edad", label: "Edad", placeholder: "Ej: 22", state: edad, set: setEdad, type: "number" },
-                { id: "numero", label: "Número", placeholder: "Ej: 10", state: numero, set: setNumero, type: "number" },
-                { id: "card_amarilla", label: "Amarillas", placeholder: "Ej: 2", state: card_amarilla, set: setCardAmarilla, type: "number" },
-                { id: "card_roja", label: "Rojas",  placeholder: "Ej: 1", state: card_roja, set: setCardRoja, type: "number" },
-                { id: "goles", label: "Goles", placeholder: "Ej: 5", state: goles, set: setGoles, type: "number" },
-                { id: "asistencias", label: "Asistencias", placeholder: "Ej: 3", state: asistencias, set: setAsistencias, type: "number" },
-              ].map(({ id, label ,placeholder, state, set, type = "text" }) => (
-                <div key={id} className="col-md-3 mb-3">
-                  <label>{label}</label>
-                  <input type={type} className="form-control"  placeholder={placeholder} value={state} onChange={(e) => set(e.target.value)} />
-                </div>
-              ))}
+         {/* Campos del jugador */}
+{[
+  { id: "nombre", label: "Nombre", placeholder: "Ej: Juan", state: nombre, set: setNombre },
+  { id: "apellido", label: "Apellido", placeholder: "Ej: Pérez", state: apellido, set: setApellido },
+  { id: "edad", label: "Edad", placeholder: "Ej: 22", state: edad, set: setEdad, type: "number", min: 0 },
+  { id: "numero", label: "Número", placeholder: "Ej: 10", state: numero, set: setNumero, type: "number", min: 0 },
+  { id: "card_amarilla", label: "Amarillas", placeholder: "Ej: 2", state: card_amarilla, set: setCardAmarilla, type: "number", min: 0 },
+  { id: "card_roja", label: "Rojas",  placeholder: "Ej: 1", state: card_roja, set: setCardRoja, type: "number", min: 0 },
+  { id: "goles", label: "Goles", placeholder: "Ej: 5", state: goles, set: setGoles, type: "number", min: 0 },
+  { id: "asistencias", label: "Asistencias", placeholder: "Ej: 3", state: asistencias, set: setAsistencias, type: "number", min: 0 },
+].map(({ id, label, placeholder, state, set, type = "text", min }) => ( // <--- Agregamos min aquí
+  <div key={id} className="col-md-3 mb-3">
+    <label>{label}</label>
+    <input 
+      type={type} 
+      className="form-control" 
+      placeholder={placeholder} 
+      value={state} 
+      min={min} // <--- Atributo visual
+      onChange={(e) => {
+        const val = e.target.value;
+        // Si es tipo número y tiene un mínimo, validamos que no sea menor
+        if (type === "number" && min !== undefined && val !== "" && parseInt(val) < min) {
+          set(min.toString()); // Forzamos al valor mínimo (ej: 0)
+        } else {
+          set(val);
+        }
+      }} 
+    />
+  </div>
+))}
             </div>
 
             <button className="btn btn-outline-primary" type="submit">Registrar Jugador</button>
