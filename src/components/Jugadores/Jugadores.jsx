@@ -82,9 +82,10 @@ const Jugadores = () => {
                   >
                     <option value="">Todos los equipos</option>
                     {equipos.map((equipo) => (
-                      <option key={equipo.id} value={equipo.nombre}>
-                        {equipo.nombre}
-                      </option>
+                        <option key={equipo.id} value={equipo.id}>
+  {equipo.nombre}
+</option>
+
                     ))}
                   </select>
                 </div>
