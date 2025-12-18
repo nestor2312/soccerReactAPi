@@ -27,7 +27,7 @@ const Torneo = () => {
     getTorneosAll();
   }, []);
   useEffect(() => {
-    document.title = "Torneos";
+    document.title = "Competiciones";
   }, []);
 
      useEffect(() => {
