@@ -121,6 +121,11 @@ const Jugadores = () => {
                               className="logo"
                               width="100%"
                               alt={player.equipo.nombre}
+                                onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = ErrorLogo;
+                                      e.target.classList.add("error-logo");
+                                    }}
                             />
                           </td>
                           <td className="text-left team" width="40%">
