@@ -97,14 +97,14 @@ const Estadisticas = () => {
             </div>
             <div className="col-12 col-md-6">
               <TablaEstadisticas
-                titulo="Tarjetas rojas"
+                titulo="Tarjetas Rojas"
                 campo="card_roja"
                 jugadores={jugadores.rojas}
               />
             </div>
             <div className="col-12 col-md-6 ">
               <TablaEstadisticas
-                titulo="Tarjetas amarillas"
+                titulo="Tarjetas Amarillas"
                 campo="card_amarilla"
                 jugadores={jugadores.amarillas}
               />

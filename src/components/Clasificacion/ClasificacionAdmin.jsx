@@ -177,7 +177,7 @@ useEffect(() => {
                                    onError={(e) => {
                                                     e.target.onerror = null;
                                                     e.target.src = ErrorLogo; 
-                                                    e.target.classList.add("error-logo");
+                                                    e.target.classList.add("error-logo mt-1 mb-1 mx-2");
                                                   }}
                                 />
                               </td>

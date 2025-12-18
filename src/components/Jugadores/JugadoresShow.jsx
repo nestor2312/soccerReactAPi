@@ -79,6 +79,7 @@ const JugadorShow = () => {
                                onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src = ErrorLogo; 
+                                  e.target.classList.add("error-logo-info");
                               }}
                             />
                           </div>
@@ -89,7 +90,7 @@ const JugadorShow = () => {
                               <tbody>
                                 <tr>
                                   <th className="text-left text-flip-card-title">
-                                    Nombre:ss
+                                    Nombre:
                                   </th>
                                   <td className="text-right text-flip-card text-capitalize">
                                     {jugador.nombre} {jugador.apellido}

@@ -98,7 +98,7 @@ const Clasificacion = () => {
                               <th className="movil titulo2">PP</th>
                               <th className="movil titulo2">GF</th>
                               <th className="movil titulo2">GC</th>
-                              <th className="movil titulo2 ">GD</th>
+                              <th className="movil titulo2">GD</th>
                               <th className="movil titulo2">Pts</th>
                             </tr>
                             {datosGrupo.equipos.map((equipo, index) => {
@@ -123,6 +123,7 @@ const Clasificacion = () => {
                                       onError={(e) => {
                                         e.target.onerror = null;
                                         e.target.src = ErrorLogo;
+                                          e.target.classList.add("error-logo");
                                       
                                       }}
                                     />

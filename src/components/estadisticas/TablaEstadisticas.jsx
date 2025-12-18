@@ -32,7 +32,9 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                            onError={(e) => {
                                                         e.target.onerror = null;
                                                         e.target.src = ErrorLogo;
-                                                      
+                                                       e.target.classList.add(
+                                        "error-logoInicio"
+                                      );
                                                       }}
                         /> 
                         </td>
