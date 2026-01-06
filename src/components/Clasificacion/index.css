@@ -2,7 +2,7 @@
     background-color: #cfc;
 }
 .logomovil{
-    width: 50px;
+    width: 40px;
 }
 .margen{
     margin: auto 160px;
@@ -57,7 +57,7 @@
 /* Para pantallas hasta 576px */
 @media only screen and (max-width: 576px) {
   .logomovil {
-    width: 30%;
+    width: 25%;
   }
 
   .margen {
