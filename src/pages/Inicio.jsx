@@ -261,12 +261,12 @@ const Inicio = () => {
                                 <th className="movil data">{equipo.pg}</th>
                                 <th className="movil data">{equipo.pe}</th>
                                 <th className="movil data">{equipo.pp}</th>
-                                <th className="movil data">{equipo.gf}</th>
+                                <th className="movil data">{equipo.gf || 0}</th>
                                 <th className="movil data hidenb">
-                                  {equipo.gc}
+                                  {equipo.gc || 0}
                                 </th>
-                                <th className="movil data">{equipo.gd}</th>
-                                <th className="movil data">{equipo.puntos}</th>
+                                <th className="movil data">{equipo.gd || 0}</th>
+                                <th className="movil data">{equipo.puntos || 0}</th>
                               </tr>
                             ))}
                           </tbody>
@@ -319,29 +319,29 @@ const Inicio = () => {
                                   {partido.equipo_a.nombre}
                                 </td>
 
-                                <td className="text-center" width="20%">
-                                  {partido.marcador1 == null ||
-                                  partido.marcador2 == null ? (
-                                    <div>
-                                      <span className="fecha">
-                                        {partido.fecha}
-                                      </span>
-                                      <span className="hora">
-                                        {formatearHora(partido.hora)}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <div>
-                                      <span className="data text-right">
-                                        {partido.marcador1}
-                                      </span>
-                                      <span className=" data"> - </span>
-                                      <span className="data text-left">
-                                        {partido.marcador2}
-                                      </span>
-                                    </div>
-                                  )}
-                                </td>
+                               <td className="text-center" width="20%">
+  {partido.marcador1 == null || partido.marcador2 == null ? (
+    <div>
+      <span className="fecha">
+        {partido.fecha ? partido.fecha : "VS"}
+      </span>
+      <span className="hora">
+        {partido.hora ? formatearHora(partido.hora) : ""}
+      </span>
+    </div>
+  ) : (
+    <div>
+      <span className="data text-right">
+        {partido.marcador1}
+      </span>
+      <span className="data"> - </span>
+      <span className="data text-left">
+        {partido.marcador2}
+      </span>
+    </div>
+  )}
+</td>
+
 
                                 <td className="text-right team" width="30%">
                                   {partido.equipo_b.nombre}

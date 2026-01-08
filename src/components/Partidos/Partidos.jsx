@@ -210,7 +210,7 @@ const Partidos = () => {
                               {partido.marcador1 == null ||
                               partido.marcador2 == null ? (
                                 <>
-                                  <span className="fecha">{partido.fecha}</span>
+                                  <span className="fecha">{partido.fecha || 'VS'}</span>
                                   <span className="hora">
                                     {partido.hora?.slice(0, 5)}
                                   </span>
@@ -319,7 +319,7 @@ const Partidos = () => {
                     </div>
                   </div>
                   <div className="text-center">
-                    <h1 className="fecha">{selectedPartido.fecha}</h1>
+                    <h1 className="fecha">{selectedPartido.fecha || 'Fecha por definir' }</h1>
                     <h4 className="hora">
                       {selectedPartido.hora?.slice(0, 5)}
                     </h4>
