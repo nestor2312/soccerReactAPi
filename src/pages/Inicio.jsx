@@ -343,7 +343,7 @@ const Inicio = () => {
 </td>
 
 
-                                <td className="text-right team" width="30%">
+                                <td className="textright team" width="30%">
                                   {partido.equipo_b.nombre}
                                 </td>
 
