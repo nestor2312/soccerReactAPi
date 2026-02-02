@@ -12,6 +12,11 @@ const endpoint = API_ENDPOINT;
 const Images = IMAGES_URL;
 
 const Partidos = () => {
+
+  
+
+
+  
   const { subcategoriaId } = useParams();
   const [partidos, setPartidos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +68,32 @@ const Partidos = () => {
       modalRef.current.close(); // Cierra el modal
     }
   };
+
+  // ... estados existentes
+
+const [eventos, setEventos] = useState([]); // Ponlo aquí
+
+
+// MUEVE EL EFECTO AQUÍ ABAJO (Después de handleOpenModal)
+useEffect(() => {
+  let isMounted = true; // Para evitar actualizar estados de componentes desmontados
+
+  if (selectedPartido?.id) {
+    const fetchEventos = async () => {
+      try {
+        const res = await axios.get(`${endpoint}partidos/${selectedPartido.id}/eventos`);
+        if (isMounted) setEventos(res.data || []);
+      } catch (err) {
+        console.error("Error cargando eventos:", err);
+      }
+    };
+    fetchEventos();
+  } else {
+    setEventos([]); 
+  }
+
+  return () => { isMounted = false; }; // Cleanup
+}, [selectedPartido]);
 
   return (
     <div className="layout">
@@ -325,6 +356,81 @@ const Partidos = () => {
                     </h4>
                   </div>
                 </div>
+
+                <div className="eventos-timeline w-100 border-top pt-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+    {/* <h6 className="text-center text-uppercase text-muted small mb-3">Incidencias del partido</h6> */}
+    
+    {eventos.length === 0 ? (
+      <p className="text-center text-muted small"> </p>
+    ) : (
+      <div className="list-group list-group-flush">
+        <div className="eventos-timeline pt-3">
+  <h6 className="text-center text-uppercase text-muted small mb-4">Detalles del partido</h6>
+
+  <div className="row g-0">
+    {/* COLUMNA EQUIPO LOCAL (A) */}
+    <div className="col-6 border-right" style={{ borderRight: '2px solid #eee', color: '#ffffff' }}>
+      <div className="list-group list-group-flush pr-2">
+        {eventos
+          .filter((e) => e.equipo_id === selectedPartido.equipoA_id)
+          .map((e) => (
+            <div key={e.id} className="mb-3 fondo-imagen  d-flex flex-column align-items-start">
+              <div className="d-flex align-items-center mb-1">
+                <span className="badge badge-dark mr-2" style={{ fontSize: '0.7rem' }}>
+                  {e.minuto ? `${e.minuto}'` : '-'}
+                </span>
+                <span className="evento-icono mr-1">
+                  {e.tipo_evento === 'gol' && '⚽'}
+                  {e.tipo_evento === 'amarilla' && '🟨'}
+                  {e.tipo_evento === 'roja' && '🟥'}
+                  {e.tipo_evento === 'asistencia' && '👟'}
+                </span>
+                <strong style={{ marginLeft: '4px', fontSize: '0.85rem', textTransform: 'capitalize' }}>{e.jugador?.nombre}</strong>
+              </div>
+<small style={{ marginLeft: '48px', marginTop: '-11px', fontSize: '0.75rem', color: '#ffffff', display: 'block', textTransform: 'capitalize' }}>                {e.tipo_evento}
+              </small>
+            </div>
+          ))}
+      </div>
+    </div>
+
+    {/* COLUMNA EQUIPO VISITANTE (B) */}
+    <div className="col-6">
+      <div className="list-group list-group-flush  pl-2">
+        {eventos
+          .filter((e) => e.equipo_id === selectedPartido.equipoB_id)
+          .map((e) => (
+            <div key={e.id} className="mb-3 d-flex fondo-imagen flex-column align-items-end text-right">
+              <div className="d-flex align-items-center  mb-1 flex-row-reverse">
+                <span className="badge badge-dark ml-2" style={{ fontSize: '0.7rem' }}>
+                  {e.minuto ? `${e.minuto}'` : '-'}
+                </span>
+                <span className="evento-icono ml-1">
+                  {e.tipo_evento === 'gol' && '⚽'}
+                  {e.tipo_evento === 'amarilla' && '🟨'}
+                  {e.tipo_evento === 'roja' && '🟥'}
+                  {e.tipo_evento === 'asistencia' && '👟'}
+                </span>
+                <strong style={{ fontSize: '0.85rem' }}>{e.jugador?.nombre}</strong>
+              </div>
+              <small className="text-muted text-capitalize" style={{ marginRight: '45px',  marginTop: '-11px',  color: '#ffffff', fontSize: '0.7rem' }}>
+                {e.tipo_evento}
+              </small>
+            </div>
+          ))}
+      </div>
+    </div>
+  </div>
+
+  {eventos.length === 0 && (
+    <p className="text-center text-muted small mt-2">No hay incidencias registradas</p>
+  )}
+</div>
+      </div>
+    )}
+  </div>
+                
+                
               </>
             )}
           </dialog>

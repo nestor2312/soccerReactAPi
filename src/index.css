@@ -15,6 +15,16 @@ html, body {
   flex-direction: column;
   min-height:100dvh;
 }
+.fondo-imagen{
+       background-image:
+                      url('./assets/Vector_9_1.svg'); /* O una URL de internet */
+    background-size: cover;
+    background-position: center;
+    border-radius: 1px;
+   color: white;
+  
+  
+    }
 
 .main-content {
   flex-grow: 1; 
