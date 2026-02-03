@@ -171,7 +171,7 @@ dialog{
     max-height: 350px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 15px;
+    padding: 0 1px;
 }
 
 .border-right {
