@@ -319,7 +319,7 @@ const Inicio = () => {
                                   {partido.equipo_a.nombre}
                                 </td>
 
-                                <td className="text-center" width="20%">
+                             <td className="text-center" width="20%">
                                   {partido.marcador1 == null ||
                                   partido.marcador2 == null ? (
                                     <div>
