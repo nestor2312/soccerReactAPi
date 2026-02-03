@@ -15,16 +15,7 @@ html, body {
   flex-direction: column;
   min-height:100dvh;
 }
-.fondo-imagen{
-       background-image:
-                      url('./assets/Vector_9_1.svg'); /* O una URL de internet */
-    background-size: cover;
-    background-position: center;
-    border-radius: 1px;
-   color: white;
-  
-  
-    }
+
 
 .main-content {
   flex-grow: 1; 
@@ -75,6 +66,30 @@ h1 {
 .btn-button:focus,
 .btn-button:focus-visible {
   outline: 40px auto -webkit-focus-ring-color;
+}
+
+.fondo-imagen{
+       background-image:
+                      url('./assets/Vector_9_1.svg'); /* O una URL de internet */
+    background-size: cover;
+    background-position: center;
+    border-radius: 1px;
+   color: white;
+  
+  
+    }
+
+/* Solo se activa en pantallas pequeñas */
+@media only screen and (max-width: 576px) {
+    .fondo-imagen {
+        display: block; /* Lo mostramos */
+      
+        background-image: url("./assets/Vector220.svg");
+        
+      
+        border-radius: 1px;
+        color: white;
+    }
 }
 
 

@@ -155,7 +155,7 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
                   <option value="gol">⚽ Gol</option>
                   <option value="amarilla">🟨 Amarilla</option>
                   <option value="roja">🟥 Roja</option>
-                  <option value="asistencia">🎯 Asistencia</option>
+                  <option value="asistencia">👟 Asistencia</option>
                 </select>
                 {errors.tipo && <small className="text-danger">{errors.tipo}</small>}
               </div>

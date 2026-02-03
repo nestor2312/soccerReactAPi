@@ -402,7 +402,7 @@ useEffect(() => {
           .map((e) => (
             <div key={e.id} className="mb-3 d-flex fondo-imagen flex-column align-items-end text-right">
               <div className="d-flex align-items-center  mb-1 flex-row-reverse">
-                <span className="badge badge-dark ml-2" style={{ fontSize: '0.7rem' }}>
+                <span className="badge badge-dark ml-2" style={{ fontSize: '0.7rem',  color: '#ffffff' }}>
                   {e.minuto ? `${e.minuto}'` : '-'}
                 </span>
                 <span className="evento-icono ml-1">
@@ -413,7 +413,7 @@ useEffect(() => {
                 </span>
                 <strong style={{ fontSize: '0.85rem' }}>{e.jugador?.nombre}</strong>
               </div>
-              <small className="text-muted text-capitalize" style={{ marginRight: '45px',  marginTop: '-11px',  color: '#ffffff', fontSize: '0.7rem' }}>
+              <small className=" text-capitalize" style={{ marginRight: '45px',  marginTop: '-11px',  color: '#ffffff', fontSize: '0.7rem' }}>
                 {e.tipo_evento}
               </small>
             </div>
