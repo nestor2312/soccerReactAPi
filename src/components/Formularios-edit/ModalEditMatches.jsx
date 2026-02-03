@@ -523,6 +523,7 @@ useEffect(() => {
           </div>
 
           <div className="modal-footer">
+             
             <button type="button" className="btn btn-danger" onClick={onClose}>
               Cerrar
             </button>

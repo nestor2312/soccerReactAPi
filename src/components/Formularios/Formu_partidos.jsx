@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
 import ModalEditMatches from "../Formularios-edit/ModalEditMatches";
+import MatchEventsModal from "./MatchEventsModal";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CreateIcon from "@mui/icons-material/Create";
 import Swal from "sweetalert2";
@@ -32,6 +33,11 @@ const FORM_Matches = () => {
   const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
   const [selectedPartido, setSelectedPartido] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+const [showEventsModal, setShowEventsModal] = useState(false);
+const [selectedMatch, setSelectedMatch] = useState(null);
+
+
   const [error] = useState(null);
   // eslint-disable-next-line no-unused-vars
  const handleEditClick = async (partido) => {
@@ -560,7 +566,7 @@ const FORM_Matches = () => {
           <tbody>
             {partidos.map((partido) => (
               <tr key={partido.id}>
- <td className="text-center">
+                <td className="text-center">
                   {partido.fecha}
                 </td>
                 <td className="text-left">
@@ -595,6 +601,12 @@ const FORM_Matches = () => {
                   >
                     <CreateIcon />
                   </button>
+                   <button type="button" className="btn btn-info"  onClick={() => {
+    setSelectedMatch(partido.id);
+    setShowEventsModal(true);
+  }}>
+              Detalles
+            </button>
                   <div>
                     <button
                       className="btn btn-danger far fa-trash-alt delete-btn"
@@ -618,6 +630,16 @@ const FORM_Matches = () => {
           API_ENDPOINT={API_ENDPOINT} // Pasa el endpoint API
           onSave={savePartido} // Función para guardar el partido
         />
+
+        <MatchEventsModal
+  showModal={showEventsModal}
+  partidoId={selectedMatch}
+  API_ENDPOINT={API_ENDPOINT}
+  onClose={() => {
+    setShowEventsModal(false);
+    setSelectedMatch(null);
+  }}
+/>
       </div>
       <div className="pagination mb-4">
         <button

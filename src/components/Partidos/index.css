@@ -166,7 +166,17 @@ dialog{
         width: 101%!important;
     }
     
+    
+.eventos-timeline {
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 1px;
+}
 
+.border-right {
+    border-right: 1px solid #dee2e6 !important;
+}
     
 .fecha {
    
