@@ -136,7 +136,7 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Eventos del Partido</h5>
-            <button className="close" onClick={onClose}>
+            <button className="btn-close" onClick={onClose}>
               &times;
             </button>
           </div>

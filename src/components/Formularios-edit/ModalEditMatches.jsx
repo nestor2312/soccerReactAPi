@@ -294,7 +294,9 @@ useEffect(() => {
         <div className="modal-content" id="editModal" tabIndex="1">
           <div className="modal-header">
             <h5 className="modal-title">Editar Partido</h5>
-            <button type="button" className="close" onClick={onClose}>
+            
+
+            <button type="button" className="btn-close" onClick={onClose}>
               &times;
             </button>
           </div>
