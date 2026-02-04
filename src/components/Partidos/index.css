@@ -9,7 +9,7 @@
     transition: transform 0.4s ease, box-shadow 0.3s ease, background 0.3s ease;
    
 }
-.fonts-events-matches{
+.font-events-matches{
     font-size: 0.85rem;
 }
 .TeamLocal{
@@ -214,7 +214,7 @@ dialog{
 
   /* Para móviles en portrait (vertical) */
 @media (max-width: 768px) and (orientation: portrait) {
-    .fonts-events-matches{
+    .font-events-matches{
     font-size: 0.71rem;
 }
     dialog {
