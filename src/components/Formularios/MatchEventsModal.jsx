@@ -207,7 +207,7 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
   <option value="">Selecciona</option>
   {jugadores.map((j) => (
     <option key={j.id} value={j.id}>
-      {j.nombre}
+      {j.nombre}  {j.apellido}
     </option>
   ))}
 </select>
@@ -217,26 +217,7 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
                 )}
               </div>
 
-              {tipo === "cambio" && (
-                <div className="col-md-3">
-                  <label>Jugador sale</label>
-                  <select
-                    className="form-control"
-                    value={jugadorOutId}
-                    onChange={(e) => setJugadorOutId(e.target.value)}
-                  >
-                    <option value="">Selecciona</option>
-                    {jugadores.map((j) => (
-                      <option key={j.id} value={j.id}>
-                        {j.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.jugadorOutId && (
-                    <small className="text-danger">{errors.jugadorOutId}</small>
-                  )}
-                </div>
-              )}
+            
 
               <div className="col-md-1 d-flex align-items-end">
                 <button className="btn btn-primary" onClick={handleCreate}>
@@ -277,12 +258,12 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
       </td>
     <td>
       {e.tipo_evento === 'gol' && '⚽ '}
-      {e.tipo_evento === 'amarilla' && '🟨 '}
-      {e.tipo_evento === 'roja' && '🟥 '}
+      {e.tipo_evento === 'amarilla' && '🟨'}
+      {e.tipo_evento === 'roja' && '🟥'}
       {e.tipo_evento === 'asistencia' && '👟'}
       <span className="text-capitalize">{e.tipo_evento}</span>
     </td>
-    <td>{e.jugador?.nombre}</td>
+    <td>{e.jugador?.nombre} {e.jugador?.apellido}</td>
     <td width="60">
       <button
         className="btn btn-danger btn-sm"

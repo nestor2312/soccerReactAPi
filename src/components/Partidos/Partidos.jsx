@@ -411,7 +411,7 @@ useEffect(() => {
                   {e.tipo_evento === 'roja' && '🟥'}
                   {e.tipo_evento === 'asistencia' && '👟'}
                 </span>
-                <strong style={{ fontSize: '0.85rem' }}>{e.jugador?.nombre}</strong>
+                <strong style={{ fontSize: '0.85rem' }}>{e.jugador?.nombre} {e.jugador?.apellido}</strong>
               </div>
               <small className=" text-capitalize" style={{ marginRight: '45px',  marginTop: '-11px',  color: '#ffffff', fontSize: '0.7rem' }}>
                 {e.tipo_evento}
