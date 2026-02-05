@@ -243,7 +243,7 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
                 {eventos.length === 0 && (
                   <tr>
                     <td colSpan="4" className="text-center">
-                      Sin eventos
+                      Sin detalles
                     </td>
                   </tr>
                 )}
@@ -279,7 +279,7 @@ await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
           </div>
 
           <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>
+            <button className="btn btn-danger" onClick={onClose}>
               Cerrar
             </button>
           </div>
