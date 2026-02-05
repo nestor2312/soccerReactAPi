@@ -376,7 +376,7 @@ useEffect(() => {
           .map((e) => (
             <div key={e.id} className="mb-3 fondo-imagen  d-flex flex-column align-items-start">
               <div className="d-flex align-items-center mb-1">
-                <span className="badge badge-dark mr-2" style={{ fontSize: '0.7rem' }}>
+                <span className="badge badge-dark mr-2" style={{ fontSize: '0.7rem',  marginLeft: '14px' }}>
                   {e.minuto ? `${e.minuto}'` : '-'}
                 </span>
                 <span className="evento-icono mr-1">
