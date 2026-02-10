@@ -11,7 +11,7 @@
 export const API_ENDPOINT = "https://liga-dorada-fubol-panama-production.up.railway.app/api/";
 export const IMAGES_URL = "https://liga-dorada-fubol-panama-production.up.railway.app/storage/uploads";
 
-
+// ll
 
 // export const API_ENDPOINT = "http://ec2-18-189-219-17.us-east-2.compute.amazonaws.com/api/";
 // export const IMAGES_URL = "http://ec2-18-189-219-17.us-east-2.compute.amazonaws.com/storage/uploads";
