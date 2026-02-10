@@ -393,7 +393,7 @@ useEffect(() => {
           ))}
       </div>
     </div>
- {/* Copa mirry relampago */}
+ {/* liga dorada panama */}
     {/* COLUMNA EQUIPO VISITANTE (B) */}
     <div className="col-6">
       <div className="list-group list-group-flush  pl-2">
