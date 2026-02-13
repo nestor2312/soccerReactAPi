@@ -512,7 +512,9 @@ input{
   object-fit: contain;
     }
     .logomovil{
-      width: 70%;
+      width: 60%;       /* tamaño fijo */
+  height: 60%;      /* mismo alto */
+  object-fit: contain;
     }
     .movil2{
       display: flex;
@@ -745,8 +747,8 @@ input{
     width: 74px;
   }
   .logo{
-    width: 30px;       /* tamaño fijo */
-  height: 30px;      /* mismo alto */
+    width: 34px;       /* tamaño fijo */
+  height: 34px;      /* mismo alto */
   object-fit: contain;
   }
   .partido{
