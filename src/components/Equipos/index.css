@@ -142,6 +142,12 @@ a {
   border-bottom: 1px solid #79a08d;
 }
 
+.logomovil {
+  width: 55px;       /* tamaño fijo */
+  height: 55px;      /* mismo alto */
+  object-fit: contain;
+}
+
 .pagination button:disabled {
   font-weight: normal;
   font-family: 'Roboto Condensed', sans-serif;

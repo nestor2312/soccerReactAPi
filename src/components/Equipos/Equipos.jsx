@@ -148,7 +148,7 @@ const Equipos = () => {
 
     <img
                 src={`${Images}/${team.archivo}`}
-                width="50%"
+               
                 className="d-block mx-auto my-2 logomovil"
                 alt={team.nombre}
                 onError={(e) => {
