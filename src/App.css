@@ -98,7 +98,9 @@ a{
     
   }
   .logo{
-    width: 34px;
+     width: 50px;       /* tamaño fijo */
+  height: 50px;      /* mismo alto */
+  object-fit: contain;
   }
   .texto-left{
     font-family: 'Roboto Condensed', sans-serif;

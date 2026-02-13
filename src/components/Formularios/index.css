@@ -507,7 +507,9 @@ input{
   @media (max-width: 768px) {
     
     .logo{
-      width: 30px;
+      width: 50px;       /* tamaño fijo */
+  height: 50px;      /* mismo alto */
+  object-fit: contain;
     }
     .logomovil{
       width: 70%;
@@ -743,7 +745,9 @@ input{
     width: 74px;
   }
   .logo{
-    width: 55%;
+    width: 30px;       /* tamaño fijo */
+  height: 30px;      /* mismo alto */
+  object-fit: contain;
   }
   .partido{
     padding: 0px;
