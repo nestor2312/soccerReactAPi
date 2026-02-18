@@ -15,6 +15,10 @@ background:linear-gradient(180deg, #152039 0%, #0F162A 100%);
   padding: 2px 0;
  
 }
+.logo_footer{
+  width: 32px;
+  margin-right: 6px;
+}
 
 .text_footer {
   color: white;
