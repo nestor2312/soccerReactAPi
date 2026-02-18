@@ -16,7 +16,7 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                 <table className="table-borderless">
                   <thead>
                     <tr>
-                    <th></th>
+                    <td></td>
                       <th className="text-left titulo2">Nombre</th>
                       <th className="text-center titulo2 ">{titulo}</th>
                     </tr>
@@ -24,7 +24,7 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
                   <tbody>
                     {jugadores.map((Player) => (
                       <tr key={Player.id}>
-                        <td>
+                        <td className="logo">
                         <img
                           src={`${Images}/${Player.equipo.archivo}`} 
                           className="logo"
