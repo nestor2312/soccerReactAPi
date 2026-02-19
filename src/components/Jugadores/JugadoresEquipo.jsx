@@ -75,7 +75,7 @@ const JugadoresEquipo = () => {
     color: textColor,
   }}
 >
-<div className="my-4">
+<div className="my-4 ">
   
                   <img
                     src={`${IMAGES_URL}/${equipo.archivo}`}

@@ -74,7 +74,7 @@ const JugadorShowTeam = () => {
   }}>
                             <img
                               src={`${Images}/${jugador.equipo?.archivo}`}
-                              className="logo w-25"
+                              className="logomovil w-25"
                               alt={jugador.equipo?.nombre}
                                onError={(e) => {
   e.target.onerror = null;
