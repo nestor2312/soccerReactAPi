@@ -26,6 +26,7 @@ const FORM_Matches = () => {
   const [marcador1, setMarcador1] = useState("");
   const [marcador2, setMarcador2] = useState("");
   const [fecha, setFecha] = useState("");
+    const [jornada, setjornada] = useState("");
   const [hora, setHora] = useState("");
   const [equipoLocalID, setEquipoLocal] = useState("");
   const [equipoVisitanteID, setEquipoVisitante] = useState("");
@@ -57,6 +58,7 @@ const [selectedMatch, setSelectedMatch] = useState(null);
       marcador2: data.marcador2,
       fecha: data.fecha,
       hora: data.hora,
+      jornada: data.jornada,
     };
 
     setSelectedPartido(mappedPartido);
@@ -245,6 +247,7 @@ const [selectedMatch, setSelectedMatch] = useState(null);
     formData.append("equipoB_id", equipoVisitanteID);
     formData.append("fecha", fecha);
     formData.append("hora", hora);
+      formData.append("jornada", jornada);
 
     try {
       await axios.post(endpoint, formData, {
@@ -428,6 +431,7 @@ const [selectedMatch, setSelectedMatch] = useState(null);
     </div>
   </div>
 
+
   {/* Datos de Equipos y Marcadores */}
   <div className="row">
     {/* Equipo Local */}
@@ -511,8 +515,26 @@ const [selectedMatch, setSelectedMatch] = useState(null);
   </div>
 
 
-  {/* Fecha y Hora */}
+
+
   <div className="row">
+  {/* joranda */}
+    <div className="col-6 col-md-2 mb-3">
+      <label htmlFor="jornada">Jornada</label>
+      <input
+        id="jornada"
+        name="jornada"
+        type="text"
+        min={0}
+        max={50}
+        placeholder="Ej: Fecha 1 (Opcional)"
+        className="form-control"
+        onChange={(e) => setjornada(e.target.value)}
+        value={jornada}
+      />
+    </div>
+
+  {/* Fecha  */}
     <div className="col-6 col-md-2 mb-3">
       <label htmlFor="fecha">Fecha</label>
       <input
@@ -524,6 +546,8 @@ const [selectedMatch, setSelectedMatch] = useState(null);
         value={fecha}
       />
     </div>
+
+      {/* Hora */}
     <div className="col-6 col-md-2 mb-3">
       <label htmlFor="hora">Hora</label>
       <input
