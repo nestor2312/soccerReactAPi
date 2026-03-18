@@ -131,37 +131,50 @@ const partidosAMostrar = vista === 'todos'
         
         <main className="main-content mx-2">
 <div className="d-flex justify-content-center mb-4 mt-3">
-  {/* Usamos tu clase .pagination aquí para que hereden los estilos de los botones */}
-  <div className="pagination">
+
+  <div> 
+    
     <button 
-      className={vista === 'todos' ? '' : 'opacidad-baja'} 
+   
+      className={`btn-flip flip mx-2 ${vista === 'todos' ? 'active' : 'opacidad-baja'}`} 
+     
       style={vista === 'todos' ? { borderBottom: '4px solid #00bf63' } : {}}
       onClick={() => setVista('todos')}
     >
       Todos los partidos
     </button>
+
     <button 
-      className={vista === 'por_jornada' ? '' : 'opacidad-baja'} 
+    
+      className={`btn-flip flip mx-2 ${vista === 'por_jornada' ? 'active' : 'opacidad-baja'}`} 
       style={vista === 'por_jornada' ? { borderBottom: '4px solid #00bf63' } : {}}
       onClick={() => setVista('por_jornada')}
     >
       Ver por jornadas
     </button>
+
   </div>
 </div>
 
 {/* Si eligió jornadas, mostramos la lista de botones de jornada */}
 {vista === 'por_jornada' && (
-  <div className="d-flex flex-wrap justify-content-center gap-2 mb-4 ">
-    {listaJornadas.map(j => (
-     <button 
-  key={j} 
-  className={`btn-jornada ${jornadaSeleccionada === j ? 'active' : ''}`}
-  onClick={() => setJornadaSeleccionada(jornadaSeleccionada === j ? null : j)}
->
-  {j}
-</button>
-    ))}
+  <div className="d-flex flex-wrap justify-content-center gap-2 mb-4">
+    {listaJornadas
+      .sort((a, b) => {
+        // Extraemos solo los números del texto para comparar (ej: "Fecha 12" -> 12)
+        const numA = parseInt(a.replace(/\D/g, '')) || 0;
+        const numB = parseInt(b.replace(/\D/g, '')) || 0;
+        return numA - numB; // Cambia a numB - numA si los quieres de mayor a menor
+      })
+      .map(j => (
+        <button 
+          key={j} 
+          className={`btn-jornada ${jornadaSeleccionada === j ? 'active' : ''}`}
+          onClick={() => setJornadaSeleccionada(jornadaSeleccionada === j ? null : j)}
+        >
+          {j}
+        </button>
+      ))}
   </div>
 )}
 

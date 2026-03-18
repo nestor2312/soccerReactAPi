@@ -18,13 +18,18 @@ const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 
 const FORM_Players = () => {
   // ✅ Estados principales
-const [jugadores, setJugadores] = useState([]); // ✅ guarda todos los jugadores
+const [jugadores, ] = useState([]); // ✅ guarda todos los jugadores
 const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda los filtrados
 
   const [subcategorias, setSubcategorias] = useState([]);
   const [equiposFiltrados, setEquiposFiltrados] = useState([]);
   const [SubcategoriaID, setSubcategoriaID] = useState("");
   const [equipoID, setEquipoID] = useState("");
+
+// --- ESTADOS PARA EL FILTRO (Buscador/Tabla) ---
+const [filtroSubcategoria, setFiltroSubcategoria] = useState("");
+const [filtroEquipo, setFiltroEquipo] = useState("");
+const [equiposFiltro, setEquiposFiltro] = useState([]);
 
   const [selectedJugador, setSelectedJugador] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -80,70 +85,61 @@ const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda 
     fetchEquipos();
   }, [SubcategoriaID]);
 
-  // 🔹 Cargar todos los jugadores (paginación base)
-  const fetchJugadores = async (page = 1) => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`${InfoJugadores_endpoint}?page=${page}`);
-      setJugadores(response.data.data);
-      setJugadoresFiltrados(response.data.data);
-      setLastPage(response.data.last_page);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error al obtener jugadores:", error);
-      setIsLoading(false);
+// 🔹 Obtener equipos para el BUSCADOR (independiente del registro)
+useEffect(() => {
+  const fetchEquiposFiltro = async () => {
+    if (filtroSubcategoria) {
+      try {
+        const response = await axios.get(`${API_ENDPOINT}subcategoria/${filtroSubcategoria}/equipos`);
+        setEquiposFiltro(response.data);
+      } catch (error) {
+        console.error("Error al obtener equipos para el filtro:", error);
+      }
+    } else {
+      setEquiposFiltro([]);
+      setFiltroEquipo(""); // Limpiar equipo si no hay subcategoría
     }
   };
-// 🔹 Cargar todos los jugadores solo si NO hay filtros activos
-useEffect(() => {
-  if (SubcategoriaID || equipoID) return; // 🔸 evita sobreescribir filtrados
-  fetchJugadores(currentPage);
-}, [currentPage, SubcategoriaID, equipoID]);
+  fetchEquiposFiltro();
+}, [filtroSubcategoria]);
 
-
-
- // 🔹 Filtrar jugadores (subcategoría + equipo)
-
+// 🔹 Filtrar jugadores usando los nuevos estados de FILTRO
 useEffect(() => {
   const fetchJugadoresFiltrados = async () => {
     try {
-      // 🧩 Si no hay filtros, muestra los jugadores originales con paginación
-      if (!SubcategoriaID && !equipoID) {
-        fetchJugadores(currentPage);
-        return;
-      }
-
       setIsLoading(true);
+      // Si NO hay filtros activos, cargamos todos con paginación normal
+      if (!filtroSubcategoria && !filtroEquipo) {
+        const response = await axios.get(`${InfoJugadores_endpoint}?page=${currentPage}`);
+        setJugadoresFiltrados(response.data.data);
+        setLastPage(response.data.last_page);
+      } else {
+        // Si hay subcategoría, usamos su endpoint específico
+        const url = filtroEquipo 
+          ? `${API_ENDPOINT}subcategoria/${filtroSubcategoria}/jugadores?page=${currentPage}` // Aquí podrías filtrar por equipo después
+          : `${API_ENDPOINT}subcategoria/${filtroSubcategoria}/jugadores?page=${currentPage}`;
 
-      // 🧩 Si hay subcategoría, consulta jugadores de esa subcategoría
-      const response = await axios.get(
-        `${API_ENDPOINT}subcategoria/${SubcategoriaID}/jugadores?page=${currentPage}`
-      );
+        const response = await axios.get(url);
+        let jugadoresData = response.data.data || response.data;
+        let totalPages = response.data.last_page || 1;
 
-      let jugadoresData = response.data.data || response.data;
-      let totalPages = response.data.last_page || 1;
+        // Filtrado local por equipo si el backend no tiene el endpoint directo
+        if (filtroEquipo) {
+          jugadoresData = jugadoresData.filter(j => j.equipo?.id === parseInt(filtroEquipo));
+          totalPages = 1; 
+        }
 
-      // 🧩 Si además hay equipo, filtra por ese equipo
-      if (equipoID) {
-        const filtrados = jugadoresData.filter(
-          (j) => j.equipo?.id === parseInt(equipoID)
-        );
-        jugadoresData = filtrados.slice(0, 10); // limitar a 10 por página
-        totalPages = 1; // solo una página de resultados filtrados
+        setJugadoresFiltrados(jugadoresData);
+        setLastPage(totalPages);
       }
-
-      setJugadoresFiltrados(jugadoresData);
-      setLastPage(totalPages);
       setIsLoading(false);
     } catch (error) {
       console.error("Error al filtrar jugadores:", error);
       setIsLoading(false);
     }
   };
-
   fetchJugadoresFiltrados();
-}, [SubcategoriaID, equipoID, currentPage]);
-
+}, [filtroSubcategoria, filtroEquipo, currentPage]);
 
 
   // 🔹 Paginación
@@ -335,7 +331,11 @@ useEffect(() => {
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Subcategoría:</label>
-              <select className="form-control" value={SubcategoriaID} onChange={(e) => setSubcategoriaID(e.target.value)}>
+              <select className="form-control" value={filtroSubcategoria} onChange={(e) => {
+        setFiltroSubcategoria(e.target.value);
+        setFiltroEquipo(""); // Reiniciar equipo al cambiar subcategoría
+        setCurrentPage(1);   // Volver a página 1
+      }}>
                 <option value="">Ver todas las subcategorías</option>
                 {subcategorias.map((sub) => (
                   <option key={sub.id} value={sub.id}>
@@ -347,20 +347,24 @@ useEffect(() => {
 
             <div className="col-md-6">
               <label>Equipo:</label>
-              <select className="form-control" value={equipoID} onChange={(e) => setEquipoID(e.target.value)}>
+              <select className="form-control" value={filtroEquipo} onChange={(e) => {
+        setFiltroEquipo(e.target.value);
+        setCurrentPage(1);
+      }}>
                  <option value="" disabled >Seleccione un equipo</option>
                 <option value="">Ver todos los jugadores</option>
-                {equiposFiltrados.map((eq) => (
+                {equiposFiltro.map((eq) => (
                   <option key={eq.id} value={eq.id}>{eq.nombre}</option>
                 ))}
               </select>
             </div>
           </div>
 
-          <h6 className="text-left">
-   Total jugadores::{" "}
+         <h6 className="text-left">
+  Total jugadores:{" "}
   <strong>
-    {SubcategoriaID || equipoID
+    {/* ✅ Usamos los estados de filtro para decidir qué longitud mostrar */}
+    {filtroSubcategoria || filtroEquipo
       ? jugadoresFiltrados.length
       : jugadores.length}
   </strong>
