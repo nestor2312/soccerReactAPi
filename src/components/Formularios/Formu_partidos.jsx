@@ -48,6 +48,55 @@ const [filtroCategoria, setFiltroCategoria] = useState("");
 const [filtroSubcategoria, setFiltroSubcategoria] = useState("");
 const [filtroJornada, setFiltroJornada] = useState("");
 
+const [showPreviewModal, setShowPreviewModal] = useState(false);
+const [fixturePrevia, setFixturePrevia] = useState([]);
+const [esIdaYVuelta, setEsIdaYVuelta] = useState(false);
+
+const generarRoundRobin = (listaEquipos, idaYVuelta = false) => {
+  let teams = [...listaEquipos];
+  if (teams.length % 2 !== 0) {
+    teams.push({ id: null, nombre: "DESCANSA" });
+  }
+
+  const n = teams.length;
+  const jornadasIda = n - 1;
+  let fixtureIda = [];
+
+  for (let i = 0; i < jornadasIda; i++) {
+    for (let j = 0; j < n / 2; j++) {
+      const local = teams[j];
+      const visitante = teams[n - 1 - j];
+
+      if (local.id !== null && visitante.id !== null) {
+        fixtureIda.push({
+          jornada: `Fecha ${i + 1}`,
+          equipoA_id: local.id,
+          equipoB_id: visitante.id,
+          nombreA: local.nombre,
+          nombreB: visitante.nombre,
+        });
+      }
+    }
+    // Rotación
+    teams.splice(1, 0, teams.pop());
+  }
+
+  if (idaYVuelta) {
+    const fixtureVuelta = fixtureIda.map(partido => ({
+      ...partido,
+      jornada: `Fecha ${parseInt(partido.jornada.split(' ')[1]) + jornadasIda}`,
+      equipoA_id: partido.equipoB_id,
+      equipoB_id: partido.equipoA_id,
+      nombreA: partido.nombreB,
+      nombreB: partido.nombreA,
+    }));
+    return [...fixtureIda, ...fixtureVuelta];
+  }
+
+  return fixtureIda;
+};
+
+
 // El estado que "dispara" la consulta al Back
 const [paramsBusqueda, setParamsBusqueda] = useState({ 
   torneo_id: "", 
@@ -379,6 +428,31 @@ useEffect(() => {
     });
   };
 
+  const confirmarGuardadoFixture = async () => {
+  setShowPreviewModal(false);
+  setIsLoading(true);
+  
+  try {
+    for (const p of fixturePrevia) {
+      const formData = new FormData();
+      formData.append("equipoA_id", p.equipoA_id);
+      formData.append("equipoB_id", p.equipoB_id);
+      formData.append("jornada", p.jornada);
+      // fecha y hora se van vacíos como quieres
+      
+      await axios.post(endpoint, formData);
+    }
+    
+    Swal.fire("¡Éxito!", "Se han generado todos los partidos", "success");
+    fetchPartidos();
+  } catch (error) {
+    console.error(error);
+    Swal.fire("Error", "Hubo un problema al guardar algunos partidos", "error");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   return (
     <>
     {isLoading ? (
@@ -631,13 +705,36 @@ useEffect(() => {
   </div>
 
   {/* Botón de Envío */}
-  <div className="row">
-    <div className="col-12 mt-3">
-      <button className="btn btn-outline-primary " type="submit">
-        Registrar Partido
-      </button>
-    </div>
-  </div>
+<div className="col-12 mt-3 d-flex gap-2">
+  <button className="btn btn-outline-primary" type="submit">
+    Registrar Partido
+  </button>
+  <button 
+    type="button" 
+    className="btn btn-purple text-white" 
+    style={{backgroundColor: '#6f42c1'}}
+    onClick={() => {
+      if(equipos.length < 2) return Swal.fire("Error", "Necesitas al menos 2 equipos en el grupo", "error");
+      const res = generarRoundRobin(equipos, esIdaYVuelta);
+      setFixturePrevia(res);
+      setShowPreviewModal(true);
+    }}
+    disabled={!grupoId}
+  >
+    Generar Fixture Automático
+  </button>
+  <div className="form-check form-switch mt-2 custom-switch-container">
+  <input 
+    className="form-check-input custom-switch-input" 
+    type="checkbox" 
+    id="idaVueltaSwitch"
+    onChange={(e) => setEsIdaYVuelta(e.target.checked)} 
+  />
+  <label className="form-check-label small fw-bold" htmlFor="idaVueltaSwitch">
+    ¿Ida y Vuelta?
+  </label>
+</div>
+</div>
 </form>
 
 
@@ -811,7 +908,57 @@ useEffect(() => {
         </button>
       </div>
     </div>
+
+    
       )}
+      {showPreviewModal && (
+ <div className="modal" style={{ display: "block" }}>
+      <div className="modal-dialog modal-MD modal-dialog-centered">
+        <div className="modal-content" id="editModal" tabIndex="1">
+          <div className="modal-header">
+          <h5 className="modal-title">Previsualización del Fixture</h5>
+          <button type="button" className="btn-close" onClick={() => setShowPreviewModal(false)}></button>
+        </div>
+        <div className="modal-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+         <table className="table table-borderless align-middle ">
+    <tbody>
+      {fixturePrevia.reduce((acc, p, index) => {
+        // insertar un encabezado cada vez que cambia la jornada
+        if (index === 0 || p.jornada !== fixturePrevia[index - 1].jornada) {
+          acc.push(
+            <tr key={`header-${p.jornada}`} className="table-light text-center">
+              <td colSpan="4" className="fw-bold py-2 px-3 text-primary" style={{ backgroundColor: '#e9ecef', fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                {p.jornada}
+              </td>
+            </tr>
+          );
+        }
+        acc.push(
+         <tr key={index} className="border-bottom">
+  <td className="text-end fw-bold text-capitalize" style={{ width: '45%' }}>
+    {p.nombreA}
+  </td>
+  <td className="text-center" style={{ width: '10%' }}>
+    <span className="badge rounded-pill bg-light text-dark border small">vs</span>
+  </td>
+  <td className="text-start fw-bold text-capitalize" style={{ width: '45%' }}>
+    {p.nombreB}
+  </td>
+</tr>
+        );
+        return acc;
+      }, [])}
+    </tbody>
+  </table>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-secondary" onClick={() => setShowPreviewModal(false)}>Cancelar</button>
+          <button className="btn btn-primary" onClick={confirmarGuardadoFixture}>Confirmar y Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
       </>
   );
 };

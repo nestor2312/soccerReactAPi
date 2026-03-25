@@ -129,14 +129,14 @@ const partidosAMostrar = vista === 'todos'
 
 
         
-        <main className="main-content mx-2">
+        <main className="main-content mx-1">
 <div className="d-flex justify-content-center mb-4 mt-3">
 
   <div> 
     
     <button 
    
-      className={`btn-flip flip mx-2 ${vista === 'todos' ? 'active' : 'opacidad-baja'}`} 
+      className={`btn-flip2 flip2 mx-1 ${vista === 'todos' ? 'active' : 'opacidad-baja'}`} 
      
       style={vista === 'todos' ? { borderBottom: '4px solid #00bf63' } : {}}
       onClick={() => setVista('todos')}
@@ -146,7 +146,7 @@ const partidosAMostrar = vista === 'todos'
 
     <button 
     
-      className={`btn-flip flip mx-2 ${vista === 'por_jornada' ? 'active' : 'opacidad-baja'}`} 
+      className={`btn-flip2 flip mx-1 ${vista === 'por_jornada' ? 'active' : 'opacidad-baja'}`} 
       style={vista === 'por_jornada' ? { borderBottom: '4px solid #00bf63' } : {}}
       onClick={() => setVista('por_jornada')}
     >
