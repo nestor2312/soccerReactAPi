@@ -18,6 +18,7 @@ const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 
 const FORM_Players = () => {
   // ✅ Estados principales
+// eslint-disable-next-line no-unused-vars
 const [jugadores, ] = useState([]); // ✅ guarda todos los jugadores
 const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda los filtrados
 
@@ -25,7 +26,7 @@ const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda 
   const [equiposFiltrados, setEquiposFiltrados] = useState([]);
   const [SubcategoriaID, setSubcategoriaID] = useState("");
   const [equipoID, setEquipoID] = useState("");
-
+const [totalGeneral, setTotalGeneral] = useState(0);
 // --- ESTADOS PARA EL FILTRO (Buscador/Tabla) ---
 const [filtroSubcategoria, setFiltroSubcategoria] = useState("");
 const [filtroEquipo, setFiltroEquipo] = useState("");
@@ -52,7 +53,7 @@ const [equiposFiltro, setEquiposFiltro] = useState([]);
   useEffect(() => {
     document.title = "Admin - Jugadores";
   
-  });
+  },[]);
 
 
   // 🔹 Obtener subcategorías
@@ -103,43 +104,38 @@ useEffect(() => {
   fetchEquiposFiltro();
 }, [filtroSubcategoria]);
 
-// 🔹 Filtrar jugadores usando los nuevos estados de FILTRO
 useEffect(() => {
-  const fetchJugadoresFiltrados = async () => {
-    try {
-      setIsLoading(true);
-      // Si NO hay filtros activos, cargamos todos con paginación normal
-      if (!filtroSubcategoria && !filtroEquipo) {
-        const response = await axios.get(`${InfoJugadores_endpoint}?page=${currentPage}`);
-        setJugadoresFiltrados(response.data.data);
-        setLastPage(response.data.last_page);
-      } else {
-        // Si hay subcategoría, usamos su endpoint específico
-        const url = filtroEquipo 
-          ? `${API_ENDPOINT}subcategoria/${filtroSubcategoria}/jugadores?page=${currentPage}` // Aquí podrías filtrar por equipo después
-          : `${API_ENDPOINT}subcategoria/${filtroSubcategoria}/jugadores?page=${currentPage}`;
-
-        const response = await axios.get(url);
-        let jugadoresData = response.data.data || response.data;
-        let totalPages = response.data.last_page || 1;
-
-        // Filtrado local por equipo si el backend no tiene el endpoint directo
-        if (filtroEquipo) {
-          jugadoresData = jugadoresData.filter(j => j.equipo?.id === parseInt(filtroEquipo));
-          totalPages = 1; 
-        }
-
-        setJugadoresFiltrados(jugadoresData);
-        setLastPage(totalPages);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error al filtrar jugadores:", error);
-      setIsLoading(false);
-    }
-  };
   fetchJugadoresFiltrados();
 }, [filtroSubcategoria, filtroEquipo, currentPage]);
+
+// 🔹 Filtrar jugadores usando los nuevos estados de FILTRO
+const fetchJugadoresFiltrados = async () => {
+  try {
+    setIsLoading(true);
+    let url = "";
+    
+    if (!filtroSubcategoria && !filtroEquipo) {
+      url = `${InfoJugadores_endpoint}?page=${currentPage}`;
+    } else {
+      url = `${API_ENDPOINT}subcategoria/${filtroSubcategoria}/jugadores?page=${currentPage}`;
+    }
+
+    const response = await axios.get(url);
+    let data = response.data.data || response.data;
+    
+    if (filtroEquipo) {
+      data = data.filter(j => j.equipo?.id === parseInt(filtroEquipo));
+    }
+
+    setJugadoresFiltrados(data);
+    setLastPage(response.data.last_page || 1);
+    setTotalGeneral(response.data.total || data.length);
+    setIsLoading(false);
+  } catch (error) {
+    console.error("Error:", error);
+    setIsLoading(false);
+  }
+};
 
 
   // 🔹 Paginación
@@ -159,10 +155,10 @@ useEffect(() => {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     }).then(async (result) => {
-      if (result.isConfirmed) {
+if (result.isConfirmed) {
         try {
           await axios.delete(`${endpoint}/${id}`);
-          fetchJugadores(currentPage);
+          fetchJugadoresFiltrados();
           Swal.fire("Eliminado", "Jugador eliminado correctamente.", "success");
         } catch (error) {
           console.error("Error al eliminar jugador:", error);
@@ -193,7 +189,7 @@ useEffect(() => {
 
       setAlerta({ mensaje: "Jugador registrado correctamente!", tipo: "success" });
       setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 4000);
-      fetchJugadores(currentPage);
+      fetchJugadoresFiltrados(currentPage);
 
       // Limpiar formulario
       setNombre("");
@@ -229,7 +225,7 @@ useEffect(() => {
   const saveJugador = async (updatedJugador) => {
     try {
       await axios.put(`${API_ENDPOINT}jugador/${updatedJugador.id}`, updatedJugador);
-      fetchJugadores(currentPage);
+      fetchJugadoresFiltrados(currentPage);
       setAlerta({ mensaje: "Jugador actualizado correctamente!", tipo: "success" });
     } catch (error) {
       console.error("Error al actualizar jugador:", error);
@@ -360,14 +356,9 @@ useEffect(() => {
             </div>
           </div>
 
-         <h6 className="text-left">
-  Total jugadores:{" "}
-  <strong>
-    {/* ✅ Usamos los estados de filtro para decidir qué longitud mostrar */}
-    {filtroSubcategoria || filtroEquipo
-      ? jugadoresFiltrados.length
-      : jugadores.length}
-  </strong>
+        <h6 className="text-left">
+  {filtroSubcategoria || filtroEquipo ? "Resultados encontrados: " : "Total de jugadores registrados: "}
+  <strong>{totalGeneral}</strong>
 </h6>
 
           {/* 🔸 Tabla */}
