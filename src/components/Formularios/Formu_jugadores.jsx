@@ -18,13 +18,19 @@ const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 
 const FORM_Players = () => {
   // ✅ Estados principales
-const [jugadores, setJugadores] = useState([]); // ✅ guarda todos los jugadores
+// eslint-disable-next-line no-unused-vars
+const [jugadores, ] = useState([]); // ✅ guarda todos los jugadores
 const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda los filtrados
 
   const [subcategorias, setSubcategorias] = useState([]);
   const [equiposFiltrados, setEquiposFiltrados] = useState([]);
   const [SubcategoriaID, setSubcategoriaID] = useState("");
   const [equipoID, setEquipoID] = useState("");
+const [totalGeneral, setTotalGeneral] = useState(0);
+// --- ESTADOS PARA EL FILTRO (Buscador/Tabla) ---
+const [filtroSubcategoria, setFiltroSubcategoria] = useState("");
+const [filtroEquipo, setFiltroEquipo] = useState("");
+const [equiposFiltro, setEquiposFiltro] = useState([]);
 
   const [selectedJugador, setSelectedJugador] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -47,7 +53,7 @@ const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda 
   useEffect(() => {
     document.title = "Admin - Jugadores";
   
-  });
+  },[]);
 
 
   // 🔹 Obtener subcategorías
@@ -80,70 +86,56 @@ const [jugadoresFiltrados, setJugadoresFiltrados] = useState([]); // ✅ guarda 
     fetchEquipos();
   }, [SubcategoriaID]);
 
-  // 🔹 Cargar todos los jugadores (paginación base)
-  const fetchJugadores = async (page = 1) => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`${InfoJugadores_endpoint}?page=${page}`);
-      setJugadores(response.data.data);
-      setJugadoresFiltrados(response.data.data);
-      setLastPage(response.data.last_page);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error al obtener jugadores:", error);
-      setIsLoading(false);
+// 🔹 Obtener equipos para el BUSCADOR (independiente del registro)
+useEffect(() => {
+  const fetchEquiposFiltro = async () => {
+    if (filtroSubcategoria) {
+      try {
+        const response = await axios.get(`${API_ENDPOINT}subcategoria/${filtroSubcategoria}/equipos`);
+        setEquiposFiltro(response.data);
+      } catch (error) {
+        console.error("Error al obtener equipos para el filtro:", error);
+      }
+    } else {
+      setEquiposFiltro([]);
+      setFiltroEquipo(""); // Limpiar equipo si no hay subcategoría
     }
   };
-// 🔹 Cargar todos los jugadores solo si NO hay filtros activos
-useEffect(() => {
-  if (SubcategoriaID || equipoID) return; // 🔸 evita sobreescribir filtrados
-  fetchJugadores(currentPage);
-}, [currentPage, SubcategoriaID, equipoID]);
-
-
-
- // 🔹 Filtrar jugadores (subcategoría + equipo)
+  fetchEquiposFiltro();
+}, [filtroSubcategoria]);
 
 useEffect(() => {
-  const fetchJugadoresFiltrados = async () => {
-    try {
-      // 🧩 Si no hay filtros, muestra los jugadores originales con paginación
-      if (!SubcategoriaID && !equipoID) {
-        fetchJugadores(currentPage);
-        return;
-      }
-
-      setIsLoading(true);
-
-      // 🧩 Si hay subcategoría, consulta jugadores de esa subcategoría
-      const response = await axios.get(
-        `${API_ENDPOINT}subcategoria/${SubcategoriaID}/jugadores?page=${currentPage}`
-      );
-
-      let jugadoresData = response.data.data || response.data;
-      let totalPages = response.data.last_page || 1;
-
-      // 🧩 Si además hay equipo, filtra por ese equipo
-      if (equipoID) {
-        const filtrados = jugadoresData.filter(
-          (j) => j.equipo?.id === parseInt(equipoID)
-        );
-        jugadoresData = filtrados.slice(0, 10); // limitar a 10 por página
-        totalPages = 1; // solo una página de resultados filtrados
-      }
-
-      setJugadoresFiltrados(jugadoresData);
-      setLastPage(totalPages);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error al filtrar jugadores:", error);
-      setIsLoading(false);
-    }
-  };
-
   fetchJugadoresFiltrados();
-}, [SubcategoriaID, equipoID, currentPage]);
+}, [filtroSubcategoria, filtroEquipo, currentPage]);
 
+// 🔹 Filtrar jugadores usando los nuevos estados de FILTRO
+const fetchJugadoresFiltrados = async () => {
+  try {
+    setIsLoading(true);
+    let url = "";
+    
+    if (!filtroSubcategoria && !filtroEquipo) {
+      url = `${InfoJugadores_endpoint}?page=${currentPage}`;
+    } else {
+      url = `${API_ENDPOINT}subcategoria/${filtroSubcategoria}/jugadores?page=${currentPage}`;
+    }
+
+    const response = await axios.get(url);
+    let data = response.data.data || response.data;
+    
+    if (filtroEquipo) {
+      data = data.filter(j => j.equipo?.id === parseInt(filtroEquipo));
+    }
+
+    setJugadoresFiltrados(data);
+    setLastPage(response.data.last_page || 1);
+    setTotalGeneral(response.data.total || data.length);
+    setIsLoading(false);
+  } catch (error) {
+    console.error("Error:", error);
+    setIsLoading(false);
+  }
+};
 
 
   // 🔹 Paginación
@@ -163,10 +155,10 @@ useEffect(() => {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     }).then(async (result) => {
-      if (result.isConfirmed) {
+if (result.isConfirmed) {
         try {
           await axios.delete(`${endpoint}/${id}`);
-          fetchJugadores(currentPage);
+          fetchJugadoresFiltrados();
           Swal.fire("Eliminado", "Jugador eliminado correctamente.", "success");
         } catch (error) {
           console.error("Error al eliminar jugador:", error);
@@ -197,7 +189,7 @@ useEffect(() => {
 
       setAlerta({ mensaje: "Jugador registrado correctamente!", tipo: "success" });
       setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 4000);
-      fetchJugadores(currentPage);
+      fetchJugadoresFiltrados(currentPage);
 
       // Limpiar formulario
       setNombre("");
@@ -233,7 +225,7 @@ useEffect(() => {
   const saveJugador = async (updatedJugador) => {
     try {
       await axios.put(`${API_ENDPOINT}jugador/${updatedJugador.id}`, updatedJugador);
-      fetchJugadores(currentPage);
+      fetchJugadoresFiltrados(currentPage);
       setAlerta({ mensaje: "Jugador actualizado correctamente!", tipo: "success" });
     } catch (error) {
       console.error("Error al actualizar jugador:", error);
@@ -335,7 +327,11 @@ useEffect(() => {
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Subcategoría:</label>
-              <select className="form-control" value={SubcategoriaID} onChange={(e) => setSubcategoriaID(e.target.value)}>
+              <select className="form-control" value={filtroSubcategoria} onChange={(e) => {
+        setFiltroSubcategoria(e.target.value);
+        setFiltroEquipo(""); // Reiniciar equipo al cambiar subcategoría
+        setCurrentPage(1);   // Volver a página 1
+      }}>
                 <option value="">Ver todas las subcategorías</option>
                 {subcategorias.map((sub) => (
                   <option key={sub.id} value={sub.id}>
@@ -347,23 +343,22 @@ useEffect(() => {
 
             <div className="col-md-6">
               <label>Equipo:</label>
-              <select className="form-control" value={equipoID} onChange={(e) => setEquipoID(e.target.value)}>
+              <select className="form-control" value={filtroEquipo} onChange={(e) => {
+        setFiltroEquipo(e.target.value);
+        setCurrentPage(1);
+      }}>
                  <option value="" disabled >Seleccione un equipo</option>
                 <option value="">Ver todos los jugadores</option>
-                {equiposFiltrados.map((eq) => (
+                {equiposFiltro.map((eq) => (
                   <option key={eq.id} value={eq.id}>{eq.nombre}</option>
                 ))}
               </select>
             </div>
           </div>
 
-          <h6 className="text-left">
-   Total jugadores::{" "}
-  <strong>
-    {SubcategoriaID || equipoID
-      ? jugadoresFiltrados.length
-      : jugadores.length}
-  </strong>
+        <h6 className="text-left">
+  {filtroSubcategoria || filtroEquipo ? "Resultados encontrados: " : "Total de jugadores registrados: "}
+  <strong>{totalGeneral}</strong>
 </h6>
 
           {/* 🔸 Tabla */}

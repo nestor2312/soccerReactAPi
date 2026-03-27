@@ -25,7 +25,8 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
   const [marcador2, setMarcador2] = useState(matchData?.marcador2 ?? 0);
 
   const [errors, setErrors] = useState({});
-  const [isPreloading, setIsPreloading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isPreoading, setIsPreloading] = useState(false);
 
   // -----------------------
   // Validación
@@ -166,99 +167,45 @@ useEffect(() => {
  
 }, [matchData, API_ENDPOINT]);
 
- 
-  useEffect(() => {
-    
- if (!torneoId) {
-  setCategorias([]);
-  setCategoriaId("");
-  setSubcategorias([]);
-  setSubcategoriaId("");
-  setGrupos([]);
-  setGrupoId("");
-  setEquipos([]);
-  return;
-}
-
-
-    const fetchCategorias = async () => {
-      try {
-        const res = await axios.get(`${API_ENDPOINT}categorias/${torneoId}`);
-        setCategorias(res.data || []);
-        // si la categoria actual ya está en la nueva lista la mantenemos, si no, la limpiamos
-        const exists = res.data?.some?.(c => String(c.id) === String(categoriaId));
-        if (!exists) setCategoriaId("");
-        // limpiar siguientes niveles
-        setSubcategorias([]);
-        setSubcategoriaId("");
-        setGrupos([]);
-        setGrupoId("");
-        setEquipos([]);
-       
-      } catch (err) {
-        console.error("Error al cargar categorías:", err);
-      }
-    };
-    fetchCategorias();
-  }, [torneoId, API_ENDPOINT, isPreloading]); // mantener isPreloading para guard
-
-  useEffect(() => {
-    if (isPreloading) return;
-   if (!categoriaId) {
-  setSubcategorias([]);
-  setSubcategoriaId("");
-  setGrupos([]);
-  setGrupoId("");
-  setEquipos([]);
-  return;
-}
-
-
-    const fetchSubcategorias = async () => {
-      try {
-        const res = await axios.get(`${API_ENDPOINT}categoria/${categoriaId}/subcategorias`);
-        setSubcategorias(res.data || []);
-        const exists = res.data?.some?.(s => String(s.id) === String(subcategoriaId));
-        if (!exists) setSubcategoriaId("");
-        // limpiar niveles inferiores
-        setGrupos([]);
-        setGrupoId("");
-        setEquipos([]);
-       
-      } catch (err) {
-        console.error("Error al cargar subcategorías:", err);
-      }
-    };
-    fetchSubcategorias();
-  }, [categoriaId, API_ENDPOINT, isPreloading]);
 
 
 
-
-
-
-useEffect(() => {
-  if (isPreloading) return;
-
-  if (!grupoId) {
-    setEquipos([]);
-   
-    return;
+ // --- MANEJADORES PARA CAMBIOS MANUALES ---
+const handleTorneoChange = async (id) => {
+  setTorneoId(id);
+  setCategoriaId(""); setSubcategoriaId(""); setGrupoId(""); setEquipos([]);
+  if (id) {
+    const res = await axios.get(`${API_ENDPOINT}categorias/${id}`);
+    setCategorias(res.data || []);
   }
+};
 
-  const fetchEquipos = async () => {
-    try {
-      const res = await axios.get(`${API_ENDPOINT}equipos/${grupoId}`);
-      setEquipos(res.data || []);
-    } catch (err) {
-      console.error("Error al cargar equipos:", err);
-    }
-  };
+const handleCategoriaChange = async (id) => {
+  setCategoriaId(id);
+  setSubcategoriaId(""); setGrupoId(""); setEquipos([]);
+  if (id) {
+    const res = await axios.get(`${API_ENDPOINT}categoria/${id}/subcategorias`);
+    setSubcategorias(res.data || []);
+  }
+};
 
-  fetchEquipos();
-}, [grupoId, API_ENDPOINT, isPreloading]);
+const handleSubcategoriaChange = async (id) => {
+  setSubcategoriaId(id);
+  setGrupoId(""); setEquipos([]);
+  if (id) {
+    const res = await axios.get(`${API_ENDPOINT}grupos/${id}`);
+    setGrupos(res.data || []);
+  }
+};
 
-
+const handleGrupoChange = async (id) => {
+  setGrupoId(id);
+  setEquipoLocal(""); setEquipoVisitante("");
+  if (id) {
+    const res = await axios.get(`${API_ENDPOINT}equipos/${id}`);
+    setEquipos(res.data || []);
+  }
+};
 
 
 
@@ -313,7 +260,7 @@ useEffect(() => {
                         id="torneo_id"
                         className="form-control"
                         value={torneoId}
-                        onChange={(e) => setTorneoId(e.target.value)}
+                      onChange={(e) => handleTorneoChange(e.target.value)}
                         disabled={torneos.length === 0}
                       >
                         <option value="" disabled>
@@ -339,7 +286,7 @@ useEffect(() => {
                         id="categoria_id"
                         className="form-control"
                         value={categoriaId}
-                        onChange={(e) => setCategoriaId(e.target.value)}
+                  onChange={(e) => handleCategoriaChange(e.target.value)}
                         disabled={!torneoId || categorias.length === 0}
                       >
                         <option value="" disabled>
@@ -367,7 +314,7 @@ useEffect(() => {
                         id="subcategoria_id"
                         className="form-control"
                         value={subcategoriaId}
-                        onChange={(e) => setSubcategoriaId(e.target.value)}
+                     onChange={(e) => handleSubcategoriaChange(e.target.value)}
                         disabled={!categoriaId || subcategorias.length === 0}
                       >
                         <option value="" disabled>
@@ -395,7 +342,7 @@ useEffect(() => {
                         id="grupo_id"
                         className="form-control"
                         value={grupoId}
-                        onChange={(e) => setGrupoId(e.target.value)}
+                      onChange={(e) => handleGrupoChange(e.target.value)}
                         disabled={!subcategoriaId || grupos.length === 0}
                       >
                         <option value="" disabled>

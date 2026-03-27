@@ -178,6 +178,15 @@ h2{
   transition: background-color 0.3s;
 }
 
+.btn-flip2 {
+  color: white;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
 
 
 

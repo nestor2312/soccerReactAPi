@@ -503,7 +503,41 @@ input{
     }
   }
   
+
+/* Estado Normal (Off) */
+.custom-switch-input {
+  width: 2.5em !important;
+  height: 1.25em !important;
+  background-color: #cbd5e0 !important;
+  border-color: #a0aec0 !important;
+  background-image: url("../../assets/Football-ball.png") !important;
   
+  /* Ajustes de tamaño y posición */
+  background-size: 40% !important; 
+  background-repeat: no-repeat !important; /* Vital para que no se repita */
+  background-position: 10% center !important; /* Un poco de margen a la izquierda */
+
+  transition: all 0.3s ease-in-out !important; 
+  cursor: pointer;
+}
+
+/* Estado Active (On) */
+.custom-switch-input:checked {
+  background-color: #10b981 !important; 
+  border-color: #059669 !important;
+  
+  background-image: url("../../assets/Soccer.png") !important;
+  background-position: 90% center !important; /* Margen a la derecha */
+}
+
+/* Estilo del Label */
+.custom-switch-container label {
+  cursor: pointer;
+  color: #4a5568;
+  padding-left: 10px;
+  vertical-align: middle;
+  font-weight: 500;
+}
   @media (max-width: 768px) {
     
     .logo{

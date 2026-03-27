@@ -13,10 +13,7 @@ const Images = IMAGES_URL;
 
 const Partidos = () => {
 
-  
 
-
-  
   const { subcategoriaId } = useParams();
   const [partidos, setPartidos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,23 +23,38 @@ const Partidos = () => {
   const [selectedPartido, setSelectedPartido] = useState(null);
   const modalRef = useRef(null);
 
-  useEffect(() => {
-    const getPartidos = async () => {
-      try {
-        const response = await axios.get(
-          `${endpoint}subcategoria/${subcategoriaId}/partidos/paginador?page=${currentPage}`
-        );
-        setPartidos(response.data.data);
-        setLastPage(response.data.last_page);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        setError("Error al cargar los partidos");
-        console.error("Error al obtener los partidos:", error);
+  const [vista, setVista] = useState('todos'); // 'todos' o 'por_jornada'
+const [jornadaSeleccionada, setJornadaSeleccionada] = useState(null);
+
+const listaJornadas = [...new Set(partidos.map(p => p.jornada).filter(j => j !== null))];
+
+useEffect(() => {
+  const getPartidos = async () => {
+    try {
+      setIsLoading(true);
+      const url = vista === 'todos' 
+        ? `${endpoint}subcategoria/${subcategoriaId}/partidos/paginador?page=${currentPage}`
+        : `${endpoint}subcategoria/${subcategoriaId}/partidos`; 
+
+      const response = await axios.get(url);
+      
+      if (vista === 'todos') {
+        // Estructura con paginación de Laravel
+        setPartidos(response.data.data || []);
+        setLastPage(response.data.last_page || 1);
+      } else {
+        // Estructura sin paginación (get)
+        setPartidos(response.data || []);
       }
-    };
-    getPartidos();
-  }, [subcategoriaId, currentPage]);
+    } catch (err) {
+      console.error(err);
+      setError("Error al cargar");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  getPartidos();
+}, [subcategoriaId, currentPage, vista]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -92,8 +104,15 @@ useEffect(() => {
     setEventos([]); 
   }
 
+
   return () => { isMounted = false; }; // Cleanup
 }, [selectedPartido]);
+
+const partidosAMostrar = vista === 'todos' 
+  ? partidos 
+  : (jornadaSeleccionada 
+      ? partidos.filter(p => p.jornada === jornadaSeleccionada) 
+      : []); // Si no hay jornada seleccionada y está en modo jornadas, mostramos vacío o un mensaje
 
   return (
     <div className="layout">
@@ -107,7 +126,58 @@ useEffect(() => {
           <ErrorCarga />
         </div>
       ) : partidos.length > 0 ? (
-        <main className="main-content mx-2">
+
+
+        
+        <main className="main-content mx-1">
+<div className="d-flex justify-content-center mb-4 mt-3">
+
+  <div> 
+    
+    <button 
+   
+      className={`btn-flip2 flip2 mx-1 ${vista === 'todos' ? 'active' : 'opacidad-baja'}`} 
+     
+      style={vista === 'todos' ? { borderBottom: '4px solid #00bf63' } : {}}
+      onClick={() => setVista('todos')}
+    >
+      Todos los partidos
+    </button>
+
+    <button 
+    
+      className={`btn-flip2 flip mx-1 ${vista === 'por_jornada' ? 'active' : 'opacidad-baja'}`} 
+      style={vista === 'por_jornada' ? { borderBottom: '4px solid #00bf63' } : {}}
+      onClick={() => setVista('por_jornada')}
+    >
+      Ver por jornadas
+    </button>
+
+  </div>
+</div>
+
+{/* Si eligió jornadas, mostramos la lista de botones de jornada */}
+{vista === 'por_jornada' && (
+  <div className="d-flex flex-wrap justify-content-center gap-2 mb-4">
+    {listaJornadas
+      .sort((a, b) => {
+        // Extraemos solo los números del texto para comparar (ej: "Fecha 12" -> 12)
+        const numA = parseInt(a.replace(/\D/g, '')) || 0;
+        const numB = parseInt(b.replace(/\D/g, '')) || 0;
+        return numA - numB; // Cambia a numB - numA si los quieres de mayor a menor
+      })
+      .map(j => (
+        <button 
+          key={j} 
+          className={`btn-jornada ${jornadaSeleccionada === j ? 'active' : ''}`}
+          onClick={() => setJornadaSeleccionada(jornadaSeleccionada === j ? null : j)}
+        >
+          {j}
+        </button>
+      ))}
+  </div>
+)}
+
           <div className="col-sm-12 mt-4 hiden">
             <div className="card border-0 shadow ">
               <div className="card-header fondo-card TITULO border-0">
@@ -125,7 +195,7 @@ useEffect(() => {
                     </tr>
                   </thead>
                   <tbody>
-                    {partidos.map((partido) => (
+                    {partidosAMostrar.map((partido) => (
                       <tr
                         key={partido.id}
                         onClick={() => handleOpenModal(partido)}
@@ -191,28 +261,31 @@ useEffect(() => {
             </div>
 
             {/* Paginación */}
-            <div className="pagination mt-4 ">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                ← Anterior
-              </button>
-              <span>{`Página ${currentPage} de ${lastPage}`}</span>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === lastPage}
-              >
-                Siguiente →
-              </button>
-            </div>
+          {/* Solo muestra el paginador si la vista es 'todos' */}
+{vista === 'todos' && (
+  <div className="pagination mt-4">
+    <button
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      ← Anterior
+    </button>
+    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+    <button
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === lastPage}
+    >
+      Siguiente →
+    </button>
+  </div>
+)}
           </div>
 
           {/* Cards de partidos */}
           <section className="Partidos hiden-box">
             <div className="margen mt-4">
               <div className="row">
-                {partidos.map((partido) => (
+                {partidosAMostrar.map((partido) => (
                   <div
                     className="col-md-4 mb-4"
                     key={partido.id}
@@ -273,21 +346,24 @@ useEffect(() => {
                 ))}
               </div>
               {/* Paginación */}
-              <div className="pagination mb-4">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  ← Anterior
-                </button>
-                <span>{`Página ${currentPage} de ${lastPage}`}</span>
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === lastPage}
-                >
-                  Siguiente →
-                </button>
-              </div>
+           {/* Solo muestra el paginador si la vista es 'todos' */}
+{vista === 'todos' && (
+  <div className="pagination mt-4">
+    <button
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      ← Anterior
+    </button>
+    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+    <button
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === lastPage}
+    >
+      Siguiente →
+    </button>
+  </div>
+)}
             </div>
           </section>
 
@@ -306,6 +382,7 @@ useEffect(() => {
 
                 <div className="card-body d-flex flex-column justify-content-center align-items-center">
                   <div className="row dialog-box">
+                    <h1 className="scoremodal"> {selectedPartido.jornada || " "}</h1>
                     <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
                       <img
                         src={`${Images}/${selectedPartido.equipo_a?.archivo}`}
@@ -428,9 +505,7 @@ useEffect(() => {
 </div>
       </div>
     )}
-  </div>
-                
-                
+  </div>                
               </>
             )}
           </dialog>

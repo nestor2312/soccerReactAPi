@@ -138,8 +138,24 @@ a {
   border-bottom: 2px solid #79a08d;
 }
 
-.pagination button:hover {
-  border-bottom: 1px solid #79a08d;
+
+
+.btn-jornada {
+    background-color: #f8f9fa; /* Gris muy claro de fondo */
+    color: #152039; /* El azul oscuro de tu marca */
+    border: 1px solid #ddd;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.btn-jornada.active {
+      background: linear-gradient(180deg, #152039 0%, #0F162A 100%);
+    color: #ffffff; 
+     box-shadow: 0px 1px 6px #25ff95;
+    border-color: #00bf63b8;
 }
 
 .pagination button:disabled {
@@ -154,6 +170,14 @@ a {
 .pagination span {
   margin: 0 5px;
 }
+
+/* Para los botones de filtro que no están seleccionados */
+.opacidad-baja {
+  opacity: 0.6;
+ filter: grayscale(50%);
+  border-bottom: 2px solid transparent !important;
+}
+
 
 /* Para pantallas tipo laptop (hasta 1366px) */
 
