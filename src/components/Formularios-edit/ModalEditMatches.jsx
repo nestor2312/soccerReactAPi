@@ -13,7 +13,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
 
-  // mantener todo string selects
+  // mantener todo como string para selects
   const [torneoId, setTorneoId] = useState(matchData?.torneoId ? String(matchData.torneoId) : "");
   const [categoriaId, setCategoriaId] = useState(matchData?.categoriaId ? String(matchData.categoriaId) : "");
   const [subcategoriaId, setSubcategoriaId] = useState(matchData?.subcategoriaId ? String(matchData.subcategoriaId) : "");
@@ -25,7 +25,8 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
   const [marcador2, setMarcador2] = useState(matchData?.marcador2 ?? 0);
 
   const [errors, setErrors] = useState({});
-  const [setIsPreloading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isPreoading, setIsPreloading] = useState(false);
 
   // -----------------------
   // Validación
