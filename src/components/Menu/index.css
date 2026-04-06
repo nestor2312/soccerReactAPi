@@ -3,7 +3,7 @@ a{
   border-bottom: none!important;
   text-decoration: inherit!important;
   margin-left: 15px;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Oswald', sans-serif;
 display:table-cell;
   font-size: 18px;
   font-style: normal;
@@ -14,7 +14,7 @@ display:table-cell;
 
 .log{
    color: white!important;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 a:hover{
  
@@ -49,8 +49,8 @@ margin-left: 10px;
   justify-content: start;
   align-items: center;
   padding: 1rem;
-background: linear-gradient(180deg, #152039 0%, #00bf63a6 100%);
-
+/* background: linear-gradient(180deg, #152039 0%, #00bf63a6 100%); */
+background: linear-gradient(180deg, #DADADA 0%, #000000 80%);
 
 }
 .navbar-links a:last-child {
@@ -149,7 +149,7 @@ margin-right: 8px;
     position: fixed;
     top: 0;
     right: 0;
-    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+    background: linear-gradient(180deg, #A9A9A9 0%, #3F3F3F 60%, #000000 100%);
     z-index: 2;
     flex-direction: column;
     width: 100%;

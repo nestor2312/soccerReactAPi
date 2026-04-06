@@ -2,7 +2,8 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 600;
-  --bs-body-bg: #f5f5f5 !important;
+  --bs-body-bg:  radial-gradient(circle at center, #0b2d1a 0%, #050505 100%) no-repeat fixed !important;
+
 }
 
 html, body {
@@ -31,11 +32,54 @@ a {
 a:hover {
   color: #f8f8f8;
 }
+/* --- CONFIGURACIÓN PARA PC Y PANTALLAS GRANDES --- */
+/* Esta regla se aplica a todo, por defecto */
+.inicio-background {
+  /* Imagen de PC (Horizontal o Principal) */
+  background-image: url('./assets/Gemini_Generated_Image_exjcepexjcepexjc.png') !important;
+
+  /* 1. Cubre todo el espacio sin deformar la imagen */
+  background-size: cover;
+
+  /* 2. Centra la imagen para que lo más importante no se corte */
+  background-position: center center;
+
+  /* 3. Evita que la imagen se duplique */
+  background-repeat: no-repeat;
+
+
+  /* Importante: el contenedor debe tener una altura */
+  height: 100vh;
+  width: 100%;
+}
+
+/* --- CONFIGURACIÓN PARA MÓVILES --- */
+/* Esta regla solo se activa en pantallas pequeñas y sobrescribe la anterior */
+@media (max-width: 768px) {
+  .inicio-background {
+    /* USA LA IMAGEN DE MÓVIL (VERTICAL) AQUÍ */
+    background-image: url('./assets/Gemini_Generated_Image_8biopw8biopw8bio.png') !important;
+     background-size: cover;
+
+  /* 2. Centra la imagen para que lo más importante no se corte */
+  background-position: center center;
+
+  /* 3. Evita que la imagen se duplique */
+  background-repeat: no-repeat;
+ 
+   height: 100vh;
+    
+  
+   
+  }
+}
 
 body {
  display: block;
  min-height: 100dvh;
- background: #f5f5f5!important;
+ background: #dfdfe3 !important;
+    /* background-image: */
+                      /* url('./assets/Gemini_Generated_Image_yths4kyths4kyths.png'); O una URL de internet */
 
  /* grid-template-columns: auto 1fr auto; */
 
@@ -54,7 +98,8 @@ h1 {
   font-weight: 500;
   font-family: inherit;
   /* background-color: #1a1a1a; */
-  background-color: #00BF63;
+background: #1A1A1A;
+border: solid #3F3F3F;
   cursor: pointer;
   color: #ffffff;
   /* transition: ; */
@@ -101,7 +146,8 @@ button {
   font-weight: 500;
   font-family: inherit;
   /* background-color: #1a1a1a; */
-  background-color: #00BF63;
+ background: #1A1A1A;
+border: solid #3F3F3F;
   cursor: pointer;
   color: #ffffff;
   /* transition: ; */

@@ -89,7 +89,7 @@ background: #ffffff!important;
   }
 .scoremodal{
     text-align: center;
-    font-family: 'Roboto Condensed', sans-serif; 
+    font-family: 'Oswald', sans-serif; 
     font-size: 22px;
     font-style: normal;
     font-weight: 600; 
@@ -117,7 +117,7 @@ background: #ffffff!important;
 .fecha {
     text-align: center;
     color: #000;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 13px;
     font-style: normal;
     font-weight: 600;
@@ -128,7 +128,7 @@ background: #ffffff!important;
 .hora {
     display: block;
     text-align: center;
-    font-family: 'Days One', sans-serif;
+    font-family: 'notable', sans-serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;

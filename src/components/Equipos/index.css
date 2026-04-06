@@ -18,7 +18,7 @@
 }
 
 .team-hover{
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
@@ -50,7 +50,9 @@
 .TITULO {
   color: #FFF;
   text-align: center;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'notable', sans-serif;
+   letter-spacing: 3px;
+ letter-spacing: 3px;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
@@ -76,7 +78,7 @@ a {
 
 .team {
   color: #000;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
@@ -125,7 +127,7 @@ a {
 
 .pagination button {
   font-weight: bold;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Oswald', sans-serif;
   margin: 0 10px;
   padding: 5px 15px;
   /* background: linear-gradient(180deg, #152039 30%, #00bf638b 90%); */
@@ -146,7 +148,7 @@ a {
     border: 1px solid #ddd;
     padding: 4px 12px;
     border-radius: 4px;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-weight: bold;
     transition: all 0.2s;
 }
@@ -160,7 +162,7 @@ a {
 
 .pagination button:disabled {
   font-weight: normal;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Oswald', sans-serif;
   background: #cccccc !important;
   cursor: not-allowed;
   color: #152039;
@@ -228,7 +230,7 @@ a {
   
   .pagination button {
     font-weight: bold;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Oswald', sans-serif;
     margin: 0 5px;
     padding: 3px 5px;
     background: linear-gradient(180deg, #152039 30%, #00bf638b 90%);

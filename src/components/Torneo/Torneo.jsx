@@ -6,6 +6,7 @@ import { API_ENDPOINT } from "../../ConfigAPI";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
 import Logo from "../../assets/Frame_49.png"
+import Logoedam from "../../assets/jj.svg"
 const Torneo = () => {
   const [torneos, setTorneos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +39,12 @@ const Torneo = () => {
         };
       }, []);
   
-
+  useEffect(() => {
+    document.body.classList.add("inicio-background");
+    return () => {
+      document.body.classList.remove("inicio-background");
+    };
+  }, []);
 
   return (
     <>
@@ -47,7 +53,10 @@ const Torneo = () => {
           <div className="container-fluid ">
           
               <Link to="/">
-                  <img className="LOGO" src={Logo} alt="Nombre de la Web Logo" />
+                  <img className="LOGO opacity-50 " src={Logo} alt="Fubol" />
+                </Link>
+ <Link to="/">
+                  <img className="LOGO logo_edam" src={Logoedam} alt="edam" />
                 </Link>
             <Link
         to={`/login`}

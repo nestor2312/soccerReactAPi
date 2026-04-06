@@ -23,9 +23,16 @@
     text-align: center;
     /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
     /* background: linear-gradient(180deg, #00BF63 0%, #09537E 100%); */
-    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-    linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
+    /* background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
+    linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box; */
+
+      background: linear-gradient(180deg, #A9A9A9 0%, #3F3F3F 60%, #000000 100%) padding-box,
+    linear-gradient(180deg, #0000007b 50%, #A9A9A9 100%)  border-box;
   
+
+ 
+
+
 }
 .BoxCard:hover{
   
@@ -53,6 +60,7 @@
                       url("./../../assets/Soccer.png"), 
                       url("./../../assets/Soccer.png"), 
                       url("./../../assets/Soccer.png");
+                  filter: grayscale(100%) brightness(1.2) contrast(1.1);
     background-repeat: no-repeat;
     background-size: 36%;  
     background-position: -17% -20%, 24% 102%, 82% 145%, 117% -25%;
@@ -71,7 +79,7 @@ text-transform: capitalize;
     text-shadow: 
     1px 1px 3px rgba(0, 0, 0, 0.8), 
     -1px -1px 3px rgba(0, 0, 0, 0.4);
-    font-family: "Days One", sans-serif;
+    font-family: "Notable", sans-serif;
     font-size: 35px;
     font-style: normal;
     font-weight: 400;
@@ -105,11 +113,19 @@ body.fondo-2 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image:
-  url("./../../assets/Group(1).png"),
-  url("./../../assets/Vector(3).png"),
-  url("./../../assets/Vector(4).png"),
-  url("./../../assets/Group.png");
+
+  background-image: 
+    url("./../../assets/Group(1).png"),
+    url("./../../assets/Vector(3).png"),
+    url("./../../assets/Vector(4).png"),
+    url("./../../assets/Group.png");
+
+  /* --- AÑADE ESTO --- */
+  /* filter: grayscale(100%) brightness(1.2) contrast(1.1); */
+  filter: grayscale(100%) brightness(1.5) contrast(0.8) opacity(0.3);
+  /* grayscale(100%): Quita el color celeste */
+  /* brightness(1.2): Lo acerca al plateado/blanco */
+
   background-repeat: no-repeat;
   background-size: 13%, 12%, 12%, 11%;
   background-position: -1% 18%, 0% 105%, 99% 99%, 100% 15%;
@@ -127,6 +143,7 @@ body.fondo-2 {
   background-image: 
                     url("./../../assets/Soccer.png"),
                     url("./../../assets/Soccer.png");
+                    filter: grayscale(100%) brightness(1.2) contrast(1.1); 
   background-repeat: no-repeat;
   background-size: 34%;
   background-position:  25% 272%, 85% 290%;
@@ -177,6 +194,16 @@ body.fondo-2 {
 
 .LOGO{
   width: 109px;
+}
+
+.text_logo{
+  text-transform: uppercase;
+font-size: 40px;
+ text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), 0px 0px 2px #B0C4DE;
+}
+
+.logo_edam{
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0px 0px 10px #B0C4DE;
 }
 
  body.fondo-2::after {
@@ -248,20 +275,21 @@ body.fondo-1::after {
     2px 2px 0 #00BF63CC, 
     0px 4px 6px #000000cc;  */
       /* text-shadow: .1em .1em 0 #09537E; */
-    /* font-family: "Days One";
+    /* font-family: "notable";
     font-size: 40px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 6px;
+    letter-spacing: 3px;
 
 } */ 
 .text-title{
 text-transform: uppercase;
-color: #09537E; 
+color: #dae4ea; 
 text-align: center;
 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-font-family: "Days One", sans-serif;
+font-family: "Notable", sans-serif;
+ letter-spacing: 3px;
 font-size: 40px;
 font-weight: 400;
 line-height: 1.2;
@@ -272,14 +300,15 @@ letter-spacing: 6px;
 
   .text-title{
     text-transform: uppercase;
-    color: #09537E; 
+  
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: "Days One", sans-serif;
+    font-family: "Notable", sans-serif;
+     letter-spacing: 3px;
     font-size: 35px;
     font-weight: 400;
     line-height: 1.2;
-    letter-spacing: 6px;
+    letter-spacing: 3px;
     }
 
   .boton-torneo::after {
@@ -328,14 +357,15 @@ body.fondo-1::after {
 
   .text-title{
     text-transform: uppercase;
-    color: #09537E; 
+   color: #dae4ea; 
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: "Days One", sans-serif;
+    font-family: "Notable", sans-serif;
+   
     font-size: 28px;
     font-weight: 400;
     line-height: 1.2;
-    letter-spacing: 6px;
+    letter-spacing: 3px;
     }
     .contenido {
       justify-content: center;
@@ -348,8 +378,8 @@ body.fondo-1::after {
       align-items: center;
       justify-content: center;
       text-align: center;
-      background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-                  linear-gradient(180deg, #007A3A 0%, #064062 100%) border-box;
+       background: linear-gradient(180deg, #A9A9A9 0%, #3F3F3F 60%, #000000 100%) padding-box,
+    linear-gradient(180deg, #0000007b 50%, #A9A9A9 100%)  border-box;
       overflow: hidden;
     }
 
@@ -367,14 +397,15 @@ body.fondo-1::after {
   }
   .text-title{
     text-transform: uppercase;
-    color: #09537E; 
+   color: #dae4ea; 
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: "Days One", sans-serif;
+    font-family: "Notable", sans-serif;
+   
     font-size: 27px;
     font-weight: 400;
     line-height: 1.2;
-    letter-spacing: 6px;
+    letter-spacing: 2px;
     }
   .boton-torneo::after {
     content: "";

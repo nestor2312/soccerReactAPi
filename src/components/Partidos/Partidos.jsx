@@ -138,7 +138,7 @@ const partidosAMostrar = vista === 'todos'
    
       className={`btn-flip2 flip2 mx-1 ${vista === 'todos' ? 'active' : 'opacidad-baja'}`} 
      
-      style={vista === 'todos' ? { borderBottom: '4px solid #00bf63' } : {}}
+      style={vista === 'todos' ? { borderBottom: '4px solid #B0C4DE' } : {}}
       onClick={() => setVista('todos')}
     >
       Todos los partidos
@@ -147,7 +147,7 @@ const partidosAMostrar = vista === 'todos'
     <button 
     
       className={`btn-flip2 flip mx-1 ${vista === 'por_jornada' ? 'active' : 'opacidad-baja'}`} 
-      style={vista === 'por_jornada' ? { borderBottom: '4px solid #00bf63' } : {}}
+      style={vista === 'por_jornada' ? { borderBottom: '4px solid #B0C4DE' } : {}}
       onClick={() => setVista('por_jornada')}
     >
       Ver por jornadas
