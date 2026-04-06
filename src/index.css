@@ -36,8 +36,8 @@ a:hover {
 /* Esta regla se aplica a todo, por defecto */
 .inicio-background {
   /* Imagen de PC (Horizontal o Principal) */
-  background-image: url('/src/assets/Gemini_Generated_Image_8xv4ka8xv4ka8xv4.png')!important ;
- background-size: cover;
+  background-image: url('/src/assets/Desktop-28.png')!important ;
+background-size: 100% 100% !important;
   background-position: center;
   background-repeat: no-repeat;
 
@@ -50,16 +50,14 @@ a:hover {
 @media (max-width: 768px) {
   .inicio-background {
     /* USA LA IMAGEN DE MÓVIL (VERTICAL) AQUÍ */
-    background-image: url('./assets/Gemini_Generated_Image_48be4948be4948be.png')!important;
-     background-size: cover;
+    background-image: url('./assets/iPhoneAir-1.png')!important;
 
-  /* 2. Centra la imagen para que lo más importante no se corte */
-  background-position: center center;
-
-  /* 3. Evita que la imagen se duplique */
-  background-repeat: no-repeat;
- 
-   height: 100vh;
+background-repeat: no-repeat;
+background-size: 100% 100% !important;
+background-position: center;
+background-color: #000; /* para evitar bordes blancos */
+    min-height: 100vh;
+   
     
   
    
