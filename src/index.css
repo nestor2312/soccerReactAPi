@@ -56,7 +56,7 @@ background-repeat: no-repeat;
 background-size: 100% 100% !important;
 background-position: center;
 background-color: #000; /* para evitar bordes blancos */
-    min-height: 100vh;
+   height: 100dvh; 
    
     
   
