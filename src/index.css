@@ -36,7 +36,7 @@ a:hover {
 /* Esta regla se aplica a todo, por defecto */
 .inicio-background {
   /* Imagen de PC (Horizontal o Principal) */
-  background-image: url('/src/assets/Desktop-28.png')!important ;
+  background-image: url('./src/assets/Desktop-28.png')!important ;
 background-size: 100% 100% !important;
   background-position: center;
   background-repeat: no-repeat;
