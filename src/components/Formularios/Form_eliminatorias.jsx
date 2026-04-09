@@ -31,7 +31,7 @@ const FORM_Eliminatorias = () => {
   const [SubcategoriaID, setSubcategoriaID] = useState("");
   const [subcategorias, setSubcategorias] = useState([]);
   const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
-
+const [nombreFase, setNombreFase] = useState('');
  const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
 
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
@@ -253,6 +253,7 @@ if (equipoLocalID !== "" && equipoVisitanteID !== "" && equipoLocalID === equipo
     equipo_b_id: equipoVisitanteID,
     numPartido: partidoNumero,
     tipo_eliminatoria: tipoEliminatoria,
+    nombre_fase: nombreFase || null,
     subcategoria_id: parseInt(SubcategoriaID, 10),
   };
 
