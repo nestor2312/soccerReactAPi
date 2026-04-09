@@ -32,14 +32,14 @@ const Categoria = () => {
     document.title = "Categorias";
   }, []);
 
-    useEffect(() => {
-      document.body.classList.add("fondo-2");
-      return () => {
-        document.body.classList.remove("fondo-2");
-      };
-    }, []);
+  
 
-
+  useEffect(() => {
+    document.body.classList.add("inicio-background");
+    return () => {
+      document.body.classList.remove("inicio-background");
+    };
+  }, []);
   return (
     <>
     <nav className="navbar navbar-expand-lg fondomenu start-0 end-0 p-1 ">

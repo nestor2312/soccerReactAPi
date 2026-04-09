@@ -42,7 +42,12 @@ const Subcategoria = () => {
         };
       }, []);
   
-
+  useEffect(() => {
+    document.body.classList.add("inicio-background");
+    return () => {
+      document.body.classList.remove("inicio-background");
+    };
+  }, []);
 
   return (
     <>
