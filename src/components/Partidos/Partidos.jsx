@@ -431,6 +431,7 @@ const partidosAMostrar = vista === 'todos'
                     <h4 className="hora">
                       {selectedPartido.hora?.slice(0, 5)}
                     </h4>
+                     <h1 className="fecha">{selectedPartido.sede || ' ' }</h1>
                   </div>
                 </div>
 

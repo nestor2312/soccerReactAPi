@@ -27,6 +27,7 @@ const FORM_Matches = () => {
   const [marcador2, setMarcador2] = useState("");
   const [fecha, setFecha] = useState("");
     const [jornada, setjornada] = useState("");
+     const [sede, setsede] = useState("");
   const [hora, setHora] = useState("");
   const [equipoLocalID, setEquipoLocal] = useState("");
   const [equipoVisitanteID, setEquipoVisitante] = useState("");
@@ -102,7 +103,8 @@ const [paramsBusqueda, setParamsBusqueda] = useState({
   torneo_id: "", 
   categoria_id: "", 
   subcategoria_id: "", 
-  jornada: "" 
+  jornada: "" ,
+  sede:"",
 });
 
 // Cargar categorías para el filtro
@@ -168,6 +170,7 @@ const limpiarFiltros = () => {
       fecha: data.fecha,
       hora: data.hora,
       jornada: data.jornada,
+      sede:data.sede,
     };
 
     setSelectedPartido(mappedPartido);
@@ -365,6 +368,7 @@ const fetchPartidos = async () => {
     formData.append("fecha", fecha);
     formData.append("hora", hora);
       formData.append("jornada", jornada);
+       formData.append("sede", sede);
 
     try {
       await axios.post(endpoint, formData, {
@@ -702,6 +706,19 @@ useEffect(() => {
         value={hora}
       />
     </div>
+
+      {/* sede */}
+    <div className="col-6 col-md-2 mb-3">
+      <label htmlFor="sede">Sede</label>
+      <input
+        id="sede"
+        name="hora"
+        type="text"
+        className="form-control"
+        onChange={(e) => setsede(e.target.value)}
+        value={sede}
+      />
+    </div>
   </div>
 
   {/* Botón de Envío */}
@@ -799,6 +816,7 @@ useEffect(() => {
           <thead className="thead-light">
             <tr>
                <th className="text-center">Jornada</th>
+                <th className="text-center">Sede</th>
               <th className="text-center">Fecha</th>
               <th className="text-center">Local</th>
               <th className="text-center">marcador</th>
@@ -812,6 +830,9 @@ useEffect(() => {
               <tr key={partido.id}>
                  <td className="text-center">
                   {partido.jornada}
+                </td>
+                 <td className="text-center">
+                  {partido.sede}
                 </td>
                 <td className="text-center">
                   {partido.fecha}

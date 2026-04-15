@@ -129,7 +129,7 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     <div className="modal-content">
       <div className="modal-header">
         <h5 className="modal-title">Editar PlayOffs</h5>
-        <button type="button" className="close" onClick={onClose}>
+        <button type="button" className="btn-close" onClick={onClose}>
           &times;
         </button>
       </div>
@@ -309,16 +309,14 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
           </div>
         )}
 
-        <div className="row">
-          <div className="col-12 text-right ">
-          <button type="button" className="mx-2 btn btn-danger"  data-bs-dismiss="modal" onClick={onClose}>
+       <div className="modal-footer">
+            <button type="button" className="btn btn-danger" onClick={onClose}>
               Cerrar
             </button>
-            <button className="btn btn-primary" onClick={handleSave}>
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
               Guardar
             </button>
-          </div>
-        </div>
+         </div>
       </div>
     </div>
   </div>

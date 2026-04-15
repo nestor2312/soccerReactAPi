@@ -8,6 +8,9 @@
     font-size: 16px;
 }
 
+
+
+
 input{
     background:#ffffff4d;
     opacity:  90%;
@@ -308,6 +311,40 @@ input{
     text-shadow: 0px 2px 3px #4a5c7f;
   }
   
+  .titulo_tercer_puesto{
+ 
+    padding: 8px 12px;
+   
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: 'Days One', sans-serif;
+  
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24.53px; /* 175.217% */
+    letter-spacing: 0.263px;
+    text-transform: uppercase;
+    margin:0 auto;
+    width: 155px;
+    background: linear-gradient(180deg, #152039 0%, #0F162A 100%)!important;
+    color: #FFF;
+    border-radius: 3px;
+    /* border: 1px solid #ffffff78; */
+     border: 1px solid #4A5C7F;
+
+    text-shadow: 0px 2px 3px #4a5c7f;
+  }
+.jugador{
+      width: 155px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #D9D9D9;
+    border: 2px solid #000;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
   .win {
     background: linear-gradient(180deg, #152039 0%, rgba(0, 191, 99, 0.65) 100%)!important;
   }
