@@ -1,15 +1,15 @@
 
 
-export const API_ENDPOINT = "http://localhost:8000/api/";
-export const IMAGES_URL = "http://localhost:8000/storage/uploads";
+// export const API_ENDPOINT = "http://localhost:8000/api/";
+// export const IMAGES_URL = "http://localhost:8000/storage/uploads";
 
 
 // http://ec2-3-94-53-43.compute-1.amazonaws.com/
 // export const API_ENDPOINT = "http://ec2-3-94-53-43.compute-1.amazonaws.com/api/";
 // export const IMAGES_URL = "http://ec2-3-94-53-43.compute-1.amazonaws.com/storage/uploads";
 // ss
-// export const API_ENDPOINT = "https://mundial-de-clubes-casanare-fubol-production.up.railway.app/api/";
-// export const IMAGES_URL = "https://mundial-de-clubes-casanare-fubol-production.up.railway.app/storage/uploads";
+export const API_ENDPOINT = "https://mundial-de-clubes-casanare-fubol-production.up.railway.app/api/";
+export const IMAGES_URL = "https://mundial-de-clubes-casanare-fubol-production.up.railway.app/storage/uploads";
 
 
 
