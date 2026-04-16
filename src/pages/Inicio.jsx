@@ -1179,46 +1179,55 @@ const getEliminatorias = async () => {
                                         </div>
                                       </div>
                     
-                                      <div className="tercer-puesto-container mt-4">
-                                        {/* Título condicional: Solo aparece si hay intención de jugar tercer puesto */}
-                                        {rondas.tercerPuesto.length > 0 && (
-                                          <div className="titulo_tercer_puesto text-center mb-2">
-                                            3er Puesto
-                                          </div>
-                                        )}
-                    
-                                        <div className="d-flex justify-content-center">
-                                          {rondas.tercerPuesto.map((partido, index) => (
-                                            <div key={index} className="partido-card">
-                                              {/* Equipo Local */}
-                                              <div className="jugador mt-2">
-                                                <span className="equipo">
-                                                  {partido.equipo_aa?.nombre || "Por Definir"}
-                                                </span>
-                                                {partido.id && (
-                                                  <span className="marcador">
-                                                    {partido.goles_a ?? "-"}
-                                                  </span>
-                                                )}
-                                              </div>
-                    
-                                              <strong className="text-center mt-1"> VS </strong>
-                    
-                                              {/* Equipo Visitante */}
-                                              <div className="jugador mt-2">
-                                                <span className="equipo">
-                                                  {partido.equipo_b?.nombre || "Por Definir"}
-                                                </span>
-                                                {partido.id && (
-                                                  <span className="marcador">
-                                                    {partido.goles_b ?? "-"}
-                                                  </span>
-                                                )}
-                                              </div>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
+                                      <div className="d-flex justify-content-center">
+  {rondas.tercer_puesto.map((partido, index) => {
+    // 1. Cálculos de lógica antes del return
+    const m1_ida = partido.marcador1_ida || 0;
+    const m1_vuelta = partido.marcador1_vuelta;
+    const m2_ida = partido.marcador2_ida || 0;
+    const m2_vuelta = partido.marcador2_vuelta;
+
+    const global1 = m1_vuelta !== null ? m1_ida + m1_vuelta : m1_ida;
+    const global2 = m2_vuelta !== null ? m2_ida + m2_vuelta : m2_ida;
+
+    // 2. Retorno del JSX
+    return (
+      <div key={partido.id || index} className="partido-card">
+        {/* Equipo Local */}
+        <div className="jugador mt-2">
+          <span className="equipo">
+            {partido.equipo_aa?.nombre || "Por Definir"}
+          </span>
+          <span className="goles">
+            {m1_ida} {m1_vuelta !== null ? `- ${m1_vuelta}` : ""}
+            {m1_vuelta !== null && ` (${global1})`}
+            {partido.marcador1_penales && ` (${partido.marcador1_penales})`}
+          </span>
+        </div>
+
+        <strong className="text-center d-block mt-1"> VS </strong>
+
+        {/* Equipo Visitante */}
+        <div className="jugador mt-1">
+          <span className="equipo">
+            {partido.equipo_b?.nombre || "Por Definir"}
+          </span>
+          <span className="goles">
+            {m2_ida} {m2_vuelta !== null ? `- ${m2_vuelta}` : ""}
+            {m2_vuelta !== null && ` (${global2})`}
+            {partido.marcador2_penales && ` (${partido.marcador2_penales})`}
+          </span>
+        </div>
+      </div>
+    );
+  })}
+
+
+
+                  </div>
+                                      
+
+
                                     </div>
                                   </div>
                                 ))}
