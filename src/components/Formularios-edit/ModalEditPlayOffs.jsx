@@ -7,6 +7,7 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   const [equipoLocal, setEquipoLocal] = useState(PlayOffsData?.equipo_a_id || "");
   const [equipoVisitante, setEquipoVisitante] = useState(PlayOffsData?.equipo_b || "");
   const [numPartido, setNumPartido] = useState(PlayOffsData?.numPartido || 0);
+  const [nombreFase, setnombreFase] = useState(PlayOffsData?.nombreFase || 0);
   const [tipo_eliminatoria, setTipoEliminatoria] = useState(PlayOffsData?.tipo_eliminatoria || "solo_ida");
   const [marcadores, setMarcadores] = useState(PlayOffsData?.marcadores || {
     marcador1_ida: 0,
@@ -27,6 +28,7 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
       setEquipoLocal(PlayOffsData.equipo_a_id || "");
       setEquipoVisitante(PlayOffsData.equipo_b_id || "");
       setNumPartido(PlayOffsData.numPartido || 0);
+        setnombreFase(PlayOffsData.nombreFase || 0);
       setTipoEliminatoria(PlayOffsData.tipo_eliminatoria || "solo_ida");
       setMarcadores({
         marcador1_ida: PlayOffsData.marcador1_ida ?? "",
@@ -82,6 +84,7 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
       equipo_b_id: equipoVisitante,
       subcategoria_id,
       numPartido,
+       nombreFase,
       tipo_eliminatoria,
       ...marcadores,
       id: PlayOffsData?.id,
@@ -168,6 +171,23 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     <option value="2">Cuartos</option>
     <option value="3">Semifinal</option>
     <option value="4">Final</option>
+      <option value="5">Tercer puesto</option>
+  </select>
+</div>
+      <div className="col-12 col-md-6 mb-3">
+  <label htmlFor="nombreFase">Fase</label>
+  <select
+    id="nombreFase"
+    name="nombreFase"
+    className="form-control validate"
+    onChange={(e) => setnombreFase(e.target.value)}
+    value={nombreFase}
+  >
+   
+    <option value="General">General / Única</option>
+                <option value="Copa Oro">Copa Oro</option>
+                <option value="Copa Plata">Copa Plata</option>
+                <option value="Copa Bronce">Copa Bronce</option>
   </select>
 </div>
         </div>

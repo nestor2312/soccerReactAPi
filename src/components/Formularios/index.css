@@ -479,6 +479,9 @@ input{
       width: 8px;
   
   }
+  .jugador{
+     width: 125px;
+  }
   .jornada_contenedor .jornada .jugador{
     width: 125px;
   }
@@ -631,6 +634,10 @@ input{
       padding: 2px;
   
   }
+.jugador{
+   width: 80px;
+}
+
   .jornada_contenedor .jornada .jugador{
     width: 80px;
   }
@@ -721,6 +728,9 @@ input{
       padding: 2px;
   
   }
+  .jugador{
+      width: 80px;
+  }
   .jornada_contenedor .jornada .jugador{
     width: 80px;
   }
@@ -768,6 +778,10 @@ input{
       width: 2px;
       padding: 2px;
   
+  }
+
+  .jugador{
+     width: 90px;
   }
   .jornada_contenedor .jornada .jugador{
     width: 90px;

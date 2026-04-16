@@ -77,7 +77,7 @@ const FORM_Eliminatorias = () => {
           cuartos: [],
           semis: [],
           final: [],
-          tercerPuesto: [],
+          tercer_puesto: [],
         };
       }
 
@@ -86,7 +86,7 @@ const FORM_Eliminatorias = () => {
       else if (num === 2) fases[nombre].cuartos.push(partido);
       else if (num === 3) fases[nombre].semis.push(partido);
       else if (num === 4) fases[nombre].final.push(partido);
-      else if (num === 5) fases[nombre].tercerPuesto.push(partido);
+      else if (num === 5) fases[nombre].tercer_puesto.push(partido);
     });
 
     // Rellenar espacios vacíos por CADA fase individualmente
@@ -113,10 +113,10 @@ const FORM_Eliminatorias = () => {
         fases[nombre].final.push({});
       }
       while (
-        fases[nombre].tercerPuesto.length < 1 &&
-        fases[nombre].tercerPuesto.length > 0
+        fases[nombre].tercer_puesto.length < 1 &&
+        fases[nombre].tercer_puesto.length > 0
       ) {
-        fases[nombre].tercerPuesto.push({});
+        fases[nombre].tercer_puesto.push({});
       }
     });
 
@@ -453,7 +453,7 @@ const FORM_Eliminatorias = () => {
         ...(fase.cuartos || []),
         ...(fase.semis || []),
         ...(fase.final || []),
-        ...(fase.tercer_puesto || []), // OJO: Usa el nombre exacto que envías desde Laravel
+        ...(fase.tercer_puesto || []), 
       ]);
 
       // 3. REPARTIR en los estados filtrando por el numPartido
@@ -801,6 +801,15 @@ const FORM_Eliminatorias = () => {
               Final
             </button>
           </li>
+           <li className="nav-item">
+            <button
+              className="nav-link"
+              data-bs-toggle="tab"
+              data-bs-target="#menu-tercer_puesto"
+            >
+              Tercer puesto
+            </button>
+          </li>
         </ul>
 
         <div className="tab-content">
@@ -836,6 +845,14 @@ const FORM_Eliminatorias = () => {
             rondasKey="final"
             fasesData={fasesData}
             eliminatorias={eliminatoriasFinal}
+            handleEditClick={handleEditClick}
+            deleteEliminatoria={deleteEliminatoria}
+          />
+           <TablaEliminatoria
+            titulo="Tercer puesto"
+            rondasKey="tercer_puesto"
+            fasesData={fasesData}
+            eliminatorias={eliminatoriastercerPuesto}
             handleEditClick={handleEditClick}
             deleteEliminatoria={deleteEliminatoria}
           />
@@ -1557,45 +1574,51 @@ const FORM_Eliminatorias = () => {
                     </div>
                   </div>
 
-                  <div className="tercer-puesto-container mt-4">
-                    {/* Título condicional: Solo aparece si hay intención de jugar tercer puesto */}
-                    {rondas.tercerPuesto.length > 0 && (
-                      <div className="titulo_tercer_puesto text-center mb-2">
-                        3er Puesto
-                      </div>
-                    )}
+                  <div className="d-flex justify-content-center">
+  {rondas.tercer_puesto.map((partido, index) => {
+    // 1. Cálculos de lógica antes del return
+    const m1_ida = partido.marcador1_ida || 0;
+    const m1_vuelta = partido.marcador1_vuelta;
+    const m2_ida = partido.marcador2_ida || 0;
+    const m2_vuelta = partido.marcador2_vuelta;
 
-                    <div className="d-flex justify-content-center">
-                      {rondas.tercerPuesto.map((partido, index) => (
-                        <div key={index} className="partido-card">
-                          {/* Equipo Local */}
-                          <div className="jugador mt-2">
-                            <span className="equipo">
-                              {partido.equipo_aa?.nombre || "Por Definir"}
-                            </span>
-                            {partido.id && (
-                              <span className="marcador">
-                                {partido.goles_a ?? "-"}
-                              </span>
-                            )}
-                          </div>
+    const global1 = m1_vuelta !== null ? m1_ida + m1_vuelta : m1_ida;
+    const global2 = m2_vuelta !== null ? m2_ida + m2_vuelta : m2_ida;
 
-                          <strong className="text-center mt-1"> VS </strong>
+    // 2. Retorno del JSX
+    return (
+      <div key={partido.id || index} className="partido-card">
+        {/* Equipo Local */}
+        <div className="jugador mt-2">
+          <span className="equipo">
+            {partido.equipo_aa?.nombre || "Por Definir"}
+          </span>
+          <span className="goles">
+            {m1_ida} {m1_vuelta !== null ? `- ${m1_vuelta}` : ""}
+            {m1_vuelta !== null && ` (${global1})`}
+            {partido.marcador1_penales && ` (${partido.marcador1_penales})`}
+          </span>
+        </div>
 
-                          {/* Equipo Visitante */}
-                          <div className="jugador mt-2">
-                            <span className="equipo">
-                              {partido.equipo_b?.nombre || "Por Definir"}
-                            </span>
-                            {partido.id && (
-                              <span className="marcador">
-                                {partido.goles_b ?? "-"}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+        <strong className="text-center d-block mt-1"> VS </strong>
+
+        {/* Equipo Visitante */}
+        <div className="jugador mt-1">
+          <span className="equipo">
+            {partido.equipo_b?.nombre || "Por Definir"}
+          </span>
+          <span className="goles">
+            {m2_ida} {m2_vuelta !== null ? `- ${m2_vuelta}` : ""}
+            {m2_vuelta !== null && ` (${global2})`}
+            {partido.marcador2_penales && ` (${partido.marcador2_penales})`}
+          </span>
+        </div>
+      </div>
+    );
+  })}
+
+
+
                   </div>
                 </div>
               </div>
