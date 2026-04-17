@@ -480,9 +480,9 @@ const getEliminatorias = async () => {
                       Eliminatorias
                     </div>
 
-<div className="flex flex-col items-center gap-6 p-4"> 
+<div className="gap-2 "> 
       {/* Contenedor del Toggle */}
-      <div className="flex bg-gray-900 p-1 rounded-2xl border  shadow-inner">
+      <div className="flex  p-1 rounded-2xl border  shadow-inner">
         <button
           onClick={() => setVista('llaves')}
           className={`btn-flip2 flip2 mx-1 ${vista === 'llaves' ? 'active' : 'opacidad-baja'}`} 
@@ -1267,7 +1267,7 @@ const getEliminatorias = async () => {
       {/* Título Principal de la Fase (Copa Oro, etc.) */}
      <div className="mb-4 p-3 rounded-3 d-flex align-items-center justify-content-between" 
            style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}>
-        <h3 className="text-white text-uppercase fw-black m-0" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
+        <h3 className="text-white text-uppercase fw-bold fw-black m-0" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
           {nombreFase}
         </h3>
       </div>
@@ -1283,9 +1283,9 @@ const getEliminatorias = async () => {
         rondas[ronda.id] && rondas[ronda.id].length > 0 && (
           <div key={ronda.id} className="mb-4">
             {/* Título de la Ronda (Octavos, Cuartos...) */}
-           <div className="d-flex align-items-center mb-3">
-              <div style={{ width: '4px', height: '20px', background: '#00bf63', marginRight: '10px' }}></div>
-              <h4 className="text-uppercase fw-bold m-0" style={{ fontSize: '0.9rem', color: '#000000' }}>
+           <div className="d-flex align-items-center  mb-3">
+              <div style={{ width: '4px', height: '20px', background: '#00bf63cc', marginRight: '10px', borderRadius:'10px' }}></div>
+              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: '#000000' }}>
                 {ronda.titulo}
               </h4>
             </div>
