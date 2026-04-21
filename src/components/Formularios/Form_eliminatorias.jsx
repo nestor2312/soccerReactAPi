@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CreateIcon from "@mui/icons-material/Create";
 import ErrorLogo from "./../../assets/Vector.svg";
+import MatchEventsModal from "./MatchEventsModal";
 import TablaEliminatoria from "./Tabla_Eliminatorias";
 const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 const endpoint = `${API_ENDPOINT}eliminatoria`;
@@ -23,6 +24,17 @@ const FORM_Eliminatorias = () => {
     marcador1_penales: "",
     marcador2_penales: "",
   });
+
+  const [showEvents, setShowEvents] = useState(false);
+const [selectedMatch, setSelectedMatch] = useState(null);
+const [currentInstancia, setCurrentInstancia] = useState("normal");
+
+// Función para abrir el modal desde cualquier tabla
+const openEventsModal = (partido, instancia = "normal") => {
+  setSelectedMatch(partido);
+  setCurrentInstancia(instancia);
+  setShowEvents(true);
+};
 
   const [numPartido, setNumPartido] = useState("");
   const [tipoEliminatoria, setTipoEliminatoria] = useState("solo_ida");
@@ -819,6 +831,7 @@ const FORM_Eliminatorias = () => {
             fasesData={fasesData}
             eliminatorias={eliminatoriasOctavos}
             handleEditClick={handleEditClick}
+            handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
 
@@ -828,6 +841,7 @@ const FORM_Eliminatorias = () => {
             fasesData={fasesData}
             eliminatorias={eliminatoriasCuartos}
             handleEditClick={handleEditClick}
+            handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
 
@@ -837,6 +851,7 @@ const FORM_Eliminatorias = () => {
             fasesData={fasesData}
             eliminatorias={eliminatoriasSemis}
             handleEditClick={handleEditClick}
+            handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
 
@@ -846,6 +861,7 @@ const FORM_Eliminatorias = () => {
             fasesData={fasesData}
             eliminatorias={eliminatoriasFinal}
             handleEditClick={handleEditClick}
+            handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
            <TablaEliminatoria
@@ -854,8 +870,20 @@ const FORM_Eliminatorias = () => {
             fasesData={fasesData}
             eliminatorias={eliminatoriastercerPuesto}
             handleEditClick={handleEditClick}
+            handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
+<MatchEventsModal
+  showModal={showEvents}
+  /* Si tiene numPartido, es una eliminatoria. 
+     Si NO tiene numPartido, es un partido de liga.
+  */
+  partidoId={!selectedMatch?.numPartido ? selectedMatch?.id : null}
+  eliminatoriaId={selectedMatch?.numPartido ? selectedMatch?.id : null}
+  instancia={currentInstancia}
+  API_ENDPOINT={API_ENDPOINT}
+  onClose={() => setShowEvents(false)}
+/>
 
           <EditPlayOffsModal
             showModal={showModal}

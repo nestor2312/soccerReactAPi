@@ -899,15 +899,17 @@ useEffect(() => {
           onSave={savePartido} // Función para guardar el partido
         />
 
-        <MatchEventsModal
+     <MatchEventsModal
   showModal={showEventsModal}
   partidoId={selectedMatch}
   API_ENDPOINT={API_ENDPOINT}
+  // instancia="normal"  <-- Opcional, por defecto es "normal"
   onClose={() => {
     setShowEventsModal(false);
-    setSelectedMatch(null);
+    setSelectedMatch(null); // Limpiamos al cerrar por seguridad
   }}
 />
+
       </div>
       <div className="pagination mb-4">
         <button
