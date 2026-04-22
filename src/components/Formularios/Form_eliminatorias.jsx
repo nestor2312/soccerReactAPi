@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-unused-vars */
 
@@ -16,6 +17,7 @@ const subcategoriasEndpoint = `${API_ENDPOINT}subcategorias`;
 const endpoint = `${API_ENDPOINT}eliminatoria`;
 const Images = IMAGES_URL;
 const FORM_Eliminatorias = () => {
+  const [activeTab, setActiveTab] = useState('octavos');
   const [marcadores, setMarcadores] = useState({
     marcador1_ida: "",
     marcador2_ida: "",
@@ -777,54 +779,52 @@ const openEventsModal = (partido, instancia = "normal") => {
         </select>
 
         <ul className="nav nav-pills mt-4 mb-3">
-          <li className="nav-item">
-            <button
-              className="nav-link active"
-              data-bs-toggle="tab"
-              data-bs-target="#menu-octavos"
-            >
-              Octavos
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#menu-cuartos"
-            >
-              Cuartos
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#menu-semis"
-            >
-              Semis
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#menu-final"
-            >
-              Final
-            </button>
-          </li>
-           <li className="nav-item">
-            <button
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#menu-tercer_puesto"
-            >
-              Tercer puesto
-            </button>
-          </li>
-        </ul>
+  <li className="nav-item">
+    <button
+      className={`nav-link ${activeTab === 'octavos' ? 'active' : ''}`}
+      onClick={() => setActiveTab('octavos')}
+    >
+      Octavos
+    </button>
+  </li>
+  <li className="nav-item">
+    <button
+      className={`nav-link ${activeTab === 'cuartos' ? 'active' : ''}`}
+      onClick={() => setActiveTab('cuartos')}
+    >
+      Cuartos
+    </button>
+  </li>
+  <li className="nav-item">
+    <button
+      className={`nav-link ${activeTab === 'semis' ? 'active' : ''}`}
+      onClick={() => setActiveTab('semis')}
+    >
+      Semis
+    </button>
+  </li>
+  <li className="nav-item">
+    <button
+      className={`nav-link ${activeTab === 'final' ? 'active' : ''}`}
+      onClick={() => setActiveTab('final')}
+    >
+      Final
+    </button>
+  </li>
+  <li className="nav-item">
+    <button
+      className={`nav-link ${activeTab === 'tercer_puesto' ? 'active' : ''}`}
+      onClick={() => setActiveTab('tercer_puesto')}
+    >
+      Tercer puesto
+    </button>
+  </li>
+</ul>
 
-        <div className="tab-content">
+       <div className="tab-content">
+  {/* Solo se muestra si el tab activo es 'octavos' */}
+  {activeTab === 'octavos' && (
+          
           <TablaEliminatoria
             titulo="Octavos de final"
             rondasKey="octavos"
@@ -834,7 +834,8 @@ const openEventsModal = (partido, instancia = "normal") => {
             handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
-
+          )}
+{activeTab === 'cuartos' && (
           <TablaEliminatoria
             titulo="Cuartos de final"
             rondasKey="cuartos"
@@ -844,7 +845,8 @@ const openEventsModal = (partido, instancia = "normal") => {
             handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
-
+  )}
+  {activeTab === 'semis' && (
           <TablaEliminatoria
             titulo="Semifinal"
             rondasKey="semis"
@@ -854,7 +856,8 @@ const openEventsModal = (partido, instancia = "normal") => {
             handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
-
+)}
+ {activeTab === 'final' && (
           <TablaEliminatoria
             titulo="Final"
             rondasKey="final"
@@ -864,6 +867,8 @@ const openEventsModal = (partido, instancia = "normal") => {
             handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
+          )}
+           {activeTab === 'tercer_puesto' && (
            <TablaEliminatoria
             titulo="Tercer puesto"
             rondasKey="tercer_puesto"
@@ -873,6 +878,8 @@ const openEventsModal = (partido, instancia = "normal") => {
             handleEventsClick={openEventsModal}
             deleteEliminatoria={deleteEliminatoria}
           />
+            )}
+
 <MatchEventsModal
   showModal={showEvents}
   /* Si tiene numPartido, es una eliminatoria. 
