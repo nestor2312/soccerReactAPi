@@ -559,8 +559,8 @@ const getEliminatorias = async () => {
                                   <div key={nombreFase} className="fase-contenedor mb-5">
                                     {/* Título de la Fase */}
                                     <h3
-                                      className="text-center text-uppercase fw-bold py-3"
-                                      style={{ background: "#1b58965a" }}
+                                      className="text-center text-uppercase fw-bold py-3 mt-1 text-white"
+                                      style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}
                                     >
                                       {nombreFase}
                                     </h3>
