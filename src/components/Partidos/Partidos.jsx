@@ -27,6 +27,19 @@ const Partidos = () => {
 const [jornadaSeleccionada, setJornadaSeleccionada] = useState(null);
 
 const listaJornadas = [...new Set(partidos.map(p => p.jornada).filter(j => j !== null))];
+const [calendario, setCalendario] = useState({});
+const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date().toISOString().split('T')[0]); // Hoy por defecto
+useEffect(() => {
+    const getCalendario = async () => {
+      try {
+        const res = await axios.get(`${endpoint}subcategoria/${subcategoriaId}/partidos-calendario`);
+        setCalendario(res.data || {});
+      } catch (err) {
+        console.error("Error en calendario:", err);
+      }
+    };
+    if (subcategoriaId) getCalendario();
+  }, [subcategoriaId]);
 
 useEffect(() => {
   const getPartidos = async () => {
@@ -85,6 +98,53 @@ useEffect(() => {
 
 const [eventos, setEventos] = useState([]); // Ponlo aquí
 
+const scrollRef = useRef(null); // Para el contenedor de botones
+const hoyRef = useRef(null);   // Para el botón de "Hoy"
+
+
+useEffect(() => {
+  // Solo actuamos si el usuario entra a la vista 'diario'
+  if (vista === 'diario') {
+    
+    const ejecutarScroll = () => {
+      if (hoyRef.current) {
+        hoyRef.current.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest'
+        });
+      }
+    };
+
+    // Si el calendario ya tiene datos, intentamos el scroll
+    if (Object.keys(calendario).length > 0) {
+      // Damos un tiempo para que React termine de montar los botones en el DOM
+      const timer = setTimeout(ejecutarScroll, 200); 
+      return () => clearTimeout(timer);
+    }
+  }
+}, [vista, calendario, fechaSeleccionada]); // Al incluir 'vista', se dispara cada vez que cambias de botón
+
+
+const formatearFechaCabecera = (fechaStr) => {
+  if (!fechaStr || fechaStr === "null" || fechaStr === "undefined") {
+    return "Fecha por definir";
+  }
+  
+  const fechaObj = new Date(fechaStr + 'T00:00:00');
+  
+  // Si por alguna razón el string no es una fecha válida (ej: "abc")
+  if (isNaN(fechaObj.getTime())) {
+    return "Fecha por definir";
+  }
+
+  return fechaObj.toLocaleDateString('es-CO', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long' 
+  });
+};
+
 
 // MUEVE EL EFECTO AQUÍ ABAJO (Después de handleOpenModal)
 useEffect(() => {
@@ -133,6 +193,14 @@ const partidosAMostrar = vista === 'todos'
 <div className="d-flex justify-content-center mb-4 mt-3">
 
   <div> 
+
+    <button 
+            className={`btn-flip2 mx-1 ${vista === 'diario' ? 'active' : 'opacidad-baja'}`} 
+            style={vista === 'diario' ? { borderBottom: '4px solid #00bf63' } : {}}
+            onClick={() => { setVista('diario'); setCurrentPage(1); }}
+          >
+            Calendario
+          </button>
     
     <button 
    
@@ -156,6 +224,106 @@ const partidosAMostrar = vista === 'todos'
   </div>
 </div>
 
+{vista === 'diario' && (
+  <div className="calendario-contenedor container mt-4">
+    {/* 1. FILA DE BOTONES DE FECHAS */}
+    <div 
+   ref={scrollRef} // <--- REFERENCIA AQUÍ
+  className="d-flex overflow-auto pb-3 mb-4 gap-2 scroller-fechas" 
+  style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth' }}>
+    {Object.keys(calendario).length > 0 ? (
+        Object.keys(calendario).sort().map((fecha) => {
+          const esHoy = fecha === new Date().toISOString().split('T')[0];
+          const fechaValida = fecha && fecha !== "null";
+         
+          return (
+       <button
+  key={fecha}
+  ref={(el) => {
+    if (el && fecha === fechaSeleccionada && vista === 'diario') {
+      // Este código se ejecuta en cuanto el botón se dibuja en el DOM
+      el.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest'
+      });
+    }
+  }}
+  className={`btn-jornada ${fechaSeleccionada === fecha ? 'active' : ''}`}
+  onClick={() => setFechaSeleccionada(fecha)}
+>
+              <div className="small text-uppercase" style={{ fontSize: '0.65rem', opacity: 0.8 }}>
+                {esHoy ? "Hoy" : (fechaValida ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { weekday: 'short' }) : "---")}
+              </div>
+              <div className="font-weight-bold">
+                {fechaValida 
+                  ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) 
+                  : "Fecha por definir"}
+              </div>
+            </button>
+          );
+        })
+      ) : (
+        <p className="text-center w-100">Cargando fechas...</p>
+      )}
+    </div>
+
+    {/* 2. CONTENIDO DE LA FECHA SELECCIONADA */}
+    <div className="dia-seccion animate__animated animate__fadeIn">
+      {calendario[fechaSeleccionada] ? (
+        <>
+          <div className="mb-3 border-bottom pb-2">
+        <h3 className="text-dark font-weight-bold text-uppercase mb-0" style={{ fontSize: '1.1rem' }}>
+        {formatearFechaCabecera(fechaSeleccionada)}
+        
+        </h3>
+          </div>
+          
+          <div className="row">
+          {calendario[fechaSeleccionada].map(partido => (
+              <div key={partido.id} className="col-md-6 col-lg-4 mb-3" onClick={() => handleOpenModal(partido)}>
+                <div className="card shadow-sm p-3 border-0 h-100 card-hover" style={{ cursor: 'pointer', borderRadius: '12px' }}>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="text-center w-25">
+                       <img src={`${Images}/${partido.equipo_a?.archivo}`} width="30" height="30" style={{objectFit: 'contain'}} onError={e => e.target.src = ErrorLogo} alt="" />
+                       <span className="d-block small font-weight-bold mt-1 text-truncate">{partido.equipo_a?.nombre}</span>
+                    </div>
+
+                    <div className="text-center">
+                      <span className="badge badge-success px-3 mb-1" style={{backgroundColor: '#00bf63'}}>
+                        {partido.hora?.slice(0, 5) || 'VS'}
+                      </span>
+                      {partido.marcador1 !== null && (
+                        <div className="font-weight-bold h5 mb-0">{partido.marcador1} - {partido.marcador2}</div>
+                      )}
+                    </div>
+
+                    <div className="text-center w-25">
+                       <img src={`${Images}/${partido.equipo_b?.archivo}`} width="30" height="30" style={{objectFit: 'contain'}} onError={e => e.target.src = ErrorLogo} alt="" />
+                       <span className="d-block small font-weight-bold mt-1 text-truncate">{partido.equipo_b?.nombre}</span>
+                    </div>
+                  </div>
+                  <div className="text-center mt-2">
+                    <small className="text-muted" style={{fontSize: '0.7rem'}}>🏟️ {partido.sede || 'Cancha por definir'}</small>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="text-center py-5 bg-light rounded" style={{ border: '2px dashed #ddd' }}>
+          <p className="mb-0 text-muted">No hay partidos para esta fecha seleccionada.</p>
+          <button className="btn btn-link btn-sm text-success" onClick={() => setFechaSeleccionada(Object.keys(calendario)[0])}>
+            Ver fecha más cercana
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+
 {/* Si eligió jornadas, mostramos la lista de botones de jornada */}
 {vista === 'por_jornada' && (
   <div className="d-flex flex-wrap justify-content-center gap-2 mb-4">
@@ -178,6 +346,7 @@ const partidosAMostrar = vista === 'todos'
   </div>
 )}
 
+{vista !== 'diario' && (
           <div className="col-sm-12 mt-4 hiden">
             <div className="card border-0 shadow ">
               <div className="card-header fondo-card TITULO border-0">
@@ -280,6 +449,7 @@ const partidosAMostrar = vista === 'todos'
   </div>
 )}
           </div>
+          )}
 
           {/* Cards de partidos */}
           <section className="Partidos hiden-box">
@@ -431,7 +601,6 @@ const partidosAMostrar = vista === 'todos'
                     <h4 className="hora">
                       {selectedPartido.hora?.slice(0, 5)}
                     </h4>
-                     <h1 className="fecha">{selectedPartido.sede || ' ' }</h1>
                   </div>
                 </div>
 

@@ -12,6 +12,13 @@
 .font-events-matches{
     font-size: 0.85rem;
 }
+
+.scroller-fechas {
+  display: flex;
+  flex-wrap: nowrap !important; /* Obliga a que se mantengan en una sola línea */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Suavidad en móviles */
+}
 .TeamLocal{
     margin-left: -5px;
 }
