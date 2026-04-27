@@ -1361,7 +1361,7 @@ const getEliminatorias = async () => {
               onError={(e) => { e.target.src = ErrorLogo; }}
             />
             <span className="text-white fw-bold small text-uppercase">
-              {partido.equipo_aa?.nombre?.substring(0, 12) || 'Por definir'}
+              {partido.equipo_aa?.nombre?.substring(0, 50) || 'Por definir'}
             </span>
           </div>
 
@@ -1392,7 +1392,7 @@ const getEliminatorias = async () => {
           {/* EQUIPO B (Logo a la derecha) */}
           <div className="d-flex align-items-center justify-content-end gap-2 flex-1 text-end">
             <span className="text-white fw-bold small text-uppercase">
-              {partido.equipo_b?.nombre?.substring(0, 12) || 'Por definir'}
+              {partido.equipo_b?.nombre?.substring(0, 50) || 'Por definir'}
             </span>
             <img
               src={`${Images}/${partido.equipo_b?.archivo}`}

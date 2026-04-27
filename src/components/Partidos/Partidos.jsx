@@ -41,6 +41,33 @@ useEffect(() => {
     if (subcategoriaId) getCalendario();
   }, [subcategoriaId]);
 
+const seleccionarFechaMasCercana = () => {
+  const fechasValidas = Object.keys(calendario).filter(f => 
+    f && f !== "null" && f !== "undefined" && f !== ""
+  );
+
+  if (fechasValidas.length === 0) return;
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  // 1. Intentamos buscar la primera fecha que sea hoy o futura
+  const fechasFuturas = fechasValidas
+    .map(f => new Date(f + 'T00:00:00'))
+    .filter(d => d >= hoy)
+    .sort((a, b) => a - b); // Ordenar de más cercana a más lejana
+
+  if (fechasFuturas.length > 0) {
+    // Si hay partidos futuros, mostramos el primero (el más próximo)
+    setFechaSeleccionada(fechasFuturas[0].toISOString().split('T')[0]);
+  } else {
+    // Si NO hay partidos futuros (terminó el torneo), mostramos el último que hubo
+    const ultimaFecha = fechasValidas.sort().reverse()[0];
+    setFechaSeleccionada(ultimaFecha);
+  }
+};
+
+
 useEffect(() => {
   const getPartidos = async () => {
     try {
@@ -218,7 +245,7 @@ const partidosAMostrar = vista === 'todos'
       style={vista === 'por_jornada' ? { borderBottom: '4px solid #00bf63' } : {}}
       onClick={() => setVista('por_jornada')}
     >
-      Ver por jornadas
+      Ver jornadas
     </button>
 
   </div>
@@ -281,15 +308,17 @@ const partidosAMostrar = vista === 'todos'
           
           <div className="row">
           {calendario[fechaSeleccionada].map(partido => (
-              <div key={partido.id} className="col-md-6 col-lg-4 mb-3" onClick={() => handleOpenModal(partido)}>
-                <div className="card shadow-sm p-3 border-0 h-100 card-hover" style={{ cursor: 'pointer', borderRadius: '12px' }}>
+              <div key={partido.id} className="col-md-4 col-lg-4 mb-3" onClick={() => handleOpenModal(partido)}>
+                <div className="card card-matches shadow-sm p-3  h-100 " style={{ cursor: 'pointer', borderRadius: '12px' }}>
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="text-center w-25">
                        <img src={`${Images}/${partido.equipo_a?.archivo}`} width="30" height="30" style={{objectFit: 'contain'}} onError={e => e.target.src = ErrorLogo} alt="" />
+                    </div>
+                     <div className="text-center w-25">
                        <span className="d-block small font-weight-bold mt-1 text-truncate">{partido.equipo_a?.nombre}</span>
                     </div>
 
-                    <div className="text-center">
+                    <div className="text-left">
                       <span className="badge badge-success px-3 mb-1" style={{backgroundColor: '#00bf63'}}>
                         {partido.hora?.slice(0, 5) || 'VS'}
                       </span>
@@ -314,7 +343,7 @@ const partidosAMostrar = vista === 'todos'
       ) : (
         <div className="text-center py-5 bg-light rounded" style={{ border: '2px dashed #ddd' }}>
           <p className="mb-0 text-muted">No hay partidos para esta fecha seleccionada.</p>
-          <button className="btn btn-link btn-sm text-success" onClick={() => setFechaSeleccionada(Object.keys(calendario)[0])}>
+          <button className="btn btn-link btn-sm text-success" onClick={seleccionarFechaMasCercana}>
             Ver fecha más cercana
           </button>
         </div>
