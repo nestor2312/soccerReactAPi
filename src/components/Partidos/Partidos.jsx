@@ -299,12 +299,13 @@ const partidosAMostrar = vista === 'todos'
     <div className="dia-seccion animate__animated animate__fadeIn">
       {calendario[fechaSeleccionada] ? (
         <>
-          <div className="mb-3 border-bottom pb-2">
-        <h3 className="text-dark font-weight-bold text-uppercase mb-0" style={{ fontSize: '1.1rem' }}>
-        {formatearFechaCabecera(fechaSeleccionada)}
-        
-        </h3>
-          </div>
+        <div className="d-flex align-items-center  mb-3">
+              <div style={{ width: '4px', height: '20px', background: '#00bf63cc', marginRight: '10px', borderRadius:'10px' }}></div>
+              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: '#000000' }}>
+                {formatearFechaCabecera(fechaSeleccionada)} 
+              </h4>
+            </div>
+       
           
           <div className="row">
           {calendario[fechaSeleccionada].map(partido => (
@@ -313,10 +314,10 @@ const partidosAMostrar = vista === 'todos'
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="text-center w-25">
                        <img src={`${Images}/${partido.equipo_a?.archivo}`} width="30" height="30" style={{objectFit: 'contain'}} onError={e => e.target.src = ErrorLogo} alt="" />
-                    </div>
-                     <div className="text-center w-25">
                        <span className="d-block small font-weight-bold mt-1 text-truncate">{partido.equipo_a?.nombre}</span>
                     </div>
+                  
+                   
 
                     <div className="text-left">
                       <span className="badge badge-success px-3 mb-1" style={{backgroundColor: '#00bf63'}}>
@@ -513,10 +514,12 @@ const partidosAMostrar = vista === 'todos'
                               {partido.marcador1 == null ||
                               partido.marcador2 == null ? (
                                 <>
-                                  <span className="fecha">{partido.fecha || 'VS'}</span>
-                                  <span className="hora">
-                                    {partido.hora?.slice(0, 5)}
-                                  </span>
+                                 <span className="badge badge-success px-3 mb-1" style={{backgroundColor: '#00bf63'}}>
+                        {partido.hora?.slice(0, 5) || 'VS'}
+                      </span>
+                                 <span className="fecha" style={{ fontSize: '0.75rem', color: '#666' }}>
+          {partido.fecha}
+        </span>
                                 </>
                               ) : (
                                 `${partido.marcador1} - ${partido.marcador2}`
