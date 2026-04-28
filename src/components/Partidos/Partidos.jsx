@@ -218,31 +218,24 @@ const partidosAMostrar = vista === 'todos'
         
         <main className="main-content mx-1">
 <div className="d-flex justify-content-center mb-4 mt-3">
-
-  <div> 
-
-    <button 
-            className={`btn-flip2 mx-1 ${vista === 'diario' ? 'active' : 'opacidad-baja'}`} 
-            style={vista === 'diario' ? { borderBottom: '4px solid #00bf63' } : {}}
-            onClick={() => { setVista('diario'); setCurrentPage(1); }}
-          >
-            Calendario
-          </button>
+  <div className="d-flex flex-nowrap overflow-auto pb-2 scroll-tabs" style={{ maxWidth: '100%', WebkitOverflowScrolling: 'touch' }}>
     
     <button 
-   
-      className={`btn-flip2 flip2 mx-1 ${vista === 'todos' ? 'active' : 'opacidad-baja'}`} 
-     
-      style={vista === 'todos' ? { borderBottom: '4px solid #00bf63' } : {}}
+      className={`btn-tab mx-1 ${vista === 'diario' ? 'active' : ''}`} 
+      onClick={() => { setVista('diario'); setCurrentPage(1); }}
+    >
+      Calendario
+    </button>
+    
+    <button 
+      className={`btn-tab mx-1 ${vista === 'todos' ? 'active' : ''}`} 
       onClick={() => setVista('todos')}
     >
       Todos los partidos
     </button>
 
     <button 
-    
-      className={`btn-flip2 flip mx-1 ${vista === 'por_jornada' ? 'active' : 'opacidad-baja'}`} 
-      style={vista === 'por_jornada' ? { borderBottom: '4px solid #00bf63' } : {}}
+      className={`btn-tab mx-1 ${vista === 'por_jornada' ? 'active' : ''}`} 
       onClick={() => setVista('por_jornada')}
     >
       Ver jornadas
@@ -309,35 +302,128 @@ const partidosAMostrar = vista === 'todos'
           
           <div className="row">
           {calendario[fechaSeleccionada].map(partido => (
-              <div key={partido.id} className="col-md-4 col-lg-4 mb-3" onClick={() => handleOpenModal(partido)}>
-                <div className="card card-matches shadow-sm p-3  h-100 " style={{ cursor: 'pointer', borderRadius: '12px' }}>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="text-center w-25">
-                       <img src={`${Images}/${partido.equipo_a?.archivo}`} width="30" height="30" style={{objectFit: 'contain'}} onError={e => e.target.src = ErrorLogo} alt="" />
-                       <span className="d-block small font-weight-bold mt-1 text-truncate">{partido.equipo_a?.nombre}</span>
-                    </div>
-                  
-                   
+           <div key={partido.id} className="col-md-4 col-lg-4 mb-3" onClick={() => handleOpenModal(partido)}>
+  
+  <div 
+    className="card card-matches shadow-sm p-3 h-100"
+    style={{ 
+      cursor: 'pointer', 
+      borderRadius: '12px', 
+      border: 'none'
+    }}
+  >
 
-                    <div className="text-left">
-                      <span className="badge badge-success px-3 mb-1" style={{backgroundColor: '#00bf63'}}>
-                        {partido.hora?.slice(0, 5) || 'VS'}
-                      </span>
-                      {partido.marcador1 !== null && (
-                        <div className="font-weight-bold h5 mb-0">{partido.marcador1} - {partido.marcador2}</div>
-                      )}
-                    </div>
+    <div className="d-flex justify-content-between align-items-center">
 
-                    <div className="text-center w-25">
-                       <img src={`${Images}/${partido.equipo_b?.archivo}`} width="30" height="30" style={{objectFit: 'contain'}} onError={e => e.target.src = ErrorLogo} alt="" />
-                       <span className="d-block small font-weight-bold mt-1 text-truncate">{partido.equipo_b?.nombre}</span>
-                    </div>
-                  </div>
-                  <div className="text-center mt-2">
-                    <small className="text-muted" style={{fontSize: '0.7rem'}}>🏟️ {partido.sede || 'Cancha por definir'}</small>
-                  </div>
-                </div>
-              </div>
+      {/* LOCAL */}
+      <div className="d-flex align-items-center" style={{ width: '30%', gap: '8px', minWidth: 0 }}>
+        
+        {/* Línea izquierda */}
+        <div 
+          style={{ 
+            width: '4px', 
+            height: '45px', 
+            background: `linear-gradient(180deg, #E0E0E0, ${partido.equipo_a?.color_hover})`,
+            borderRadius: '10px'
+          }}
+        ></div>
+
+        {/* Logo + Nombre */}
+        <div className="d-flex align-items-center" style={{ gap: '6px', minWidth: 0 }}>
+          
+          <img 
+            src={`${Images}/${partido.equipo_a?.archivo}`} 
+            width="36" 
+            height="36" 
+            style={{ objectFit: 'contain' }} 
+            onError={e => e.target.src = ErrorLogo} 
+            alt=""
+          />
+
+          <span 
+            className="small font-weight-bold text-truncate"
+            style={{ maxWidth: '90px' }}
+            title={partido.equipo_a?.nombre}
+          >
+            {partido.equipo_a?.nombre}
+          </span>
+
+        </div>
+      </div>
+
+      {/* CENTRO */}
+      <div className="text-center flex-grow-1">
+        <span 
+          className="badge mb-1"
+          style={{
+            backgroundColor: '#00bf63',
+            borderRadius: '50px',
+            padding: '4px 14px',
+            fontSize: '0.75rem',
+            fontWeight: '600'
+          }}
+        >
+          {partido.hora?.slice(0, 5) || 'VS'}
+        </span>
+
+        {partido.marcador1 !== null && (
+          <div className="font-weight-bold h5 mb-0">
+            {partido.marcador1} : {partido.marcador2}
+          </div>
+        )}
+      </div>
+
+      {/* VISITANTE */}
+      <div className="d-flex align-items-center justify-content-end" style={{ width: '30%', gap: '8px', minWidth: 0 }}>
+        
+        {/* Logo + Nombre */}
+        <div className="d-flex align-items-center" style={{ gap: '6px', minWidth: 0 }}>
+          
+          <span 
+            className="small font-weight-bold text-truncate"
+            style={{ maxWidth: '90px' }}
+            title={partido.equipo_b?.nombre}
+          >
+            {partido.equipo_b?.nombre}
+          </span>
+
+          <img 
+            src={`${Images}/${partido.equipo_b?.archivo}`} 
+            width="36" 
+            height="36" 
+            style={{ objectFit: 'contain' }} 
+            onError={e => e.target.src = ErrorLogo} 
+            alt=""
+          />
+
+        </div>
+
+        {/* Línea derecha */}
+        <div 
+          style={{ 
+            width: '4px', 
+            height: '45px', 
+            background: `linear-gradient(180deg, #E0E0E0, ${partido.equipo_b?.color_hover})`,
+            borderRadius: '10px'
+          }}
+        ></div>
+
+      </div>
+
+    </div>
+
+    {/* SEDE */}
+    <div className="text-center mt-2 pt-2 border-top">
+      <small 
+        className="text-muted" 
+        style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}
+      >
+        🏟️ {partido.sede || 'Cancha por definir'}
+      </small>
+    </div>
+
+  </div>
+</div>
             ))}
           </div>
         </>
