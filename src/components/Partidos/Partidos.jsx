@@ -305,11 +305,11 @@ const partidosAMostrar = vista === 'todos'
            <div key={partido.id} className="col-md-4 col-lg-4 mb-3" onClick={() => handleOpenModal(partido)}>
   
   <div 
-    className="card card-matches shadow-sm p-3 h-100"
+   className="card card-matches p-3 h-100"
     style={{ 
       cursor: 'pointer', 
-      borderRadius: '12px', 
-      border: 'none'
+     
+   
     }}
   >
 
@@ -341,8 +341,7 @@ const partidosAMostrar = vista === 'todos'
           />
 
           <span 
-            className="small font-weight-bold text-truncate"
-            style={{ maxWidth: '90px' }}
+           className="team "
             title={partido.equipo_a?.nombre}
           >
             {partido.equipo_a?.nombre}
@@ -368,7 +367,7 @@ const partidosAMostrar = vista === 'todos'
 
         {partido.marcador1 !== null && (
           <div className="font-weight-bold h5 mb-0">
-            {partido.marcador1} : {partido.marcador2}
+            {partido.marcador1} - {partido.marcador2}
           </div>
         )}
       </div>
@@ -380,8 +379,8 @@ const partidosAMostrar = vista === 'todos'
         <div className="d-flex align-items-center" style={{ gap: '6px', minWidth: 0 }}>
           
           <span 
-            className="small font-weight-bold text-truncate"
-            style={{ maxWidth: '90px' }}
+            className="team "
+           
             title={partido.equipo_b?.nombre}
           >
             {partido.equipo_b?.nombre}
@@ -413,7 +412,7 @@ const partidosAMostrar = vista === 'todos'
     </div>
 
     {/* SEDE */}
-    <div className="text-center mt-2 pt-2 border-top">
+    <div className="text-center border-top">
       <small 
         className="text-muted" 
         style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}
@@ -498,7 +497,7 @@ const partidosAMostrar = vista === 'todos'
                             }}
                           />
                         </td>
-                        <td className="text-left team" width="30%">
+                        <td className="text-left team mx-1" width="30%">
                           {partido.equipo_a?.nombre}
                         </td>
                         <td className="text-center" width="20%">
@@ -522,7 +521,7 @@ const partidosAMostrar = vista === 'todos'
                             </div>
                           )}
                         </td>
-                        <td className="textright team" width="30%">
+                        <td className="textright team mx-1" width="30%">
                           {partido.equipo_b?.nombre}
                         </td>
                         <td width="10%">
@@ -591,7 +590,7 @@ const partidosAMostrar = vista === 'todos'
                               e.target.classList.add("error-logo");
                             }}
                             />
-                            <span className="team">
+                            <span className="team mx-1">
                               {partido.equipo_a?.nombre}
                             </span>
                           </div>
@@ -613,7 +612,7 @@ const partidosAMostrar = vista === 'todos'
                             </span>
                           </div>
                           <div className="col-4 d-flex justify-content-end align-items-center">
-                            <span className="team">
+                            <span className="team mx-1">
                               {partido.equipo_b?.nombre}
                             </span>
                             <img
@@ -670,12 +669,12 @@ const partidosAMostrar = vista === 'todos'
 
                 <div className="card-body d-flex flex-column justify-content-center align-items-center">
                   <div className="row dialog-box">
-                    <h1 className="scoremodal"> {selectedPartido.jornada || " "}</h1>
+                    <h1 className="btn-jornada-fecha "> {selectedPartido.jornada || " "}</h1>
                     <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
                       <img
                         src={`${Images}/${selectedPartido.equipo_a?.archivo}`}
                         className="logo2 TeamLocal"
-                        alt={selectedPartido.equipo_a?.nombre || "Equipo A"}
+                        alt={selectedPartido.equipo_a?.nombre || "Equipo "}
                          onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = ErrorLogo;
@@ -683,7 +682,7 @@ const partidosAMostrar = vista === 'todos'
                             }}
                       />
                       <span className="team">
-                        {selectedPartido.equipo_a?.nombre || "Equipo A"}
+                        {selectedPartido.equipo_a?.nombre || "Equipo "}
                       </span>
                     </div>
                     <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
@@ -691,7 +690,20 @@ const partidosAMostrar = vista === 'todos'
                         {selectedPartido.marcador1 == null ||
                         selectedPartido.marcador2 == null ? (
                           <>
-                            <h2 className="scoremodal">VS</h2>
+                          <span 
+  className="badge mb-1"
+  style={{
+    backgroundColor: 'transparent',
+    border: '1.5px solid #00bf63',
+    color: '#00bf63',
+    borderRadius: '50px',
+    padding: '4px 12px',
+    fontSize: '0.85rem', // Un poco más pequeño para que sea sutil
+    fontWeight: '700',
+    letterSpacing: '1px'
+  }}
+>VS</span>
+                          
                           </>
                         ) : (
                           `${selectedPartido.marcador1} - ${selectedPartido.marcador2}`
@@ -700,7 +712,7 @@ const partidosAMostrar = vista === 'todos'
                     </div>
                     <div className="col-sm-4 col-4 d-flex justify-content-end align-items-center">
                       <span className="team">
-                        {selectedPartido.equipo_b?.nombre || "Equipo B"}
+                        {selectedPartido.equipo_b?.nombre || "Equipo "}
                       </span>
                       <img
                         src={`${Images}/${selectedPartido.equipo_b?.archivo}`}

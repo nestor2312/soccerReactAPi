@@ -19,6 +19,25 @@
   outline: none !important;
 }
 
+.btn-jornada-fecha {
+   
+      font-weight: bold;
+        text-align: center;
+     
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 700; 
+             /* background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)',  */
+             /* borderLeft: '5px solid #00bf63' */
+border-left: 3px solid #00bf63;
+      background:linear-gradient(90deg, #1b5896 0%, #1a1d23 100%);
+    color: #ffffff; 
+    border-radius: 6px;
+     box-shadow: 0px 1px 6px #25ff96ad;
+ 
+}
+
+
 .btn-tab.active {
      border-radius: 8px;
   color: #00bf63; /* Tu verde Fubol */
