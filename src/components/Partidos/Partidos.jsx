@@ -668,8 +668,11 @@ const partidosAMostrar = vista === 'todos'
                 </button>
 
                 <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                    <div className="btn-jornada-fecha mb-4">
+    {selectedPartido.jornada || " "}
+  </div>
                   <div className="row dialog-box">
-                    <h1 className="btn-jornada-fecha "> {selectedPartido.jornada || " "}</h1>
+                   
                     <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
                       <img
                         src={`${Images}/${selectedPartido.equipo_a?.archivo}`}
@@ -690,10 +693,10 @@ const partidosAMostrar = vista === 'todos'
                         {selectedPartido.marcador1 == null ||
                         selectedPartido.marcador2 == null ? (
                           <>
-                          <span 
+                   <span 
   className="badge mb-1"
   style={{
-    backgroundColor: 'transparent',
+    backgroundColor: ' #00bf6324',
     border: '1.5px solid #00bf63',
     color: '#00bf63',
     borderRadius: '50px',
