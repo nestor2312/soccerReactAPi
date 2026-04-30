@@ -568,7 +568,9 @@ const validarFixture = () => {
     }
 
     // 🔁 Crear clave única SIN importar orden
-    const clave = [equipoA, equipoB].sort().join("-");
+    const clave = esIdaYVuelta
+  ? `${equipoA}-${equipoB}` // respeta orden
+  : [equipoA, equipoB].sort().join("-");
 
     if (partidosVistos.has(clave)) {
       errores.push(`❌ Partido duplicado: ${p.nombreA} vs ${p.nombreB}`);
