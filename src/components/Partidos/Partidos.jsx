@@ -218,7 +218,7 @@ const partidosAMostrar = vista === 'todos'
         
         <main className="main-content mx-1">
 <div className="d-flex justify-content-center mb-4 mt-3">
-  <div className="d-flex flex-nowrap overflow-auto pb-2 scroll-tabs" style={{ maxWidth: '100%', WebkitOverflowScrolling: 'touch' }}>
+  <div className="d-flex flex-nowrap overflow-auto pb-2 scroll-tabs " style={{ maxWidth: '100%', WebkitOverflowScrolling: 'touch' }}>
     
     <button 
       className={`btn-tab mx-1 ${vista === 'diario' ? 'active' : ''}`} 
@@ -245,11 +245,11 @@ const partidosAMostrar = vista === 'todos'
 </div>
 
 {vista === 'diario' && (
-  <div className="calendario-contenedor container mt-4">
+  <div className="calendario-contenedor  container mt-4">
     {/* 1. FILA DE BOTONES DE FECHAS */}
     <div 
    ref={scrollRef} // <--- REFERENCIA AQUÍ
-  className="d-flex overflow-auto pb-3 mb-4 gap-2 scroller-fechas" 
+  className="d-flex overflow-auto pb-3 mb-4 gap-2 scroller-fechas " 
   style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth' }}>
     {Object.keys(calendario).length > 0 ? (
         Object.keys(calendario).sort().map((fecha) => {

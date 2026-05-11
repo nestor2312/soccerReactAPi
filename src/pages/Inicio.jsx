@@ -1314,7 +1314,7 @@ const getEliminatorias = async () => {
   {Object.entries(fasesData).map(([nombreFase, rondas]) => (
     <div key={nombreFase} className="mb-5">
       {/* Título Principal de la Fase (Copa Oro, etc.) */}
-     <div className="mb-4 p-3 rounded-3 d-flex align-items-center justify-content-between" 
+     <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between" 
            style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}>
         <h3 className="text-white text-uppercase fw-bold fw-black m-0" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
           {nombreFase}
@@ -1339,103 +1339,86 @@ const getEliminatorias = async () => {
               </h4>
             </div>
 
-         <div className="row g-3">
+      <div className="row g-3">
   {rondas[ronda.id].map((partido, idx) => (
-    <div key={idx} className="col-12 col-md-12"
-      onClick={() => handleOpenModal(partido)}>
-<div className="p-3 shadow-sm border-0" 
-     style={{ 
-       background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)', 
-       borderRadius: '12px' 
-     }}>        
-        <div className="d-flex align-items-center justify-content-between">
+    <div key={idx} className="col-12" onClick={() => handleOpenModal(partido)}>
+      <div className="p-3 shadow-sm border-0" 
+           style={{ 
+             background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)', 
+             borderRadius: '12px',
+             cursor: 'pointer' 
+           }}>        
+        
+        <div className="d-flex align-items-center">
           
-          {/* EQUIPO A (Logo a la izquierda) */}
-          <div className="d-flex align-items-center gap-2 flex-1">
+          {/* EQUIPO A: Ocupa el mismo espacio que el B */}
+          <div className="d-flex align-items-center gap-2" style={{ flex: '1 1 0', minWidth: 0 }}>
             <img
               src={`${Images}/${partido.equipo_aa?.archivo}`}
-              width="45px"
-              height="45px"
-              style={{ objectFit: 'contain' }}
+              width="40px" height="40px"
+              style={{ objectFit: 'contain', flexShrink: 0 }}
               alt=""
               onError={(e) => { e.target.src = ErrorLogo; }}
             />
-            <span className="text-white fw-bold small text-uppercase">
-              {partido.equipo_aa?.nombre?.substring(0, 50) || 'Por definir'}
+            <span className="text-white fw-bold small text-uppercase text-truncate">
+              {partido.equipo_aa?.nombre || 'Por definir'}
             </span>
           </div>
 
-          {/* MARCADORES CENTRALES O VS */}
-<div className="d-flex align-items-center justify-content-center mx-2" style={{ minWidth: '60px' }}>
-  {partido.marcador1_ida === null || partido.marcador1_ida === undefined ? (
-    /* Si no hay marcador, mostramos el VS */
-    <span 
-  className="badge rounded-pill px-3 py-2 glass" 
->
-  VS
-</span>
-  ) : (
-    /* Si hay marcador, mostramos los números */
-   /* Si ya hay goles, mostramos la suma (Global) */
-    <div className="d-flex align-items-center px-2 glass rounded-2" style={{ border: '1px solid rgba(255,255,255,0.4)' }}>
-      <span className="text-white fs-5 fw-black px-2">
-        {(partido.marcador1_ida || 0) + (partido.marcador1_vuelta || 0)}
-      </span>
-      <span className="text-white opacity-50">-</span>
-      <span className="text-white fs-5 fw-black px-2">
-        {(partido.marcador2_ida || 0) + (partido.marcador2_vuelta || 0)}
-      </span>
-    </div>
-  )}
-</div>
+          {/* CENTRO: VS / MARCADOR (Ancho fijo para no moverse) */}
+          <div className="d-flex align-items-center justify-content-center mx-2" style={{ width: '80px', flexShrink: 0 }}>
+            {partido.marcador1_ida === null || partido.marcador1_ida === undefined ? (
+              <span className="badge rounded-pill px-3 py-2 glass shadow-sm" style={{ fontSize: '0.7rem' }}>
+                VS
+              </span>
+            ) : (
+              <div className="d-flex align-items-center px-2 glass rounded-2 border border-white border-opacity-25">
+                <span className="text-white fs-5 fw-bold px-1">
+                  {(partido.marcador1_ida || 0) + (partido.marcador1_vuelta || 0)}
+                </span>
+                <span className="text-white opacity-50 small">:</span>
+                <span className="text-white fs-5 fw-bold px-1">
+                  {(partido.marcador2_ida || 0) + (partido.marcador2_vuelta || 0)}
+                </span>
+              </div>
+            )}
+          </div>
 
-          {/* EQUIPO B (Logo a la derecha) */}
-          <div className="d-flex align-items-center justify-content-end gap-2 flex-1 text-end">
-            <span className="text-white fw-bold small text-uppercase">
-              {partido.equipo_b?.nombre?.substring(0, 50) || 'Por definir'}
+          {/* EQUIPO B: Ocupa el mismo espacio que el A */}
+          <div className="d-flex align-items-center justify-content-end gap-2 text-end" style={{ flex: '1 1 0', minWidth: 0 }}>
+            <span className="text-white fw-bold small text-uppercase text-truncate">
+              {partido.equipo_b?.nombre || 'Por definir'}
             </span>
             <img
               src={`${Images}/${partido.equipo_b?.archivo}`}
-              width="45px"
-              height="45px"
-              style={{ objectFit: 'contain' }}
+              width="40px" height="40px"
+              style={{ objectFit: 'contain', flexShrink: 0 }}
               alt=""
               onError={(e) => { e.target.src = ErrorLogo; }}
             />
           </div>
-
         </div>
 
-     {/* CONDICIÓN MAESTRA: 
-    Solo si existe marcador de vuelta O existen penales, se dibuja el contenedor de detalles.
-*/}
-{((partido.marcador1_vuelta !== null && partido.marcador1_vuelta !== undefined) || 
-  (partido.marcador1_penales !== null && partido.marcador1_penales !== undefined)) && (
-  
-  <div className="mt-2 pt-2 border-top border-white border-opacity-10">
-    <div className="d-flex justify-content-center gap-2">
-      
-      {/* Detalle de Ida y Vuelta */}
-      {partido.marcador1_vuelta !== null && (
-        <div className="px-2 py-1 rounded text-white" style={{ background: 'rgba(0,0,0,0.2)', fontSize: '0.65rem' }}>
-          <span className="opacity-75">IDA:</span> {partido.marcador1_ida}-{partido.marcador2_ida} 
-          <span className="mx-1">|</span> 
-          <span className="opacity-75">VUELTA:</span> {partido.marcador1_vuelta}-{partido.marcador2_vuelta}
-        </div>
-      )}
-
-      {/* Detalle de Penales */}
-      {partido.marcador1_penales !== null && (
-        <div className="px-2 py-1 rounded bg-danger text-white fw-bold" style={{ fontSize: '0.65rem' }}>
-          PEN: {partido.marcador1_penales} - {partido.marcador2_penales}
-        </div>
-      )}
-      
-    </div>
-  </div>
-)}
-      
-
+        {/* DETALLES (IDA/VUELTA/PENALES) */}
+        {((partido.marcador1_vuelta !== null && partido.marcador1_vuelta !== undefined) || 
+          (partido.marcador1_penales !== null && partido.marcador1_penales !== undefined)) && (
+          <div className="mt-2 pt-2 border-top border-white border-opacity-10">
+            <div className="d-flex justify-content-center flex-wrap gap-2">
+              {partido.marcador1_vuelta !== null && (
+                <div className="px-2 py-1 rounded text-white" style={{ background: 'rgba(0,0,0,0.2)', fontSize: '0.65rem' }}>
+                  <span className="opacity-75">I:</span> {partido.marcador1_ida}-{partido.marcador2_ida} 
+                  <span className="mx-1">|</span> 
+                  <span className="opacity-75">V:</span> {partido.marcador1_vuelta}-{partido.marcador2_vuelta}
+                </div>
+              )}
+              {partido.marcador1_penales !== null && (
+                <div className="px-2 py-1 rounded bg-danger text-white fw-bold shadow-sm" style={{ fontSize: '0.65rem' }}>
+                  PEN: {partido.marcador1_penales} - {partido.marcador2_penales}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   ))}
@@ -1516,7 +1499,7 @@ const getEliminatorias = async () => {
     </div>
   )}
                   <div className="text-center">
-                    <h1 className="fecha">{selectedPartido.fecha || 'Fecha por definir' }</h1>
+                   
                     <h4 className="hora">
                       {selectedPartido.hora?.slice(0, 5)}
                     </h4>
