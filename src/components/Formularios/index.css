@@ -85,9 +85,20 @@ input{
     width: 35px;
     height: 50px;        
     padding: 10px;
-    border-top: 2px solid rgb(0, 0, 0);
-    border-bottom: 2px solid rgb(0, 0, 0);
-    border-right: 2px solid rgb(0, 0, 0);    
+    /* 1. Definimos el degradado como fondo del borde */
+    background-image: linear-gradient(white, white), linear-gradient(180deg, #00BF63, #09537E);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    
+    /* 2. Definimos el grosor del borde */
+    border: 2px solid transparent;
+    
+    /* 3. Aplicamos el radio de borde (esto sí funcionará aquí) */
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    
+    /* 4. Quitamos el borde izquierdo si solo quieres la "U" */
+    border-left: none;  
   }
   
   .conectores .conector .conector_simple {
@@ -97,64 +108,9 @@ input{
     
   }
   
-  .conectores .conector .conector_doble_semifinal {
-    height: 160px;
-      /* background-color: rgb(18, 123, 215); */
-  }
-
-    .conectores .conector .conector_doble_final {
-    height: 300px;
-      /* background-color: rgb(255, 0, 157); */
-  }
-
   
 
-    .conector_doble_semifinal_octavos {
-    height: 240px !important;  
-    /* background-color: rgb(146, 131, 207); */
-}
 
-
- .conector_doble_final_octavos {
-    height: 485px !important;  
-    /* background-color: rgb(85, 79, 110); */
-}
-
-  .conectores .conector .conector_doble_ganador {
-    height: 300px;
-  }
-
-
-
-  .conectores .conector .conector_doble_cuartos {
-    height: 70px;
-    /* background-color: #09537E; */
-  } 
-
-  .conectores .conector .conector_doble_cuartos_octavos {
-    height: 130px;
-    /* background-color: #000406; */
-  } 
-
-    .conectores .conector .conector_doble_octavos {
-    height: 80px;
-     /* background-color: #517e09; */
-  }
-  
- .siguiente-registrada{
-     height: 600px;
-     /* background-color: red; */
-}
-
- .siguiente-registrada_semifinal_octavos{
-   
-     /* background-color: rgb(0, 98, 255)!important; */
-}
-
-.siguiente-registradaa{
-     /* height: 600px; */
-      /* background-color: rgb(9, 255, 0); */
-}
 
   
   .equipo {
