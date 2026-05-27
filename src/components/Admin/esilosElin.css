@@ -17,14 +17,26 @@
     display: flex;
     align-items: center;
   }
-  .conectores .conector .conector_doble {
+.conectores .conector .conector_doble {
     width: 40px;
-    height: 50px;        
+    height: 50px;
     padding: 10px;
-    border-top: 2px solid rgb(0, 0, 0);
-    border-bottom: 2px solid rgb(0, 0, 0);
-    border-right: 2px solid rgb(0, 0, 0);    
-  }
+    
+    /* 1. Definimos el degradado como fondo del borde */
+    background-image: linear-gradient(white, white), linear-gradient(180deg, #00BF63, #09537E);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    
+    /* 2. Definimos el grosor del borde */
+    border: 2px solid transparent;
+    
+    /* 3. Aplicamos el radio de borde (esto sí funcionará aquí) */
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    
+    /* 4. Quitamos el borde izquierdo si solo quieres la "U" */
+    border-left: none;
+}
   
   .conectores .conector .conector_simple {
     width: 20px;    
@@ -70,7 +82,7 @@
     /* height: 150px; */
     display: flex;
     align-items: center;    
-    padding: 10px 0 10px 10px;   
+    padding: 10px 0 10px 0px;   
   }
   
   .partido .jugador {
@@ -203,6 +215,15 @@
     color: #fff;
   }
   
+   /* nuevo cuadro dimanico inicio    //////////////////////////////////////////////////////////////////////// */
+  /* //////////////////////////////////////////////////////////////////////////// */
+  
+
+
+   /* nuevo cuadro dimanico fin     //////////////////////////////////////////////////////////////////////// */
+  /* //////////////////////////////////////////////////////////////////////////// */
+  
+
   
   /* Media//////////////////////////////////////////////////////////////////////// */
   /* //////////////////////////////////////////////////////////////////////////// */
