@@ -7,13 +7,20 @@ import "./esilosElin.css";
 
 const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
   
+   const nombresFases = {
+    dieciseisavos: "Dieciseisavos",
+    octavos: "Octavos",
+    cuartos: "Cuartos",
+    semis: "Semis",
+    final: "Final"
+  };
 
   const estructuraFases = [
-     { id: "dieciseisavos", datos: rondas?.dieciseisavos, clase: "conector_doble_dieciseisavos" },
-    { id: "octavos", datos: rondas?.octavos, clase: "conector_doble_octavos" },
-    { id: "cuartos", datos: rondas?.cuartos, clase: "conector_doble_cuartos" },
-    { id: "semis", datos: rondas?.semis, clase: "conector_doble_semifinal" },
-    { id: "final", datos: rondas?.final, clase: "conector_doble_final" }
+     { id: "dieciseisavos", datos: rondas?.dieciseisavos  },
+    { id: "octavos", datos: rondas?.octavos },
+    { id: "cuartos", datos: rondas?.cuartos },
+    { id: "semis", datos: rondas?.semis },
+    { id: "final", datos: rondas?.final }
   ];
 
   const fasesActivas = estructuraFases.filter(fase => fase.datos && fase.datos.length > 0);
@@ -50,6 +57,18 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
   };
 
   return (
+ <div className="wrapper">
+<div className="titulos">
+        {fasesActivas.map((fase) => (
+          <div key={fase.id} className="titulo">
+            {nombresFases[fase.id]}
+          </div>
+        ))}
+        {rondas.final?.length > 0 && (
+          <div className="titulo">Campeón</div>
+        )}
+      </div>
+
     <div className="esquema">
 {fasesActivas.map((fase, index) => {
   
@@ -103,6 +122,8 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
     alturaConector: 100 
   };
 
+  
+
   // Extraemos las variables calibradas por ti
   const gapPartidos = configActual.gapPartidos;
   const gapInterno = configActual.gapInterno;
@@ -113,7 +134,7 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
 
   return (
     <React.Fragment key={fase.id}>
-      
+    
       {/* 🔵 COLUMNA DE PARTIDOS */}
       <div className="jornada_contenedor" style={{ gap: `${gapPartidos}px` }}>
         {fase.datos.map((partido, i) => (
@@ -125,7 +146,7 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
             abreviarNombre={abreviarNombre}
             gapInterno={gapInterno}
           />
-        ))}
+        ))} 
       </div>
 
       {/* 🔗 COLUMNA DE CONECTORES */}
@@ -158,13 +179,16 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
               </div>
             ) : (
               <div className="jugador por-definir">
-                <span className="equipo">Por Definir</span>
+                <span className="equipo">Por Definir 🏆</span>
               </div>
             )}
           </div>
         </div>
       )}
     </div>
+ </div>
+
+
   );
 };
 

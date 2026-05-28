@@ -581,34 +581,7 @@ const getEliminatorias = async () => {
                                       {nombreFase}
                                     </h3>
                     
-                                    <div className="titulos">
-                                      {rondas.dieciseisavos.length > 0 ? (
-                                        <div className="titulo">Dieciseisavos</div>
-                                      ) : // Si no hay partidos registrados en cuartos, no se renderiza nada
-                                      null}
-
-                                      {rondas.octavos.length > 0 ? (
-                                        <div className="titulo">Octavos</div>
-                                      ) : // Si no hay partidos registrados en cuartos, no se renderiza nada
-                                      null}
-                                      {rondas.cuartos.length > 0 ? (
-                                        <div className="titulo">Cuartos</div>
-                                      ) : // Si no hay partidos registrados en cuartos, no se renderiza nada
-                                      null}
-                                      {rondas.semis.length > 0 ? (
-                                        <div className="titulo">Semis</div>
-                                      ) : // Si no hay partidos registrados en cuartos, no se renderiza nada
-                                      null}
-                                      {rondas.final.length > 0 ? (
-                                        <div className="titulo">Final</div>
-                                      ) : // Si no hay partidos registrados en cuartos, no se renderiza nada
-                                      null}
-                                      {rondas.final.length > 0 ? (
-                                        <div className="titulo">Campeón</div>
-                                      ) : (
-                                        <div className="placeholder-conector"></div>
-                                      )}
-                                    </div>
+                                    
                                     <div>
 
 
