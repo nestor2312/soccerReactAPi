@@ -162,6 +162,7 @@
 .wrapper {
   width: 100%;
   overflow-x: auto;
+   background: #dfdf00;
 }
 
 /* FILA DE TITULOS */
@@ -476,6 +477,7 @@
 }
 .wrapper {
   width: 106%;
+   background: #c1128a;
   
 }
 
@@ -546,8 +548,9 @@
 }
 
 .wrapper {
-  width: 108%;
-  
+  width: 10%;
+    background: #bf4900;
+}
 }
 
     .conectores .conector .conector_doble {
@@ -587,7 +590,7 @@
   }
   
     
-  }
+  
   
   @media (max-width: 320px) {
     .TITULO{
@@ -607,6 +610,7 @@
 }
 .wrapper {
   width: 106%;
+   background: rgb(255, 196, 0);
   
 }
 
