@@ -472,6 +472,7 @@
 
     .titulos{
   gap: 6px;
+  background: #00BF63;
 }
 .wrapper {
   width: 106%;
@@ -541,6 +542,7 @@
 
     .titulos{
   gap: 6px;
+   background: #00BF73;
 }
 
 .wrapper {
@@ -601,6 +603,7 @@
   }
 .titulos{
   gap: 5px;
+   background: #00dF63;
 }
 .wrapper {
   width: 106%;
