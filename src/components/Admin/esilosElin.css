@@ -474,17 +474,18 @@
     }
 
     .titulos{
+      width:max-content;
   gap: 5px;
   background: #00BF63;
 }
 .wrapper {
-  width: 106%;
+  width: 100%;
    background: #c1128a;
   
 }
 
 .torneo-dieciseisavos .conectores .conector .conector_doble {
-    width: 12px;   /* Por ejemplo, cambias el ancho aquí */
+    width: 1px;   /* Por ejemplo, cambias el ancho aquí */
     padding: 2px !important;
 }
 
