@@ -25,6 +25,8 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
 
   const fasesActivas = estructuraFases.filter(fase => fase.datos && fase.datos.length > 0);
 
+const torneoTipo = fasesActivas[0]?.id;
+
   // OBTENER AL CAMPEÓN: Miramos si la fase final ya tiene un partido jugado y un ganador
   const partidoFinal = rondas?.final?.[0];
   let campeon = null;
@@ -69,7 +71,7 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
         )}
       </div>
 
-    <div className="esquema">
+  <div className={`esquema torneo-${torneoTipo}`}>
 {fasesActivas.map((fase, index) => {
   
   // 🚩 Identificamos en qué tipo de torneo estamos según su ronda inicial

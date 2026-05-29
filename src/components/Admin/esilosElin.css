@@ -154,7 +154,10 @@
   }
   
   
- 
+ .torneo-dieciseisavos .conectores .conector .conector_doble {
+    width: 15px;   /* Por ejemplo, cambias el ancho aquí */
+    padding: 3px;
+}
   /* CONTENEDOR GENERAL */
 .wrapper {
   width: 100%;
@@ -236,7 +239,10 @@
   }
   
   @media (max-width: 1024px) {
-    
+    .torneo-dieciseisavos .conectores .conector .conector_doble {
+    width: 15px;   /* Por ejemplo, cambias el ancho aquí */
+    padding: 3px;
+}
   }
   
   @media  (max-width: 991px) {  
@@ -472,6 +478,11 @@
   
 }
 
+.torneo-dieciseisavos .conectores .conector .conector_doble {
+    width: 105px;   /* Por ejemplo, cambias el ancho aquí */
+    padding: 3px;
+}
+
     .conectores .conector .conector_doble {
       width: 2px;
       padding: 2px;
@@ -515,7 +526,10 @@
   .TITULO{
     font-size: 20px;
   }
-    
+
+     .titulo{
+    font-size: 12px;
+  }
     
     
   }
