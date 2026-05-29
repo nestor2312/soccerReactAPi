@@ -474,11 +474,11 @@
     }
 
     .titulos{
-  gap: 4px;
+  gap: 5px;
   background: #00BF63;
 }
 .wrapper {
-  width: 160%;
+  width: 106%;
    background: #c1128a;
   
 }
