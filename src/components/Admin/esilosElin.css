@@ -162,7 +162,7 @@
 .wrapper {
   width: 100%;
   overflow-x: auto;
-   background: #dfdf00;
+ 
 }
 
 /* FILA DE TITULOS */
@@ -171,6 +171,7 @@
    justify-content: center;
   gap: 60px; /* 🔥 controla separación entre columnas */
   margin-bottom: 20px;
+    background: #a0a00c;
  
 }
 
@@ -258,6 +259,7 @@
 
   .titulos {
   gap: 40px;
+    background: #00a4df;
 }
 .titulo{
   width: 125px;
@@ -472,18 +474,18 @@
     }
 
     .titulos{
-  gap: 6px;
+  gap: 4px;
   background: #00BF63;
 }
 .wrapper {
-  width: 106%;
+  width: 160%;
    background: #c1128a;
   
 }
 
 .torneo-dieciseisavos .conectores .conector .conector_doble {
-    width: 105px;   /* Por ejemplo, cambias el ancho aquí */
-    padding: 3px;
+    width: 12px;   /* Por ejemplo, cambias el ancho aquí */
+    padding: 2px !important;
 }
 
     .conectores .conector .conector_doble {
@@ -544,12 +546,12 @@
 
     .titulos{
   gap: 6px;
-   background: #00BF73;
+  
 }
 
 .wrapper {
   width: 10%;
-    background: #bf4900;
+   
 }
 }
 
@@ -606,11 +608,11 @@
   }
 .titulos{
   gap: 5px;
-   background: #00dF63;
+  
 }
 .wrapper {
   width: 106%;
-   background: rgb(255, 196, 0);
+ 
   
 }
 
