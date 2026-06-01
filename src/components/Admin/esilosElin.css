@@ -172,7 +172,7 @@
    justify-content: center;
   gap: 60px; /* 🔥 controla separación entre columnas */
   margin-bottom: 20px;
-    background: #a0a00c;
+   
  
 }
 
@@ -260,7 +260,7 @@
 
   .titulos {
   gap: 40px;
-    background: #00a4df;
+   
 }
 .titulo{
   width: 125px;
@@ -476,12 +476,12 @@
 
     .titulos{
      
-  gap: 1px;
-  background: #00BF63;
+  gap: 6px;
+ 
 }
 .wrapper {
-  width: 100%  !important;
-   background: #c1128a;
+  width: 105%  !important;
+  
   
 }
 
