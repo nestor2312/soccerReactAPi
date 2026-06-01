@@ -569,7 +569,7 @@ const getEliminatorias = async () => {
       {/* Renderizado Condicional */}
       <div className="w-full max-w-4xl">
         {vista === 'llaves' ? (
-          <div className="animate-fade-in overflow-x-auto"> 
+          <div className="animate-fade-in scroll-container"> 
            
                     {Object.entries(fasesData).map(([nombreFase, rondas]) => (
                                   <div key={nombreFase} className="fase-contenedor mb-5">

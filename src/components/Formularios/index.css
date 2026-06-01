@@ -67,7 +67,8 @@ input{
   
   
   .esquema {
-    display: flex;
+   display: inline-flex;
+    min-width: 100%;
     justify-content: center;        
   }
   

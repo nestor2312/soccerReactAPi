@@ -59,9 +59,10 @@ const torneoTipo = fasesActivas[0]?.id;
   };
 
   return (
- <div className="wrapper">
+ <div className="wrapper ">
 <div className="titulos">
         {fasesActivas.map((fase) => (
+          
           <div key={fase.id} className="titulo">
             {nombresFases[fase.id]}
           </div>

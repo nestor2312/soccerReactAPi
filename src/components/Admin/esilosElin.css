@@ -3,7 +3,8 @@
   
   
   .esquema {
-    display: flex;
+    display: inline-flex;
+    min-width: 100%;
     justify-content: center;        
   }
   
@@ -474,18 +475,26 @@
     }
 
     .titulos{
-      width:max-content;
-  gap: 5px;
+     
+  gap: 1px;
   background: #00BF63;
 }
 .wrapper {
-  width: 100%;
+  width: 100%  !important;
    background: #c1128a;
   
 }
 
+.titulos.torneo-dieciseisavos  {
+    width: 1000px;   
+    padding: 2px !important;
+    background-color: red !important;
+}
+
+
 .torneo-dieciseisavos .conectores .conector .conector_doble {
-    width: 1px;   /* Por ejemplo, cambias el ancho aquí */
+  overflow-x: auto;
+    width: 10px;   /* Por ejemplo, cambias el ancho aquí */
     padding: 2px !important;
 }
 
