@@ -475,12 +475,12 @@
     }
 
     .titulos{
-     
+     width: max-content;
   gap: 6px;
  
 }
 .wrapper {
-  width: 105%  !important;
+  width: 100%  !important;
   
   
 }
