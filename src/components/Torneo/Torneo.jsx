@@ -27,7 +27,7 @@ const Torneo = () => {
     getTorneosAll();
   }, []);
   useEffect(() => {
-    document.title = "Competiciones";
+    document.title = "Torneos";
   }, []);
 
      useEffect(() => {
@@ -57,7 +57,7 @@ const Torneo = () => {
       </Link>
           </div>
         </nav>
-    <h1 className="text-center text-title mt-2">competiciones</h1>
+    <h1 className="text-center text-title mt-2">torneos</h1>
    
       {isLoading ? (
         <div className="loading-container">
