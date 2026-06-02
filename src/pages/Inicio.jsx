@@ -811,9 +811,26 @@ const getEliminatorias = async () => {
                     </div>
                   <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
   <span className="scoremodal">
-    {instanciaVista === 'ida' && (selectedPartido.marcador1_ida ?? 0) + " - " + (selectedPartido.marcador2_ida ?? 0)}
+{instanciaVista === 'ida' && (
+      // Si ambos marcadores son null, significa que no hay información aún -> Mostramos VS
+      selectedPartido.marcador1_ida === null && selectedPartido.marcador2_ida === null ? (
+        <span className="text-muted fw-bold" style={{ fontSize: '1.2rem' }}>VS</span>
+      ) : (
+        // Si hay información, muestra los goles (usando 0 por defecto si alguno falta)
+        (selectedPartido.marcador1_ida ?? 0) + " - " + (selectedPartido.marcador2_ida ?? 0)
+      )
+    )}   
+{/* VISTA: VUELTA */}
     {instanciaVista === 'vuelta' && (selectedPartido.marcador1_vuelta ?? 0) + " - " + (selectedPartido.marcador2_vuelta ?? 0)}
-{instanciaVista === 'tanda_penales' && (
+
+    {/* VISTA: PENALES */}
+    {instanciaVista === 'tanda_penales' && (
+      <div className="d-flex align-items-center justify-content-center">
+        <span className="mr-2 text-black" style={{ fontSize: '0.8rem' }}>P</span>
+        <span>( </span> {(selectedPartido.marcador1_penales ?? 0)} - {(selectedPartido.marcador2_penales ?? 0)} <span> )</span>
+      </div>
+    )}
+    {instanciaVista === 'tanda_penales' && (
     <div className="d-flex align-items-center justify-content-center">
       <span className=" mr-2 text-black" style={{ fontSize: '0.8rem' }}>P</span>
       <span>( </span> {(selectedPartido.marcador1_penales ?? 0)} - {(selectedPartido.marcador2_penales ?? 0)} <span> )</span>
