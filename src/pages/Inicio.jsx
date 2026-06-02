@@ -15,6 +15,9 @@ const endpoint = `${API_ENDPOINT}`;
 const Images = IMAGES_URL;
 
 const Inicio = () => {
+
+
+  
   const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
   const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
@@ -851,32 +854,48 @@ const getEliminatorias = async () => {
                 </div>
 
 <div className="d-flex align-items-center justify-content-center gap-2 mb-4">
-  {/* Botones de Ida y Vuelta */}
-  {['ida', 'vuelta'].map((inst) => (
-    <button
-      key={inst}
-      onClick={() => setInstanciaVista(inst)}
-      className="btn d-flex align-items-center p-2 border-0 shadow-none"
-      style={{ 
-        opacity: instanciaVista === inst ? '1' : '0.5', 
-        transition: 'all 0.3s ease',
-        background: 'transparent'
-      }}
-    >
-      <div style={{ 
-        width: '4px', 
-        height: '16px', 
-        background: '#00bf63', 
-        marginRight: '8px', 
-        borderRadius: '10px',
-        // La barrita verde solo se muestra si está activo
-        display: instanciaVista === inst ? 'block' : 'none' 
-      }}></div>
-      <span className="text-uppercase fw-bold" style={{ fontSize: '0.8rem', color: '#000' }}>
-        {inst}
-      </span>
-    </button>
-  ))}
+
+{/* Botones de Ida y Vuelta dinámicos */}
+  {(() => {
+    // Validamos si existe partido de vuelta
+    const tieneVuelta = selectedPartido.marcador1_vuelta !== null;
+
+    // Si tiene vuelta, renderiza ambos botones. Si no, solo el de 'ida' (renombrado)
+    const instanciasAMostrar = tieneVuelta ? ['ida', 'vuelta'] : ['ida'];
+
+    return instanciasAMostrar.map((inst) => {
+      // Determinamos el texto dinámico del botón
+      let textoBoton = inst;
+      if (inst === 'ida' && !tieneVuelta) {
+        textoBoton = 'detalles';
+      }
+
+      return (
+        <button
+          key={inst}
+          onClick={() => setInstanciaVista(inst)}
+          className="btn d-flex align-items-center p-2 border-0 shadow-none"
+          style={{ 
+            opacity: instanciaVista === inst ? '1' : '0.5', 
+            transition: 'all 0.3s ease',
+            background: 'transparent'
+          }}
+        >
+          <div style={{ 
+            width: '4px', 
+            height: '16px', 
+            background: '#00bf63', 
+            marginRight: '8px', 
+            borderRadius: '10px',
+            display: instanciaVista === inst ? 'block' : 'none' 
+          }}></div>
+          <span className="text-uppercase fw-bold" style={{ fontSize: '0.8rem', color: '#000' }}>
+            {textoBoton}
+          </span>
+        </button>
+      );
+    });
+  })()}
 
   {/* Botón de Penales con Borde Dinámico */}
   {selectedPartido.marcador1_penales !== null && (
@@ -890,7 +909,6 @@ const getEliminatorias = async () => {
         borderTop: 'none',
         borderRight: 'none',
         borderBottom: 'none',
-        // AQUÍ ESTÁ EL CAMBIO: El color del borde depende del estado activo
         borderLeft: `5px solid ${instanciaVista === 'tanda_penales' ? '#00bf63' : 'transparent'}`, 
         transition: 'all 0.3s ease',
         minWidth: '110px'
@@ -905,6 +923,7 @@ const getEliminatorias = async () => {
       </span>
     </button>
   )}
+
 </div>
 
                 <div className="eventos-timeline w-100 border-top pt-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
