@@ -185,9 +185,9 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   >
    
     <option value="General">General / Única</option>
-                <option value="Copa Oro">Copa Oro</option>
+                {/* <option value="Copa Oro">Copa Oro</option>
                 <option value="Copa Plata">Copa Plata</option>
-                <option value="Copa Bronce">Copa Bronce</option>
+                <option value="Copa Bronce">Copa Bronce</option> */}
   </select>
 </div>
         </div>

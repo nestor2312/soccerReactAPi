@@ -647,9 +647,9 @@ const openEventsModal = (partido, instancia = "normal") => {
               >
                 {/* Cambia value="" por value="General" */}
                 <option value="General">General / Única</option>
-                <option value="Copa Oro">Copa Oro</option>
+                {/* <option value="Copa Oro">Copa Oro</option>
                 <option value="Copa Plata">Copa Plata</option>
-                <option value="Copa Bronce">Copa Bronce</option>
+                <option value="Copa Bronce">Copa Bronce</option> */}
               </select>
               <small className="text-muted">
                 Selecciona si el torneo tiene llaves simultáneas.
