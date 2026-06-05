@@ -800,7 +800,7 @@ const getEliminatorias = async () => {
         X
       </button>
 
-      <div className="card-body d-flex flex-column justify-content-center align-items-center">
+      <div className=" d-flex flex-column justify-content-center align-items-center">
 
          < div className="btn-jornada-fecha mb-4">
 
