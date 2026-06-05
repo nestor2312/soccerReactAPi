@@ -87,6 +87,15 @@ const [vista, setVista] = useState('llaves');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+const nombresPartidos = {
+  1: "Octavos", // O "Jornada 1", "Ida", etc.
+  2: "Cuartos",
+  3: "Semis",
+  4: "Final",
+  5: "Tercer puesto",
+  6: "Dieciseisavos"
+};
+
 
   const fasesData = useMemo(() => {
      // Juntamos todos los partidos de los estados
@@ -665,7 +674,7 @@ const getEliminatorias = async () => {
         </h3>
       </div>
 
-      {/* Definimos las rondas en orden para iterarlas fácil */}
+      {/* rondas en orden  */}
       {[
          { id: 'dieciseisavos', titulo: 'Dieciseisavos de Final' },
         { id: 'octavos', titulo: 'Octavos de Final' },
@@ -779,256 +788,288 @@ const getEliminatorias = async () => {
       </div>
     </div>
 {/* Modal */}
-          <dialog ref={modalRef}>
-            {selectedPartido && (
-              <>
-                {/* Botón de cierre mejorado */}
-                <button
-                  type="button"
-                  className="close-button btn btn-outline-danger"
-                  onClick={handleCloseModal}
-                >
-                  X
-                </button>
+       <dialog ref={modalRef}>
+  {selectedPartido && (
+    <>
+      {/* Botón de cierre mejorado */}
+      <button
+        type="button"
+        className="close-button btn btn-outline-danger"
+        onClick={handleCloseModal}
+      >
+        X
+      </button>
 
-                <div className="card-body d-flex flex-column justify-content-center align-items-center">
-                  <div className="row dialog-box">
-                    <h1 className="scoremodal"> {selectedPartido.jornada || " "}</h1>
-                    <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
-                      <img
-                        src={`${Images}/${selectedPartido.equipo_aa?.archivo}`}
-                        className="logo2 TeamLocal"
-                        alt={selectedPartido.equipo_aa?.nombre || "Equipo "}
-                         onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = ErrorLogo;
-                              e.target.classList.add("error-logo");
-                            }}
-                      />
-                      <span className="team">
-                        {selectedPartido.equipo_aa?.nombre || "Equipo "}
-                      </span>
-                    </div>
-                  <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
-  <span className="scoremodal">
-{instanciaVista === 'ida' && (
-      // Si ambos marcadores son null, significa que no hay información aún -> Mostramos VS
-      selectedPartido.marcador1_ida === null && selectedPartido.marcador2_ida === null ? (
-        <span className="text-muted fw-bold" style={{ fontSize: '1.2rem' }}>VS</span>
-      ) : (
-        // Si hay información, muestra los goles (usando 0 por defecto si alguno falta)
-        (selectedPartido.marcador1_ida ?? 0) + " - " + (selectedPartido.marcador2_ida ?? 0)
-      )
-    )}   
-{/* VISTA: VUELTA */}
-    {instanciaVista === 'vuelta' && (selectedPartido.marcador1_vuelta ?? 0) + " - " + (selectedPartido.marcador2_vuelta ?? 0)}
+      <div className="card-body d-flex flex-column justify-content-center align-items-center">
 
-    {/* VISTA: PENALES */}
-    {instanciaVista === 'tanda_penales' && (
-      <div className="d-flex align-items-center justify-content-center">
-        <span className="mr-2 text-black" style={{ fontSize: '0.8rem' }}>P</span>
-        <span>( </span> {(selectedPartido.marcador1_penales ?? 0)} - {(selectedPartido.marcador2_penales ?? 0)} <span> )</span>
-      </div>
-    )}
-    {instanciaVista === 'tanda_penales' && (
-    <div className="d-flex align-items-center justify-content-center">
-      <span className=" mr-2 text-black" style={{ fontSize: '0.8rem' }}>P</span>
-      <span>( </span> {(selectedPartido.marcador1_penales ?? 0)} - {(selectedPartido.marcador2_penales ?? 0)} <span> )</span>
-    </div>
-  )}  </span>
+         < div className="btn-jornada-fecha mb-4">
 
-  
-</div>
-                    <div className="col-sm-4 col-4 d-flex justify-content-end align-items-center">
-                      <span className="team">
-                        {selectedPartido.equipo_b?.nombre || "Equipo B"}
-                      </span>
-                      <img
-                        src={`${Images}/${selectedPartido.equipo_b?.archivo}`}
-                        className="logo2 TeamVisitante"
-                        alt={selectedPartido.equipo_b?.nombre || "Equipo "}
-                         onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = ErrorLogo;
-                              e.target.classList.add("error-logo");
-                            }}
-                      />
-                    </div>
-                  </div>
-                  {/* El Global solo se muestra si estamos viendo la vuelta o si ya hay marcador de vuelta */}
-  {(instanciaVista === 'vuelta' || selectedPartido.marcador1_vuelta !== null) && (
-    <div className="d-flex small mt-1">
-      <strong>Global:</strong> {(selectedPartido.marcador1_ida || 0) + (selectedPartido.marcador1_vuelta || 0)} - {(selectedPartido.marcador2_ida || 0) + (selectedPartido.marcador2_vuelta || 0)}
-    </div>
-  )}
-                  <div className="text-center">
-                   
-                    <h4 className="hora">
-                      {selectedPartido.hora?.slice(0, 5)}
-                    </h4>
-                     <h1 className="fecha">{selectedPartido.sede || ' ' }</h1>
-                  </div>
-                </div>
+  {selectedPartido.numPartido && nombresPartidos[selectedPartido.numPartido] 
+    ? nombresPartidos[selectedPartido.numPartido] 
+    : selectedPartido.numPartido 
+      ? `Partido ${selectedPartido.numPartido}` 
+      : "Partido por definir"}
+       
+         </div>
 
-<div className="d-flex align-items-center justify-content-center gap-2 mb-4">
-
-{/* Botones de Ida y Vuelta dinámicos */}
-  {(() => {
-    // Validamos si existe partido de vuelta
-    const tieneVuelta = selectedPartido.marcador1_vuelta !== null;
-
-    // Si tiene vuelta, renderiza ambos botones. Si no, solo el de 'ida' (renombrado)
-    const instanciasAMostrar = tieneVuelta ? ['ida', 'vuelta'] : ['ida'];
-
-    return instanciasAMostrar.map((inst) => {
-      // Determinamos el texto dinámico del botón
-      let textoBoton = inst;
-      if (inst === 'ida' && !tieneVuelta) {
-        textoBoton = 'detalles';
-      }
-
-      return (
-        <button
-          key={inst}
-          onClick={() => setInstanciaVista(inst)}
-          className="btn d-flex align-items-center p-2 border-0 shadow-none"
-          style={{ 
-            opacity: instanciaVista === inst ? '1' : '0.5', 
-            transition: 'all 0.3s ease',
-            background: 'transparent'
-          }}
-        >
-          <div style={{ 
-            width: '4px', 
-            height: '16px', 
-            background: '#00bf63', 
-            marginRight: '8px', 
-            borderRadius: '10px',
-            display: instanciaVista === inst ? 'block' : 'none' 
-          }}></div>
-          <span className="text-uppercase fw-bold" style={{ fontSize: '0.8rem', color: '#000' }}>
-            {textoBoton}
-          </span>
-        </button>
-      );
-    });
-  })()}
-
-  {/* Botón de Penales con Borde Dinámico */}
-  {selectedPartido.marcador1_penales !== null && (
-    <button 
-      onClick={() => setInstanciaVista('tanda_penales')}
-      className="btn rounded-3 d-flex align-items-center px-3 py-2 shadow-sm" 
-      style={{ 
-        background: instanciaVista === 'tanda_penales' 
-          ? 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)' 
-          : '#f8f9fa',
-        borderTop: 'none',
-        borderRight: 'none',
-        borderBottom: 'none',
-        borderLeft: `5px solid ${instanciaVista === 'tanda_penales' ? '#00bf63' : 'transparent'}`, 
-        transition: 'all 0.3s ease',
-        minWidth: '110px'
-      }}
-    >
-      <span className="text-uppercase fw-bold m-0" style={{ 
-        fontSize: '0.75rem', 
-        letterSpacing: '0.5px',
-        color: instanciaVista === 'tanda_penales' ? '#fff' : '#6c757d' 
-      }}>
-        {instanciaVista === 'tanda_penales' ? "⚽ Penales" : "Penales"}
-      </span>
-    </button>
-  )}
-
-</div>
-
-                <div className="eventos-timeline w-100 border-top pt-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-    {/* <h6 className="text-center text-uppercase text-muted small mb-3">Incidencias del partido</h6> */}
-    
-
-
-    {eventos.length === 0 ? (
-      <p className="text-center text-muted small"> </p>
-    ) : (
-      <div className="list-group list-group-flush">
-        <div className="eventos-timeline pt-3">
-  <h6 className="text-center text-uppercase text-muted small mb-4">Detalles del partido</h6>
-
-  <div className="row g-0">
-    {/* COLUMNA EQUIPO LOCAL (A) */}
-    <div className="col-6 border-right" style={{ borderRight: '2px solid #eee', color: '#ffffff' }}>
-      <div className="list-group list-group-flush pr-2">
-       {eventos
-  .filter((e) => 
-    e.equipo_id === (selectedPartido.equipo_aa?.id || selectedPartido.equipo_a_id) && 
-    e.instancia === instanciaVista // <--- FILTRO DINÁMICO
-  )
-          .map((e) => (
-            <div key={e.id} className="mb-3 fondo-imagen  d-flex flex-column align-items-start">
-              <div className="d-flex align-items-center mb-1">
-                <span className="badge badge-dark mr-2" style={{ fontSize: '0.7rem',  marginLeft: '14px' }}>
-                  {e.minuto ? `${e.minuto}'` : '-'}
-                </span>
-                <span className="evento-icono mr-1">
-                  {e.tipo_evento === 'gol' && '⚽'}
-                  {e.tipo_evento === 'amarilla' && '🟨'}
-                  {e.tipo_evento === 'roja' && '🟥'}
-                  {e.tipo_evento === 'asistencia' && '👟'}
-                    {e.tipo_evento === 'gol_penal' && '✅'}
-                      {e.tipo_evento === 'fallo_penal' && '❌'}
-                  
-                </span>
-                <strong className="font-events-matches" style={{ marginLeft: '4px', textTransform: 'capitalize' }}>{e.jugador?.nombre}  {e.jugador?.apellido}</strong>
-              </div>
-<small style={{ marginLeft: '48px', marginTop: '-11px', fontSize: '0.75rem', color: '#ffffff', display: 'block', textTransform: 'capitalize' }}>                {e.tipo_evento}
-              </small>
-            </div>
-          ))}
-      </div>
-    </div>
-
-    {/* COLUMNA EQUIPO VISITANTE (B) */}
-    <div className="col-6">
-      <div className="list-group list-group-flush  pl-2">
-       {eventos
-  .filter((e) => 
-    e.equipo_id === (selectedPartido.equipo_b?.id || selectedPartido.equipo_b_id) && 
-    e.instancia === instanciaVista // <--- FILTRO DINÁMICO
-  )
-          .map((e) => (
-            <div key={e.id} className="mb-3 d-flex fondo-imagen flex-column align-items-end text-right">
-              <div className="d-flex align-items-center  mb-1 flex-row-reverse">
-                <span className="badge badge-dark ml-2" style={{ fontSize: '0.7rem',  color: '#ffffff' }}>
-                  {e.minuto ? `${e.minuto}'` : '-'}
-                </span>
-                <span className="evento-icono ml-1">
-                  {e.tipo_evento === 'gol' && '⚽'}
-                  {e.tipo_evento === 'amarilla' && '🟨'}
-                  {e.tipo_evento === 'roja' && '🟥'}
-                  {e.tipo_evento === 'asistencia' && '👟'}
-                </span>
-                <strong className="font-events-matches">{e.jugador?.nombre} {e.jugador?.apellido}</strong>
-              </div>
-              <small className=" text-capitalize" style={{ marginRight: '45px',  marginTop: '-11px',  color: '#ffffff', fontSize: '0.7rem' }}>
-                {e.tipo_evento}
-              </small>
-            </div>
-          ))}
-      </div>
-    </div>
-  </div>
-
-  {eventos.length === 0 && (
-    <p className="text-center text-muted small mt-2">No hay incidencias registradas</p>
-  )}
-</div>
-      </div>
-    )}
-  </div>                
-              </>
+        <div className="row dialog-box"> 
+          {/* COLUMNA LOCAL */}
+          <div className="col-sm-4 col-4 d-flex justify-content-start align-items-center">
+            {selectedPartido.equipo_aa?.archivo ? (
+              <img
+                src={`${Images}/${selectedPartido.equipo_aa.archivo}`}
+                className="logo2 TeamLocal"
+                alt={selectedPartido.equipo_aa?.nombre || "Equipo"}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = ErrorLogo;
+                  e.target.classList.add("error-logo");
+                }}
+              />
+            ) : (
+              <img src={ErrorLogo} className="logo2 TeamLocal error-logo" alt="Sin equipo" />
             )}
-          </dialog>
+            <span className="team">
+              {selectedPartido.equipo_aa?.nombre || "Por definir"}
+            </span>
+          </div>
+
+          {/* COLUMNA MARCADOR CENTRAL */}
+          <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
+         <span className="scoremodal" 
+  style={{
+    backgroundColor: "rgba(0, 191, 99, 0.14)", 
+    border: "1.5px solid rgb(0, 191, 99)", 
+    color: "rgb(0, 191, 99)", 
+    borderRadius: "50px", 
+    padding: "4px 12px", 
+    fontSize: "0.85rem", 
+    fontWeight: "700", 
+    letterSpacing: "1px",
+    display: "inline-block" // Recomendado para que el padding vertical en etiquetas <span> se aplique bien
+  }}
+>
+  {/* VISTA: IDA */}
+  {instanciaVista === 'ida' && (
+    (selectedPartido.marcador1_ida === null || selectedPartido.marcador1_ida === undefined) && 
+    (selectedPartido.marcador2_ida === null || selectedPartido.marcador2_ida === undefined) ? (
+      <span className=" fw-bold" style={{ fontSize: '1.0rem' }}>VS</span>
+    ) : (
+      `${selectedPartido.marcador1_ida ?? 0} - ${selectedPartido.marcador2_ida ?? 0}`
+    )
+  )} 
+  
+  {/* VISTA: VUELTA */}
+  {instanciaVista === 'vuelta' && (
+    (selectedPartido.marcador1_vuelta === null || selectedPartido.marcador1_vuelta === undefined) ? (
+      <span className="fw-bold" style={{ fontSize: '1.0rem' }}>VS</span>
+    ) : (
+      `${selectedPartido.marcador1_vuelta ?? 0} - ${selectedPartido.marcador2_vuelta ?? 0}`
+    )
+  )}
+
+  {/* VISTA: PENALES */}
+{/* VISTA: PENALES */}
+{instanciaVista === 'tanda_penales' && (
+  <div className="d-flex align-items-center justify-content-center">
+    <span className="me-2 text-black" style={{ fontSize: '0.8rem' }}>P</span>
+    <span>( {selectedPartido.marcador1_penales ?? 0} - {selectedPartido.marcador2_penales ?? 0} )</span>
+  </div>
+)}
+</span>
+          </div>
+
+          {/* COLUMNA VISITANTE */}
+          <div className="col-sm-4 col-4 d-flex justify-content-end align-items-center">
+            <span className="team">
+              {selectedPartido.equipo_b?.nombre || "Por definir"}
+            </span>
+            {selectedPartido.equipo_b?.archivo ? (
+              <img
+                src={`${Images}/${selectedPartido.equipo_b.archivo}`}
+                className="logo2 TeamVisitante"
+                alt={selectedPartido.equipo_b?.nombre || "Equipo"}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = ErrorLogo;
+                  e.target.classList.add("error-logo");
+                }}
+              />
+            ) : (
+              <img src={ErrorLogo} className="logo2 TeamVisitante error-logo" alt="Sin equipo" />
+            )}
+          </div>
+        </div>
+
+        {/* Global - Validando estrictamente que existan ambos marcadores antes de mostrarlo */}
+        {selectedPartido.marcador1_vuelta !== null && selectedPartido.marcador1_vuelta !== undefined && (
+          <div className="d-flex small mt-1">
+            <strong>Global:</strong> {(selectedPartido.marcador1_ida || 0) + (selectedPartido.marcador1_vuelta || 0)} - {(selectedPartido.marcador2_ida || 0) + (selectedPartido.marcador2_vuelta || 0)}
+          </div>
+        )}
+
+        <div className="text-center">
+          <h4 className="hora">
+            {/* falta añadir hora */}
+            {selectedPartido.hora ? selectedPartido.hora.slice(0, 5) : " "}
+          </h4>
+                      {/* falta añadir sede */}
+          <h1 className="fecha">{selectedPartido.sede || ' '}</h1>
+        </div>
+      </div>
+
+      {/* BOTONES DE NAVEGACIÓN DE INSTANCIAS */}
+      <div className="d-flex align-items-center justify-content-center gap-2 mb-4">
+        {(() => {
+          // Si no hay datos válidos de vuelta, asumimos que no tiene vuelta
+          const tieneVuelta = selectedPartido.marcador1_vuelta !== null && selectedPartido.marcador1_vuelta !== undefined;
+          const instanciasAMostrar = tieneVuelta ? ['ida', 'vuelta'] : ['ida'];
+
+          return instanciasAMostrar.map((inst) => {
+            let textoBoton = inst;
+            if (inst === 'ida' && !tieneVuelta) {
+              textoBoton = 'detalles';
+            }
+
+            return (
+              <button
+                key={inst}
+                onClick={() => setInstanciaVista(inst)}
+                className="btn d-flex align-items-center p-2 border-0 shadow-none"
+                style={{ 
+                  opacity: instanciaVista === inst ? '1' : '0.5', 
+                  transition: 'all 0.3s ease',
+                  background: 'transparent'
+                }}
+              >
+                <div style={{ 
+                  width: '4px', 
+                  height: '16px', 
+                  background: '#00bf63', 
+                  marginRight: '8px', 
+                  borderRadius: '10px',
+                  display: instanciaVista === inst ? 'block' : 'none' 
+                }}></div>
+                <span className="text-uppercase fw-bold" style={{ fontSize: '0.8rem', color: '#000' }}>
+                  {textoBoton}
+                </span>
+              </button>
+            );
+          });
+        })()}
+
+        {/* Botón de Penales */}
+        {selectedPartido.marcador1_penales !== null && selectedPartido.marcador1_penales !== undefined && (
+          <button 
+            onClick={() => setInstanciaVista('tanda_penales')}
+            className="btn rounded-3 d-flex align-items-center px-3 py-2 shadow-sm" 
+            style={{ 
+              background: instanciaVista === 'tanda_penales' 
+                ? 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)' 
+                : '#f8f9fa',
+              borderTop: 'none',
+              borderRight: 'none',
+              borderBottom: 'none',
+              borderLeft: `5px solid ${instanciaVista === 'tanda_penales' ? '#00bf63' : 'transparent'}`, 
+              transition: 'all 0.3s ease',
+              minWidth: '110px'
+            }}
+          >
+            <span className="text-uppercase fw-bold m-0" style={{ 
+              fontSize: '0.75rem', 
+              letterSpacing: '0.5px',
+              color: instanciaVista === 'tanda_penales' ? '#fff' : '#6c757d' 
+            }}>
+              {instanciaVista === 'tanda_penales' ? "⚽ Penales" : "Penales"}
+            </span>
+          </button>
+        )}
+      </div>
+
+      {/* SECCIÓN DE EVENTOS / INCIDENCIAS */}
+      <div className="eventos-timeline w-100 border-top pt-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+        {(!eventos || eventos.length === 0) ? (
+          // No hay incidencias registradas
+          <p className="text-center text-muted small mt-2"> </p>
+        ) : (
+          <div className="eventos-timeline pt-3">
+            <h6 className="text-center text-uppercase text-muted small mb-4">Detalles del partido</h6>
+
+            <div className="row g-0">
+              {/* COLUMNA EQUIPO LOCAL (A) */}
+              <div className="col-6" style={{ borderRight: '2px solid #eee', color: '#ffffff' }}>
+                <div className="list-group list-group-flush pe-2">
+                  {eventos
+                    .filter((e) => {
+                      const localId = selectedPartido.equipo_aa?.id || selectedPartido.equipo_a_id;
+                      return localId && e.equipo_id === localId && e.instancia === instanciaVista;
+                    })
+                    .map((e) => (
+                      <div key={e.id} className="mb-3 fondo-imagen d-flex flex-column align-items-start">
+                        <div className="d-flex align-items-center mb-1">
+                          <span className="badge badge-dark me-2" style={{ fontSize: '0.7rem', marginLeft: '14px' }}>
+                            {e.minuto ? `${e.minuto}'` : '-'}
+                          </span>
+                          <span className="evento-icono me-1">
+                            {e.tipo_evento === 'gol' && '⚽'}
+                            {e.tipo_evento === 'amarilla' && '🟨'}
+                            {e.tipo_evento === 'roja' && '🟥'}
+                            {e.tipo_evento === 'asistencia' && '👟'}
+                            {e.tipo_evento === 'gol_penal' && '✅'}
+                            {e.tipo_evento === 'fallo_penal' && '❌'}
+                          </span>
+                          <strong className="font-events-matches" style={{ marginLeft: '4px', textTransform: 'capitalize' }}>
+                            {e.jugador?.nombre || 'Jugador'} {e.jugador?.apellido || ''}
+                          </strong>
+                        </div>
+                        <small style={{ marginLeft: '48px', marginTop: '-11px', fontSize: '0.75rem', color: '#ffffff', display: 'block', textTransform: 'capitalize' }}>
+                          {e.tipo_evento || ''}
+                        </small>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* COLUMNA EQUIPO VISITANTE (B) */}
+              <div className="col-6">
+                <div className="list-group list-group-flush ps-2">
+                  {eventos
+                    .filter((e) => {
+                      const visitanteId = selectedPartido.equipo_b?.id || selectedPartido.equipo_b_id;
+                      return visitanteId && e.equipo_id === visitanteId && e.instancia === instanciaVista;
+                    })
+                    .map((e) => (
+                      <div key={e.id} className="mb-3 d-flex fondo-imagen flex-column align-items-end text-right">
+                        <div className="d-flex align-items-center mb-1 flex-row-reverse">
+                          <span className="badge badge-dark ms-2" style={{ fontSize: '0.7rem', color: '#ffffff' }}>
+                            {e.minuto ? `${e.minuto}'` : '-'}
+                          </span>
+                          <span className="evento-icono ms-1">
+                            {e.tipo_evento === 'gol' && '⚽'}
+                            {e.tipo_evento === 'amarilla' && '🟨'}
+                            {e.tipo_evento === 'roja' && '🟥'}
+                            {e.tipo_evento === 'asistencia' && '👟'}
+                            {e.tipo_evento === 'gol_penal' && '✅'}
+                            {e.tipo_evento === 'fallo_penal' && '❌'}
+                          </span>
+                          <strong className="font-events-matches">
+                            {e.jugador?.nombre || 'Jugador'} {e.jugador?.apellido || ''}
+                          </strong>
+                        </div>
+                        <small className="text-capitalize" style={{ marginRight: '45px', marginTop: '-11px', color: '#ffffff', fontSize: '0.7rem' }}>
+                          {e.tipo_evento || ''}
+                        </small>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>              
+    </>
+  )}
+</dialog>
                   </div>
                 </div>
               </div>
