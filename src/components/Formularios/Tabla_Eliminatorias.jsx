@@ -21,6 +21,9 @@ const TablaEliminatoria = ({
             <th className="text-center fondo-card-admin">Ida</th>
             <th className="text-center fondo-card-admin">Vuelta</th>
             <th className="text-center fondo-card-admin">Penales</th>
+                 <th className="text-center fondo-card-admin">Fecha</th>
+                      <th className="text-center fondo-card-admin">Hora</th>
+                           <th className="text-center fondo-card-admin">Sede</th>
             <th className="text-center fondo-card-admin">Acciones</th>
           </tr>
         </thead>
@@ -32,7 +35,7 @@ const TablaEliminatoria = ({
             return (
               <React.Fragment key={nombreFase}>
                 <tr className="table-dark">
-                  <td colSpan="5" className="text-center fw-bold py-2 small">
+                  <td colSpan="8" className="text-center fw-bold py-2 small">
                     --- {nombreFase.toUpperCase()} ---
                   </td>
                 </tr>
@@ -79,6 +82,23 @@ const TablaEliminatoria = ({
                               🥅
                             </button>
                           )}
+                        </div>
+                      </td>
+                      <td className="text-center">
+                        <div className="d-flex flex-column align-items-center">
+                          {partido.fecha ?? "por definir"} 
+                         
+                        </div>
+                      </td>
+                            <td className="text-center">
+                        <div className="d-flex flex-column align-items-center">
+                          {partido.hora ?? "por definir"} 
+                         
+                        </div>
+                      </td>      <td className="text-center">
+                        <div className="d-flex flex-column align-items-center">
+                          {partido.sede ?? "por definir"} 
+                         
                         </div>
                       </td>
 

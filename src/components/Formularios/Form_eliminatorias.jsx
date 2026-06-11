@@ -24,7 +24,9 @@ const Images = IMAGES_URL;
 
 
 
+
 const FORM_Eliminatorias = () => {
+
 
 
 const abreviarNombre = (nombre) => {
@@ -53,7 +55,10 @@ const abreviarNombre = (nombre) => {
 };
 
 
-
+const [fecha, setFecha] = useState("");
+    const [sede, setSede] = useState("");
+   
+  const [hora, setHora] = useState("");
   
   const [activeTab, setActiveTab] = useState('octavos');
   const [marcadores, setMarcadores] = useState({
@@ -378,6 +383,10 @@ const openEventsModal = (partido, instancia = "normal") => {
       equipo_a_id: equipoLocalID,
       equipo_b_id: equipoVisitanteID,
       numPartido: partidoNumero,
+       fecha: fecha,
+        sede: sede,
+         hora: hora,
+
       tipo_eliminatoria: tipoEliminatoria,
       // Cambiamos null por "General" (o el nombre que prefieras para la fase única)
       nombre_fase: nombreFase.trim() === "" ? "General" : nombreFase,
@@ -728,6 +737,45 @@ const openEventsModal = (partido, instancia = "normal") => {
                     onChange={handleMarcadorChange}
                   />
                 </div>
+{/* fecha */}
+                <div className="col-6 mb-3">
+                  <label className="form-label">Fecha</label>
+                  <input
+                    className="form-control validate"
+                    name="fecha"
+                    type="date"
+                   
+                   
+                    onChange={(e) => setFecha(e.target.value)}
+        value={fecha}
+                  />
+                </div>
+
+                {/* hora */}
+                <div className="col-6 mb-3">
+                  <label className="form-label">Hora</label>
+                  <input
+                    className="form-control validate"
+                    name="hora"
+                    type="time"
+                   
+                   
+                    onChange={(e) => setHora(e.target.value)}
+        value={hora}
+                  />
+                </div>
+                {/* sede */}
+                <div className="col-6 mb-3">
+                  <label className="form-label">Sede</label>
+                  <input
+                    className="form-control validate"
+                    name="sede"
+                    type="text"
+                    onChange={(e) => setSede(e.target.value)}
+        value={sede}
+                  />
+                </div>
+                
               </>
             )}
 
@@ -796,7 +844,13 @@ const openEventsModal = (partido, instancia = "normal") => {
                 </div>
               </>
             )}
+
+            
           </div>
+
+
+
+          
 
           {/* Botón Enviar */}
           <div className="row">
