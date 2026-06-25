@@ -915,6 +915,7 @@ const getEliminatorias = async () => {
           </h4>
                       {/* falta añadir sede */}
           <h1 className="fecha">{selectedPartido.fecha || ' '}</h1>
+          <h1 className="fecha">{selectedPartido.sede || ' '}</h1>
         </div>
       </div>
 
