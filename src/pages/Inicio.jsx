@@ -17,6 +17,38 @@ const Images = IMAGES_URL;
 const Inicio = () => {
 
 
+
+
+const agruparPorFechaYFase = (partidos) => {
+  return partidos.reduce((acc, partido) => {
+
+    const fecha = partido.fecha || "Sin fecha";
+
+    const rondaObj = nombresPartidos[partido.numPartido];
+    const ronda = rondaObj?.key || "sin_ronda";
+
+    if (!acc[fecha]) acc[fecha] = {};
+    if (!acc[fecha][ronda]) acc[fecha][ronda] = [];
+
+    acc[fecha][ronda].push(partido);
+
+    return acc;
+
+  }, {});
+};
+
+
+const ordenarPorHora = (partidos) => {
+  return partidos.sort((a, b) => {
+    if (!a.hora) return 1;
+    if (!b.hora) return -1;
+    return a.hora.localeCompare(b.hora);
+  });
+};
+
+
+
+
   
   const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
@@ -88,12 +120,12 @@ const [vista, setVista] = useState('llaves');
   const [error, setError] = useState(null);
 
 const nombresPartidos = {
-  1: "Octavos", // O "Jornada 1", "Ida", etc.
-  2: "Cuartos",
-  3: "Semis",
-  4: "Final",
-  5: "Tercer puesto",
-  6: "Dieciseisavos"
+  1: { key: "octavos", label: "Octavos de Final" },
+  2: { key: "cuartos", label: "Cuartos de Final" },
+  3: { key: "semis", label: "Semifinales" },
+  4: { key: "final", label: "Gran Final" },
+  5: { key: "tercer_puesto", label: "Tercer puesto" },
+  6: { key: "dieciseisavos", label: "Dieciseisavos de Final" }
 };
 
 
@@ -300,6 +332,24 @@ const getEliminatorias = async () => {
     // Si solo hay una palabra, tomar los primeros 3 caracteres
     return nombre.slice(0, 3).toUpperCase();
   };
+
+  const todosLosPartidos = useMemo(() => {
+  return [
+    ...eliminatoriasdieciseisavos,
+    ...eliminatoriasOctavos,
+    ...eliminatoriasCuartos,
+    ...eliminatoriasSemis,
+    ...eliminatoriasFinal,
+    ...eliminatoriastercerPuesto,
+  ].filter(p => p && p.id); // evitar vacíos
+}, [
+  eliminatoriasdieciseisavos,
+  eliminatoriasOctavos,
+  eliminatoriasCuartos,
+  eliminatoriasSemis,
+  eliminatoriasFinal,
+  eliminatoriastercerPuesto,
+]);
 
   function getTextColor(bgColor) {
     if (!bgColor) return "#000000"; // color por defecto
@@ -559,7 +609,7 @@ const getEliminatorias = async () => {
 
 <div className="gap-1 "> 
       {/* Contenedor del Toggle */}
-      <div className="flex  rounded-2xl border  shadow-inner">
+      <div className="flex  rounded-2xl border mt-2 shadow-inner">
         <button
           onClick={() => setVista('llaves')}
           className={`btn-flip2 flip2 mx-1 ${vista === 'llaves' ? 'active' : 'opacidad-baja'}`} 
@@ -576,216 +626,378 @@ const getEliminatorias = async () => {
         >
           LISTA
         </button>
+
+        <button
+  onClick={() => setVista('calendario')}
+  className={`btn-flip2 flip2 mx-1 ${vista === 'calendario' ? 'active' : 'opacidad-baja'}`} 
+  style={vista === 'calendario' ? { borderBottom: '4px solid #00bf63' } : {}}
+>
+  CALENDARIO
+</button>
       </div>
 
       {/* Renderizado Condicional */}
       <div className="w-full max-w-4xl">
-        {vista === 'llaves' ? (
-          <div className="animate-fade-in scroll-container"> 
-           
-                    {Object.entries(fasesData).map(([nombreFase, rondas]) => (
-                                  <div key={nombreFase} className="fase-contenedor mb-5">
-                                    {/* Título de la Fase */}
-                                    <h3
-                                      className="text-center text-uppercase fw-bold py-3 mt-1 text-white"
-                                      style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' , width: `auto`}}
-                                    >
-                                      {nombreFase}
-                                    </h3>
-                    
-                                    
-                                    <div>
 
+  {vista === 'llaves' ? (
 
-                           <PruebaElim
-                             rondas={rondas}
-                             Images={Images}
-                             ErrorLogo={ErrorLogo}
-                             abreviarNombre={abreviarNombre}
-                           />
+    // ========================
+    // 🔹 LLAVES
+    // ========================
+    <div className="animate-fade-in scroll-container">
 
-                              <div className="d-flex flex-column align-items-center mb-4">
-  {/* 1. Título */}
-  {rondas.tercer_puesto.length > 0 && (
-    <div className="titulo mb-2">Tercer puesto</div>
-  )}
+      {Object.entries(fasesData).map(([nombreFase, rondas]) => (
+        <div key={nombreFase} className="fase-contenedor mb-5">
 
- {rondas.tercer_puesto.map((partido, index) => {
-    // 1. Cálculos de lógica antes del return
-    const m1_ida = partido.marcador1_ida || 0;
-    const m1_vuelta = partido.marcador1_vuelta;
-    const m2_ida = partido.marcador2_ida || 0;
-    const m2_vuelta = partido.marcador2_vuelta;
+          <h3
+            className="text-center text-uppercase fw-bold py-3 mt-1 text-white"
+            style={{
+              background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)',
+              borderLeft: '5px solid #00bf63'
+            }}
+          >
+            {nombreFase}
+          </h3>
 
-    const global1 = m1_vuelta !== null ? m1_ida + m1_vuelta : m1_ida;
-    const global2 = m2_vuelta !== null ? m2_ida + m2_vuelta : m2_ida;
+          <PruebaElim
+            rondas={rondas}
+            Images={Images}
+            ErrorLogo={ErrorLogo}
+            abreviarNombre={abreviarNombre}
+          />
 
-    // 2. Retorno del JSX
-    return (
-      <div key={partido.id || index} className="partido-card">
-        {/* Equipo Local */}
-        <div className="jugador mt-2">
-          <span className="equipo">
-            {partido.equipo_aa?.nombre || "Por Definir"}
-          </span>
-          <span className="goles">
-            {m1_ida} {m1_vuelta !== null ? `- ${m1_vuelta}` : ""}
-            {m1_vuelta !== null && ` (${global1})`}
-            {partido.marcador1_penales && ` (${partido.marcador1_penales})`}
-          </span>
         </div>
+      ))}
 
-        <strong className="text-center d-block mt-1"> VS </strong>
+    </div>
 
-        {/* Equipo Visitante */}
-        <div className="jugador mt-1">
-          <span className="equipo">
-            {partido.equipo_b?.nombre || "Por Definir"}
-          </span>
-          <span className="goles">
-            {m2_ida} {m2_vuelta !== null ? `- ${m2_vuelta}` : ""}
-            {m2_vuelta !== null && ` (${global2})`}
-            {partido.marcador2_penales && ` (${partido.marcador2_penales})`}
-          </span>
-        </div>
-      </div>
-    );
-  })}
-</div>
-                           
-                                          
-                                      
+  ) : vista === 'lista' ? (
 
+    // ========================
+    // 🔹 LISTA (tu código actual)
+    // ========================
+   <div className="animate-fade-in px-2">
 
-                                    </div>
-                                  </div>
-                                ))}
-
-          </div>
-        ) : (
-         <div className="animate-fade-in px-2">
   {Object.entries(fasesData).map(([nombreFase, rondas]) => (
     <div key={nombreFase} className="mb-5">
-      {/* Título Principal de la Fase (Copa Oro, etc.) */}
-     <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between" 
+
+      {/* HEADER FASE */}
+   <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between" 
            style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}>
         <h3 className="text-white text-uppercase fw-bold fw-black m-0" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
           {nombreFase}
         </h3>
       </div>
 
-      {/* rondas en orden  */}
       {[
-         { id: 'dieciseisavos', titulo: 'Dieciseisavos de Final' },
+        { id: 'dieciseisavos', titulo: 'Dieciseisavos de Final' },
         { id: 'octavos', titulo: 'Octavos de Final' },
         { id: 'cuartos', titulo: 'Cuartos de Final' },
         { id: 'semis', titulo: 'Semifinales' },
-        { id: 'tercer_puesto', titulo: 'tercer puesto' },
+        { id: 'tercer_puesto', titulo: 'Tercer puesto' },
         { id: 'final', titulo: 'Gran Final' }
       ].map((ronda) => (
-        // Solo mostramos la sección si la ronda tiene partidos
+
         rondas[ronda.id] && rondas[ronda.id].length > 0 && (
           <div key={ronda.id} className="mb-4">
-            {/* Título de la Ronda (Octavos, Cuartos...) */}
-           <div className="d-flex align-items-center  mb-3">
-              <div style={{ width: '4px', height: '20px', background: '#00bf63cc', marginRight: '10px', borderRadius:'10px' }}></div>
+
+            {/* TITULO RONDA */}
+            <div className="d-flex align-items-center mb-3">
+              <div style={{
+                width: '4px',
+                height: '20px',
+                background: '#00bf63cc',
+                marginRight: '10px',
+                borderRadius: '10px'
+              }}></div>
+
               <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: '#000000' }}>
                 {ronda.titulo}
               </h4>
             </div>
 
-      <div className="row g-3">
-  {rondas[ronda.id].map((partido, idx) => (
-    <div key={idx} className="col-12" onClick={() => handleOpenModal(partido)}>
-      <div className="p-3 shadow-sm border-0" 
-           style={{ 
-             background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)', 
-             borderRadius: '12px',
-             cursor: 'pointer' 
-           }}>        
-        
-        <div className="d-flex align-items-center">
-          
-          {/* EQUIPO A: Ocupa el mismo espacio que el B */}
-          <div className="d-flex align-items-center gap-2" style={{ flex: '1 1 0', minWidth: 0 }}>
-            <img
-              src={`${Images}/${partido.equipo_aa?.archivo}`}
-              width="40px" height="40px"
-              style={{ objectFit: 'contain', flexShrink: 0 }}
-              alt=""
-              onError={(e) => { e.target.src = ErrorLogo; }}
-            />
-            <span className="text-white fw-bold small text-uppercase text-truncate">
-              {partido.equipo_aa?.nombre || 'Por definir'}
-            </span>
-          </div>
+            {/* PARTIDOS */}
+            <div className="row g-3">
+              {rondas[ronda.id].map((partido) => {
 
-          {/* CENTRO: VS / MARCADOR (Ancho fijo para no moverse) */}
-          <div className="d-flex align-items-center justify-content-center mx-2" style={{ width: '80px', flexShrink: 0 }}>
-            {partido.marcador1_ida === null || partido.marcador1_ida === undefined ? (
-              <span className="badge rounded-pill px-3 py-2 glass shadow-sm" style={{ fontSize: '0.7rem' }}>
-                VS
-              </span>
-            ) : (
-              <div className="d-flex align-items-center px-2 glass rounded-2 border border-white border-opacity-25">
-                <span className="text-white fs-5 fw-bold px-1">
-                  {(partido.marcador1_ida || 0) + (partido.marcador1_vuelta || 0)}
-                </span>
-                <span className="text-white opacity-50 small">:</span>
-                <span className="text-white fs-5 fw-bold px-1">
-                  {(partido.marcador2_ida || 0) + (partido.marcador2_vuelta || 0)}
-                </span>
-              </div>
-            )}
-          </div>
+                const totalA = (partido.marcador1_ida ?? 0) + (partido.marcador1_vuelta ?? 0);
+                const totalB = (partido.marcador2_ida ?? 0) + (partido.marcador2_vuelta ?? 0);
 
-          {/* EQUIPO B: Ocupa el mismo espacio que el A */}
-          <div className="d-flex align-items-center justify-content-end gap-2 text-end" style={{ flex: '1 1 0', minWidth: 0 }}>
-            <span className="text-white fw-bold small text-uppercase text-truncate">
-              {partido.equipo_b?.nombre || 'Por definir'}
-            </span>
-            <img
-              src={`${Images}/${partido.equipo_b?.archivo}`}
-              width="40px" height="40px"
-              style={{ objectFit: 'contain', flexShrink: 0 }}
-              alt=""
-              onError={(e) => { e.target.src = ErrorLogo; }}
-            />
-          </div>
-        </div>
+                return (
+                  <div key={partido.id} className="col-12" onClick={() => handleOpenModal(partido)}>
 
-        {/* DETALLES (IDA/VUELTA/PENALES) */}
-        {((partido.marcador1_vuelta !== null && partido.marcador1_vuelta !== undefined) || 
-          (partido.marcador1_penales !== null && partido.marcador1_penales !== undefined)) && (
-          <div className="mt-2 pt-2 border-top border-white border-opacity-10">
-            <div className="d-flex justify-content-center flex-wrap gap-2">
-              {partido.marcador1_vuelta !== null && (
-                <div className="px-2 py-1 rounded text-white" style={{ background: 'rgba(0,0,0,0.2)', fontSize: '0.65rem' }}>
-                  <span className="opacity-75">I:</span> {partido.marcador1_ida}-{partido.marcador2_ida} 
-                  <span className="mx-1">|</span> 
-                  <span className="opacity-75">V:</span> {partido.marcador1_vuelta}-{partido.marcador2_vuelta}
-                </div>
-              )}
-              {partido.marcador1_penales !== null && (
-                <div className="px-2 py-1 rounded bg-danger text-white fw-bold shadow-sm" style={{ fontSize: '0.65rem' }}>
-                  PEN: {partido.marcador1_penales} - {partido.marcador2_penales}
-                </div>
-              )}
+                    <div className="p-3 shadow-sm border-0"
+                         style={{
+                           background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
+                           borderRadius: '12px',
+                           cursor: 'pointer'
+                         }}>
+
+                      <div className="d-flex align-items-center">
+
+                        {/* EQUIPO A */}
+                        <div className="d-flex align-items-center gap-2"
+                             style={{ flex: '1 1 0', minWidth: 0 }}>
+                          <img
+                            src={`${Images}/${partido.equipo_aa?.archivo}`}
+                            width="40px"
+                            height="40px"
+                            style={{ objectFit: 'contain', flexShrink: 0 }}
+                            alt=""
+                            onError={(e) => { e.target.src = ErrorLogo; }}
+                          />
+                          <span className="text-white fw-bold small text-uppercase text-truncate">
+                            {partido.equipo_aa?.nombre || 'Por definir'}
+                          </span>
+                        </div>
+
+                        {/* CENTRO */}
+                        <div className="d-flex flex-column align-items-center justify-content-center mx-2"
+                             style={{ width: '90px', flexShrink: 0 }}>
+
+                          {/* HORA */}
+                          {/* <span className="text-white small mb-1">
+                            {partido.hora ? partido.hora.slice(0,5) : '--:--'}
+                          </span> */}
+
+                          {/* MARCADOR */}
+                          {partido.marcador1_ida === null || partido.marcador1_ida === undefined ? (
+                            <span className="badge rounded-pill px-3 py-2 glass shadow-sm"
+                                  style={{ fontSize: '0.7rem' }}>
+                              VS
+                            </span>
+                          ) : (
+                            <div className="d-flex align-items-center px-2 glass rounded-2 border border-white border-opacity-25">
+                              <span className="text-white fs-6 fw-bold px-1">
+                                {totalA}
+                              </span>
+                              <span className="text-white opacity-50 small"> - </span>
+                              <span className="text-white fs-6 fw-bold px-1">
+                                {totalB}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* EQUIPO B */}
+                        <div className="d-flex align-items-center justify-content-end gap-2 text-end"
+                             style={{ flex: '1 1 0', minWidth: 0 }}>
+                          <span className="text-white fw-bold small text-uppercase text-truncate">
+                            {partido.equipo_b?.nombre || 'Por definir'}
+                          </span>
+                          <img
+                            src={`${Images}/${partido.equipo_b?.archivo}`}
+                            width="40px"
+                            height="40px"
+                            style={{ objectFit: 'contain', flexShrink: 0 }}
+                            alt=""
+                            onError={(e) => { e.target.src = ErrorLogo; }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* DETALLES */}
+                      {((partido.marcador1_vuelta !== null && partido.marcador1_vuelta !== undefined) ||
+                        (partido.marcador1_penales !== null && partido.marcador1_penales !== undefined)) && (
+
+                        <div className="mt-2 pt-2 border-top border-white border-opacity-10">
+
+                          <div className="d-flex justify-content-center flex-wrap gap-2">
+
+                            {partido.marcador1_vuelta !== null && (
+                              <div className="px-2 py-1 rounded text-white"
+                                   style={{ background: 'rgba(0,0,0,0.2)', fontSize: '0.65rem' }}>
+                                <span className="opacity-75">I:</span> {partido.marcador1_ida}-{partido.marcador2_ida}
+                                <span className="mx-1"> - </span>
+                                <span className="opacity-75">V:</span> {partido.marcador1_vuelta}-{partido.marcador2_vuelta}
+                              </div>
+                            )}
+
+                            {partido.marcador1_penales !== null && (
+                              <div className="px-2 py-1 rounded bg-danger text-white fw-bold shadow-sm"
+                                   style={{ fontSize: '0.65rem' }}>
+                                PEN: {partido.marcador1_penales} - {partido.marcador2_penales}
+                              </div>
+                            )}
+
+                          </div>
+
+                        </div>
+                      )}
+
+                      {/* SEDE */}
+                      {/* <div className="text-center mt-2 small text-white opacity-75">
+                        {partido.sede || "Sede por definir"}
+                      </div> */}
+
+                    </div>
+
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  ))}
-</div>
+
           </div>
         )
+
       ))}
+
     </div>
   ))}
+
 </div>
-        )}
+
+  ) : (
+
+    // ========================
+    // 🔥 CALENDARIO
+    // ========================
+    // ========================
+// 🔥 CALENDARIO (CON DISEÑO + IMÁGENES)
+// ========================
+<div className="animate-fade-in px-2">
+
+  {Object.entries(agruparPorFechaYFase(todosLosPartidos))
+    .sort(([a], [b]) => new Date(a) - new Date(b))
+    .map(([fecha, fases]) => (
+
+      <div key={fecha} className="mb-4">
+
+        {/*  FECHA */}
+      
+
+          <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between" 
+           style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}>
+        <h3 className="text-white text-uppercase fw-bold fw-black m-0" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
+         {fecha !== "Sin fecha"
+              ? new Date(fecha).toLocaleDateString('es-CO', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long'
+                })
+              : "Sin fecha"}
+        </h3>
       </div>
+
+        {/* 🔥 RONDAS ORDENADAS */}
+        {[
+          { id: 'dieciseisavos', titulo: 'Dieciseisavos de Final' },
+          { id: 'octavos', titulo: 'Octavos de Final' },
+          { id: 'cuartos', titulo: 'Cuartos de Final' },
+          { id: 'semis', titulo: 'Semifinales' },
+          { id: 'tercer_puesto', titulo: 'Tercer puesto' },
+          { id: 'final', titulo: 'Gran Final' }
+        ].map((ronda) => {
+
+          const partidos = fases[ronda.id] || [];
+
+          if (partidos.length === 0) return null;
+
+          const partidosOrdenados = ordenarPorHora(partidos);
+
+          return (
+            <div key={ronda.id} className="mb-3">
+
+              {/* 🔹 TITULO RONDA */}
+              <div className="d-flex align-items-center mb-2">
+                <div style={{
+                  width: '4px',
+                  height: '18px',
+                  background: '#00bf63',
+                  marginRight: '8px',
+                  borderRadius: '10px'
+                }}></div>
+
+                <span className="fw-bold text-uppercase small">
+                  {ronda.titulo}
+                </span>
+              </div>
+
+              {/* ⚽ PARTIDOS */}
+              <div className="row g-3">
+                {partidosOrdenados.map((p) => {
+
+                  const totalA = (p.marcador1_ida ?? 0) + (p.marcador1_vuelta ?? 0);
+                  const totalB = (p.marcador2_ida ?? 0) + (p.marcador2_vuelta ?? 0);
+
+                  return (
+                    <div key={p.id} className="col-12" onClick={() => handleOpenModal(p)}>
+
+                      <div className="p-3 shadow-sm border-0"
+                        style={{
+                          background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
+                          borderRadius: '12px',
+                          cursor: 'pointer'
+                        }}>
+
+                        <div className="d-flex align-items-center">
+
+                          {/* EQUIPO A */}
+                          <div className="d-flex align-items-center gap-2" style={{ flex: 1 }}>
+                            <img
+                              src={`${Images}/${p.equipo_aa?.archivo}`}
+                              width="40"
+                              height="40"
+                              onError={(e) => e.target.src = ErrorLogo}
+                            />
+                            <span className="text-white fw-bold small text-truncate">
+                              {p.equipo_aa?.nombre || 'Por definir'}
+                            </span>
+                          </div>
+
+                          {/* CENTRO */}
+                          <div className="text-center mx-2" style={{ width: '80px' }}>
+                            <div className="text-white small">
+                              {p.hora ? p.hora.slice(0,5) : '--:--'}
+                            </div>
+
+                            {p.marcador1_ida == null ? (
+                              <span className="badge">VS</span>
+                            ) : (
+                              <strong className="text-white">
+                                {totalA} - {totalB}
+                              </strong>
+                            )}
+                          </div>
+
+                          {/* EQUIPO B */}
+                          <div className="d-flex align-items-center justify-content-end gap-2 text-end" style={{ flex: 1 }}>
+                            <span className="text-white fw-bold small text-truncate">
+                              {p.equipo_b?.nombre || 'Por definir'}
+                            </span>
+                            <img
+                              src={`${Images}/${p.equipo_b?.archivo}`}
+                              width="40"
+                              height="40"
+                              onError={(e) => e.target.src = ErrorLogo}
+                            />
+                          </div>
+
+                        </div>
+
+                        {/* SEDE */}
+                        <div className="text-center mt-2 small text-white opacity-75">
+                          {p.sede || "Sede por definir"}
+                        </div>
+
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+
+            </div>
+          );
+        })}
+
+      </div>
+    ))}
+
+</div>
+  )}
+
+</div>
     </div>
 {/* Modal */}
        <dialog ref={modalRef}>
@@ -914,7 +1126,7 @@ const getEliminatorias = async () => {
             {selectedPartido.hora ? selectedPartido.hora.slice(0, 5) : " "}
           </h4>
                       {/* falta añadir sede */}
-          <h1 className="fecha">{selectedPartido.fecha || ' '}</h1>
+          <h1 className="fecha">{selectedPartido.fecha || ' '}</h1> -- 
           <h1 className="fecha">{selectedPartido.sede || ' '}</h1>
         </div>
       </div>
