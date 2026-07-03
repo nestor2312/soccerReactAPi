@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState, useMemo, useRef } from "react";
 import Footer from "../components/Footer/Footer";
 import Menu from "../components/Menu/Menu";
@@ -17,8 +18,28 @@ const Images = IMAGES_URL;
 const Inicio = () => {
 
 
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  
+
+  const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
+  const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
+  const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
+  const [eliminatoriasFinal, setEliminatoriasFinal] = useState([]);
+ const [instanciaVista, setInstanciaVista] = useState('ida');
+  const [eliminatoriastercerPuesto, setEliminatoriastercerPuesto ] = useState(
+    [],
+  );
+ const [eliminatoriasdieciseisavos, setEliminatoriasdieciseisavos] = useState(
+    [],
+  );
 
 
+
+
+
+
+
+  
 const agruparPorFechaYFase = (partidos) => {
   return partidos.reduce((acc, partido) => {
 
@@ -48,19 +69,6 @@ const ordenarPorHora = (partidos) => {
 
 
 
-
-  
-  const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
-  const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
-  const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
-  const [eliminatoriasFinal, setEliminatoriasFinal] = useState([]);
- const [instanciaVista, setInstanciaVista] = useState('ida');
-  const [eliminatoriastercerPuesto, setEliminatoriastercerPuesto ] = useState(
-    [],
-  );
- const [eliminatoriasdieciseisavos, setEliminatoriasdieciseisavos] = useState(
-    [],
-  );
 // modal inicio
   const [selectedPartido, setSelectedPartido] = useState(null);
    const modalRef = useRef(null);
@@ -79,6 +87,7 @@ const ordenarPorHora = (partidos) => {
       modalRef.current.close(); // Cierra el modal
     }
   };
+
 
   // ... estados existentes
 
@@ -300,7 +309,7 @@ const getEliminatorias = async () => {
     getTeamsAll();
   }, [subcategoriaId]);
 
-
+const scrollRef = useRef(null);
 
   const formatearHora = (hora) => {
     return hora.slice(0, 5);
@@ -350,6 +359,41 @@ const getEliminatorias = async () => {
   eliminatoriasFinal,
   eliminatoriastercerPuesto,
 ]);
+
+const calendario = useMemo(() => {
+    return agruparPorFechaYFase(todosLosPartidos);
+  }, [todosLosPartidos]);
+
+    
+// 3. LA VARIABLE CRUCIAL QUE TE FALTABA DECLARAR ARRIBA
+const partidosDelDia = useMemo(() => {
+  return (fechaSeleccionada && calendario[fechaSeleccionada]) || {};
+}, [calendario, fechaSeleccionada]);
+
+
+useEffect(() => {
+  // 1. Pasamos las llaves a un array ordenado
+  const fechasDisponibles = Object.keys(calendario).sort();
+  
+  // CRUCIAL: Solo entramos aquí si hay datos Y si el usuario NO ha seleccionado ninguna fecha aún (al cargar)
+  if (fechasDisponibles.length > 0 && fechaSeleccionada === null) {
+    
+    const hoy = new Date();
+    const año = hoy.getFullYear();
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoy.getDate()).padStart(2, '0');
+    const hoyFormato = `${año}-${mes}-${dia}`; // "YYYY-MM-DD"
+
+    if (calendario[hoyFormato]) {
+      setFechaSeleccionada(hoyFormato);
+    } else {
+      // Filtramos "Sin fecha" para no mostrar un día inválido por defecto
+      const primeraFechaValida = fechasDisponibles.find(f => f !== "Sin fecha") || fechasDisponibles[0];
+      setFechaSeleccionada(primeraFechaValida);
+    }
+  }
+}, [calendario, fechaSeleccionada]); 
+// Al verificar estrictamente === null, evitamos que cualquier actualización limpie la selección del usuario
 
   function getTextColor(bgColor) {
     if (!bgColor) return "#000000"; // color por defecto
@@ -852,154 +896,171 @@ const getEliminatorias = async () => {
     // ========================
     // 🔥 CALENDARIO
     // ========================
-    // ========================
-// 🔥 CALENDARIO (CON DISEÑO + IMÁGENES)
+
 // ========================
 <div className="animate-fade-in px-2">
 
-  {Object.entries(agruparPorFechaYFase(todosLosPartidos))
-    .sort(([a], [b]) => new Date(a) - new Date(b))
-    .map(([fecha, fases]) => (
+  {/* =========================================================================
+      1. AQUÍ VAN LOS BOTONES DEL CALENDARIO (Siempre visibles arriba)
+     ========================================================================= */}
+  <div className="calendario-contenedor container mt-4">
+    <div 
+      ref={scrollRef} 
+      className="d-flex overflow-auto pb-3 mb-4 gap-2 scroller-fechas" 
+      style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth' }}
+    >
+      {Object.keys(calendario).length > 0 ? (
+        Object.keys(calendario).sort().map((fecha) => {
+          const esHoy = fecha === new Date().toISOString().split('T')[0];
+          const fechaValida = fecha && fecha !== "null";
+           
+          return (
+            <button
+              key={fecha}
+              className={`btn-jornada ${fechaSeleccionada === fecha ? 'active' : ''}`}
+              onClick={() => setFechaSeleccionada(fecha)}
+            >
+              <div className="small text-uppercase" style={{ fontSize: '0.65rem', opacity: 0.8 }}>
+                {esHoy ? "Hoy" : (fechaValida ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { weekday: 'short' }) : "---")}
+              </div>
+              <div className="font-weight-bold">
+                {fechaValida 
+                  ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) 
+                  : "Fecha por definir"}
+              </div>
+            </button>
+          );
+        })
+      ) : (
+        <p className="text-center w-100">Cargando fechas...</p>
+      )}
+    </div>
+  </div>
 
-      <div key={fecha} className="mb-4">
+  {/* =========================================================================
+      2. ABAJO SE RENDERIZAN LOS PARTIDOS CORRESPONDIENTES A LA FECHA SELECCIONADA
+     ========================================================================= */}
+  {fechaSeleccionada && Object.keys(partidosDelDia).length > 0 ? (
+    <div className="mb-4">
 
-        {/*  FECHA */}
-      
-
-          <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between" 
-           style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}>
-       <h3 className="text-white text-uppercase fw-bold fw-black m-0"
-  style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
-
-  {fecha !== "Sin fecha"
-    ? new Date(fecha + "T00:00:00").toLocaleDateString('es-CO', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long'
-      })
-    : "Sin fecha"}
-
-</h3>
+      {/* 🔥 ENCABEZADO DE LA FECHA SELECCIONADA */}
+      <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between"
+        style={{
+          background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)',
+          borderLeft: '5px solid #00bf63'
+        }}>
+        <h3 className="text-white text-uppercase fw-bold m-0">
+          {new Date(fechaSeleccionada + "T00:00:00").toLocaleDateString('es-CO', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
+          })}
+        </h3>
       </div>
 
-        {/* 🔥 RONDAS ORDENADAS */}
-        {[
-          { id: 'dieciseisavos', titulo: 'Dieciseisavos de Final' },
-          { id: 'octavos', titulo: 'Octavos de Final' },
-          { id: 'cuartos', titulo: 'Cuartos de Final' },
-          { id: 'semis', titulo: 'Semifinales' },
-          { id: 'tercer_puesto', titulo: 'Tercer puesto' },
-          { id: 'final', titulo: 'Gran Final' }
-        ].map((ronda) => {
+      {/* 🔥 RONDAS Y PARTIDOS DEL DÍA */}
+      {[
+        { id: 'dieciseisavos', titulo: 'Dieciseisavos de Final' },
+        { id: 'octavos', titulo: 'Octavos de Final' },
+        { id: 'cuartos', titulo: 'Cuartos de Final' },
+        { id: 'semis', titulo: 'Semifinales' },
+        { id: 'tercer_puesto', titulo: 'Tercer puesto' },
+        { id: 'final', titulo: 'Gran Final' }
+      ].map((ronda) => {
+        
+        const partidos = partidosDelDia[ronda.id] || [];
+        if (partidos.length === 0) return null;
 
-          const partidos = fases[ronda.id] || [];
+        const partidosOrdenados = ordenarPorHora(partidos);
 
-          if (partidos.length === 0) return null;
+        return (
+          <div key={ronda.id} className="mb-3">
+            {/* TÍTULO DE LA RONDA */}
+            <div className="d-flex align-items-center mb-2">
+              <div style={{
+                width: '4px',
+                height: '18px',
+                background: '#00bf63',
+                marginRight: '8px',
+                borderRadius: '10px'
+              }}></div>
+              <span className="fw-bold text-uppercase small">
+                {ronda.titulo}
+              </span>
+            </div>
 
-          const partidosOrdenados = ordenarPorHora(partidos);
+            {/* CONTENEDOR DE TARJETAS DE PARTIDOS */}
+            <div className="row g-3">
+              {partidosOrdenados.map((p) => {
+                const totalA = (p.marcador1_ida ?? 0) + (p.marcador1_vuelta ?? 0);
+                const totalB = (p.marcador2_ida ?? 0) + (p.marcador2_vuelta ?? 0);
 
-          return (
-            <div key={ronda.id} className="mb-3">
+                return (
+                  <div key={p.id} className="col-12" onClick={() => handleOpenModal(p)}>
+                    <div className="p-3 shadow-sm"
+                      style={{
+                        background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
+                        borderRadius: '12px',
+                        cursor: 'pointer'
+                      }}>
 
-              {/* 🔹 TITULO RONDA */}
-              <div className="d-flex align-items-center mb-2">
-                <div style={{
-                  width: '4px',
-                  height: '18px',
-                  background: '#00bf63',
-                  marginRight: '8px',
-                  borderRadius: '10px'
-                }}></div>
-
-                <span className="fw-bold text-uppercase small">
-                  {ronda.titulo}
-                </span>
-              </div>
-
-              {/* ⚽ PARTIDOS */}
-              <div className="row g-3">
-                {partidosOrdenados.map((p) => {
-
-                  const totalA = (p.marcador1_ida ?? 0) + (p.marcador1_vuelta ?? 0);
-                  const totalB = (p.marcador2_ida ?? 0) + (p.marcador2_vuelta ?? 0);
-
-                  return (
-                    <div key={p.id} className="col-12" onClick={() => handleOpenModal(p)}>
-
-                      <div className="p-3 shadow-sm border-0"
-                        style={{
-                          background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
-                          borderRadius: '12px',
-                          cursor: 'pointer'
-                        }}>
-
-                        <div className="d-flex align-items-center">
-
-                          {/* EQUIPO A */}
-                          <div className="d-flex align-items-center gap-2" style={{ flex: 1 }}>
-                            <img
-                              src={`${Images}/${p.equipo_aa?.archivo}`}
-                              width="40"
-                              height="40"
-                              onError={(e) => e.target.src = ErrorLogo}
-                            />
-                            <span className="text-white fw-bold small text-truncate">
-                              {p.equipo_aa?.nombre || 'Por definir'}
-                            </span>
-                          </div>
-
-                          {/* CENTRO */}
-                          <div className="text-center mx-2" style={{ width: '80px' }}>
-                            <div className="text-white small">
-                              {p.hora ? p.hora.slice(0,5) : '--:--'}
-                            </div>
-
-                            {p.marcador1_ida == null ? (
-                              <span className="badge rounded-pill px-3 py-2 glass shadow-sm"
-                                  style={{ fontSize: '0.7rem' }}>
-                              VS
-                            </span>
-                            ) : (
-                              <strong className="text-white">
-                                {totalA} - {totalB}
-                              </strong>
-                            )}
-                          </div>
-
-                          {/* EQUIPO B */}
-                          <div className="d-flex align-items-center justify-content-end gap-2 text-end" style={{ flex: 1 }}>
-                            <span className="text-white fw-bold small text-truncate">
-                              {p.equipo_b?.nombre || 'Por definir'}
-                            </span>
-                            <img
-                              src={`${Images}/${p.equipo_b?.archivo}`}
-                              width="40"
-                              height="40"
-                              onError={(e) => e.target.src = ErrorLogo}
-                            />
-                          </div>
-
+                      <div className="d-flex align-items-center">
+                        {/* EQUIPO A */}
+                        <div className="d-flex align-items-center gap-2" style={{ flex: 1 }}>
+                          <img
+                            src={`${Images}/${p.equipo_aa?.archivo}`}
+                            width="40"
+                            height="40"
+                            onError={(e) => e.target.src = ErrorLogo}
+                          />
+                          <span className="text-white text-uppercase fw-bold small text-truncate">
+                            {p.equipo_aa?.nombre || 'Por definir'}
+                          </span>
                         </div>
 
-                        {/* SEDE */}
-                        <div className="text-center mt-2 small text-white opacity-75">
-                          {p.sede || "Sede por definir"}
+                        {/* CENTRO */}
+                        <div className="text-center mx-2" style={{ width: '80px' }}>
+                          <div className="text-white small">
+                            {p.hora ? p.hora.slice(0,5) : '--:--'}
+                          </div>
+                          {p.marcador1_ida == null ? (
+                            <span className="badge rounded-pill px-3 py-2 glass">VS</span>
+                          ) : (
+                            <strong className="text-white">{totalA} - {totalB}</strong>
+                          )}
                         </div>
 
+                        {/* EQUIPO B */}
+                        <div className="d-flex align-items-center justify-content-end gap-2 text-end" style={{ flex: 1 }}>
+                          <span className="text-white text-uppercase fw-bold small text-truncate">
+                            {p.equipo_b?.nombre || 'Por definir'}
+                          </span>
+                          <img
+                            src={`${Images}/${p.equipo_b?.archivo}`}
+                            width="40"
+                            height="40"
+                            onError={(e) => e.target.src = ErrorLogo}
+                          />
+                        </div>
+                      </div>
+
+                      {/* SEDE */}
+                      <div className="text-center mt-2 small text-white opacity-75">
+                        {p.sede || "Sede por definir"}
                       </div>
 
                     </div>
-                  );
-                })}
-              </div>
-
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-
-      </div>
-    ))}
-
+          </div>
+        );
+      })}
+    </div>
+  ) : (
+    <p className="text-center text-muted py-4">Selecciona una fecha para ver los partidos</p>
+  )}
 </div>
   )}
 
