@@ -826,9 +826,9 @@ const getEliminatorias = async () => {
                       )}
 
                       {/* SEDE */}
-                      {/* <div className="text-center mt-2 small text-white opacity-75">
+                      <div className="text-center mt-2 small text-white opacity-75">
                         {partido.sede || "Sede por definir"}
-                      </div> */}
+                      </div>
 
                     </div>
 
@@ -952,7 +952,10 @@ const getEliminatorias = async () => {
                             </div>
 
                             {p.marcador1_ida == null ? (
-                              <span className="badge">VS</span>
+                              <span className="badge rounded-pill px-3 py-2 glass shadow-sm"
+                                  style={{ fontSize: '0.7rem' }}>
+                              VS
+                            </span>
                             ) : (
                               <strong className="text-white">
                                 {totalA} - {totalB}
@@ -1014,15 +1017,13 @@ const getEliminatorias = async () => {
 
       <div className=" d-flex flex-column justify-content-center align-items-center">
 
-         < div className="btn-jornada-fecha mb-4">
-
-  {selectedPartido.numPartido && nombresPartidos[selectedPartido.numPartido] 
-    ? nombresPartidos[selectedPartido.numPartido] 
-    : selectedPartido.numPartido 
-      ? `Partido ${selectedPartido.numPartido}` 
-      : "Partido por definir"}
-       
-         </div>
+         <div className="btn-jornada-fecha mb-4">
+          {selectedPartido.numPartido && nombresPartidos[selectedPartido.numPartido]
+            ? nombresPartidos[selectedPartido.numPartido].label
+            : selectedPartido.numPartido
+              ? `Partido ${selectedPartido.numPartido}`
+              : "Partido por definir"}
+        </div>
 
         <div className="row dialog-box"> 
           {/* COLUMNA LOCAL */}
