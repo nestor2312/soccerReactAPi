@@ -868,15 +868,18 @@ const getEliminatorias = async () => {
 
           <div className="mb-4 p-3 mt-2 rounded-3 d-flex align-items-center justify-content-between" 
            style={{ background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)', borderLeft: '5px solid #00bf63' }}>
-        <h3 className="text-white text-uppercase fw-bold fw-black m-0" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
-         {fecha !== "Sin fecha"
-              ? new Date(fecha).toLocaleDateString('es-CO', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long'
-                })
-              : "Sin fecha"}
-        </h3>
+       <h3 className="text-white text-uppercase fw-bold fw-black m-0"
+  style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
+
+  {fecha !== "Sin fecha"
+    ? new Date(fecha + "T00:00:00").toLocaleDateString('es-CO', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      })
+    : "Sin fecha"}
+
+</h3>
       </div>
 
         {/* 🔥 RONDAS ORDENADAS */}
