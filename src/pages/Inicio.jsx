@@ -314,7 +314,7 @@ const scrollRef = useRef(null);
   const formatearHora = (hora) => {
     return hora.slice(0, 5);
   };
-
+// 
   const abreviarNombre = (nombre) => {
     if (!nombre) return "por definir";
 
