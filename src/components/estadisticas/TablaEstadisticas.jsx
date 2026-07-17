@@ -3,6 +3,50 @@
 import { IMAGES_URL } from "../../ConfigAPI";
 import ErrorLogo from "../../assets/Vector.svg";
 const Images = IMAGES_URL;
+
+const TablaEquipos = ({ titulo, equipos }) => (
+  <section className="Jugadores mt-4 mb-2">
+     <div className="container-fluid">
+    <div className="card border-0 shadow">
+      <div className="card-header fondo-card TITULO border-0">
+        {titulo}
+      </div>
+
+      <table className="table-borderless">
+        <thead>
+          <tr>
+            <th></th>
+            <th className="text-left titulo2">Equipo</th>
+            <th className="text-center titulo2 ">GOLES EN CONTRA</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {equipos.map((e, i) => (
+            <tr key={i}>
+              <td>
+                <img
+                  src={`${Images}/${e.equipo.archivo}`}
+                  className="logo"
+                  onError={(ev) => ev.target.src = ErrorLogo}
+                />
+              </td>
+
+              <td className="text-capitalize">{e.equipo.nombre}</td>
+              <td className="text-center data">{e.golesRecibidos}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+     </div>
+  </section>
+);
+
+export { TablaEquipos };
+
+
 const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
     <section className=" Jugadores mt-2 mb-2">
       <div className="container-fluid">
