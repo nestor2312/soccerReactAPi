@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import "./index.css";
 import Logo from "../../assets/Frame_49.png"
-import Logoedam from "../../assets/jj.svg"
+// import Logoedam from "../../assets/jj.svg"
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +17,8 @@ const Menu = () => {
     <nav className="navbar">
    <div className="navbar-logo">
   <Link to="/">
-     <img className="LOGO" src={Logoedam} alt="EDam" />
-    <img className="LOGO opacity-50" src={Logo} alt="Fubol" />
+     {/* <img className="LOGO" src={Logoedam} alt="EDam" /> */}
+    <img className="LOGO opacity-100" src={Logo} alt="Fubol" />
   </Link>
 </div>
   

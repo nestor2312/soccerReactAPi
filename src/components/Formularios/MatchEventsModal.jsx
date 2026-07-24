@@ -5,283 +5,260 @@ import axios from "axios";
 const MatchEventsModal = ({
   showModal,
   partidoId,
+  eliminatoriaId,
+  instancia = "normal",
   API_ENDPOINT,
   onClose,
 }) => {
   const [eventos, setEventos] = useState([]);
-  
-const [equipos, setEquipos] = useState([]);
-const [jugadores, setJugadores] = useState([]);
+  const [equipos, setEquipos] = useState([]);
+  const [jugadores, setJugadores] = useState([]);
 
-  // form
   const [tipo, setTipo] = useState("");
   const [minuto, setMinuto] = useState("");
   const [jugadorId, setJugadorId] = useState("");
-  const [jugadorOutId, setJugadorOutId] = useState("");
   const [equipoId, setEquipoId] = useState("");
-
   const [errors, setErrors] = useState({});
 
-  // -----------------------
-  // Cargar eventos del partido
-  // -----------------------
+  const activeId = eliminatoriaId || partidoId;
+  const isEliminatoria = !!eliminatoriaId;
+
+  // Iconos para la tabla
+  const getEventoIcon = (tipo) => {
+    switch (tipo) {
+      case "gol": return "⚽";
+      case "gol_penal": return "✅";
+      case "fallo_penal": return "❌";
+      case "amarilla": return "🟨";
+      case "roja": return "🟥";
+      case "asistencia": return "👟";
+      default: return "";
+    }
+  };
+
   useEffect(() => {
-    if (!showModal || !partidoId) return;
+    if (!showModal || !activeId) return;
 
-     setEventos([]);
-  setEquipos([]);
-  setJugadores([]);
-  setEquipoId("");
-  setJugadorId("");
+    // Resetear estados al abrir para evitar ver datos del partido anterior
+    setEventos([]);
+    setEquipos([]);
+    setJugadores([]);
+    setEquipoId("");
+    setJugadorId("");
 
-    const fetchEventos = async () => {
+    const fetchData = async () => {
+      // 1. Cargar Eventos
+   try {
+    // Intentamos enviar ambos IDs en los params para que el backend los vea
+    const resEventos = await axios.get(`${API_ENDPOINT}partidos/${activeId}/eventos`, {
+      params: {
+        partido_id: !isEliminatoria ? activeId : null,
+        eliminatoria_id: isEliminatoria ? activeId : null,
+        instancia: instancia 
+      }
+    });
+
+   
+    setEventos(resEventos.data || []);
+  } catch (err) {
+    console.error("Error cargando eventos:", err);
+  }
+
+      // 2. Cargar Equipos y Jugadores (Lógica flexible para equipos NULL)
       try {
-        const res = await axios.get(
-          `${API_ENDPOINT}partidos/${partidoId}/eventos`
+        const resEquipos = await axios.get(
+          `${API_ENDPOINT}partidos/${activeId}/jugadores`,
+          { params: { tipo: isEliminatoria ? "eliminatoria" : "liga" } }
         );
-        setEventos(res.data || []);
+
+        const data = resEquipos.data;
+        
+        // Mapeo flexible: intenta leer equipoA, equipo_a o equipo_aa
+        const eqA = data.equipoA || data.equipo_a || data.equipo_aa;
+        const eqB = data.equipoB || data.equipo_b;
+
+        // FILTRO CLAVE: Creamos la lista solo con los equipos que NO son null
+        const equiposValidos = [eqA, eqB].filter(e => e !== null && e !== undefined && e.id);
+        
+        setEquipos(equiposValidos);
       } catch (err) {
-        console.error("Error cargando eventos:", err);
+        console.error("Error cargando equipos/jugadores:", err);
+        setEquipos([]);
       }
     };
 
-const fetchEquipos = async () => {
-  try {
-    const res = await axios.get(`${API_ENDPOINT}partidos/${partidoId}/jugadores`);
-    
-    // Solo actualizamos si ambos equipos existen en la respuesta
-    if (res.data.equipoA && res.data.equipoB) {
-      setEquipos([res.data.equipoA, res.data.equipoB]);
-    } else {
-      console.warn("La API no devolvió los dos equipos", res.data);
-    }
-  } catch (err) {
-    console.error("Error cargando equipos:", err);
-  }
-};
+    fetchData();
+  }, [showModal, activeId, instancia, isEliminatoria, API_ENDPOINT]);
 
-
-    fetchEventos();
-    fetchEquipos();
-  }, [showModal, partidoId, API_ENDPOINT]);
-
-  // -----------------------
-  // Validación
-  // -----------------------
   const validate = () => {
     let newErrors = {};
-    if (!tipo) newErrors.tipo = "Selecciona el tipo";
-    // if (!minuto) newErrors.minuto = "Minuto obligatorio";
-    if (!jugadorId) newErrors.jugadorId = "Selecciona un jugador";
-    if (tipo === "cambio" && !jugadorOutId)
-      newErrors.jugadorOutId = "Selecciona el jugador que sale";
-
+    if (!tipo) newErrors.tipo = "Obligatorio";
+    if (!jugadorId) newErrors.jugadorId = "Obligatorio";
+    if (!equipoId) newErrors.equipoId = "Obligatorio";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // -----------------------
-  // Crear evento
-  // -----------------------
   const handleCreate = async () => {
     if (!validate()) return;
 
     try {
-     // BIEN: usando la variable partidoId
-await axios.post(`${API_ENDPOINT}partidos/${partidoId}/eventos`, {
-  partido_id: partidoId, // opcional si ya va en la URL
-  tipo_evento: tipo,     // nombre exacto de tu validación en Laravel
-  minuto: minuto,
-  jugador_id: jugadorId,
-  equipo_id: equipoId,
-});
+      const payload = {
+        tipo_evento: tipo,
+        minuto: minuto || null,
+        jugador_id: jugadorId,
+        equipo_id: equipoId,
+        instancia: instancia,
+        [isEliminatoria ? "eliminatoria_id" : "partido_id"]: activeId,
+      };
 
-      // refrescar lista
-      const res = await axios.get(
-        `${API_ENDPOINT}partidos/${partidoId}/eventos`
-      );
-      setEventos(res.data || []);
+      // POST a la ruta: /api/partidos/{id}/eventos
+      const res = await axios.post(`${API_ENDPOINT}partidos/${activeId}/eventos`, payload);
 
-      // reset
+      // Agregar el nuevo evento a la lista local
+      setEventos((prev) => [...prev, res.data]);
+
+      // Limpiar el formulario
       setTipo("");
       setMinuto("");
       setJugadorId("");
-      setJugadorOutId("");
       setEquipoId("");
       setErrors({});
     } catch (err) {
-      console.error("Error creando evento:", err);
+      console.error("Error al crear el evento:", err);
+      alert("Error al guardar el evento. Verifica la conexión.");
     }
   };
 
-  // -----------------------
-  // Eliminar evento
-  // -----------------------
   const handleDelete = async (id) => {
-    if (!confirm("¿Eliminar evento?")) return;
-
+    if (!confirm("¿Eliminar este evento?")) return;
     try {
+      // Asumiendo que tienes una ruta genérica para borrar eventos por ID
       await axios.delete(`${API_ENDPOINT}eventos/${id}`);
-      setEventos(eventos.filter((e) => e.id !== id));
+      setEventos((prev) => prev.filter((e) => e.id !== id));
     } catch (err) {
       console.error("Error eliminando evento:", err);
     }
   };
 
+  // Filtrar por instancia (Normal o Penales) y ordenar por minuto
+  const eventosFiltrados = eventos
+    .filter((e) => e.instancia === instancia)
+    .sort((a, b) => (parseInt(a.minuto) || 0) - (parseInt(b.minuto) || 0));
+
   if (!showModal) return null;
 
   return (
-    <div className="modal" style={{ display: "block" }}>
+    <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.6)", zIndex: 1050 }}>
       <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Eventos del Partido</h5>
-            <button className="btn-close" onClick={onClose}>
-              &times;
-            </button>
+        <div className="modal-content border-0 shadow-lg">
+          <div className="modal-header bg-dark text-white">
+            <h5 className="modal-title text-uppercase" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
+              Registro de Eventos: {instancia.replace("_", " ")}
+            </h5>
+            <button className="btn-close btn-close-white" onClick={onClose}></button>
           </div>
 
           <div className="modal-body">
-            {/* FORM */}
-            <div className="row">
+            {/* Formulario de registro rápido */}
+            <div className="row g-2 p-3 bg-light rounded mb-4 border">
               <div className="col-md-3">
-                <label>Tipo</label>
-                <select
-                  className="form-control"
-                  value={tipo}
-                  onChange={(e) => setTipo(e.target.value)}
-                >
+                <label className="form-label small fw-bold">Tipo</label>
+                <select className={`form-select ${errors.tipo ? 'is-invalid' : ''}`} value={tipo} onChange={(e) => setTipo(e.target.value)}>
                   <option value="">Selecciona</option>
-                  <option value="gol">⚽ Gol</option>
-                  <option value="amarilla">🟨 Amarilla</option>
-                  <option value="roja">🟥 Roja</option>
-                  <option value="asistencia">👟 Asistencia</option>
+                  {instancia !== "tanda_penales" ? (
+                    <>
+                      <option value="gol">⚽ Gol</option>
+                      <option value="amarilla">🟨 Amarilla</option>
+                      <option value="roja">🟥 Roja</option>
+                      <option value="asistencia">👟 Asistencia</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="gol_penal">✅ Gol Penal</option>
+                      <option value="fallo_penal">❌ Fallado</option>
+                    </>
+                  )}
                 </select>
-                {errors.tipo && <small className="text-danger">{errors.tipo}</small>}
               </div>
 
-              <div className="col-md-2">
-                <label>Minuto</label>
-                <input
-                  type="number"
-                  min="0"
-                  className="form-control"
-                  value={minuto}
-                  onChange={(e) => setMinuto(e.target.value)}
-                />
-                {errors.minuto && <small className="text-danger">{errors.minuto}</small>}
-              </div>
+              {instancia !== "tanda_penales" && (
+                <div className="col-md-2">
+                  <label className="form-label small fw-bold">Minuto</label>
+                  <input type="number" className="form-control" value={minuto} onChange={(e) => setMinuto(e.target.value)} placeholder="Ej: 45" />
+                </div>
+              )}
 
               <div className="col-md-3">
-  <label>Equipo</label>
-  <select
-    className="form-control"
-    value={equipoId}
-    onChange={(e) => {
-      const id = e.target.value;
-      setEquipoId(id);
-
-      const equipo = equipos.find(eq => eq.id == id);
-      setJugadores(equipo ? equipo.jugadores : []);
-      setJugadorId("");
-    }}
-  >
-    <option value="">Selecciona</option>
-    {equipos.map((e) => (
-      <option key={e.id} value={e.id}>
-        {e.nombre}
-      </option>
-    ))}
-  </select>
-</div>
-
-
-              <div className="col-md-3">
-                <label>Jugador</label>
-             <select
-  className="form-control"
-  value={jugadorId}
-  onChange={(e) => setJugadorId(e.target.value)}
-  disabled={!equipoId}
+                <label className="form-label small fw-bold">Equipo</label>
+             <select 
+  className={`form-select ${errors.equipoId ? 'is-invalid' : ''}`} 
+  value={equipoId} 
+  onChange={(e) => {
+    const id = e.target.value;
+    setEquipoId(id);
+    const eq = equipos.find(q => String(q.id) === String(id)); // Comparación segura de strings
+    setJugadores(eq ? eq.jugadores : []);
+    setJugadorId("");
+  }}
 >
-  <option value="">Selecciona</option>
-  {jugadores.map((j) => (
-    <option key={j.id} value={j.id}>
-      {j.nombre}  {j.apellido}
-    </option>
-  ))}
+  <option value="">
+    {equipos.length === 0 ? "Por definir..." : "Selecciona equipo"}
+  </option>
+  {equipos.map(e => <option key={e.id} value={e.id}>{e.nombre}</option>)}
 </select>
-
-                {errors.jugadorId && (
-                  <small className="text-danger">{errors.jugadorId}</small>
-                )}
               </div>
 
-            
+              <div className="col-md-3">
+                <label className="form-label small fw-bold">Jugador</label>
+                <select className={`form-select ${errors.jugadorId ? 'is-invalid' : ''}`} value={jugadorId} onChange={(e) => setJugadorId(e.target.value)} disabled={!equipoId}>
+                  <option value="">Selecciona</option>
+                  {jugadores.map(j => <option key={j.id} value={j.id}>{j.nombre} {j.apellido}</option>)}
+                </select>
+              </div>
 
               <div className="col-md-1 d-flex align-items-end">
-                <button className="btn btn-primary" onClick={handleCreate}>
-                  +
-                </button>
+                <button className="btn btn-primary w-100 fw-bold" onClick={handleCreate}>+</button>
               </div>
             </div>
 
-            <hr />
-
-            {/* LISTA DE EVENTOS */}
-            <table className="table table-sm table-bordered">
-              <thead>
-                <tr>
-                  <th>Min</th>
-                  <th>Equipo</th>
-                  <th>Tipo</th>
-                  <th>Jugador</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {eventos.length === 0 && (
+            {/* Tabla de eventos registrados */}
+            <div className="table-responsive" style={{ maxHeight: "350px" }}>
+              <table className="table table-sm table-hover align-middle">
+                <thead className="table-dark">
                   <tr>
-                    <td colSpan="4" className="text-center">
-                      Sin detalles
-                    </td>
+                    <th className="text-center">Min</th>
+                    <th>Equipo</th>
+                    <th>Evento</th>
+                    <th>Jugador</th>
+                    <th className="text-end"></th>
                   </tr>
-                )}
-              {eventos.map((e) => (
-  <tr key={e.id}>
-    {/* Agregamos de nuevo el minuto */}
-   <td>{e.minuto ? `${e.minuto}'` : '-'}</td>
-   <td>
-        <span className="" style={{border: '1px solid #ddd'}}>
-          {e.equipo?.nombre || 'N/A'}
-        </span>
-      </td>
-    <td>
-      {e.tipo_evento === 'gol' && '⚽ '}
-      {e.tipo_evento === 'amarilla' && '🟨'}
-      {e.tipo_evento === 'roja' && '🟥'}
-      {e.tipo_evento === 'asistencia' && '👟'}
-      <span className="text-capitalize">{e.tipo_evento}</span>
-    </td>
-    <td>{e.jugador?.nombre} {e.jugador?.apellido}</td>
-    <td width="60">
-      <button
-        className="btn btn-danger btn-sm"
-        onClick={() => handleDelete(e.id)}
-      >
-        ✕
-      </button>
-    </td>
-  </tr>
-))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {eventosFiltrados.map((e) => (
+                    <tr key={e.id}>
+                      <td className="text-center fw-bold">{e.minuto ? `${e.minuto}'` : "-"}</td>
+                      <td><span className="badge bg-secondary">{e.equipo?.nombre}</span></td>
+                      <td>
+                        {getEventoIcon(e.tipo_evento)} <span className="text-capitalize small">{e.tipo_evento.replace("_", " ")}</span>
+                      </td>
+                      <td>{e.jugador ? `${e.jugador.nombre} ${e.jugador.apellido}` : 'Desconocido'}</td>
+                      <td className="text-end">
+                        <button className="btn btn-sm btn-outline-danger border-0" onClick={() => handleDelete(e.id)}>✕</button>
+                      </td>
+                    </tr>
+                  ))}
+                  {eventosFiltrados.length === 0 && (
+                    <tr>
+                      <td colSpan="5" className="text-center py-4 text-muted">No hay eventos registrados en esta instancia.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-
-          <div className="modal-footer">
-            <button className="btn btn-danger" onClick={onClose}>
-              Cerrar
-            </button>
+          <div className="modal-footer bg-light">
+            <button className="btn btn-secondary btn-sm" onClick={onClose}>Cerrar</button>
           </div>
         </div>
       </div>

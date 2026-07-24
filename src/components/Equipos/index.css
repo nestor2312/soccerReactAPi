@@ -154,10 +154,13 @@ a {
 }
 
 .btn-jornada.active {
-      background: linear-gradient(180deg, #152039 0%, #0F162A 100%);
+             /* background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)',  */
+             /* borderLeft: '5px solid #00bf63' */
+border-left: 3px solid #00bf63;
+      background:linear-gradient(90deg, #1b5896 0%, #1a1d23 100%);
     color: #ffffff; 
      box-shadow: 0px 1px 6px #25ff95;
-    border-color: #00bf63b8;
+    /* border-color: #00bf63b8; */
 }
 
 .pagination button:disabled {

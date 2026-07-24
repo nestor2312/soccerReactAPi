@@ -2,6 +2,63 @@
     width: 48%;
 }
 
+/* Contenedor para scroll suave en móvil */
+.scroll-tabs::-webkit-scrollbar {
+  display: none; /* Oculta la barra pero permite scroll */
+}
+
+.btn-tab {
+  background: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 700;
+  color: #888;
+  white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+  transition: all 0.3s ease;
+  position: relative;
+  outline: none !important;
+}
+
+.btn-jornada-fecha {
+    width: 125px;
+    text-align: center;
+    font-family: 'Days One', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    /* Eliminamos font-weight porque Days One ya es gruesa por defecto */
+    
+    border-left: 3px solid #00bf63;
+    background: linear-gradient(90deg, #1b5896 0%, #1a1d23 100%);
+    color: #ffffff; 
+    border-radius: 6px;
+    box-shadow: 0px 1px 6px #25ff96ad;
+    
+}
+
+
+.btn-tab.active {
+     border-radius: 8px;
+  color: #00bf63; /* Tu verde Fubol */
+}
+
+/* La línea de abajo que se anima */
+.btn-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 4px;
+  background-color: #00BF63;
+  border-radius: 10px 10px 0 0;
+}
+
+.btn-tab:not(.active):hover {
+  color: #555;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+}
+
 .card-matches { 
     cursor: pointer;
     height: 130px!important;
@@ -11,6 +68,13 @@
 }
 .font-events-matches{
     font-size: 0.85rem;
+}
+
+.scroller-fechas {
+  display: flex;
+  flex-wrap: nowrap !important; /* Obliga a que se mantengan en una sola línea */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Suavidad en móviles */
 }
 .TeamLocal{
     margin-left: -5px;

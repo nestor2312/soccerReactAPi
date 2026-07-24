@@ -6,7 +6,7 @@ import { API_ENDPOINT } from "../../ConfigAPI";
 import Cargando from "../Carga/carga";
 import ErrorCarga from "../Error/Error";
 import Logo from "../../assets/Frame_49.png"
-import Logoedam from "../../assets/jj.svg"
+// import Logoedam from "../../assets/jj.svg"
 const Torneo = () => {
   const [torneos, setTorneos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +56,7 @@ const Torneo = () => {
                   <img className="LOGO opacity-50 " src={Logo} alt="Fubol" />
                 </Link>
  <Link to="/">
-                  <img className="LOGO logo_edam" src={Logoedam} alt="edam" />
+                  {/* <img className="LOGO logo_edam" src={Logoedam} alt="edam" /> */}
                 </Link>
             <Link
         to={`/login`}

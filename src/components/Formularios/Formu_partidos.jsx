@@ -27,6 +27,7 @@ const FORM_Matches = () => {
   const [marcador2, setMarcador2] = useState("");
   const [fecha, setFecha] = useState("");
     const [jornada, setjornada] = useState("");
+     const [sede, setsede] = useState("");
   const [hora, setHora] = useState("");
   const [equipoLocalID, setEquipoLocal] = useState("");
   const [equipoVisitanteID, setEquipoVisitante] = useState("");
@@ -50,25 +51,28 @@ const [filtroJornada, setFiltroJornada] = useState("");
 
 const [showPreviewModal, setShowPreviewModal] = useState(false);
 const [fixturePrevia, setFixturePrevia] = useState([]);
+
+
 const [esIdaYVuelta, setEsIdaYVuelta] = useState(false);
 
-const generarRoundRobin = (listaEquipos, idaYVuelta = false) => {
+
+const generarRoundRobin = (listaEquipos) => {
   let teams = [...listaEquipos];
   if (teams.length % 2 !== 0) {
     teams.push({ id: null, nombre: "DESCANSA" });
   }
 
   const n = teams.length;
-  const jornadasIda = n - 1;
-  let fixtureIda = [];
+  const jornadas = n - 1;
+  let fixture = [];
 
-  for (let i = 0; i < jornadasIda; i++) {
+  for (let i = 0; i < jornadas; i++) {
     for (let j = 0; j < n / 2; j++) {
       const local = teams[j];
       const visitante = teams[n - 1 - j];
 
       if (local.id !== null && visitante.id !== null) {
-        fixtureIda.push({
+        fixture.push({
           jornada: `Fecha ${i + 1}`,
           equipoA_id: local.id,
           equipoB_id: visitante.id,
@@ -77,32 +81,35 @@ const generarRoundRobin = (listaEquipos, idaYVuelta = false) => {
         });
       }
     }
-    // Rotación
+    // Rotación: el primero fijo, el último pasa a la segunda posición
     teams.splice(1, 0, teams.pop());
   }
-
-  if (idaYVuelta) {
-    const fixtureVuelta = fixtureIda.map(partido => ({
-      ...partido,
-      jornada: `Fecha ${parseInt(partido.jornada.split(' ')[1]) + jornadasIda}`,
-      equipoA_id: partido.equipoB_id,
-      equipoB_id: partido.equipoA_id,
-      nombreA: partido.nombreB,
-      nombreB: partido.nombreA,
-    }));
-    return [...fixtureIda, ...fixtureVuelta];
-  }
-
-  return fixtureIda;
+  return fixture;
 };
 
+
+const generarVuelta = (fixture, totalJornadas) => {
+  return fixture.map(p => {
+    const numero = Number(p.jornada.replace('Fecha ', ''));
+
+    return {
+      ...p,
+      jornada: `Fecha ${numero + totalJornadas}`,
+      equipoA_id: p.equipoB_id,
+      equipoB_id: p.equipoA_id,
+      nombreA: p.nombreB,
+      nombreB: p.nombreA,
+    };
+  });
+};
 
 // El estado que "dispara" la consulta al Back
 const [paramsBusqueda, setParamsBusqueda] = useState({ 
   torneo_id: "", 
   categoria_id: "", 
   subcategoria_id: "", 
-  jornada: "" 
+  jornada: "" ,
+  sede:"",
 });
 
 // Cargar categorías para el filtro
@@ -148,6 +155,63 @@ const limpiarFiltros = () => {
   setParamsBusqueda({ torneo_id: "", categoria_id: "", subcategoria_id: "", jornada: "" });
 };
 
+// Invierte Equipo A por Equipo B
+const handleInvertir = (index) => {
+  setFixturePrevia(prev => {
+    const nuevoFixture = [...prev];
+    const partido = { ...nuevoFixture[index] };
+
+    // Pasamos la jornada para que permita la inversión sin chocar con la "vuelta"
+    if (esPartidoDuplicado(prev, index, partido.equipoB_id, partido.equipoA_id, partido.jornada)) {
+      Swal.fire("Error", "Este cruce ya existe en esta jornada", "error");
+      return prev;
+    }
+
+    [partido.equipoA_id, partido.equipoB_id] = [partido.equipoB_id, partido.equipoA_id];
+    [partido.nombreA, partido.nombreB] = [partido.nombreB, partido.nombreA];
+
+    nuevoFixture[index] = partido;
+    return nuevoFixture;
+  });
+};
+
+const handleCambiarEquipo = (index, posicion, nuevoId) => {
+  const idNumerico = Number(nuevoId);
+  const nuevoEquipo = equipos.find(e => Number(e.id) === idNumerico);
+  if (!nuevoEquipo) return;
+
+  setFixturePrevia(prev => {
+    const nuevoFixture = [...prev];
+    const partido = { ...nuevoFixture[index] };
+    
+    let equipoA = posicion === 'A' ? idNumerico : partido.equipoA_id;
+    let equipoB = posicion === 'B' ? idNumerico : partido.equipoB_id;
+
+    if (Number(equipoA) === Number(equipoB)) {
+      Swal.fire("Aviso", "Un equipo no puede jugar contra sí mismo", "warning");
+      return prev;
+    }
+
+    // Validación por jornada
+    if (esPartidoDuplicado(prev, index, equipoA, equipoB, partido.jornada)) {
+      Swal.fire("Error", "Este equipo ya tiene un partido asignado en esta jornada", "error");
+      return prev;
+    }
+
+    if (posicion === 'A') {
+      partido.equipoA_id = nuevoEquipo.id;
+      partido.nombreA = nuevoEquipo.nombre;
+    } else {
+      partido.equipoB_id = nuevoEquipo.id;
+      partido.nombreB = nuevoEquipo.nombre;
+    }
+
+    nuevoFixture[index] = partido;
+    return nuevoFixture;
+  });
+};
+
+
   const [error] = useState(null);
   // eslint-disable-next-line no-unused-vars
  const handleEditClick = async (partido) => {
@@ -168,6 +232,7 @@ const limpiarFiltros = () => {
       fecha: data.fecha,
       hora: data.hora,
       jornada: data.jornada,
+      sede:data.sede,
     };
 
     setSelectedPartido(mappedPartido);
@@ -192,6 +257,25 @@ const limpiarFiltros = () => {
     setCurrentPage(page);
     setIsLoading(true);
   };
+
+const esPartidoDuplicado = (fixture, indexActual, equipoA, equipoB, jornadaActual) => {
+  return fixture.some((p, i) => {
+    if (i === indexActual) return false;
+
+    // Solo comparamos contra partidos DE LA MISMA JORNADA
+    if (p.jornada !== jornadaActual) return false;
+
+    const mismoOrden =
+      Number(p.equipoA_id) === Number(equipoA) &&
+      Number(p.equipoB_id) === Number(equipoB);
+
+    const invertido =
+      Number(p.equipoA_id) === Number(equipoB) &&
+      Number(p.equipoB_id) === Number(equipoA);
+
+    return mismoOrden || invertido;
+  });
+};
 
   const savePartido = async (updatedPartido) => {
     try {
@@ -357,6 +441,8 @@ const fetchPartidos = async () => {
       return;
     }
 
+
+    
     const formData = new FormData();
     formData.append("marcador1", marcador1);
     formData.append("marcador2", marcador2);
@@ -365,6 +451,7 @@ const fetchPartidos = async () => {
     formData.append("fecha", fecha);
     formData.append("hora", hora);
       formData.append("jornada", jornada);
+       formData.append("sede", sede);
 
     try {
       await axios.post(endpoint, formData, {
@@ -451,6 +538,57 @@ useEffect(() => {
   } finally {
     setIsLoading(false);
   }
+};
+
+const generarFixtureCompleto = (equipos, idaYVuelta) => {
+  let ida = generarRoundRobin(equipos);
+
+  if (!idaYVuelta) return ida;
+
+  const totalJornadas = new Set(ida.map(p => p.jornada)).size;
+  const vuelta = generarVuelta(ida, totalJornadas);
+
+  return [...ida, ...vuelta];
+};
+
+const validarFixture = () => {
+  const errores = [];
+  const partidosVistos = new Set();
+
+  for (let i = 0; i < fixturePrevia.length; i++) {
+    const p = fixturePrevia[i];
+
+    const equipoA = Number(p.equipoA_id);
+    const equipoB = Number(p.equipoB_id);
+
+    // ❌ Mismo equipo
+    if (equipoA === equipoB) {
+      errores.push(`❌ ${p.nombreA} no puede jugar contra sí mismo`);
+      continue;
+    }
+
+    // 🔁 Crear clave única SIN importar orden
+    const clave = esIdaYVuelta
+  ? `${equipoA}-${equipoB}` // respeta orden
+  : [equipoA, equipoB].sort().join("-");
+
+    if (partidosVistos.has(clave)) {
+      errores.push(`❌ Partido duplicado: ${p.nombreA} vs ${p.nombreB}`);
+    } else {
+      partidosVistos.add(clave);
+    }
+  }
+
+  if (errores.length > 0) {
+    Swal.fire({
+      title: "Errores en el fixture",
+      html: errores.join("<br>"),
+      icon: "error",
+    });
+    return false;
+  }
+
+  return true;
 };
 
   return (
@@ -702,6 +840,19 @@ useEffect(() => {
         value={hora}
       />
     </div>
+
+      {/* sede */}
+    <div className="col-6 col-md-2 mb-3">
+      <label htmlFor="sede">Sede</label>
+      <input
+        id="sede"
+        name="hora"
+        type="text"
+        className="form-control"
+        onChange={(e) => setsede(e.target.value)}
+        value={sede}
+      />
+    </div>
   </div>
 
   {/* Botón de Envío */}
@@ -713,12 +864,22 @@ useEffect(() => {
     type="button" 
     className="btn btn-purple text-white" 
     style={{backgroundColor: '#6f42c1'}}
-    onClick={() => {
-      if(equipos.length < 2) return Swal.fire("Error", "Necesitas al menos 2 equipos en el grupo", "error");
-      const res = generarRoundRobin(equipos, esIdaYVuelta);
-      setFixturePrevia(res);
-      setShowPreviewModal(true);
-    }}
+   onClick={() => {
+  if (equipos.length < 2) {
+    return Swal.fire("Error", "Necesitas al menos 2 equipos en el grupo", "error");
+  }
+
+let fixture;
+
+if (esIdaYVuelta) {
+  fixture = generarFixtureCompleto(equipos, true);
+} else {
+  fixture = generarRoundRobin(equipos);
+}
+
+setFixturePrevia(fixture);
+setShowPreviewModal(true);
+}}
     disabled={!grupoId}
   >
     Generar Fixture Automático
@@ -799,6 +960,7 @@ useEffect(() => {
           <thead className="thead-light">
             <tr>
                <th className="text-center">Jornada</th>
+                <th className="text-center">Sede</th>
               <th className="text-center">Fecha</th>
               <th className="text-center">Local</th>
               <th className="text-center">marcador</th>
@@ -812,6 +974,9 @@ useEffect(() => {
               <tr key={partido.id}>
                  <td className="text-center">
                   {partido.jornada}
+                </td>
+                 <td className="text-center">
+                  {partido.sede}
                 </td>
                 <td className="text-center">
                   {partido.fecha}
@@ -878,15 +1043,17 @@ useEffect(() => {
           onSave={savePartido} // Función para guardar el partido
         />
 
-        <MatchEventsModal
+     <MatchEventsModal
   showModal={showEventsModal}
   partidoId={selectedMatch}
   API_ENDPOINT={API_ENDPOINT}
+  // instancia="normal"  <-- Opcional, por defecto es "normal"
   onClose={() => {
     setShowEventsModal(false);
-    setSelectedMatch(null);
+    setSelectedMatch(null); // Limpiamos al cerrar por seguridad
   }}
 />
+
       </div>
       <div className="pagination mb-4">
         <button
@@ -911,49 +1078,106 @@ useEffect(() => {
 
     
       )}
-      {showPreviewModal && (
- <div className="modal" style={{ display: "block" }}>
-      <div className="modal-dialog modal-MD modal-dialog-centered">
-        <div className="modal-content" id="editModal" tabIndex="1">
-          <div className="modal-header">
-          <h5 className="modal-title">Previsualización del Fixture</h5>
+    {showPreviewModal && (
+  <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
+    <div className="modal-dialog modal-dialog-centered modal-md">
+      <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '16px' }}>
+        
+        <div className="modal-header border-0 pt-4 px-4 pb-0">
+          <div>
+            <h5 className="modal-title fw-bold text-dark">Ajustar Fixture</h5>
+            <p className="text-muted small mb-0">Puedes cambiar los equipos o invertir la localía antes de guardar.</p>
+          </div>
           <button type="button" className="btn-close" onClick={() => setShowPreviewModal(false)}></button>
         </div>
-        <div className="modal-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-         <table className="table table-borderless align-middle ">
-    <tbody>
-      {fixturePrevia.reduce((acc, p, index) => {
-        // insertar un encabezado cada vez que cambia la jornada
-        if (index === 0 || p.jornada !== fixturePrevia[index - 1].jornada) {
-          acc.push(
-            <tr key={`header-${p.jornada}`} className="table-light text-center">
-              <td colSpan="4" className="fw-bold py-2 px-3 text-primary" style={{ backgroundColor: '#e9ecef', fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                {p.jornada}
-              </td>
-            </tr>
-          );
-        }
-        acc.push(
-         <tr key={index} className="border-bottom">
-  <td className="text-end fw-bold text-capitalize" style={{ width: '45%' }}>
-    {p.nombreA}
-  </td>
-  <td className="text-center" style={{ width: '10%' }}>
-    <span className="badge rounded-pill bg-light text-dark border small">vs</span>
-  </td>
-  <td className="text-start fw-bold text-capitalize" style={{ width: '45%' }}>
-    {p.nombreB}
-  </td>
-</tr>
-        );
-        return acc;
-      }, [])}
-    </tbody>
-  </table>
+
+        <div className="modal-body px-4" style={{ maxHeight: '450px', overflowY: 'auto' }}>
+          {fixturePrevia.reduce((acc, p, index) => {
+            // Encabezado de Jornada
+            if (index === 0 || p.jornada !== fixturePrevia[index - 1].jornada) {
+              acc.push(
+                <div key={`header-${p.jornada}`} 
+                     className="text-muted small fw-bolder mt-4 mb-2 text-uppercase d-flex align-items-center" 
+                     style={{ letterSpacing: '1px' }}>
+                  <div className="bg-primary me-2" style={{ width: '4px', height: '15px', borderRadius: '2px' }}></div>
+                  {p.jornada}
+                </div>
+              );
+            }
+
+            // Fila de Partido Editable
+            acc.push(
+              <div key={index} 
+                   className="d-flex align-items-center bg-light p-2 mb-2 shadow-sm"
+                   style={{ borderRadius: '12px', border: '1px solid #e9ecef' }}>
+                
+                {/* Selector Equipo A */}
+                <div style={{ flex: 1 }}>
+                  <select 
+                    className="form-select form-select-sm border-0 bg-transparent fw-bold text-end text-primary"
+                    value={p.equipoA_id}
+                    onChange={(e) => handleCambiarEquipo(index, 'A', e.target.value)}
+                  >
+                    {equipos.map(eq => (
+                      <option key={eq.id} value={eq.id}>{eq.nombre}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Botón Invertir y VS */}
+                <div className="px-2 text-center d-flex flex-column align-items-center">
+                  <button 
+                    type="button"
+                    className="btn btn-sm btn-white shadow-sm border rounded-circle p-0 mb-1"
+                    style={{ width: '28px', height: '28px', fontSize: '0.8rem' }}
+                    onClick={() => handleInvertir(index)}
+                    title="Invertir localía"
+                  >
+                    ⇄
+                  </button>
+                  <span className="badge rounded-pill bg-white text-dark border-0 shadow-sm text-muted" 
+                        style={{ fontSize: '0.65rem' }}>
+                    VS
+                  </span>
+                </div>
+
+                {/* Selector Equipo B */}
+                <div style={{ flex: 1 }}>
+                  <select 
+                    className="form-select form-select-sm border-0 bg-transparent fw-bold text-start text-primary"
+                    value={p.equipoB_id}
+                    onChange={(e) => handleCambiarEquipo(index, 'B', e.target.value)}
+                  >
+                    {equipos.map(eq => (
+                      <option key={eq.id} value={eq.id}>{eq.nombre}</option>
+                    ))}
+                  </select>
+                </div>
+
+              </div>
+            );
+            return acc;
+          }, [])}
         </div>
-        <div className="modal-footer">
-          <button className="btn btn-secondary" onClick={() => setShowPreviewModal(false)}>Cancelar</button>
-          <button className="btn btn-primary" onClick={confirmarGuardadoFixture}>Confirmar y Guardar</button>
+
+        <div className="modal-footer border-0 p-4 pt-2">
+          <button className="btn btn-light fw-semibold text-muted px-4" 
+                  style={{ borderRadius: '10px' }}
+                  onClick={() => setShowPreviewModal(false)}>
+            Cancelar
+          </button>
+          <button 
+  className="btn btn-primary fw-bold px-4 shadow" 
+  style={{ borderRadius: '10px' }}
+  onClick={() => {
+    // Si la validación es exitosa, procedemos a guardar
+    if (validarFixture()) {
+      confirmarGuardadoFixture();
+    }
+  }}
+>
+  Guardar Fixture
+</button>
         </div>
       </div>
     </div>

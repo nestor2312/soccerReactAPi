@@ -12,7 +12,8 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
 
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
-
+    const [sede, setsede] = useState("");
+      const [jornada, setjornada] = useState("");
   // mantener todo como string para selects
   const [torneoId, setTorneoId] = useState(matchData?.torneoId ? String(matchData.torneoId) : "");
   const [categoriaId, setCategoriaId] = useState(matchData?.categoriaId ? String(matchData.categoriaId) : "");
@@ -81,6 +82,8 @@ useEffect(() => {
       setHora(matchData.hora || "");
       setMarcador1(matchData.marcador1 ?? 0);
       setMarcador2(matchData.marcador2 ?? 0);
+      setjornada(matchData.jornada || "");
+      setsede(matchData.sede || "");
 
       // Extraer IDs anidados
       const torneoFromMatch =
@@ -225,6 +228,8 @@ const handleGrupoChange = async (id) => {
       marcador2: marcador2 ?? 0,
       fecha,
       hora,
+      jornada,
+      sede,
     
     };
 
@@ -465,7 +470,32 @@ const handleGrupoChange = async (id) => {
                       />
                       {errors.hora && <small className="text-danger">{errors.hora}</small>}
                     </div>
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="jornada">Jornada</label>
+                      <input
+                        id="jornada"
+                        name="jornada"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setjornada(e.target.value)}
+                        value={jornada}
+                      />
+                      {errors.sede && <small className="text-danger">{errors.sede}</small>}
+                    </div>
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="sede">Sede</label>
+                      <input
+                        id="sede"
+                        name="sede"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setsede(e.target.value)}
+                        value={sede}
+                      />
+                      {errors.sede && <small className="text-danger">{errors.sede}</small>}
+                    </div>
                   </div>
+                  
                 </div>
               </div>
             </form>

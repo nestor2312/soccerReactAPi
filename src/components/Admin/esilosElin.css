@@ -3,7 +3,8 @@
   
   
   .esquema {
-    display: flex;
+    display: inline-flex;
+    min-width: 100%;
     justify-content: center;        
   }
   
@@ -17,14 +18,26 @@
     display: flex;
     align-items: center;
   }
-  .conectores .conector .conector_doble {
+.conectores .conector .conector_doble {
     width: 40px;
-    height: 50px;        
+    height: 50px;
     padding: 10px;
-    border-top: 2px solid rgb(0, 0, 0);
-    border-bottom: 2px solid rgb(0, 0, 0);
-    border-right: 2px solid rgb(0, 0, 0);    
-  }
+    
+    /* 1. Definimos el degradado como fondo del borde */
+    background-image: linear-gradient(white, white), linear-gradient(180deg, #00BF63, #09537E);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    
+    /* 2. Definimos el grosor del borde */
+    border: 2px solid transparent;
+    
+    /* 3. Aplicamos el radio de borde (esto sí funcionará aquí) */
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    
+    /* 4. Quitamos el borde izquierdo si solo quieres la "U" */
+    border-left: none;
+}
   
   .conectores .conector .conector_simple {
     width: 20px;    
@@ -44,7 +57,7 @@
   .equipo {
     text-transform: capitalize;
     color: rgb(0, 0, 0);
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Days one', sans-serif;
    
    
   }
@@ -52,7 +65,7 @@
   .goles {
     color: #000;
     text-align: center;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Days one', sans-serif;
     font-size: 16px;
     font-style: bold;
     font-weight: 600;
@@ -70,7 +83,7 @@
     /* height: 150px; */
     display: flex;
     align-items: center;    
-    padding: 10px 0 10px 10px;   
+    padding: 10px 0 10px 0px;   
   }
   
   .partido .jugador {
@@ -161,8 +174,7 @@
     padding: 5px;
     text-align: center;
     font-feature-settings: 'clig' off, 'liga' off;
-    font-family: 'Notable', sans-serif;
-     letter-spacing: 3px;
+    font-family: 'Days One', sans-serif;
    
     font-size: 14px;
     font-style: normal;
@@ -204,6 +216,15 @@
     color: #fff;
   }
   
+   /* nuevo cuadro dimanico inicio    //////////////////////////////////////////////////////////////////////// */
+  /* //////////////////////////////////////////////////////////////////////////// */
+  
+
+
+   /* nuevo cuadro dimanico fin     //////////////////////////////////////////////////////////////////////// */
+  /* //////////////////////////////////////////////////////////////////////////// */
+  
+
   
   /* Media//////////////////////////////////////////////////////////////////////// */
   /* //////////////////////////////////////////////////////////////////////////// */
@@ -222,7 +243,10 @@
   }
   
   @media (max-width: 1024px) {
-    
+    .torneo-dieciseisavos .conectores .conector .conector_doble {
+    width: 15px;   /* Por ejemplo, cambias el ancho aquí */
+    padding: 3px;
+}
   }
   
   @media  (max-width: 991px) {  
@@ -234,14 +258,15 @@
   .jornada_contenedor .jornada .jugador{
     width: 125px;
   }
-  .titulos{
-    width: 100%;
-    display: flex;
-      justify-content: space-around;
-  }
-  .titulo {
-    width: 126px;
-  }
+
+  .titulos {
+  gap: 40px;
+   
+}
+.titulo{
+  width: 125px;
+}
+ 
   .equipo{
     font-size: 12px;
   }
@@ -269,7 +294,7 @@
    
     .team {
       color: #000;
-      font-family: 'Oswald', sans-serif;
+      font-family: 'Days one', sans-serif;
    
     font-size: 12px;
     font-style: normal;
@@ -346,15 +371,7 @@
     width: 2px;
     padding: 0 2px 0 0;
   }
-  .titulos{
-    width: 99%;
-    display: flex;
-    justify-content: space-between;
-  }
-  .titulo {
-    width: 80px;
-    font-size: 10px;
-  }
+ 
   .equipo{
     font-size: 12px;
   }
@@ -434,15 +451,7 @@
     width: 2px;
     padding: 0 2px 0 0;
   }
-  .titulos{
-    width: 99%;
-    display: flex;
-    justify-content: space-between;
-  }
-  .titulo {
-    width: 80px;
-    font-size: 10px;
-  }
+  
   .equipo{
     font-size: 12px;
   }
@@ -467,6 +476,31 @@
     .number{
       font-size: 11px;
     }
+
+    .titulos{
+     width: max-content;
+  gap: 6px;
+ 
+}
+.wrapper {
+  width: 100%  !important;
+  
+  
+}
+
+.titulos.torneo-dieciseisavos  {
+    width: 1000px;   
+    padding: 2px !important;
+    background-color: red !important;
+}
+
+
+.torneo-dieciseisavos .conectores .conector .conector_doble {
+  overflow-x: auto;
+    width: 10px;   /* Por ejemplo, cambias el ancho aquí */
+    padding: 2px !important;
+}
+
     .conectores .conector .conector_doble {
       width: 2px;
       padding: 2px;
@@ -488,13 +522,12 @@
   
   .titulo {
     font-weight: 600;
-     font-family: 'notable', sans-serif;
-      letter-spacing: 3px;
+     font-family: 'Days One', sans-serif;
       width: 100%;
       font-size: 10px;
   }
   .equipo{
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Days one', sans-serif;
     font-size: 10px;
   }
   .goles{
@@ -523,7 +556,10 @@
   .TITULO{
     font-size: 20px;
   }
-    
+
+     .titulo{
+    font-size: 12px;
+  }
     
     
   }
@@ -532,6 +568,18 @@
     .TITULO{
       font-size: 20px;
     }
+
+    .titulos{
+  gap: 6px;
+  
+}
+
+.wrapper {
+  width: 10%;
+   
+}
+}
+
     .conectores .conector .conector_doble {
       width: 0%;
       padding: 0px;
@@ -548,19 +596,7 @@
     padding: 0 0px 0 0;
     border: 1px solid #000;
   }
-  .titulos{
-    margin: 0 auto;
-    width: 100%;
-    display: flex;
   
-    justify-content: space-evenly;
-    margin-top: 20px; 
-  }
-  .titulo {
-    margin-left: 1px;
-    width: 95px;
-    font-size: 10px;
-  }
   .equipog{
     font-size: 50px;
     background-color: rgb(0, 255, 30);
@@ -581,7 +617,7 @@
   }
   
     
-  }
+  
   
   @media (max-width: 320px) {
     .TITULO{
@@ -595,19 +631,21 @@
   .jornada_contenedor .jornada .jugador{
     width: 90px;
   }
+.titulos{
+  gap: 5px;
+  
+}
+.wrapper {
+  width: 106%;
+ 
+  
+}
+
   .conectores .conector .conector_simple{
     width: 2px;
     padding: 0 2px 0 0;
   }
-  .titulos{
-    width: 99%;
-    display: flex;
-    justify-content: space-between;
-  }
-  .titulo {
-    width: 80px;
-    font-size: 10px;
-  }
+ 
   .equipo{
     font-size: 12px;
   }

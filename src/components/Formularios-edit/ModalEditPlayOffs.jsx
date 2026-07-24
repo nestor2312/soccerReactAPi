@@ -7,6 +7,11 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   const [equipoLocal, setEquipoLocal] = useState(PlayOffsData?.equipo_a_id || "");
   const [equipoVisitante, setEquipoVisitante] = useState(PlayOffsData?.equipo_b || "");
   const [numPartido, setNumPartido] = useState(PlayOffsData?.numPartido || 0);
+  const [nombreFase, setnombreFase] = useState(PlayOffsData?.nombreFase || 0);
+    const [fecha, setFecha ] = useState(PlayOffsData?.fecha || "");
+  const [hora, setHora] = useState(PlayOffsData?.hora || "");
+  const [sede, setsede] = useState(PlayOffsData?.sede || "");
+const [errors, setErrors] = useState({});
   const [tipo_eliminatoria, setTipoEliminatoria] = useState(PlayOffsData?.tipo_eliminatoria || "solo_ida");
   const [marcadores, setMarcadores] = useState(PlayOffsData?.marcadores || {
     marcador1_ida: 0,
@@ -25,8 +30,12 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     if (PlayOffsData) {
       setSubcategoriaId(PlayOffsData.subcategoria_id || "");
       setEquipoLocal(PlayOffsData.equipo_a_id || "");
+       setHora(PlayOffsData.hora || "");
+        setsede(PlayOffsData.sede || "");
+         setFecha(PlayOffsData.fecha || "");
       setEquipoVisitante(PlayOffsData.equipo_b_id || "");
       setNumPartido(PlayOffsData.numPartido || 0);
+        setnombreFase(PlayOffsData.nombreFase || 0);
       setTipoEliminatoria(PlayOffsData.tipo_eliminatoria || "solo_ida");
       setMarcadores({
         marcador1_ida: PlayOffsData.marcador1_ida ?? "",
@@ -82,6 +91,10 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
       equipo_b_id: equipoVisitante,
       subcategoria_id,
       numPartido,
+       nombreFase,
+       sede,
+       fecha,
+       hora,
       tipo_eliminatoria,
       ...marcadores,
       id: PlayOffsData?.id,
@@ -104,6 +117,9 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
         equipoLocal: setEquipoLocal,
         equipoVisitante: setEquipoVisitante,
         numPartido: setNumPartido,
+        sede:setsede,
+        hora:setHora,
+        fecha:setFecha,
         tipoEliminatoria: setTipoEliminatoria,
       };
       handlers[name](value);
@@ -129,7 +145,7 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     <div className="modal-content">
       <div className="modal-header">
         <h5 className="modal-title">Editar PlayOffs</h5>
-        <button type="button" className="close" onClick={onClose}>
+        <button type="button" className="btn-close" onClick={onClose}>
           &times;
         </button>
       </div>
@@ -168,6 +184,23 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     <option value="2">Cuartos</option>
     <option value="3">Semifinal</option>
     <option value="4">Final</option>
+      <option value="5">Tercer puesto</option>
+  </select>
+</div>
+      <div className="col-12 col-md-6 mb-3">
+  <label htmlFor="nombreFase">Fase</label>
+  <select
+    id="nombreFase"
+    name="nombreFase"
+    className="form-control validate"
+    onChange={(e) => setnombreFase(e.target.value)}
+    value={nombreFase}
+  >
+   
+    <option value="General">General / Única</option>
+                <option value="Copa Oro">Copa Oro</option>
+                <option value="Copa Plata">Copa Plata</option>
+                <option value="Copa Bronce">Copa Bronce</option>
   </select>
 </div>
         </div>
@@ -224,6 +257,47 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
             </select>
           </div>
         </div>
+
+        {/* Fecha y Hora */}
+                  <div className="row">
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="fecha">Fecha</label>
+                      <input
+                        id="fecha"
+                        name="fecha"
+                        type="date"
+                        className="form-control"
+                        onChange={(e) => setFecha(e.target.value)}
+                        value={fecha}
+                      />
+                      {errors.fecha && <small className="text-danger">{errors.fecha}</small>}
+                    </div>
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="hora">Hora</label>
+                      <input
+                        id="hora"
+                        name="hora"
+                        type="time"
+                        className="form-control"
+                        onChange={(e) => setHora(e.target.value)}
+                        value={hora}
+                      />
+                      {errors.hora && <small className="text-danger">{errors.hora}</small>}
+                    </div>
+
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="sede">Sede</label>
+                      <input
+                        id="sede"
+                        name="sede"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setsede(e.target.value)}
+                        value={sede}
+                      />
+                      {errors.sede && <small className="text-danger">{errors.sede}</small>}
+                    </div>
+                  </div>
 
         {/* Marcadores */}
         {mostrarCampo("ida") && (
@@ -309,16 +383,14 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
           </div>
         )}
 
-        <div className="row">
-          <div className="col-12 text-right ">
-          <button type="button" className="mx-2 btn btn-danger"  data-bs-dismiss="modal" onClick={onClose}>
+       <div className="modal-footer">
+            <button type="button" className="btn btn-danger" onClick={onClose}>
               Cerrar
             </button>
-            <button className="btn btn-primary" onClick={handleSave}>
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
               Guardar
             </button>
-          </div>
-        </div>
+         </div>
       </div>
     </div>
   </div>
