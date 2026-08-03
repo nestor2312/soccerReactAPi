@@ -49,7 +49,8 @@ margin-left: 10px;
   justify-content: start;
   align-items: center;
   padding: 1rem;
-background: linear-gradient(180deg, #152039 0%, #00bf63a6 100%);
+/* background: linear-gradient(180deg, #152039 0%, #00bf63a6 100%); */
+background: var(--card-bg-gradient);
 
 
 }
@@ -149,7 +150,7 @@ margin-right: 8px;
     position: fixed;
     top: 0;
     right: 0;
-    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+    background: var(--main-background);
     z-index: 2;
     flex-direction: column;
     width: 100%;

@@ -165,7 +165,7 @@ const Clasificacion = () => {
                 >
                   ← Anterior
                 </button>
-                <span>{`Página ${currentPage || 1} de ${lastPage || 1}`}</span>
+                <span className="color">{`Página ${currentPage || 1} de ${lastPage || 1}`}</span>
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === lastPage || isLoading}

@@ -59,7 +59,7 @@ const torneoTipo = fasesActivas[0]?.id;
   };
 
   return (
- <div className="wrapper ">
+ <div className="wrapper card border-0">
 <div className="titulos">
         {fasesActivas.map((fase) => (
           

@@ -554,7 +554,7 @@ const partidosAMostrar = vista === 'todos'
     >
       ← Anterior
     </button>
-    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+    <span className="color">{`Página ${currentPage} de ${lastPage}`}</span>
     <button
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === lastPage}
@@ -642,7 +642,7 @@ const partidosAMostrar = vista === 'todos'
     >
       ← Anterior
     </button>
-    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+    <span className="color">{`Página ${currentPage} de ${lastPage}`}</span>
     <button
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === lastPage}
@@ -689,7 +689,7 @@ const partidosAMostrar = vista === 'todos'
                       </span>
                     </div>
                     <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
-                      <span className="scoremodal">
+                      <span className="scoremodal color">
                         {selectedPartido.marcador1 == null ||
                         selectedPartido.marcador2 == null ? (
                           <>
@@ -730,7 +730,7 @@ const partidosAMostrar = vista === 'todos'
                     </div>
                   </div>
                   <div className="text-center">
-                    <h1 className="fecha">{selectedPartido.fecha || 'Fecha por definir' }</h1>
+                    <h1 className="fecha ">{selectedPartido.fecha || 'Fecha por definir' }</h1>
                     <h4 className="hora">
                       {selectedPartido.hora?.slice(0, 5)}
                     </h4>
@@ -745,7 +745,7 @@ const partidosAMostrar = vista === 'todos'
     ) : (
       <div className="list-group list-group-flush">
         <div className="eventos-timeline pt-3">
-  <h6 className="text-center text-uppercase text-muted small mb-4">Detalles del partido</h6>
+  <h6 className="text-center text-uppercase  small mb-4 color ">Detalles del partido</h6>
 
   <div className="row g-0">
     {/* COLUMNA EQUIPO LOCAL (A) */}

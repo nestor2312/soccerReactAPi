@@ -2,8 +2,166 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 600;
-  --bs-body-bg: #f5f5f5 !important;
+ --bs-body-bg: var(--bg-main) !important;
 }
+/* Tema 1: Dark Neón (Gamer) */
+:root, [data-theme="oscuro"] {
+
+
+  --bg-breaket: linear-gradient(180deg, #7272725b 0%, #6466685b 100%);
+  --bg-main: #01060b;
+  --card-bg: #091217;
+  --card-border: #35c17244;
+  --text-primary: #ffffff;
+  --accent-color: #00ff66;
+   --text-header-card: #ffffff;
+ --row-highlight: rgba(0, 255, 102, 0.2); /* Verde neón suave */
+     --text-gradient: linear-gradient(180deg, #00ff66 0%, rgba(9, 83, 126, 0.80) 100%);
+--cards-teams: #ffffff1d;
+--main-background: linear-gradient(180deg, #00ff9c 0%, #060b08 100%);
+  --hover-cards-border:linear-gradient(180deg, #0d2618 0%, #091217 100%) padding-box,
+    linear-gradient(180deg, #00FF66 0%, #00FF66 100%) border-box !important;
+--cards--start: linear-gradient(180deg, #091217 0%, #060b08 95%) padding-box,
+            linear-gradient(180deg, #00FF66 0%, #0F3A22 100%) border-box !important;
+
+  /* Variables para el efecto de resplandor y degradado */
+  --accent-glow: #00ff9c;
+  --card-bg-gradient: linear-gradient(180deg, #091217 0%, #060b08 95%);
+}
+
+
+ [data-theme="dark"] {
+
+
+  --bg-breaket: linear-gradient(180deg, #7272725b 0%, #6466685b 100%);
+  --bg-main: #01060b;
+  --card-bg: #091217;
+  --card-border: #35c17244;
+  --text-primary: #ffffff;
+  --accent-color: #00ff66;
+   --text-header-card: #ffffff;
+ --row-highlight: rgba(0, 255, 102, 0.2); /* Verde neón suave */
+     --text-gradient: linear-gradient(180deg, #00ff66 0%, rgba(9, 83, 126, 0.80) 100%);
+--cards-teams: #ffffff1d;
+--main-background: linear-gradient(180deg, #00ff9c 0%, #060b08 100%);
+  --hover-cards-border:linear-gradient(180deg, #0d2618 0%, #091217 100%) padding-box,
+    linear-gradient(180deg, #00FF66 0%, #00FF66 100%) border-box !important;
+--cards--start: linear-gradient(180deg, #091217 0%, #060b08 95%) padding-box,
+            linear-gradient(180deg, #00FF66 0%, #0F3A22 100%) border-box !important;
+
+  /* Variables para el efecto de resplandor y degradado */
+  --accent-glow: #00ff9c;
+  --card-bg-gradient: linear-gradient(180deg, #091217 0%, #060b08 95%);
+}
+
+
+/* Tema 2: Azul  */
+[data-theme="azul"] {
+   --bg-breaket:  linear-gradient(180deg, #909090 0%, #E2E8F0 100%);
+  --bg-main: #e8f0f8;
+  --card-bg: #ffffff;
+ --cards-teams: #f5f5f5;
+  --card-border: #cbd5e1;
+  --text-primary: #000000;
+  --accent-color: #0392e0;
+   --text-header-card: #f4faff;
+--row-highlight: rgba(0, 188, 212, 0.3); /* Azul/Cyan suave */
+--cards--start: linear-gradient(180deg, #00BCD4 0%, #0A1E3D 95%) padding-box,
+                  linear-gradient(180deg, #008ba3 0%, #061226 100%) border-box !important;
+--main-background:  linear-gradient(180deg, #00BCD4 0%, #0A1E3D 100%);
+  /* Estado Hover (Opción A: Fondo claro sutil + Borde Neón Cyan) */
+--hover-cards-border: linear-gradient(180deg, #e0f7fa 0%, #a6caff 100%) padding-box,
+                      linear-gradient(180deg, #00BCD4 0%, #0288d1 100%) border-box !important;                        
+     --text-gradient: linear-gradient(180deg, #5697c6 0%, #028df0 100%);
+
+  /* Adaptado para tonos azules */
+  --accent-glow: #00BCD4;
+  /* --card-bg-gradient: linear-gradient(180deg, #5697c6 0%, #021E3C 95%); */
+    /* --card-bg-gradient: linear-gradient(180deg, #2962FF 0%, #0A1E3D 95%);  */
+
+   /* --card-bg-gradient: linear-gradient(180deg, #00BCD4 0%, #0A1E3D 95%);  */
+
+  /* --card-bg-gradient: linear-gradient(180deg, #0052cc 0%, #0A1E3D 95%); */
+
+   /* --card-bg-gradient: linear-gradient(180deg, #010e25 0%, #2e64e3 95%);  */
+
+   /* --card-bg-gradient: linear-gradient(180deg, #00A3FF 0%, #021E3C 95%);  */
+
+  /* --card-bg-gradient: linear-gradient(180deg, #64B5F6 0%, #021E3C 95%);
+  --card-bg-gradient: linear-gradient(180deg, #00BCD4 0%, #021E3C 95%);
+  --card-bg-gradient: linear-gradient(180deg, #81D4FA 0%, #021E3C 95%); */
+
+/* --card-bg-gradient: linear-gradient(
+  180deg,
+  #2962FF 0%,
+  #00A3FF 40%,
+  #021E3C 100%
+); */
+
+/* 🔷 Azul institucional */
+/* --card-bg-gradient: linear-gradient(180deg, #0052cc 0%, #0A1E3D 95%); */
+
+/* ❄️ Azul claro elegante */
+/* --card-bg-gradient: linear-gradient(180deg, #64B5F6 0%, #021E3C 95%); */
+
+/* 🔵 Azul eléctrico (moderno / tech) */
+/* --card-bg-gradient: linear-gradient(180deg, #2962FF 0%, #0A1E3D 95%); */
+
+/* 🌊 Turquesa (fresco / moderno) */
+--card-bg-gradient: linear-gradient(180deg, #00BCD4 0%, #0A1E3D 95%);
+
+/* ⚡ Azul neón (gamer / llamativo) */
+/* --card-bg-gradient: linear-gradient(180deg, #00A3FF 0%, #021E3C 95%); */
+
+
+   /* --card-bg-gradient: linear-gradient(180deg, #5697c6 0%, #021E3C 95%); */
+}
+
+.color{
+  color: var(--text-primary);
+}
+
+.theme-toggle-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000; /* Asegura que quede por encima del contenido */
+  background: var(--cards--start);
+ 
+  color: var(--text-header-card);
+  padding: 0.6em 1em;
+  border-radius: 50px; /* Redondeado estilo píldora */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  text-transform: capitalize;
+  backdrop-filter: blur(8px);
+}
+
+/* Tema 3: Verde Clásico */
+[data-theme="defecto"] {
+   --bg-breaket:  linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
+  --bg-main: #f5f5f5;
+  --card-bg: #ffffff;
+  --cards-teams: #f5f5f5;
+  --card-border: #e9e9e936;
+  --text-primary: #000000;
+  --text-header-card: #ffffff;
+  --hover-cards-border:linear-gradient(180deg, #fff 0%, #fff 100%) padding-box,
+      linear-gradient(180deg, #00BF63 0%, #09537E 100%) border-box !important;
+  --cards--start: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
+                linear-gradient(180deg, #007A3A 0%, #064062 100%) border-box !important; 
+--row-highlight: rgba(22, 163, 74, 0.3); /* Verde clásico suave */
+
+--main-background:  linear-gradient(180deg, #00BF63 0%, #09537E 100%);
+
+  --accent-color: #0fcd57;
+  --text-gradient: linear-gradient(180deg, #00bf63cc 0%, #09537ecc 100%);
+  
+  /* Adaptado para tonos verdes claros */
+  --accent-glow: #00BF63;
+  --card-bg-gradient: linear-gradient(180deg,#152039,#00bf63cc 95%);
+}
+
 
 html, body {
   height: 100%;
@@ -31,11 +189,13 @@ a {
 a:hover {
   color: #f8f8f8;
 }
-
+/*  */
 body {
  display: block;
  min-height: 100dvh;
- background: #f5f5f5!important;
+ background-color: var(--bg-main) !important;
+  /* background: #00070f !important; */
+ /* background: #f5f5f5!important; */
 
  /* grid-template-columns: auto 1fr auto; */
 
@@ -101,7 +261,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   /* background-color: #1a1a1a; */
-  background-color: #00BF63;
+  background-color: var(--accent-glow);
   cursor: pointer;
   color: #ffffff;
   /* transition: ; */

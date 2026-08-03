@@ -87,7 +87,7 @@ input{
     height: 50px;        
     padding: 10px;
     /* 1. Definimos el degradado como fondo del borde */
-    background-image: linear-gradient(white, white), linear-gradient(180deg, #00BF63, #09537E);
+    background:var(--hover-cards-border);
     background-origin: border-box;
     background-clip: padding-box, border-box;
     
@@ -105,7 +105,7 @@ input{
   .conectores .conector .conector_simple {
     width: 20px;    
     padding: 0 15px 0 0;
-    border: 1px solid rgb(0, 0, 0);
+    border: 1px solid  var(--accent-glow) !important;
     
   }
   
@@ -117,14 +117,14 @@ input{
   .equipo {
     font-size: 15px;
     text-transform: capitalize;
-    color: #000000;
+    color: var(--text-primary);
     font-family: 'Roboto Condensed', sans-serif;
   }
 
 
   
   .goles {
-    color: #000;
+    color: var(--text-primary);
     text-align: center;
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 14px;
@@ -191,18 +191,27 @@ input{
     justify-content: space-around;
   }
   
-  .jornada_contenedor .jornada .jugador {
-    width: 155px;
-    padding: 1px;
-    border-radius: 5px;
-    background-color: #D9D9D9; 
-    border: 2px solid #000; 
-    display: flex;
-    justify-content: flex-start;
-    align-items: center
-  
-  
-  }
+/* Base para todos los jugadores */
+.jornada_contenedor .jornada .jugador {
+  width: 155px;
+  padding: 1px;
+  border-radius: 5px;
+  background: var(--bg-breaket) ; 
+  border: 2px solid #00000070; 
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+} 
+
+/* Ganador (gana la prioridad por tener el mismo peso y estar después) */
+.jornada_contenedor .jornada .jugador.win {
+  background: var(--cards--start);
+ 
+}
+
+.win{
+   background: var(--cards--start);
+}
   /* Ganador */
   .esquema .ganador_esquema {    
     display: flex;
@@ -289,15 +298,13 @@ input{
     padding: 8px;
     border-radius: 5px;
     background-color: #D9D9D9;
-    border: 2px solid #000;
+    border: 2px solid #000000 ;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
 
-  .win {
-    background: linear-gradient(180deg, #152039 0%, rgba(0, 191, 99, 0.65) 100%)!important;
-  }
+ 
   
   .win .goles {
    
@@ -474,7 +481,7 @@ input{
 
 
     .team {
-      color: #000;
+      color:var(--text-primary);
       font-family: 'Roboto Condensed', sans-serif;
    
     font-size: 13px;
@@ -647,7 +654,7 @@ input{
       font-style: normal;
       font-weight: 600;
       line-height: normal;
-      background: linear-gradient(180deg, rgba(0, 191, 99, 0.80) 0%, rgba(9, 83, 126, 0.80) 100%);
+      background: var(--text-gradient);
       background-clip: text;
       -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -839,11 +846,3 @@ input{
 
   
   
-  
-  
-
- 
-
-
-
-

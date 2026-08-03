@@ -205,7 +205,7 @@ useEffect(() => {
 
           <div className="pagination mb-4">
             <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>← Anterior</button>
-            <span>{`Página ${currentPage} de ${lastPage}`}</span>
+            <span >{`Página ${currentPage} de ${lastPage}`}</span>
             <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === lastPage}>Siguiente →</button>
           </div>
         </section>

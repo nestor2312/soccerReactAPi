@@ -1,5 +1,5 @@
 .fila-resaltada{
-    background-color: #cfc;
+   background-color:var(--row-highlight) !important;
 }
 .logomovil{
     width: 40px;
@@ -84,7 +84,7 @@
 }
 
 .data {
-  color: #000;
+  color: var(--text-primary);
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 15px;

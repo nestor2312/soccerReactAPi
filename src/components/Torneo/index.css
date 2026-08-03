@@ -23,8 +23,7 @@
     text-align: center;
     /* background: linear-gradient(180deg, #152039 30%, #00bf638b 100%); */
     /* background: linear-gradient(180deg, #00BF63 0%, #09537E 100%); */
-    background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-    linear-gradient(180deg, #007A3A 0%, #064062 100%)  border-box;
+    background: var(--cards--start)
   
 }
 .BoxCard:hover{
@@ -348,8 +347,7 @@ body.fondo-1::after {
       align-items: center;
       justify-content: center;
       text-align: center;
-      background: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
-                  linear-gradient(180deg, #007A3A 0%, #064062 100%) border-box;
+      background: var(--cards--start);
       overflow: hidden;
     }
 

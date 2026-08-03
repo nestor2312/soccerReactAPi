@@ -111,6 +111,40 @@ import Landing from "./pages/Landing";
 const RoutesWithAnalytics = ({ setIsAuthenticated }) => {
   const location = useLocation();
 
+  const [theme, setTheme] = useState("dark");
+
+const themes = ["oscuro", "azul", "defecto"];
+
+const changeTheme = () => {
+  const currentIndex = themes.indexOf(theme);
+  const nextIndex = (currentIndex + 1) % themes.length;
+  setTheme(themes[nextIndex]);
+};
+
+useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme && themes.includes(savedTheme)) {
+    setTheme(savedTheme);
+  }
+}, []);
+
+useEffect(() => {
+  document.documentElement.setAttribute("data-theme", theme);
+}, [theme]);
+
+useEffect(() => {
+  localStorage.setItem("theme", theme);
+}, [theme]);
+
+// const isLanding = location.pathname === "/login";
+
+// {!isLanding && (
+//   <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+//     {theme === "light" ? "🌙" : "☀️"}
+//   </button>
+// )}
+
+
   useEffect(() => {
     if (window.gtag) {
       window.gtag("event", "page_view", {
@@ -119,7 +153,14 @@ const RoutesWithAnalytics = ({ setIsAuthenticated }) => {
     }
   }, [location]);
 
-  return (
+ return (
+  <div >
+    
+   
+ {/* Se ubica al final del JSX principal, fuera del flujo normal */}
+<button onClick={changeTheme} className="theme-toggle-floating">
+  🎨 {theme}
+</button>
     <Routes>
       <Route path="landing" element={<Landing />} />
       <Route path="/" element={<Torneo />} />
@@ -147,7 +188,9 @@ const RoutesWithAnalytics = ({ setIsAuthenticated }) => {
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
-  );
+
+  </div>
+);
 };
 
 function App() {

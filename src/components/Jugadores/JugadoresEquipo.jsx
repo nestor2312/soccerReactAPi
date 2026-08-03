@@ -92,7 +92,7 @@ const JugadoresEquipo = () => {
 </div>
                 </div>
 
-                <h3 className="mt-3 mb-4 text-center">Jugadores</h3>
+                <h3 className="mt-3 mb-4 space color text-center">Jugadores</h3>
 
                 <div className="row d-flex justify-content-around">
                   {equipo.jugadores.map((Player) => (

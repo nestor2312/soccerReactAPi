@@ -426,8 +426,8 @@ useEffect(() => {
               <div className="row">
                 {clasificacion.map((datosGrupo) => (
                   <div className="col-sm-12 col-md-6 mt-4" key={datosGrupo.id}>
-                    <div className="card border-0 shadow ">
-                      <div className="card-header fondo-card TITULO border-0">
+                    <div className="card  shadow ">
+                      <div className="card-header fondo-card TITULO ">
                         Clasificacion
                       </div>
                       <div className="card table-responsive border-0 table-sm">
@@ -653,7 +653,7 @@ useEffect(() => {
 
 <div className="gap-1 "> 
       {/* Contenedor del Toggle */}
-      <div className="flex  rounded-2xl border mt-2 shadow-inner">
+      <div className="flex  rounded-2xl border-0 mt-2 shadow-inner">
         <button
           onClick={() => setVista('llaves')}
           className={`btn-flip2 flip2 mx-1 ${vista === 'llaves' ? 'active' : 'opacidad-baja'}`} 
@@ -688,7 +688,7 @@ useEffect(() => {
     // ========================
     // 🔹 LLAVES
     // ========================
-    <div className="animate-fade-in scroll-container">
+    <div className="animate-fade-in scroll-container card">
 
       {Object.entries(fasesData).map(([nombreFase, rondas]) => (
         <div key={nombreFase} className="fase-contenedor mb-5">
@@ -755,7 +755,7 @@ useEffect(() => {
                 borderRadius: '10px'
               }}></div>
 
-              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: '#000000' }}>
+              <h4 className="text-uppercase fw-bold m-0 color  " style={{ fontSize: '0.9rem' }}>
                 {ronda.titulo}
               </h4>
             </div>
