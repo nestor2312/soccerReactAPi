@@ -257,9 +257,10 @@ body.fondo-1::after {
 } */ 
 .text-title{
 text-transform: uppercase;
-color: #09537E; 
+color: var(--text-title) !important; 
+transition: color 0.5s;
 text-align: center;
-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+text-shadow:var(--text-title-shadow); 
 font-family: "Days One", sans-serif;
 font-size: 40px;
 font-weight: 400;
@@ -271,9 +272,9 @@ letter-spacing: 6px;
 
   .text-title{
     text-transform: uppercase;
-    color: #09537E; 
+   
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+   
     font-family: "Days One", sans-serif;
     font-size: 35px;
     font-weight: 400;
@@ -327,9 +328,9 @@ body.fondo-1::after {
 
   .text-title{
     text-transform: uppercase;
-    color: #09537E; 
+   
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+   
     font-family: "Days One", sans-serif;
     font-size: 28px;
     font-weight: 400;
@@ -365,9 +366,9 @@ body.fondo-1::after {
   }
   .text-title{
     text-transform: uppercase;
-    color: #09537E; 
+   
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+   
     font-family: "Days One", sans-serif;
     font-size: 27px;
     font-weight: 400;
