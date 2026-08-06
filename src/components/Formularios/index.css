@@ -449,6 +449,12 @@ input{
   .goles{
     font-size: 14px;
   }
+
+   .esquema {
+   
+    min-width: 110%;
+      
+  }
   
   .esquema .ganador .jugador{
     width: 140px;
@@ -602,6 +608,12 @@ input{
   .goles{
     font-size: 13px;
   }
+
+  .esquema {
+   
+    min-width: 110%;
+      
+  }
   
   .esquema .ganador .jugador{
     width: 80px;
@@ -688,6 +700,13 @@ input{
     font-size: 13px;
   }
   
+
+  .esquema {
+   
+    min-width: 110%;
+      
+  }
+
   .esquema .ganador .jugador{
     width: 80px;
     font-size: 12px;
@@ -742,6 +761,12 @@ input{
     font-size: 12px;
     font-weight:600
   }
+
+  
+  .esquema{
+     min-width: 126%;
+  }
+
   
   .esquema .ganador .jugador{
     padding: 0px;
@@ -796,6 +821,10 @@ input{
     font-size: 10px;
     margin-right: 6px;
   }
+ .esquema {
+   min-width: 120%;
+
+ }
   
   .esquema .ganador .jugador{
     width: 65px;
@@ -836,6 +865,11 @@ input{
   .goles{
     font-size: 13px;
   }
+
+  .esquema {
+   min-width: 1010%;
+
+ }
   
   .esquema .ganador .jugador{
     width: 80px;
