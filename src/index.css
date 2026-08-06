@@ -22,7 +22,7 @@
 --cards-teams: #ffffff1d;
 --main-background: linear-gradient(180deg, #091217 0%, #091217 70%, #0d2619 100%);
  --hover-cards-border:linear-gradient(180deg, #0d2618 0%, #091217 100%) padding-box,
-    linear-gradient(180deg, #00FF66 0%, # 100%) border-box !important;
+    linear-gradient(180deg, #00ff9c 0%, #00FF66 100%) border-box !important;
 --cards--start: linear-gradient(180deg, #091217 0%, #060b08 95%) padding-box,
             linear-gradient(180deg, #00FF66 0%, #0F3A22 100%) border-box !important;
 
