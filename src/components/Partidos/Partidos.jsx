@@ -467,7 +467,7 @@ const partidosAMostrar = vista === 'todos'
               <div className="card-header fondo-card TITULO  ">
                 Partidos
               </div>
-              <div className="card table-responsive   table-sm">
+              <div className="card table-responsive  border-0 table-sm">
                 <table className="table-borderless">
                   <thead className="mt-2 mb-2">
                     <tr>

@@ -96,7 +96,7 @@ const Jugadores = () => {
                 <div className="card-header fondo-card TITULO  ">
                   Jugadores
                 </div>
-                <div className="card table-responsive   table-sm">
+                <div className="card table-responsive  border-0 table-sm">
                   <table className="table-borderless">
                     <thead>
                       <tr>

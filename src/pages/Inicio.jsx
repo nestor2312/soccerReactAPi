@@ -430,8 +430,8 @@ useEffect(() => {
                       <div className="card-header fondo-card TITULO ">
                         Clasificacion
                       </div>
-                      <div className="card table-responsive   table-sm">
-                        <table className="table-borderless">
+                      <div className="card table-responsive border-0 table-sm">
+                        <table className="table-borderless ">
                           <thead>
                             <tr>
                               <th></th>
@@ -500,7 +500,7 @@ useEffect(() => {
                       <div className="card-header fondo-card TITULO  ">
                         Partidos
                       </div>
-                      <div className="card table-responsive   table-sm">
+                      <div className="card table-responsive border-0 table-sm">
                         <table className="table-borderless">
                           <thead>
                             <tr>
