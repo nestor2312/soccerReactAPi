@@ -1023,8 +1023,8 @@ const openEventsModal = (partido, instancia = "normal") => {
         {/* Esquema de eliminatorias */}
 
         <div className="col-sm-12 col-md-12 mt-4">
-          <div className="card mt-2 border-0 shadow">
-            <div className="card-header fondo-card-admin TITULO-admin border-0">
+          <div className="card mt-2   shadow">
+            <div className="card-header fondo-card-admin TITULO-admin  ">
               Eliminatorias
             </div>
 

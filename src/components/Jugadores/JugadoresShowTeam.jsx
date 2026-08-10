@@ -59,7 +59,7 @@ const JugadorShowTeam = () => {
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-12 col-md-6 mt-5 mb-5">
-                  <div className=" border-0  flashcard d-flex align-items-center">
+                  <div className="    flashcard d-flex align-items-center">
                     <div className={`card-body ${isFlipped ? "flipped" : ""}`}>
                       {/* Front */}
                       <div className="front">

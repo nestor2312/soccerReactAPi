@@ -899,7 +899,7 @@ setShowPreviewModal(true);
 </form>
 
 
-<div className="card p-4 mb-4 shadow-sm border-0 bg-light">
+<div className="card p-4 mb-4 shadow-sm   bg-light">
   <div className="d-flex justify-content-between align-items-center mb-3">
     <h5 className="mb-0">Filtrar por Partidos</h5>
     <button className="btn btn-sm btn-outline-secondary" onClick={limpiarFiltros}>
@@ -1081,9 +1081,9 @@ setShowPreviewModal(true);
     {showPreviewModal && (
   <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
     <div className="modal-dialog modal-dialog-centered modal-md">
-      <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '16px' }}>
+      <div className="modal-content   shadow-lg" style={{ borderRadius: '16px' }}>
         
-        <div className="modal-header border-0 pt-4 px-4 pb-0">
+        <div className="modal-header   pt-4 px-4 pb-0">
           <div>
             <h5 className="modal-title fw-bold text-dark">Ajustar Fixture</h5>
             <p className="text-muted small mb-0">Puedes cambiar los equipos o invertir la localía antes de guardar.</p>
@@ -1114,7 +1114,7 @@ setShowPreviewModal(true);
                 {/* Selector Equipo A */}
                 <div style={{ flex: 1 }}>
                   <select 
-                    className="form-select form-select-sm border-0 bg-transparent fw-bold text-end text-primary"
+                    className="form-select form-select-sm   bg-transparent fw-bold text-end text-primary"
                     value={p.equipoA_id}
                     onChange={(e) => handleCambiarEquipo(index, 'A', e.target.value)}
                   >
@@ -1135,7 +1135,7 @@ setShowPreviewModal(true);
                   >
                     ⇄
                   </button>
-                  <span className="badge rounded-pill bg-white text-dark border-0 shadow-sm text-muted" 
+                  <span className="badge rounded-pill bg-white text-dark   shadow-sm text-muted" 
                         style={{ fontSize: '0.65rem' }}>
                     VS
                   </span>
@@ -1144,7 +1144,7 @@ setShowPreviewModal(true);
                 {/* Selector Equipo B */}
                 <div style={{ flex: 1 }}>
                   <select 
-                    className="form-select form-select-sm border-0 bg-transparent fw-bold text-start text-primary"
+                    className="form-select form-select-sm   bg-transparent fw-bold text-start text-primary"
                     value={p.equipoB_id}
                     onChange={(e) => handleCambiarEquipo(index, 'B', e.target.value)}
                   >
@@ -1160,7 +1160,7 @@ setShowPreviewModal(true);
           }, [])}
         </div>
 
-        <div className="modal-footer border-0 p-4 pt-2">
+        <div className="modal-footer   p-4 pt-2">
           <button className="btn btn-light fw-semibold text-muted px-4" 
                   style={{ borderRadius: '10px' }}
                   onClick={() => setShowPreviewModal(false)}>

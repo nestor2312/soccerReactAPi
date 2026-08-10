@@ -73,7 +73,7 @@ const Jugadores = () => {
                   <label htmlFor="equipoFiltro">Filtrar por equipo:</label>
                   <select
                     id="equipoFiltro"
-                    className="form-select bg-light text-black border-0 shadow-sm"
+                    className="form-select bg-light text-black   shadow-sm"
                     value={equipoSeleccionado}
                     onChange={(e) => {
                       setEquipoSeleccionado(e.target.value);
@@ -92,11 +92,11 @@ const Jugadores = () => {
               </div>
 
               {/* Tabla de jugadores */}
-              <div className="card border-0 shadow">
-                <div className="card-header fondo-card TITULO border-0">
+              <div className="card   shadow">
+                <div className="card-header fondo-card TITULO  ">
                   Jugadores
                 </div>
-                <div className="card table-responsive border-0 table-sm">
+                <div className="card table-responsive   table-sm">
                   <table className="table-borderless">
                     <thead>
                       <tr>
@@ -170,7 +170,7 @@ const Jugadores = () => {
                     </label>
                     <select
                       id="equipoFiltro"
-                      className="form-select bg-light text-black border-0 shadow-sm"
+                      className="form-select bg-light text-black   shadow-sm"
                       value={equipoSeleccionado}
                       onChange={(e) => {
                         setEquipoSeleccionado(e.target.value);

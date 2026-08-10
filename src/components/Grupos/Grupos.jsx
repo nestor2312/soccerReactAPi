@@ -35,11 +35,11 @@ const Grupos = () => {
           <div className="row">
             <div className="col-12 col-sm-12 col-md-6 mt-4">
               {Groups.map((grupo) => (
-                <div key={grupo.id} className="card border-0 shadow">
-                  <div className="card-header fondo-card TITULO border-0">
+                <div key={grupo.id} className="card   shadow">
+                  <div className="card-header fondo-card TITULO  ">
                     {grupo.nombre}
                   </div>
-                  <div className="card table-responsive border-0 table-sm">
+                  <div className="card table-responsive   table-sm">
                     <table className="table table-borderless">
                       <thead>
                         <tr className="py-2">

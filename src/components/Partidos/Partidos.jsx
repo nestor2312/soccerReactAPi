@@ -463,11 +463,11 @@ const partidosAMostrar = vista === 'todos'
 
 {vista !== 'diario' && (
           <div className="col-sm-12 mt-4 hiden">
-            <div className="card border-0 shadow ">
-              <div className="card-header fondo-card TITULO border-0">
+            <div className="card   shadow ">
+              <div className="card-header fondo-card TITULO  ">
                 Partidos
               </div>
-              <div className="card table-responsive border-0 table-sm">
+              <div className="card table-responsive   table-sm">
                 <table className="table-borderless">
                   <thead className="mt-2 mb-2">
                     <tr>

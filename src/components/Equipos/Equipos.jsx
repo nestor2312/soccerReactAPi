@@ -79,8 +79,8 @@ const Equipos = () => {
           <div className="margen margen-mobile">
             <div className="container-fluid">
               <div className="col-12 col-sm-12 col-md-12 mt-4 mb-3">
-                <div className="card border-0 shadow">
-                  <div className="card-header fondo-card TITULO border-0">
+                <div className="card   shadow">
+                  <div className="card-header fondo-card TITULO  ">
                     Equipos
                   </div>
                   <div className="card-body box-team">

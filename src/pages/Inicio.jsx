@@ -430,7 +430,7 @@ useEffect(() => {
                       <div className="card-header fondo-card TITULO ">
                         Clasificacion
                       </div>
-                      <div className="card table-responsive border-0 table-sm">
+                      <div className="card table-responsive   table-sm">
                         <table className="table-borderless">
                           <thead>
                             <tr>
@@ -496,11 +496,11 @@ useEffect(() => {
 
                 {Matches.length > 0 ? (
                   <div className="col-sm-12 col-md-6 mt-4">
-                    <div className="card border-0 shadow">
-                      <div className="card-header fondo-card TITULO border-0">
+                    <div className="card   shadow">
+                      <div className="card-header fondo-card TITULO  ">
                         Partidos
                       </div>
-                      <div className="card table-responsive border-0 table-sm">
+                      <div className="card table-responsive   table-sm">
                         <table className="table-borderless">
                           <thead>
                             <tr>
@@ -593,8 +593,8 @@ useEffect(() => {
                 )}
 
                 <div className="col-12 col-sm-12 col-md-12 mt-4">
-                  <div className="card border-0 shadow">
-                    <div className="card-header fondo-card TITULO border-0">
+                  <div className="card   shadow">
+                    <div className="card-header fondo-card TITULO  ">
                       Equipos
                     </div>
                     <div className="card-body ">
@@ -646,14 +646,14 @@ useEffect(() => {
                 {/* Esquema de eliminatorias */}
 
                 <div className="col-sm-12 col-md-12 mt-4 mb-3">
-                  <div className="card mt-2 border-0 shadow">
-                    <div className="card-header fondo-card TITULO border-0">
+                  <div className="card mt-2   shadow">
+                    <div className="card-header fondo-card TITULO  ">
                       Eliminatorias
                     </div>
 
 <div className="gap-1 "> 
       {/* Contenedor del Toggle */}
-      <div className="flex  rounded-2xl border-0 mt-2 shadow-inner">
+      <div className="flex  rounded-2xl   mt-2 shadow-inner">
         <button
           onClick={() => setVista('llaves')}
           className={`btn-flip2 flip2 mx-1 ${vista === 'llaves' ? 'active' : 'opacidad-baja'}`} 
@@ -770,7 +770,7 @@ useEffect(() => {
                 return (
                   <div key={partido.id} className="col-12" onClick={() => handleOpenModal(partido)}>
 
-                    <div className="p-3 shadow-sm border-0"
+                    <div className="p-3 shadow-sm  "
                          style={{
                            background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
                            borderRadius: '12px',
@@ -1213,7 +1213,7 @@ useEffect(() => {
               <button
                 key={inst}
                 onClick={() => setInstanciaVista(inst)}
-                className="btn d-flex align-items-center p-2 border-0 shadow-none"
+                className="btn d-flex align-items-center p-2   shadow-none"
                 style={{ 
                   opacity: instanciaVista === inst ? '1' : '0.5', 
                   transition: 'all 0.3s ease',

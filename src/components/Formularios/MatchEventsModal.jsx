@@ -151,7 +151,7 @@ const MatchEventsModal = ({
   return (
     <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.6)", zIndex: 1050 }}>
       <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content border-0 shadow-lg">
+        <div className="modal-content   shadow-lg">
           <div className="modal-header bg-dark text-white">
             <h5 className="modal-title text-uppercase" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
               Registro de Eventos: {instancia.replace("_", " ")}
@@ -244,7 +244,7 @@ const MatchEventsModal = ({
                       </td>
                       <td>{e.jugador ? `${e.jugador.nombre} ${e.jugador.apellido}` : 'Desconocido'}</td>
                       <td className="text-end">
-                        <button className="btn btn-sm btn-outline-danger border-0" onClick={() => handleDelete(e.id)}>✕</button>
+                        <button className="btn btn-sm btn-outline-danger  " onClick={() => handleDelete(e.id)}>✕</button>
                       </td>
                     </tr>
                   ))}

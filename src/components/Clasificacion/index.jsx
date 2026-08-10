@@ -81,11 +81,11 @@ const Clasificacion = () => {
                       datosGrupos.length === 1 ? "col-md-12" : "col-md-6"
                     } mt-4`}
                   >
-                    <div className="card border-0 shadow">
-                      <div className="card-header fondo-card TITULO border-0 text-capitalize">
+                    <div className="card   shadow">
+                      <div className="card-header fondo-card TITULO   text-capitalize">
                         {datosGrupo.grupo.nombre}  
                       </div>
-                      <div className="card table-responsive border-0 table-sm">
+                      <div className="card table-responsive   table-sm">
                         <table className="table-borderless">
                           <tbody>
                             <tr>

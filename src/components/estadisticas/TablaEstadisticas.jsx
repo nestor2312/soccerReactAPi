@@ -8,11 +8,11 @@ const TablaEstadisticas = ({ titulo, campo, jugadores }) => (
       <div className="container-fluid">
         <div className="row ">
           <div className="mt-3">
-            <div className="card border-0 shadow">
-              <div className="card-header fondo-card TITULO border-0">
+            <div className="card   shadow">
+              <div className="card-header fondo-card TITULO  ">
                 {titulo}
               </div>
-              <div className="card table-responsive border-0 table-sm">
+              <div className="card table-responsive   table-sm">
                 <table className="table-borderless">
                   <thead>
                     <tr>
