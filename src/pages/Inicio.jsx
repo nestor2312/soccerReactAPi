@@ -658,15 +658,17 @@ useEffect(() => {
           onClick={() => setVista('llaves')}
           className={`btn-flip2 flip2 mx-1 ${vista === 'llaves' ? 'active' : 'opacidad-baja'}`} 
      
-      style={vista === 'llaves' ? { borderBottom: '4px solid #00bf63' } : {}}
-        >
+style={vista === 'llaves' 
+  ? { borderBottom: '4px solid var(--accent-color)' } 
+  : {}
+}        >
           LLAVES
         </button>
         <button
           onClick={() => setVista('lista')}
            className={`btn-flip2 flip2 mx-1 ${vista === 'lista' ? 'active' : 'opacidad-baja'}`} 
      
-      style={vista === 'lista' ? { borderBottom: '4px solid #00bf63' } : {}}
+      style={vista === 'lista' ? { borderBottom: '4px solid var(--accent-color)' } : {}}
         >
           LISTA
         </button>
@@ -674,7 +676,7 @@ useEffect(() => {
         <button
   onClick={() => setVista('calendario')}
   className={`btn-flip2 flip2 mx-1 ${vista === 'calendario' ? 'active' : 'opacidad-baja'}`} 
-  style={vista === 'calendario' ? { borderBottom: '4px solid #00bf63' } : {}}
+  style={vista === 'calendario' ? {  borderBottom: '4px solid var(--accent-color)' } : {}}
 >
   CALENDARIO
 </button>
@@ -772,7 +774,7 @@ useEffect(() => {
 
                     <div className="p-3 shadow-sm  "
                          style={{
-                           background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
+                           background: "var(--cards-playoffs)",
                            borderRadius: '12px',
                            cursor: 'pointer'
                          }}>
@@ -999,7 +1001,7 @@ useEffect(() => {
                   <div key={p.id} className="col-12" onClick={() => handleOpenModal(p)}>
                     <div className="p-3 shadow-sm"
                       style={{
-                        background: 'linear-gradient(135deg, #00bf63cc 0%, #09537ecc 100%)',
+                        background: "var(--cards-playoffs)",
                         borderRadius: '12px',
                         cursor: 'pointer'
                       }}>
