@@ -245,19 +245,22 @@ const partidosAMostrar = vista === 'todos'
 </div>
 
 {vista === 'diario' && (
-  <div className="calendario-contenedor  container mt-4">
+  <div className="calendario-contenedor  container mt-4" 
+  >
     {/* 1. FILA DE BOTONES DE FECHAS */}
-    <div 
+    <div   
    ref={scrollRef} // <--- REFERENCIA AQUÍ
-  className="d-flex overflow-auto pb-3 mb-4 gap-2 scroller-fechas " 
-  style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth' }}>
+  className="d-flex overflow-auto pb-2 pt-2 mb-3 gap-2 scroller-fechas " 
+  style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth', }}>
     {Object.keys(calendario).length > 0 ? (
         Object.keys(calendario).sort().map((fecha) => {
           const esHoy = fecha === new Date().toISOString().split('T')[0];
           const fechaValida = fecha && fecha !== "null";
          
           return (
-       <button
+       <button  style={{ 
+      cursor: 'pointer', 
+    }}
   key={fecha}
   ref={(el) => {
     if (el && fecha === fechaSeleccionada && vista === 'diario') {
@@ -271,16 +274,19 @@ const partidosAMostrar = vista === 'todos'
   }}
   className={`btn-jornada ${fechaSeleccionada === fecha ? 'active' : ''}`}
   onClick={() => setFechaSeleccionada(fecha)}
+
 >
-              <div className="small text-uppercase" style={{ fontSize: '0.65rem', opacity: 0.8 }}>
+              <div className="small text-uppercase"  >
                 {esHoy ? "Hoy" : (fechaValida ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { weekday: 'short' }) : "---")}
               </div>
-              <div className="font-weight-bold">
+              <div className="font-weight-bold"
+             >
+
                 {fechaValida 
                   ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) 
                   : "Fecha por definir"}
               </div>
-            </button>
+            </button >
           );
         })
       ) : (
@@ -294,7 +300,7 @@ const partidosAMostrar = vista === 'todos'
         <>
         <div className="d-flex align-items-center  mb-3">
               <div style={{ width: '4px', height: '20px', background: '#00bf63cc', marginRight: '10px', borderRadius:'10px' }}></div>
-              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: '#000000' }}>
+              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: 'var(--text-primary)'}}>
                 {formatearFechaCabecera(fechaSeleccionada)} 
               </h4>
             </div>
@@ -308,8 +314,6 @@ const partidosAMostrar = vista === 'todos'
    className="card card-matches p-3 h-100"
     style={{ 
       cursor: 'pointer', 
-     
-   
     }}
   >
 
@@ -341,7 +345,7 @@ const partidosAMostrar = vista === 'todos'
           />
 
           <span 
-           className="team "
+           className="team text-truncate"
             title={partido.equipo_a?.nombre}
           >
             {partido.equipo_a?.nombre}
@@ -355,7 +359,7 @@ const partidosAMostrar = vista === 'todos'
         <span 
           className="badge mb-1"
           style={{
-            backgroundColor: '#00bf63',
+            background: 'var(--accent-color)',
             borderRadius: '50px',
             padding: '4px 14px',
             fontSize: '0.75rem',
@@ -379,7 +383,7 @@ const partidosAMostrar = vista === 'todos'
         <div className="d-flex align-items-center" style={{ gap: '6px', minWidth: 0 }}>
           
           <span 
-            className="team "
+            className="team text-truncate"
            
             title={partido.equipo_b?.nombre}
           >
@@ -414,7 +418,7 @@ const partidosAMostrar = vista === 'todos'
     {/* SEDE */}
     <div className="text-center border-top">
       <small 
-        className="text-muted" 
+        
         style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}
       >
         🏟️ {partido.sede || 'Cancha por definir'}
@@ -427,8 +431,8 @@ const partidosAMostrar = vista === 'todos'
           </div>
         </>
       ) : (
-        <div className="text-center py-5 bg-light rounded" style={{ border: '2px dashed #ddd' }}>
-          <p className="mb-0 text-muted">No hay partidos para esta fecha seleccionada.</p>
+        <div className="text-center py-5  rounded" style={{ fontSize: '0.65rem',background:"var(--card-bg)" , opacity: 1 }}>
+          <p className="mb-0 ">No hay partidos para esta fecha seleccionada.</p>
           <button className="btn btn-link btn-sm text-success" onClick={seleccionarFechaMasCercana}>
             Ver fecha más cercana
           </button>
