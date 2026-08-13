@@ -276,7 +276,7 @@ const partidosAMostrar = vista === 'todos'
   onClick={() => setFechaSeleccionada(fecha)}
 
 >
-              <div className="small text-uppercase"  >
+              <div className="small text-uppercase" style={{background:`var(--row-highlight)`}} >
                 {esHoy ? "Hoy" : (fechaValida ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { weekday: 'short' }) : "---")}
               </div>
               <div className="font-weight-bold"

@@ -145,12 +145,11 @@
 
 
 .card-matches:hover {
-    transform: translateY(-1px) scale(1.03); 
-   
- background: var(--hover-cards-border) !important;
-    border: 2px solid transparent;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
-  }
+  transform: translateY(-1px) scale(1.03);
+  background: var(--hover-cards-border) !important;
+  border: 2px solid transparent !important; /* 🔥 CLAVE */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
 .scoremodal{
     text-align: center;
     font-family: 'Roboto Condensed', sans-serif; 

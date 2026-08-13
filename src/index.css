@@ -22,7 +22,7 @@
 --cards-teams: #ffffff1d;
 --main-background: linear-gradient(180deg, #091217 0%, #091217 70%, #0d2619 100%);
  --hover-cards-border:linear-gradient(180deg, #0d2618 0%, #091217 100%) padding-box,
-    linear-gradient(180deg, #00ff9c 0%, #00FF66 100%) border-box !important;
+    linear-gradient(180deg, #00ff9c 0%, #49f58e 100%) border-box !important;
 --cards--start: linear-gradient(180deg, #091217 0%, #060b08 95%) padding-box,
             linear-gradient(180deg, #00FF66 0%, #0F3A22 100%) border-box !important;
 --cards-playoffs: 
@@ -34,7 +34,7 @@ linear-gradient(135deg, rgba(9, 18, 23, 1) 0%, rgba(15, 58, 34, 0.8) 100%);
 }
 
 
- [data-theme="dark"] {
+ [data-toolpad-color-scheme="dark"] {
 
 
   --bg-breaket: linear-gradient(180deg, #7272725b 0%, #6466685b 100%);
@@ -77,7 +77,7 @@ linear-gradient(135deg, rgba(9, 18, 23, 1) 0%, rgba(15, 58, 34, 0.8) 100%);
 --main-background:  linear-gradient(180deg, #00BCD4 0%, #0A1E3D 100%);
   /* Estado Hover (Opción A: Fondo claro sutil + Borde Neón Cyan) */
 --hover-cards-border: linear-gradient(180deg, #e0f7fa 0%, #a6caff 100%) padding-box,
-                      linear-gradient(180deg, #00BCD4 0%, #0288d1 100%) border-box !important;                        
+                      linear-gradient(180deg, #00BCD4 0%, #008ba3 100%) border-box !important;                        
      --text-gradient: linear-gradient(180deg, #5697c6 0%, #028df0 100%);
 --cards-playoffs: 
 linear-gradient(135deg, rgba(10, 30, 61, 0.95) 0%, rgba(0, 188, 212, 0.7) 100%);
@@ -155,7 +155,7 @@ linear-gradient(135deg, rgba(10, 30, 61, 0.95) 0%, rgba(0, 188, 212, 0.7) 100%);
   --text-title:#09537E;
   --text-title-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   --text-header-card: #ffffff;
-  --hover-cards-border:linear-gradient(180deg, #fff 0%, #fff 100%) padding-box,
+  --hover-cards-border:linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%) padding-box,
       linear-gradient(180deg, #00BF63 0%, #09537E 100%) border-box !important;
   --cards--start: linear-gradient(180deg, #00BF63 0%, #09537E 100%) padding-box,
                 linear-gradient(180deg, #007A3A 0%, #064062 100%) border-box !important; 
