@@ -732,6 +732,7 @@ input{
       padding: 2px;
   
   }
+  
 
   .jugador{
      width: 90px;
@@ -764,7 +765,7 @@ input{
 
   
   .esquema{
-     min-width: 126%;
+     min-width: 130%;
   }
 
   
@@ -809,14 +810,14 @@ input{
   
   }
   .conectores .conector .conector_simple{
-    width: 15px;
+    width: 12px;
     padding: 0 0px 0 0;
     border: 1px solid #000;
   }
  
     .torneo-dieciseisavos .conectores .conector .conector_doble {
        
-        width: 15px;
+        width: 13px;
         
     }
 
