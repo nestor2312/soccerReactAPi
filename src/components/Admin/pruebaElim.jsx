@@ -170,14 +170,14 @@ const torneoTipo = fasesActivas[0]?.id;
         <div className="jornada_contenedor campeon_columna">
           <div className="campeon_box">
             {campeon ? (
-              <div className="jugador win">
+              <div className="jugador win ">
                 <img 
                   src={`${Images}/${campeon?.archivo}`} 
                   alt="" 
                   className="logo" 
                   onError={handleImgError}
                 />
-                <span className="equipo">{abreviarNombre(campeon.nombre)}</span>
+                <span className="equipo ">{campeon.nombre}</span>
                 <span className="badge_campeon">🏆</span>
               </div>
             ) : (

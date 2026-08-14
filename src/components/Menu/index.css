@@ -50,9 +50,22 @@ margin-left: 10px;
   align-items: center;
   padding: 1rem;
 background: var(--card-bg-gradient);
-
+/* border-bottom: 1px  solid var(--card-border-color) !important; */
 
 }
+.navbar::after{
+      box-shadow: 0 0 8px var(--accent-glow), 0 0 16px var(--accent-glow);
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 90%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    opacity: 0.6;
+}
+
+
 .navbar-links a:last-child {
   margin-right: 23px;
 }
