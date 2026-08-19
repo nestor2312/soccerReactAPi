@@ -68,6 +68,9 @@ const seleccionarFechaMasCercana = () => {
 };
 
 
+
+
+
 useEffect(() => {
   const getPartidos = async () => {
     try {
@@ -222,7 +225,7 @@ const partidosAMostrar = vista === 'todos'
     
     <button 
       className={`btn-tab mx-1 ${vista === 'diario' ? 'active' : ''}`} 
-      onClick={() => { setVista('diario'); setCurrentPage(1); }}
+      onClick={() => { setVista('diario'); setJornadaSeleccionada(null); setCurrentPage(1); }}
     >
       Calendario
     </button>

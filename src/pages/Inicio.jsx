@@ -675,6 +675,7 @@ style={vista === 'llaves'
 
         <button
   onClick={() => setVista('calendario')}
+  
   className={`btn-flip2 flip2 mx-1 ${vista === 'calendario' ? 'active' : 'opacidad-baja'}`} 
   style={vista === 'calendario' ? {  borderBottom: '4px solid var(--accent-color)' } : {}}
 >
