@@ -12,7 +12,7 @@
   --bg-main: #01060b;
   --card-bg: #091217;
   --text-title:#ffffff;
-  --text-title-shadow: 2px 2px 4px #00ff66;
+ --text-title-shadow: 0 0 6px #00ff66;
   --card-border: #35c17244;
   --text-primary: #ffffff;
   --accent-color: #00ff66;
@@ -29,7 +29,7 @@
 linear-gradient(135deg, rgba(9, 18, 23, 1) 0%, rgba(15, 58, 34, 0.8) 100%);
 
   /* Variables para el efecto de resplandor y degradado */
-  --accent-glow: #00ff9c;
+ --accent-glow: #00cc52;
   --card-bg-gradient: linear-gradient(180deg, #091217 0%, #060b08 95%);
 }
 
