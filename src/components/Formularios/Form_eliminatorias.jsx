@@ -93,6 +93,8 @@ const openEventsModal = (partido, instancia = "normal") => {
   const [nombreFase, setNombreFase] = useState("General");
   const [eliminatoriasOctavos, setEliminatoriasOctavos] = useState([]);
 
+    const [tipoPartidoExtra, setTipoPartidoExtra] = useState("normal");
+
   const [eliminatoriasCuartos, setEliminatoriasCuartos] = useState([]);
   const [eliminatoriasSemis, setEliminatoriasSemis] = useState([]);
   const [eliminatoriasFinal, setEliminatoriasFinal] = useState([]);
@@ -116,90 +118,117 @@ const openEventsModal = (partido, instancia = "normal") => {
     setSelectedPartido(null); // Limpiar los datos del partido
   };
 
-  const fasesData = useMemo(() => {
-    // Juntamos todos los partidos de los estados
-    const todas = [
-      ...eliminatoriasOctavos,
-      ...eliminatoriasCuartos,
-      ...eliminatoriasSemis,
-      ...eliminatoriasFinal,
-      ...eliminatoriastercerPuesto,
-        ...eliminatoriasdieciseisavos,
-    ];
-    const fases = {};
 
-    todas.forEach((partido) => {
-      // Es vital que el backend envíe 'nombre_fase'
-      const nombre = partido.nombre_fase || "General";
 
-      if (!fases[nombre]) {
-        fases[nombre] = {
-          octavos: [],
-          cuartos: [],
-          semis: [],
-          final: [],
-          tercer_puesto: [],
-           dieciseisavos: [],
-        };
-      }
+// reemplaza el bloque const fasesData = useMemo(() => { ... }, [...]);
+const fasesData = useMemo(() => {
+  const todas = [
+    ...eliminatoriasOctavos,
+    ...eliminatoriasCuartos,
+    ...eliminatoriasSemis,
+    ...eliminatoriasFinal,
+    ...eliminatoriastercerPuesto,
+    ...eliminatoriasdieciseisavos,
+  ];
 
-      const num = parseInt(partido.numPartido, 10);
-      if (num === 1) fases[nombre].octavos.push(partido);
-      else if (num === 2) fases[nombre].cuartos.push(partido);
-      else if (num === 3) fases[nombre].semis.push(partido);
-      else if (num === 4) fases[nombre].final.push(partido);
-      else if (num === 5) fases[nombre].tercer_puesto.push(partido);
-        else if (num === 6) fases[nombre].dieciseisavos.push(partido);
-    });
+  const fases = {};
 
-    // Rellenar espacios vacíos por CADA fase individualmente
-    Object.keys(fases).forEach((nombre) => {
-        // Relleno para Octavos (8 partidos)
-       while (
-        fases[nombre].dieciseisavos.length < 16 &&
-        fases[nombre].dieciseisavos.length > 0
-      ) {
-        fases[nombre].dieciseisavos.push({});
-      }
-      // Relleno para Octavos (8 partidos)
-      while (
-        fases[nombre].octavos.length < 8 &&
-        fases[nombre].octavos.length > 0
-      ) {
-        fases[nombre].octavos.push({});
-      }
-      // Relleno para Cuartos (4 partidos)
-      while (
-        fases[nombre].cuartos.length < 4 &&
-        fases[nombre].cuartos.length > 0
-      ) {
-        fases[nombre].cuartos.push({});
-      }
-      // Relleno para Semis (2 partidos)
-      while (fases[nombre].semis.length < 2 && fases[nombre].semis.length > 0) {
-        fases[nombre].semis.push({});
-      }
-      while (fases[nombre].final.length < 1 && fases[nombre].final.length > 0) {
-        fases[nombre].final.push({});
-      }
-      while (
-        fases[nombre].tercer_puesto.length < 1 &&
-        fases[nombre].tercer_puesto.length > 0
-      ) {
-        fases[nombre].tercer_puesto.push({});
-      }
-    });
+  // límites por tipo (coincide con tu backend)
+  const limitesNormal = {
+    6: 16,
+    1: 8,
+    2: 4,
+    3: 2,
+    4: 1,
+    5: 1,
+  };
+  const limitesPlayIn = {
+    6: 8,
+    1: 4,
+    2: 2,
+    3: 1,
+    4: 0,
+    5: 0,
+  };
 
-    console.log("Fases detectadas:", Object.keys(fases));
-    return fases;
-  }, [
-    eliminatoriasOctavos,
-    eliminatoriasCuartos,
-    eliminatoriasSemis,
-    eliminatoriasFinal,
-    eliminatoriastercerPuesto,
-    eliminatoriasdieciseisavos,
-  ]);
+  // helpers
+  const getMax = (num, tipo) =>
+    tipo === "play_in" ? (limitesPlayIn[num] ?? 0) : (limitesNormal[num] ?? 0);
+
+  // agrupa partidos por nombre de fase y por ronda
+  todas.forEach((partido) => {
+    const nombre = partido.nombre_fase || "General";
+    const num = parseInt(partido.numPartido, 10);
+    const tipoExtra = partido.tipo_partido_extra || "normal";
+
+    if (!fases[nombre]) {
+      fases[nombre] = {
+        dieciseisavos: [],
+        octavos: [],
+        cuartos: [],
+        semis: [],
+        final: [],
+        tercer_puesto: [],
+      };
+    }
+
+    const destino =
+      num === 1 ? "octavos" :
+      num === 2 ? "cuartos" :
+      num === 3 ? "semis" :
+      num === 4 ? "final" :
+      num === 5 ? "tercer_puesto" :
+      num === 6 ? "dieciseisavos" :
+      null;
+
+    if (destino) {
+      // marcar cada partido con su tipo para uso posterior
+      partido._tipoExtra = tipoExtra;
+      fases[nombre][destino].push(partido);
+    }
+  });
+
+  // Para cada fase y cada ronda, respetar límites separados por tipo
+  Object.keys(fases).forEach((nombre) => {
+    const f = fases[nombre];
+
+    const procesarRonda = (arr, numRonda) => {
+      if (!arr || arr.length === 0) return [];
+
+      // separar play_in y normal (mantener orden original por si importa)
+      const playin = arr.filter((p) => p.tipo_partido_extra === "play_in");
+      const normal = arr.filter((p) => p.tipo_partido_extra !== "play_in");
+
+      const maxPlayin = getMax(numRonda, "play_in");
+      const maxNormal = getMax(numRonda, "normal");
+
+      // cortar cada grupo por su límite (no mezclar)
+      const cutPlayin = playin.slice(0, maxPlayin);
+      const cutNormal = normal.slice(0, maxNormal);
+
+      // Decide el orden visual: por defecto mostramos primero playin (arriba) y luego normal.
+      // Si quieres otro orden (normal primero) invierte la concatenación.
+      return [...cutPlayin, ...cutNormal];
+    };
+
+    f.dieciseisavos = procesarRonda(f.dieciseisavos, 6);
+    f.octavos = procesarRonda(f.octavos, 1);
+    f.cuartos = procesarRonda(f.cuartos, 2);
+    f.semis = procesarRonda(f.semis, 3);
+    f.final = procesarRonda(f.final, 4);
+    f.tercer_puesto = procesarRonda(f.tercer_puesto, 5);
+  });
+
+  return fases;
+}, [
+  eliminatoriasOctavos,
+  eliminatoriasCuartos,
+  eliminatoriasSemis,
+  eliminatoriasFinal,
+  eliminatoriastercerPuesto,
+  eliminatoriasdieciseisavos,
+]);
+
 
   const handleSubcategoriaChange = (e) => {
     setSelectedSubcategoria(e.target.value);
@@ -386,7 +415,7 @@ const openEventsModal = (partido, instancia = "normal") => {
        fecha: fecha,
         sede: sede,
          hora: hora,
-
+tipo_partido_extra: tipoPartidoExtra,
       tipo_eliminatoria: tipoEliminatoria,
       // Cambiamos null por "General" (o el nombre que prefieras para la fase única)
       nombre_fase: nombreFase.trim() === "" ? "General" : nombreFase,
@@ -687,7 +716,19 @@ const openEventsModal = (partido, instancia = "normal") => {
               </select>
             </div>
 
-            {/* Tipo de Eliminatoria */}
+            <div className="col-12 col-md-6 mb-3">
+  <label>Tipo de Partido</label>
+  <select
+    className="form-control"
+    value={tipoPartidoExtra}
+    onChange={(e) => setTipoPartidoExtra(e.target.value)}
+  >
+    <option value="normal">Normal</option>
+    <option value="play_in">Repechaje</option>
+  </select>
+</div>
+
+           {/* Tipo de Eliminatoria */}
             <div className="col-12 col-md-6 mb-3">
               <label htmlFor="tipo_eliminatoria" className="form-label">
                 Tipo de Eliminatoria

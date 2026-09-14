@@ -7,7 +7,32 @@
     min-width: 100%;
     justify-content: center;        
   }
+
+  .jornada_contenedor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* default */
   
+}
+
+/* Columna de partidos */
+.playin-col {
+  transform: translateY(-30px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Conectores con distribución de espacio */
+.playin-conector {
+  transform: translateY(-32px);
+ display: flex;
+   
+    justify-content: space-around;
+}
+
+
   /* Lineas */
   .conectores {
     display: flex;

@@ -390,6 +390,9 @@ input{
   margin-right: 2px;
 
 }
+.bg-playoff{
+  background:#09537E;
+}
 
 .scroll-container::-webkit-scrollbar-thumb {
   background-color: #09537E; 
