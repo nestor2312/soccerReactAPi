@@ -259,6 +259,7 @@ const EditMatchModal = ({ showModal, matchData, API_ENDPOINT, onSave, onClose })
       equipoA_id: equipoA_id ? Number(equipoA_id) : null,
       equipoB_id: equipoB_id ? Number(equipoB_id) : null,
       marcador1: Number(marcador1),
+      grupo_id: grupoId,
       marcador2: Number(marcador2),
       fecha,
       hora,

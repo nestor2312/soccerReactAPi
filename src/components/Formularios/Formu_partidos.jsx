@@ -449,6 +449,7 @@ const fetchPartidos = async () => {
     formData.append("equipoA_id", equipoLocalID);
     formData.append("equipoB_id", equipoVisitanteID);
     formData.append("fecha", fecha);
+    formData.append("grupo_id", grupoId);
     formData.append("hora", hora);
       formData.append("jornada", jornada);
        formData.append("sede", sede);
@@ -525,6 +526,7 @@ useEffect(() => {
       formData.append("equipoA_id", p.equipoA_id);
       formData.append("equipoB_id", p.equipoB_id);
       formData.append("jornada", p.jornada);
+        formData.append("grupo_id", grupoId);
       // fecha y hora se van vacíos como quieres
       
       await axios.post(endpoint, formData);
@@ -959,6 +961,7 @@ setShowPreviewModal(true);
     <table className="table table-striped">
           <thead className="thead-light">
             <tr>
+               <th className="text-center">Grupo</th>
                <th className="text-center">Jornada</th>
                 <th className="text-center">Sede</th>
               <th className="text-center">Fecha</th>
@@ -972,6 +975,9 @@ setShowPreviewModal(true);
           <tbody>
             {partidos.map((partido) => (
               <tr key={partido.id}>
+                 <td className="text-center">
+                  {partido.grupo.nombre}
+                </td>
                  <td className="text-center">
                   {partido.jornada}
                 </td>
