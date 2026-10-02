@@ -685,9 +685,9 @@ tipo_partido_extra: tipoPartidoExtra,
               >
                 {/* Cambia value="" por value="General" */}
                 <option value="General">General / Única</option>
-                <option value="Copa Oro">Copa Oro</option>
+                {/* <option value="Copa Oro">Copa Oro</option>
                 <option value="Copa Plata">Copa Plata</option>
-                <option value="Copa Bronce">Copa Bronce</option>
+                <option value="Copa Bronce">Copa Bronce</option> */}
               </select>
               <small className="text-muted">
                 Selecciona si el torneo tiene llaves simultáneas.
@@ -724,7 +724,7 @@ tipo_partido_extra: tipoPartidoExtra,
     onChange={(e) => setTipoPartidoExtra(e.target.value)}
   >
     <option value="normal">Normal</option>
-    <option value="play_in">Repechaje</option>
+    {/* <option value="play_in">Repechaje</option> */}
   </select>
 </div>
 

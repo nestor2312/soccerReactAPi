@@ -198,9 +198,9 @@ const [errors, setErrors] = useState({});
   >
    
     <option value="General">General / Única</option>
-                <option value="Copa Oro">Copa Oro</option>
+                {/* <option value="Copa Oro">Copa Oro</option>
                 <option value="Copa Plata">Copa Plata</option>
-                <option value="Copa Bronce">Copa Bronce</option>
+                <option value="Copa Bronce">Copa Bronce</option> */}
   </select>
 </div>
         </div>

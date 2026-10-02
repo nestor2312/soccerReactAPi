@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 
-const EditTeamModal = ({ team, onUpdate, grupos }) => {
+const EditTeamModal = ({ team, onUpdate }) => {
   const [nombre, setNombre] = useState("");
   const [archivo, setArchivo] = useState(null);
-  const [GrupoID, setGrupoID] = useState("");
+ 
   const [color_hover, setcolor_hover] = useState(null);
   const [errors, setErrors] = useState({}); // Estado para manejar errores
 
   useEffect(() => {
     if (team) {
       setNombre(team.nombre || "");
-      setGrupoID(team.grupo_id || "");
+     
       setArchivo(null);
       setcolor_hover(team.color_hover || "");
       setErrors({}); // Reiniciar errores al abrir el modal
@@ -28,11 +28,7 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
       isValid = false;
     }
 
-    // Validación del grupo
-    if (!GrupoID) {
-      newErrors.GrupoID = "Debes seleccionar un grupo.";
-      isValid = false;
-    }
+   
 
     // Validación del archivo (si se selecciona)
     if (archivo) {
@@ -57,7 +53,7 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
     onUpdate({
       id: team.id,
       nombre,
-      grupo_id: GrupoID,
+    
       archivo,
       color_hover
     });
@@ -101,27 +97,6 @@ const EditTeamModal = ({ team, onUpdate, grupos }) => {
                 {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
               </div>
 
-              {/* Selector de grupo */}
-              <div className="form-group mt-3">
-                <label htmlFor="editGrupo">Selecciona un grupo:</label>
-                <select
-                  id="editGrupo"
-                  className={`form-control ${errors.GrupoID ? "is-invalid" : ""}`}
-                  value={GrupoID}
-                  onChange={(e) => setGrupoID(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Selecciona un grupo
-                  </option>
-                  {grupos.map((grupo) => (
-                    <option key={grupo.id} value={grupo.id}>
-                     {grupo.nombre} - {grupo.subcategoria?.nombre} -{" "}
-          {grupo.subcategoria?.categoria?.torneo?.nombre}
-                    </option>
-                  ))}
-                </select>
-                {errors.GrupoID && <div className="invalid-feedback">{errors.GrupoID}</div>}
-              </div>
 
               {/* Input para el archivo */}
               <div className="form-group mt-3">
