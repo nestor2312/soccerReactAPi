@@ -68,6 +68,9 @@ const seleccionarFechaMasCercana = () => {
 };
 
 
+
+
+
 useEffect(() => {
   const getPartidos = async () => {
     try {
@@ -222,7 +225,7 @@ const partidosAMostrar = vista === 'todos'
     
     <button 
       className={`btn-tab mx-1 ${vista === 'diario' ? 'active' : ''}`} 
-      onClick={() => { setVista('diario'); setCurrentPage(1); }}
+      onClick={() => { setVista('diario'); setJornadaSeleccionada(null); setCurrentPage(1); }}
     >
       Calendario
     </button>
@@ -245,19 +248,22 @@ const partidosAMostrar = vista === 'todos'
 </div>
 
 {vista === 'diario' && (
-  <div className="calendario-contenedor  container mt-4">
+  <div className="calendario-contenedor  container mt-4" 
+  >
     {/* 1. FILA DE BOTONES DE FECHAS */}
-    <div 
+    <div   
    ref={scrollRef} // <--- REFERENCIA AQUÍ
-  className="d-flex overflow-auto pb-3 mb-4 gap-2 scroller-fechas " 
-  style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth' }}>
+  className="d-flex overflow-auto pb-2 pt-2 mb-3 gap-2 scroller-fechas " 
+  style={{ whiteSpace: 'nowrap', scrollBehavior: 'smooth', }}>
     {Object.keys(calendario).length > 0 ? (
         Object.keys(calendario).sort().map((fecha) => {
           const esHoy = fecha === new Date().toISOString().split('T')[0];
           const fechaValida = fecha && fecha !== "null";
          
           return (
-       <button
+       <button  style={{ 
+      cursor: 'pointer', 
+    }}
   key={fecha}
   ref={(el) => {
     if (el && fecha === fechaSeleccionada && vista === 'diario') {
@@ -271,16 +277,19 @@ const partidosAMostrar = vista === 'todos'
   }}
   className={`btn-jornada ${fechaSeleccionada === fecha ? 'active' : ''}`}
   onClick={() => setFechaSeleccionada(fecha)}
+
 >
-              <div className="small text-uppercase" style={{ fontSize: '0.65rem', opacity: 0.8 }}>
+              <div className="small text-uppercase" style={{background:`var(--row-highlight)`}} >
                 {esHoy ? "Hoy" : (fechaValida ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { weekday: 'short' }) : "---")}
               </div>
-              <div className="font-weight-bold">
+              <div className="font-weight-bold"
+             >
+
                 {fechaValida 
                   ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) 
                   : "Fecha por definir"}
               </div>
-            </button>
+            </button >
           );
         })
       ) : (
@@ -294,7 +303,7 @@ const partidosAMostrar = vista === 'todos'
         <>
         <div className="d-flex align-items-center  mb-3">
               <div style={{ width: '4px', height: '20px', background: '#00bf63cc', marginRight: '10px', borderRadius:'10px' }}></div>
-              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: '#000000' }}>
+              <h4 className="text-uppercase fw-bold m-0  " style={{ fontSize: '0.9rem', color: 'var(--text-primary)'}}>
                 {formatearFechaCabecera(fechaSeleccionada)} 
               </h4>
             </div>
@@ -308,8 +317,6 @@ const partidosAMostrar = vista === 'todos'
    className="card card-matches p-3 h-100"
     style={{ 
       cursor: 'pointer', 
-     
-   
     }}
   >
 
@@ -341,7 +348,7 @@ const partidosAMostrar = vista === 'todos'
           />
 
           <span 
-           className="team "
+           className="team text-truncate"
             title={partido.equipo_a?.nombre}
           >
             {partido.equipo_a?.nombre}
@@ -355,7 +362,7 @@ const partidosAMostrar = vista === 'todos'
         <span 
           className="badge mb-1"
           style={{
-            backgroundColor: '#00bf63',
+            background: 'var(--accent-color)',
             borderRadius: '50px',
             padding: '4px 14px',
             fontSize: '0.75rem',
@@ -379,7 +386,7 @@ const partidosAMostrar = vista === 'todos'
         <div className="d-flex align-items-center" style={{ gap: '6px', minWidth: 0 }}>
           
           <span 
-            className="team "
+            className="team text-truncate"
            
             title={partido.equipo_b?.nombre}
           >
@@ -414,7 +421,7 @@ const partidosAMostrar = vista === 'todos'
     {/* SEDE */}
     <div className="text-center border-top">
       <small 
-        className="text-muted" 
+        
         style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}
       >
         🏟️ {partido.sede || 'Cancha por definir'}
@@ -427,8 +434,8 @@ const partidosAMostrar = vista === 'todos'
           </div>
         </>
       ) : (
-        <div className="text-center py-5 bg-light rounded" style={{ border: '2px dashed #ddd' }}>
-          <p className="mb-0 text-muted">No hay partidos para esta fecha seleccionada.</p>
+        <div className="text-center py-5  rounded" style={{ fontSize: '0.65rem',background:"var(--card-bg)" , opacity: 1 }}>
+          <p className="mb-0 ">No hay partidos para esta fecha seleccionada.</p>
           <button className="btn btn-link btn-sm text-success" onClick={seleccionarFechaMasCercana}>
             Ver fecha más cercana
           </button>
@@ -463,11 +470,11 @@ const partidosAMostrar = vista === 'todos'
 
 {vista !== 'diario' && (
           <div className="col-sm-12 mt-4 hiden">
-            <div className="card border-0 shadow ">
-              <div className="card-header fondo-card TITULO border-0">
+            <div className="card   shadow ">
+              <div className="card-header fondo-card TITULO  ">
                 Partidos
               </div>
-              <div className="card table-responsive border-0 table-sm">
+              <div className="card table-responsive  border-0 table-sm">
                 <table className="table-borderless">
                   <thead className="mt-2 mb-2">
                     <tr>
@@ -554,7 +561,7 @@ const partidosAMostrar = vista === 'todos'
     >
       ← Anterior
     </button>
-    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+    <span className="color">{`Página ${currentPage} de ${lastPage}`}</span>
     <button
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === lastPage}
@@ -642,7 +649,7 @@ const partidosAMostrar = vista === 'todos'
     >
       ← Anterior
     </button>
-    <span>{`Página ${currentPage} de ${lastPage}`}</span>
+    <span className="color">{`Página ${currentPage} de ${lastPage}`}</span>
     <button
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === lastPage}
@@ -689,7 +696,7 @@ const partidosAMostrar = vista === 'todos'
                       </span>
                     </div>
                     <div className="col-sm-4 col-4 d-flex flex-wrap align-content-around justify-content-center text-center">
-                      <span className="scoremodal">
+                      <span className="scoremodal color">
                         {selectedPartido.marcador1 == null ||
                         selectedPartido.marcador2 == null ? (
                           <>
@@ -730,7 +737,7 @@ const partidosAMostrar = vista === 'todos'
                     </div>
                   </div>
                   <div className="text-center">
-                    <h1 className="fecha">{selectedPartido.fecha || 'Fecha por definir' }</h1>
+                    <h1 className="fecha ">{selectedPartido.fecha || 'Fecha por definir' }</h1>
                     <h4 className="hora">
                       {selectedPartido.hora?.slice(0, 5)}
                     </h4>
@@ -745,7 +752,7 @@ const partidosAMostrar = vista === 'todos'
     ) : (
       <div className="list-group list-group-flush">
         <div className="eventos-timeline pt-3">
-  <h6 className="text-center text-uppercase text-muted small mb-4">Detalles del partido</h6>
+  <h6 className="text-center text-uppercase  small mb-4 color ">Detalles del partido</h6>
 
   <div className="row g-0">
     {/* COLUMNA EQUIPO LOCAL (A) */}

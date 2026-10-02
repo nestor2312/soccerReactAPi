@@ -70,10 +70,10 @@ const Jugadores = () => {
               {/* Filtro */}
               <div className="mb-4 form-group">
                 <div className="col-md-3  col-12">
-                  <label htmlFor="equipoFiltro">Filtrar por equipo:</label>
+                  <label htmlFor="equipoFiltro" className="color">Filtrar por equipo:</label>
                   <select
                     id="equipoFiltro"
-                    className="form-select bg-light text-black border-0 shadow-sm"
+                    className="form-select text-black shadow-sm"
                     value={equipoSeleccionado}
                     onChange={(e) => {
                       setEquipoSeleccionado(e.target.value);
@@ -92,11 +92,11 @@ const Jugadores = () => {
               </div>
 
               {/* Tabla de jugadores */}
-              <div className="card border-0 shadow">
-                <div className="card-header fondo-card TITULO border-0">
+              <div className="card   shadow">
+                <div className="card-header fondo-card TITULO  ">
                   Jugadores
                 </div>
-                <div className="card table-responsive border-0 table-sm">
+                <div className="card table-responsive  border-0 table-sm">
                   <table className="table-borderless">
                     <thead>
                       <tr>
@@ -165,12 +165,12 @@ const Jugadores = () => {
                 {/* Filtro alternativa */}
                 <div className="row mb-4 form-group hiden2">
                   <div className="col-md-3">
-                    <label htmlFor="equipoFiltro" className="form-label">
+                    <label htmlFor="equipoFiltro" className="form-label color">
                       Filtrar por equipo:
                     </label>
                     <select
                       id="equipoFiltro"
-                      className="form-select bg-light text-black border-0 shadow-sm"
+                      className="form-select text-black shadow-sm"
                       value={equipoSeleccionado}
                       onChange={(e) => {
                         setEquipoSeleccionado(e.target.value);
@@ -238,7 +238,7 @@ const Jugadores = () => {
                   >
                     ← Anterior
                   </button>
-                  <span>{`Página ${currentPage} de ${lastPage}`}</span>
+                  <span className="color">{`Página ${currentPage} de ${lastPage}`}</span>
                   <button
                     onClick={() => setCurrentPage((p) => p + 1)}
                     disabled={currentPage === lastPage}

@@ -20,27 +20,25 @@
 }
 
 .btn-jornada-fecha {
-   width: 110px;
-      font-weight: bold;
-        text-align: center;
-     
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 700; 
-             /* background: 'linear-gradient(90deg, #1b5896 0%, #1a1d23 100%)',  */
-             /* borderLeft: '5px solid #00bf63' */
-border-left: 3px solid #00bf63;
-      background:linear-gradient(90deg, #1b5896 0%, #1a1d23 100%);
+    width: 125px;
+    text-align: center;
+    font-family: 'Days One', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    /* Eliminamos font-weight porque Days One ya es gruesa por defecto */
+    
+    border-left: 3px solid #00bf63;
+    background: linear-gradient(90deg, #1b5896 0%, #1a1d23 100%);
     color: #ffffff; 
     border-radius: 6px;
-     box-shadow: 0px 1px 6px #25ff96ad;
- 
+    box-shadow: 0px 1px 6px #25ff96ad;
+    
 }
 
 
 .btn-tab.active {
      border-radius: 8px;
-  color: #00bf63; /* Tu verde Fubol */
+  color: var(--accent-glow); /* Tu verde Fubol */
 }
 
 /* La línea de abajo que se anima */
@@ -51,7 +49,7 @@ border-left: 3px solid #00bf63;
   left: 20%;
   right: 20%;
   height: 4px;
-  background-color: #00BF63;
+  background-color: var(--accent-glow);
   border-radius: 10px 10px 0 0;
 }
 
@@ -85,8 +83,11 @@ border-left: 3px solid #00bf63;
  
     margin-right: -5px;
 }
-.card{
-background: #ffffff!important;
+.card {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  color: var(--text-primary) !important; /* Para que el texto dentro de la card también cambie */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 
@@ -110,8 +111,7 @@ background: #ffffff!important;
   /* Estilos base para el modal */
   dialog {
     border-radius: 12px;
-    background: linear-gradient(180deg, #ffff 0%, #ffff 100%) padding-box,
-                linear-gradient(180deg, #00BF63 10%, #067089 90%) border-box !important;
+    background: var(--hover-cards-border);
     border: 2px solid transparent;
     opacity: 0;
     transform: translateY(-15px) scale(0.95);
@@ -145,14 +145,11 @@ background: #ffffff!important;
 
 
 .card-matches:hover {
-    transform: translateY(-1px) scale(1.03); 
-   
-    background: 
-      linear-gradient(180deg, #fff 0%, #fff 100%) padding-box,
-      linear-gradient(180deg, #00BF63 0%, #09537E 100%) border-box !important;
-    border: 2px solid transparent;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
-  }
+  transform: translateY(-1px) scale(1.03);
+  background: var(--hover-cards-border) !important;
+  border: 2px solid transparent !important; /* 🔥 CLAVE */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
 .scoremodal{
     text-align: center;
     font-family: 'Roboto Condensed', sans-serif; 
@@ -182,7 +179,7 @@ background: #ffffff!important;
 
 .fecha {
     text-align: center;
-    color: #000;
+    color: var(--text-primary);
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 13px;
     font-style: normal;
@@ -199,7 +196,7 @@ background: #ffffff!important;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    background: linear-gradient(180deg, #00bf63cc 0%, #09537ecc 100%);
+    background: var(--text-gradient);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

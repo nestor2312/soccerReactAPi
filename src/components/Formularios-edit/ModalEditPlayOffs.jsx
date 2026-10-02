@@ -8,6 +8,10 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
   const [equipoVisitante, setEquipoVisitante] = useState(PlayOffsData?.equipo_b || "");
   const [numPartido, setNumPartido] = useState(PlayOffsData?.numPartido || 0);
   const [nombreFase, setnombreFase] = useState(PlayOffsData?.nombreFase || 0);
+    const [fecha, setFecha ] = useState(PlayOffsData?.fecha || "");
+  const [hora, setHora] = useState(PlayOffsData?.hora || "");
+  const [sede, setsede] = useState(PlayOffsData?.sede || "");
+const [errors, setErrors] = useState({});
   const [tipo_eliminatoria, setTipoEliminatoria] = useState(PlayOffsData?.tipo_eliminatoria || "solo_ida");
   const [marcadores, setMarcadores] = useState(PlayOffsData?.marcadores || {
     marcador1_ida: 0,
@@ -26,6 +30,9 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
     if (PlayOffsData) {
       setSubcategoriaId(PlayOffsData.subcategoria_id || "");
       setEquipoLocal(PlayOffsData.equipo_a_id || "");
+       setHora(PlayOffsData.hora || "");
+        setsede(PlayOffsData.sede || "");
+         setFecha(PlayOffsData.fecha || "");
       setEquipoVisitante(PlayOffsData.equipo_b_id || "");
       setNumPartido(PlayOffsData.numPartido || 0);
         setnombreFase(PlayOffsData.nombreFase || 0);
@@ -85,6 +92,9 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
       subcategoria_id,
       numPartido,
        nombreFase,
+       sede,
+       fecha,
+       hora,
       tipo_eliminatoria,
       ...marcadores,
       id: PlayOffsData?.id,
@@ -107,6 +117,9 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
         equipoLocal: setEquipoLocal,
         equipoVisitante: setEquipoVisitante,
         numPartido: setNumPartido,
+        sede:setsede,
+        hora:setHora,
+        fecha:setFecha,
         tipoEliminatoria: setTipoEliminatoria,
       };
       handlers[name](value);
@@ -244,6 +257,47 @@ const EditPlayOffsModal = ({ showModal, PlayOffsData, API_ENDPOINT, onSave, onCl
             </select>
           </div>
         </div>
+
+        {/* Fecha y Hora */}
+                  <div className="row">
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="fecha">Fecha</label>
+                      <input
+                        id="fecha"
+                        name="fecha"
+                        type="date"
+                        className="form-control"
+                        onChange={(e) => setFecha(e.target.value)}
+                        value={fecha}
+                      />
+                      {errors.fecha && <small className="text-danger">{errors.fecha}</small>}
+                    </div>
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="hora">Hora</label>
+                      <input
+                        id="hora"
+                        name="hora"
+                        type="time"
+                        className="form-control"
+                        onChange={(e) => setHora(e.target.value)}
+                        value={hora}
+                      />
+                      {errors.hora && <small className="text-danger">{errors.hora}</small>}
+                    </div>
+
+                    <div className="col-6 col-md-3 mb-3">
+                      <label htmlFor="sede">Sede</label>
+                      <input
+                        id="sede"
+                        name="sede"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setsede(e.target.value)}
+                        value={sede}
+                      />
+                      {errors.sede && <small className="text-danger">{errors.sede}</small>}
+                    </div>
+                  </div>
 
         {/* Marcadores */}
         {mostrarCampo("ida") && (

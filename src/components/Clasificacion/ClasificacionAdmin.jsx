@@ -140,15 +140,15 @@ useEffect(() => {
           <div className="row">
             {datosGrupos.map((datosGrupo) => (
               <div key={datosGrupo.grupo.id} className="col-12 col-sm-12 col-md-6 mt-4">
-                <div className="card border-0 shadow">
-                  <div className="card-header fondo-card-admin TITULO-admin border-0">
+                <div className="card   shadow">
+                  <div className="card-header fondo-card-admin TITULO-admin  ">
                     {datosGrupo.grupo.nombre} - {datosGrupo.grupo.subcategoria?.nombre ?? 'Sin subcategoría'} - 
                     <span className="text-muted"> 
                        {datosGrupo.grupo.subcategoria?.categoria?.nombre ?? 'Sin categoría'} - {datosGrupo.grupo.subcategoria?.categoria?.torneo?.nombre ?? 'Sin torneo'}
                     </span>
                   </div>
 
-                  <div className="card table-responsive border-0 table-sm">
+                  <div className="card table-responsive   table-sm">
                     <table className="table-borderless">
                       <tbody>
                         <tr className="py-2">
@@ -205,7 +205,7 @@ useEffect(() => {
 
           <div className="pagination mb-4">
             <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>← Anterior</button>
-            <span>{`Página ${currentPage} de ${lastPage}`}</span>
+            <span >{`Página ${currentPage} de ${lastPage}`}</span>
             <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === lastPage}>Siguiente →</button>
           </div>
         </section>

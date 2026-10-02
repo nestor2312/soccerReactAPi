@@ -43,14 +43,7 @@ const Register = () => {
         }
     };
 
-    useEffect(() => {
-        // Cambiar el color de fondo del body cuando se monta el componente
-        document.body.style.background = "linear-gradient(180deg, #152039 0%, rgba(0, 191, 99, 0.80) 100%)"; 
-        // Restaurar el color de fondo original cuando el componente se desmonte
-        return () => {
-          document.body.style.backgroundColor = ""; // Restablece el fondo original
-        };
-      }, []);
+
 
     return (
         <div>
