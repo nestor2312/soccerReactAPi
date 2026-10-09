@@ -959,6 +959,7 @@ setShowPreviewModal(true);
     <table className="table table-striped">
           <thead className="thead-light">
             <tr>
+               <th className="text-center">Grupo</th>
                <th className="text-center">Jornada</th>
                 <th className="text-center">Sede</th>
               <th className="text-center">Fecha</th>
@@ -972,7 +973,13 @@ setShowPreviewModal(true);
           <tbody>
             {partidos.map((partido) => (
               <tr key={partido.id}>
+               
+                   <td className="text-center">
+                  
+                 {partido.equipo_a?.grupo?.nombre}
+                </td>
                  <td className="text-center">
+                  
                   {partido.jornada}
                 </td>
                  <td className="text-center">

@@ -319,12 +319,16 @@ const partidosAMostrar = vista === 'todos'
       cursor: 'pointer', 
     }}
   >
-
+<div className="col-12 text-center mb-2">
+    <span className="grupo-partido">
+      {partido.equipo_a?.grupo?.nombre || 'Sin grupo'}
+    </span>
+  </div>
     <div className="d-flex justify-content-between align-items-center">
 
       {/* LOCAL */}
       <div className="d-flex align-items-center" style={{ width: '30%', gap: '8px', minWidth: 0 }}>
-        
+       
         {/* Línea izquierda */}
         <div 
           style={{ 
@@ -369,6 +373,7 @@ const partidosAMostrar = vista === 'todos'
             fontWeight: '600'
           }}
         >
+          
           {partido.hora?.slice(0, 5) || 'VS'}
         </span>
 
@@ -477,7 +482,9 @@ const partidosAMostrar = vista === 'todos'
               <div className="card table-responsive  border-0 table-sm">
                 <table className="table-borderless">
                   <thead className="mt-2 mb-2">
+                    
                     <tr>
+                      <th></th>
                       <th></th>
                       <th className="titulo2 text-left">Local</th>
                       <th></th>
@@ -491,6 +498,9 @@ const partidosAMostrar = vista === 'todos'
                         key={partido.id}
                         onClick={() => handleOpenModal(partido)}
                       >
+                        <td><span className="grupo-partido">
+      {partido.equipo_a?.grupo?.nombre || 'Sin grupo'}
+    </span></td>
                         <td width="10%">
                           <img
                             src={`${Images}/${partido.equipo_a?.archivo}`}
@@ -514,6 +524,7 @@ const partidosAMostrar = vista === 'todos'
                               <span className="fecha">{partido.fecha || 'VS'}</span>
                               <span className="hora">
                                 {partido.hora?.slice(0, 5)}
+                                
                               </span>
                             </div>
                           ) : (
@@ -585,8 +596,13 @@ const partidosAMostrar = vista === 'todos'
                   >
                     <div className="card card-matches d-flex justify-content-center align-items-center">
                       <div className="card-body d-flex justify-content-center align-items-center">
-                        <div className="row">
-                          <div className="col-4 d-flex justify-content-start align-items-center">
+                        <div className="row w-100 align-items-center">
+                   <div className="col-12 text-center mb-2">
+    <span className="grupo-partido">
+      {partido.equipo_a?.grupo?.nombre || 'Sin grupo'}
+    </span>
+  </div>
+                          <div className="col-4 d-flex justify-content-start align-items-center gap-2">
                             <img
                               src={`${Images}/${partido.equipo_a?.archivo}`}
                               className="logo2 TeamLocal"
@@ -599,6 +615,7 @@ const partidosAMostrar = vista === 'todos'
                             />
                             <span className="team mx-1">
                               {partido.equipo_a?.nombre}
+                            
                             </span>
                           </div>
                           <div className="col-4 d-flex flex-wrap align-content-around justify-content-center">
@@ -618,7 +635,7 @@ const partidosAMostrar = vista === 'todos'
                               )}
                             </span>
                           </div>
-                          <div className="col-4 d-flex justify-content-end align-items-center">
+                          <div className="col-4 d-flex justify-content-end align-items-center gap-2">
                             <span className="team mx-1">
                               {partido.equipo_b?.nombre}
                             </span>

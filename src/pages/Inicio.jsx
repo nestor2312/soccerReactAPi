@@ -9,7 +9,7 @@ import ErrorLogo from "../assets/Vector.svg";
 import { API_ENDPOINT, IMAGES_URL } from "../ConfigAPI";
 import ErrorCarga from "../components/Error/Error";
 import { Link, useParams } from "react-router-dom";
-
+import OneSignal from "react-onesignal";
 import  PruebaElim from "./../components/Admin/pruebaElim"
 const endpoint = `${API_ENDPOINT}`;
 
@@ -33,7 +33,8 @@ const Inicio = () => {
     [],
   );
 
-
+// Push Notifications Banner
+  const [visible, setVisible] = useState(false);
 
 
 
@@ -340,11 +341,63 @@ useEffect(() => {
     return brightness < 128 ? "#ffffff" : "#000000";
   }
 
+
+  
+
+
   useEffect(() => {
     document.title = "Inicio";
   }, []);
+
+
+
+
+useEffect(() => {
+    const yaDecidio = localStorage.getItem("fubol_notificaciones_respondido");
+    const yaSuscrito = OneSignal.User?.PushSubscription?.optedIn ?? false;
+
+    if (!yaDecidio && !yaSuscrito) {
+      setVisible(true);
+    }
+  }, []);
+
+  const handleActivar = async () => {
+    try {
+      if (Notification.permission !== "granted") {
+        await OneSignal.Notifications.requestPermission();
+      }
+      await OneSignal.User.PushSubscription.optIn();
+    } catch (error) {
+      console.error("ERROR:", error);
+    } finally {
+      ocultarParaSiempre();
+    }
+  };
+
+  const handleDescartar = () => {
+    ocultarParaSiempre();
+  };
+
+  const ocultarParaSiempre = () => {
+    localStorage.setItem("fubol_notificaciones_respondido", "true");
+    setVisible(false);
+  };
+
   return (
     <div className="layout">
+  {visible && (
+        <div className="fubol-push-banner">
+          <span>🔔 ¿Quieres recibir alertas de partidos y calendarios?</span>
+          <div className="fubol-push-botones">
+            <button className="btn-activar" onClick={handleActivar}>
+              Activar
+            </button>
+            <button className="btn-descartar" onClick={handleDescartar}>
+              No, gracias
+            </button>
+          </div>
+        </div>
+      )}
       <Menu />
       {isLoading ? (
         <div className="loading-container">

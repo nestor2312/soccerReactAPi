@@ -82,6 +82,7 @@
 // export default App;
 
 import { BrowserRouter, Routes, Route, useLocation  } from "react-router-dom";
+import OneSignal from "react-onesignal";
 
 import Login from "./components/Login/Login";
 import Inicio from "./pages/Inicio";
@@ -128,6 +129,18 @@ useEffect(() => {
   }
 }, []);
 
+// useEffect(() => {
+//   window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+//   window.OneSignalDeferred.push(async function(OneSignal) {
+//     await OneSignal.init({
+//       appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+//       allowLocalhostAsSecureOrigin: true,
+//     });
+//   });
+
+// }, []);
+// console.log(import.meta.env.VITE_ONESIGNAL_APP_ID);
 useEffect(() => {
   document.documentElement.setAttribute("data-theme", theme);
 }, [theme]);
@@ -152,6 +165,24 @@ useEffect(() => {
       });
     }
   }, [location]);
+
+
+useEffect(() => {
+  const initOneSignal = async () => {
+    await OneSignal.init({
+      appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+      allowLocalhostAsSecureOrigin: true,
+    });
+
+    console.log("OneSignal inicializado correctamente");
+
+    const permission = await OneSignal.Notifications.permission;
+
+    console.log("Permiso de notificaciones:", permission);
+  };
+
+  initOneSignal();
+}, []);
 
  return (
   <div >
