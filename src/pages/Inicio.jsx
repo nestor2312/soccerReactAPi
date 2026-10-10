@@ -9,7 +9,7 @@ import ErrorLogo from "../assets/Vector.svg";
 import { API_ENDPOINT, IMAGES_URL } from "../ConfigAPI";
 import ErrorCarga from "../components/Error/Error";
 import { Link, useParams } from "react-router-dom";
-import OneSignal from "react-onesignal";
+// import OneSignal from "react-onesignal";
 import  PruebaElim from "./../components/Admin/pruebaElim"
 const endpoint = `${API_ENDPOINT}`;
 
@@ -34,7 +34,7 @@ const Inicio = () => {
   );
 
 // Push Notifications Banner
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
 
 
 
@@ -385,7 +385,7 @@ useEffect(() => {
 
   return (
     <div className="layout">
-  {visible && (
+  {/* {visible && (
         <div className="fubol-push-banner">
           <span>🔔 ¿Quieres recibir alertas de partidos y calendarios?</span>
           <div className="fubol-push-botones">
@@ -397,7 +397,7 @@ useEffect(() => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
       <Menu />
       {isLoading ? (
         <div className="loading-container">
