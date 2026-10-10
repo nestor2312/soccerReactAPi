@@ -352,36 +352,36 @@ useEffect(() => {
 
 
 
-useEffect(() => {
-    const yaDecidio = localStorage.getItem("fubol_notificaciones_respondido");
-    const yaSuscrito = OneSignal.User?.PushSubscription?.optedIn ?? false;
+// useEffect(() => {
+//     const yaDecidio = localStorage.getItem("fubol_notificaciones_respondido");
+//     const yaSuscrito = OneSignal.User?.PushSubscription?.optedIn ?? false;
 
-    if (!yaDecidio && !yaSuscrito) {
-      setVisible(true);
-    }
-  }, []);
+//     if (!yaDecidio && !yaSuscrito) {
+//       setVisible(true);
+//     }
+//   }, []);
 
-  const handleActivar = async () => {
-    try {
-      if (Notification.permission !== "granted") {
-        await OneSignal.Notifications.requestPermission();
-      }
-      await OneSignal.User.PushSubscription.optIn();
-    } catch (error) {
-      console.error("ERROR:", error);
-    } finally {
-      ocultarParaSiempre();
-    }
-  };
+  // const handleActivar = async () => {
+  //   try {
+  //     if (Notification.permission !== "granted") {
+  //       await OneSignal.Notifications.requestPermission();
+  //     }
+  //     await OneSignal.User.PushSubscription.optIn();
+  //   } catch (error) {
+  //     console.error("ERROR:", error);
+  //   } finally {
+  //     ocultarParaSiempre();
+  //   }
+  // };
 
-  const handleDescartar = () => {
-    ocultarParaSiempre();
-  };
+  // const handleDescartar = () => {
+  //   ocultarParaSiempre();
+  // };
 
-  const ocultarParaSiempre = () => {
-    localStorage.setItem("fubol_notificaciones_respondido", "true");
-    setVisible(false);
-  };
+  // const ocultarParaSiempre = () => {
+  //   localStorage.setItem("fubol_notificaciones_respondido", "true");
+  //   setVisible(false);
+  // };
 
   return (
     <div className="layout">
