@@ -19,7 +19,8 @@ const FormTeams = () => {
   const [colorHover, setColorHover] = useState("");
   const [archivo, setArchivo] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-
+const [paginaModal, setPaginaModal] = useState(1);
+const [ultimaPaginaModal, setUltimaPaginaModal] = useState(1);
   // Estados de datos
   const [grupos, setGrupos] = useState([]);
   const [teams, setTeams] = useState([]);
@@ -210,24 +211,64 @@ const FormTeams = () => {
   };
 
   // Abrir Modal y Cargar TODOS los equipos disponibles sin paginar
-  const abrirModalAsignacion = async (grupo) => {
-    setGrupoAAsignar(grupo);
-    setBusquedaEquipo("");
-    const idsActuales = grupo.equipos ? grupo.equipos.map((eq) => eq.id) : [];
-    setSelectedEquipoIds(idsActuales);
-    setLoadingDisponibles(true);
+const fetchEquiposModal = async (pagina = 1) => {
+  setLoadingDisponibles(true);
 
-    try {
-      // Nota: Si tu backend requiere un flag para traer todos sin paginación, agrégalo aquí (ej: ?all=true)
-      const res = await axios.get(`${API_ENDPOINT}equipos?all=true`);
-      const listaEquipos = Array.isArray(res.data) ? res.data : (res.data.data || []);
-      setEquiposDisponibles(listaEquipos);
-    } catch (err) {
-      setAlerta({ mensaje: "Error al obtener lista de equipos.", tipo: "danger" });
-    } finally {
-      setLoadingDisponibles(false);
-    }
-  };
+  try {
+    const response = await axios.get(
+      `${infoEndpoint}?page=${pagina}`
+    );
+
+    setEquiposDisponibles(response.data.data);
+    setPaginaModal(response.data.current_page);
+    setUltimaPaginaModal(response.data.last_page);
+  } catch (err) {
+    console.error("Error al cargar equipos del modal:", err);
+
+    setAlerta({
+      mensaje: "Error al cargar los equipos.",
+      tipo: "danger",
+    });
+  } finally {
+    setLoadingDisponibles(false);
+  }
+};
+
+
+const abrirModalAsignacion = async (grupo) => {
+  setGrupoAAsignar(grupo);
+  setBusquedaEquipo("");
+  setPaginaModal(1);
+
+  const idsActuales = grupo.equipos
+    ? grupo.equipos.map((eq) => eq.id)
+    : [];
+
+  setSelectedEquipoIds(idsActuales);
+  setLoadingDisponibles(true);
+
+  try {
+    const res = await axios.get(
+      `${API_ENDPOINT}equipos?page=1`
+    );
+
+    const listaEquipos = Array.isArray(res.data)
+      ? res.data
+      : (res.data.data || []);
+
+    setEquiposDisponibles(listaEquipos);
+    setUltimaPaginaModal(res.data.last_page || 1);
+  } catch (err) {
+    console.error("Error al cargar equipos:", err);
+
+    setAlerta({
+      mensaje: "Error al obtener lista de equipos.",
+      tipo: "danger",
+    });
+  } finally {
+    setLoadingDisponibles(false);
+  }
+};
 
   // Alternar selección (Agregar o Quitar ID)
   const handleToggleEquipo = (id) => {
@@ -657,9 +698,36 @@ const FormTeams = () => {
                               {eq.nombre}
                             </span>
                           </div>
+                          
                         </label>
+
                       );
                     })}
+                    <div className="d-flex justify-content-between align-items-center mt-3">
+  <button
+    type="button"
+    className="btn btn-outline-primary btn-sm"
+    disabled={paginaModal <= 1 || loadingDisponibles}
+    onClick={() => fetchEquiposModal(paginaModal - 1)}
+  >
+    ← Anterior
+  </button>
+
+  <span className="small text-muted">
+    Página {paginaModal} de {ultimaPaginaModal}
+  </span>
+
+  <button
+    type="button"
+    className="btn btn-outline-primary btn-sm"
+    disabled={
+      paginaModal >= ultimaPaginaModal || loadingDisponibles
+    }
+    onClick={() => fetchEquiposModal(paginaModal + 1)}
+  >
+    Siguiente →
+  </button>
+</div>
                     {equiposFiltrados.length === 0 && (
                       <div className="p-2 text-center text-muted small">No se encontraron equipos.</div>
                     )}
@@ -667,6 +735,7 @@ const FormTeams = () => {
                 </div>
               )}
             </div>
+            
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cancelar
