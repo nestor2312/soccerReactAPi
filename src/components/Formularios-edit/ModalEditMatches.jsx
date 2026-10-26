@@ -214,28 +214,51 @@ const handleGrupoChange = async (id) => {
 
 
 
-  // -----------------------
-  // Guardar
-  // -----------------------
-  const handleSave = () => {
-    if (!validateForm()) return;
+const handleSave = async () => {
+  if (!validateForm()) return;
 
-    const updatedPartido = {
-      id: matchData?.id,
-      equipoA_id: equipoA_id ? Number(equipoA_id) : null,
-      equipoB_id: equipoB_id ? Number(equipoB_id) : null,
-      marcador1: marcador1 ?? 0,
-      marcador2: marcador2 ?? 0,
-      fecha,
-      hora,
-      jornada,
-      sede,
-    
-    };
+  const fechaOriginal = (matchData?.fecha || "").slice(0, 10);
+  const fechaNueva = (fecha || "").slice(0, 10);
 
-    onSave(updatedPartido);
-    onClose();
+  const horaOriginal = (matchData?.hora || "").slice(0, 5);
+  const horaNueva = (hora || "").slice(0, 5);
+
+  const sedeOriginal = (matchData?.sede || "").trim();
+  const sedeNueva = (sede || "").trim();
+
+  const cambios = {
+    fecha: fechaNueva !== fechaOriginal,
+    hora: horaNueva !== horaOriginal,
+    sede: sedeNueva !== sedeOriginal,
   };
+
+  const huboCambios =
+    cambios.fecha || cambios.hora || cambios.sede;
+
+  const updatedPartido = {
+    id: matchData?.id,
+    equipoA_id: equipoA_id ? Number(equipoA_id) : null,
+    equipoB_id: equipoB_id ? Number(equipoB_id) : null,
+    marcador1: marcador1 ?? 0,
+    marcador2: marcador2 ?? 0,
+    fecha,
+    hora,
+    jornada,
+    sede,
+  };
+
+  const guardadoCorrecto = await onSave(
+    updatedPartido,
+    {
+      ...cambios,
+      huboCambios,
+    }
+  );
+
+  if (guardadoCorrecto !== false) {
+    onClose();
+  }
+};
 
 
   if (!showModal) return null;

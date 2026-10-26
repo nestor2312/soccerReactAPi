@@ -106,11 +106,11 @@ import JugadorShowTeam from "./components/Jugadores/JugadoresShowTeam";
 import JugadoresEquipo from "./components/Jugadores/JugadoresEquipo";
 import NotFound from "./pages/NotFound";
 import Landing from "./pages/Landing";
-
+import OneSignal from "react-onesignal";
 
 const RoutesWithAnalytics = ({ setIsAuthenticated }) => {
   const location = useLocation();
-
+let oneSignalInicializando = false;
   const [theme, setTheme] = useState("dark");
 
 const themes = ["oscuro", "azul", "defecto"];
@@ -152,6 +152,39 @@ useEffect(() => {
       });
     }
   }, [location]);
+
+useEffect(() => {
+  const iniciarOneSignal = async () => {
+    if (oneSignalInicializando) return;
+
+    oneSignalInicializando = true;
+
+    try {
+      await OneSignal.init({
+        appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+        allowLocalhostAsSecureOrigin: true,
+      });
+
+      console.log("OneSignal inicializado correctamente");
+      console.log(
+        "Permiso OneSignal:",
+        OneSignal.Notifications.permission
+      );
+      console.log(
+        "¿Está suscrito?:",
+        await OneSignal.User.PushSubscription.optedIn
+      );
+      console.log(
+        "ID de suscripción:",
+        OneSignal.User.PushSubscription.id
+      );
+    } catch (error) {
+      console.error("Error al iniciar OneSignal:", error);
+    }
+  };
+
+  iniciarOneSignal();
+}, []);
 
  return (
   <div >

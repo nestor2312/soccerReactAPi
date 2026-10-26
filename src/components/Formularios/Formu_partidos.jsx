@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../ConfigAPI";
@@ -78,6 +79,9 @@ const generarRoundRobin = (listaEquipos) => {
           equipoB_id: visitante.id,
           nombreA: local.nombre,
           nombreB: visitante.nombre,
+          fecha: "", // 👈 Nuevo: vacío por defecto
+          hora: "",  // 👈 Nuevo: vacío por defecto
+          sede: "",
         });
       }
     }
@@ -277,32 +281,66 @@ const esPartidoDuplicado = (fixture, indexActual, equipoA, equipoB, jornadaActua
   });
 };
 
-  const savePartido = async (updatedPartido) => {
+
+
+const savePartido = async (updatedPartido, cambios = {}) => {
+  // Primero guardamos el partido
+  try {
+    await axios.put(
+      `${API_ENDPOINT}partido/${updatedPartido.id}`,
+      updatedPartido
+    );
+  } catch (error) {
+    console.error("Error al actualizar el partido:", error);
+
+    setAlerta({
+      mensaje: "¡Error al actualizar el partido!",
+      tipo: "danger",
+    });
+
+    setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 4000);
+
+    return false;
+  }
+
+  fetchPartidos();
+
+  setAlerta({
+    mensaje: "¡Partido actualizado correctamente!",
+    tipo: "success",
+  });
+
+  setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 2000);
+
+  // Una sola petición de notificación
+  if (cambios.huboCambios) {
     try {
-      console.log("Datos enviados al backend:", updatedPartido);
-      // Actualizar partido en el backend
-      await axios.put(
-        `${API_ENDPOINT}partido/${updatedPartido.id}`,
-        updatedPartido
+      const respuesta = await axios.post(
+        `${API_ENDPOINT}onesignal/cambiopartido`,
+        {
+          partido_id: updatedPartido.id,
+          cambio_fecha: cambios.fecha,
+          cambio_hora: cambios.hora,
+          cambio_sede: cambios.sede,
+          fecha: updatedPartido.fecha,
+          hora: updatedPartido.hora,
+          sede: updatedPartido.sede,
+        }
       );
 
-      fetchPartidos();
-      // Mostrar alerta de éxito
-      setAlerta({
-        mensaje: "¡Partido actualizado correctamente!",
-        tipo: "success",
-      });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 2000);
+      if (!respuesta.data.success) {
+        console.error("OneSignal no confirmó el envío:", respuesta.data);
+      }
     } catch (error) {
-      // Manejar errores
-      console.error("Error al actualizar el partido:", error);
-      setAlerta({
-        mensaje: "¡Error al actualizar el partido!",
-        tipo: "danger",
-      });
-      setTimeout(() => setAlerta({ mensaje: "", tipo: "" }), 4000);
+      // El partido ya quedó guardado; no debemos marcarlo como fallido
+      console.error("Error al enviar la notificación:", error);
     }
-  };
+  }
+
+  return true;
+};
+
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -515,20 +553,45 @@ useEffect(() => {
     });
   };
 
+const handleCambiarDetalleFixture = (index, campo, valor) => {
+  setFixturePrevia(prev => {
+    const nuevoFixture = [...prev];
+    nuevoFixture[index] = { ...nuevoFixture[index], [campo]: valor };
+    return nuevoFixture;
+  });
+};
+
   const confirmarGuardadoFixture = async () => {
+
+    
   setShowPreviewModal(false);
   setIsLoading(true);
   
   try {
+
+    const grupoSeleccionado = grupos.find(
+  (grupo) => String(grupo.id) === String(grupoId)
+);
+
+const nombreGrupo = grupoSeleccionado?.nombre || "tu grupo";
+
     for (const p of fixturePrevia) {
       const formData = new FormData();
       formData.append("equipoA_id", p.equipoA_id);
       formData.append("equipoB_id", p.equipoB_id);
       formData.append("jornada", p.jornada);
+      if (p.fecha) formData.append("fecha", p.fecha);
+      if (p.hora) formData.append("hora", p.hora);
+      if (p.sede) formData.append("sede", p.sede);
       // fecha y hora se van vacíos como quieres
       
       await axios.post(endpoint, formData);
     }
+
+    await axios.post(`${API_ENDPOINT}onesignal/fixture`, {
+  nombre_grupo: nombreGrupo,
+  total_partidos: fixturePrevia.length,
+});
     
     Swal.fire("¡Éxito!", "Se han generado todos los partidos", "success");
     fetchPartidos();
@@ -1078,111 +1141,232 @@ setShowPreviewModal(true);
 
     
       )}
-    {showPreviewModal && (
-  <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
+  
+{showPreviewModal && (
+  <div
+    className="modal d-block"
+    style={{
+      backgroundColor: "rgba(0,0,0,0.6)",
+      backdropFilter: "blur(4px)",
+      zIndex: 1050,
+    }}
+  >
     <div className="modal-dialog modal-dialog-centered modal-md">
-      <div className="modal-content   shadow-lg" style={{ borderRadius: '16px' }}>
-        
-        <div className="modal-header   pt-4 px-4 pb-0">
+      <div
+        className="modal-content shadow-lg border-0"
+        style={{ borderRadius: "16px" }}
+      >
+        {/* Encabezado */}
+        <div className="modal-header pt-4 px-4 pb-3 border-0">
           <div>
-            <h5 className="modal-title fw-bold text-dark">Ajustar Fixture</h5>
-            <p className="text-muted small mb-0">Puedes cambiar los equipos o invertir la localía antes de guardar.</p>
+            <h5 className="modal-title fw-bold text-dark">
+              Ajustar Fixture
+            </h5>
+            <p className="text-muted small mb-0">
+              Cambia los equipos, la localía, la fecha y la hora
+              antes de guardar.
+            </p>
           </div>
-          <button type="button" className="btn-close" onClick={() => setShowPreviewModal(false)}></button>
+
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowPreviewModal(false)}
+            aria-label="Cerrar"
+          />
         </div>
 
-        <div className="modal-body px-4" style={{ maxHeight: '450px', overflowY: 'auto' }}>
+        {/* Lista de partidos */}
+        <div
+          className="modal-body px-4 pt-0"
+          style={{
+            maxHeight: "450px",
+            overflowY: "auto",
+          }}
+        >
           {fixturePrevia.reduce((acc, p, index) => {
-            // Encabezado de Jornada
-            if (index === 0 || p.jornada !== fixturePrevia[index - 1].jornada) {
+            // Encabezado de jornada
+            if (
+              index === 0 ||
+              p.jornada !== fixturePrevia[index - 1].jornada
+            ) {
               acc.push(
-                <div key={`header-${p.jornada}`} 
-                     className="text-muted small fw-bolder mt-4 mb-2 text-uppercase d-flex align-items-center" 
-                     style={{ letterSpacing: '1px' }}>
-                  <div className="bg-primary me-2" style={{ width: '4px', height: '15px', borderRadius: '2px' }}></div>
+                <div
+                  key={`header-${p.jornada}`}
+                  className="text-muted small fw-bold mt-3 mb-2 text-uppercase d-flex align-items-center"
+                  style={{ letterSpacing: "1px" }}
+                >
+                  <div
+                    className="bg-primary me-2"
+                    style={{
+                      width: "4px",
+                      height: "15px",
+                      borderRadius: "2px",
+                    }}
+                  />
                   {p.jornada}
                 </div>
               );
             }
 
-            // Fila de Partido Editable
+            // Partido editable
             acc.push(
-              <div key={index} 
-                   className="d-flex align-items-center bg-light p-2 mb-2 shadow-sm"
-                   style={{ borderRadius: '12px', border: '1px solid #e9ecef' }}>
-                
-                {/* Selector Equipo A */}
-                <div style={{ flex: 1 }}>
-                  <select 
-                    className="form-select form-select-sm   bg-transparent fw-bold text-end text-primary"
-                    value={p.equipoA_id}
-                    onChange={(e) => handleCambiarEquipo(index, 'A', e.target.value)}
-                  >
-                    {equipos.map(eq => (
-                      <option key={eq.id} value={eq.id}>{eq.nombre}</option>
-                    ))}
-                  </select>
+              <div
+                key={`${p.jornada}-${index}`}
+                className="p-3 mb-3 bg-light shadow-sm"
+                style={{
+                  borderRadius: "12px",
+                  border: "1px solid #e9ecef",
+                }}
+              >
+                {/* Equipos */}
+                <div className="d-flex align-items-center gap-2">
+                  {/* Equipo A */}
+                  <div className="flex-grow-1" style={{ minWidth: 0 }}>
+                    <select
+                      className="form-select form-select-sm bg-white fw-semibold text-primary"
+                      value={p.equipoA_id}
+                      onChange={(e) =>
+                        handleCambiarEquipo(index, "A", e.target.value)
+                      }
+                      aria-label="Equipo local"
+                    >
+                      {equipos.map((eq) => (
+                        <option key={eq.id} value={eq.id}>
+                          {eq.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Invertir localía */}
+                  <div className="d-flex flex-column align-items-center flex-shrink-0">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-white bg-white shadow-sm border rounded-circle p-0 mb-1"
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        fontSize: "16px",
+                      }}
+                      onClick={() => handleInvertir(index)}
+                      title="Invertir localía"
+                      aria-label="Invertir localía"
+                    >
+                      ⇄
+                    </button>
+
+                    <span
+                      className="badge rounded-pill bg-white text-muted shadow-sm"
+                      style={{ fontSize: "0.65rem" }}
+                    >
+                      VS
+                    </span>
+                  </div>
+
+                  {/* Equipo B */}
+                  <div className="flex-grow-1" style={{ minWidth: 0 }}>
+                    <select
+                      className="form-select form-select-sm bg-white fw-semibold text-primary"
+                      value={p.equipoB_id}
+                      onChange={(e) =>
+                        handleCambiarEquipo(index, "B", e.target.value)
+                      }
+                      aria-label="Equipo visitante"
+                    >
+                      {equipos.map((eq) => (
+                        <option key={eq.id} value={eq.id}>
+                          {eq.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
-                {/* Botón Invertir y VS */}
-                <div className="px-2 text-center d-flex flex-column align-items-center">
-                  <button 
-                    type="button"
-                    className="btn btn-sm btn-white shadow-sm border rounded-circle p-0 mb-1"
-                    style={{ width: '28px', height: '28px', fontSize: '0.8rem' }}
-                    onClick={() => handleInvertir(index)}
-                    title="Invertir localía"
-                  >
-                    ⇄
-                  </button>
-                  <span className="badge rounded-pill bg-white text-dark   shadow-sm text-muted" 
-                        style={{ fontSize: '0.65rem' }}>
-                    VS
-                  </span>
-                </div>
+                {/* Fecha y hora */}
+                <div className="row g-2 mt-2">
+                  <div className="col-6">
+                    <label
+                      className="form-label text-muted fw-semibold mb-1"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      <i className="bi bi-calendar3 me-1" />
+                      Fecha (opcional)
+                    </label>
 
-                {/* Selector Equipo B */}
-                <div style={{ flex: 1 }}>
-                  <select 
-                    className="form-select form-select-sm   bg-transparent fw-bold text-start text-primary"
-                    value={p.equipoB_id}
-                    onChange={(e) => handleCambiarEquipo(index, 'B', e.target.value)}
-                  >
-                    {equipos.map(eq => (
-                      <option key={eq.id} value={eq.id}>{eq.nombre}</option>
-                    ))}
-                  </select>
-                </div>
+                    <input
+                      type="date"
+                      className="form-control form-control-sm bg-white"
+                      value={p.fecha || ""}
+                      onChange={(e) =>
+                        handleCambiarDetalleFixture(
+                          index,
+                          "fecha",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
 
+                  <div className="col-6">
+                    <label
+                      className="form-label text-muted fw-semibold mb-1"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      <i className="bi bi-clock me-1" />
+                      Hora (opcional)
+                    </label>
+
+                    <input
+                      type="time"
+                      className="form-control form-control-sm bg-white"
+                      value={p.hora || ""}
+                      onChange={(e) =>
+                        handleCambiarDetalleFixture(
+                          index,
+                          "hora",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
               </div>
             );
+
             return acc;
           }, [])}
         </div>
 
-        <div className="modal-footer   p-4 pt-2">
-          <button className="btn btn-light fw-semibold text-muted px-4" 
-                  style={{ borderRadius: '10px' }}
-                  onClick={() => setShowPreviewModal(false)}>
+        {/* Pie del modal */}
+        <div className="modal-footer p-4 pt-2 border-0">
+          <button
+            type="button"
+            className="btn btn-light fw-semibold text-muted px-4"
+            style={{ borderRadius: "10px" }}
+            onClick={() => setShowPreviewModal(false)}
+          >
             Cancelar
           </button>
-          <button 
-  className="btn btn-primary fw-bold px-4 shadow" 
-  style={{ borderRadius: '10px' }}
-  onClick={() => {
-    // Si la validación es exitosa, procedemos a guardar
-    if (validarFixture()) {
-      confirmarGuardadoFixture();
-    }
-  }}
->
-  Guardar Fixture
-</button>
+
+          <button
+            type="button"
+            className="btn btn-primary fw-bold px-4 shadow-sm"
+            style={{ borderRadius: "10px" }}
+            onClick={() => {
+              if (validarFixture()) {
+                confirmarGuardadoFixture();
+              }
+            }}
+          >
+            Guardar Fixture
+          </button>
         </div>
       </div>
     </div>
   </div>
 )}
+
       </>
   );
 };
