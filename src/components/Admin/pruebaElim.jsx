@@ -125,11 +125,11 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
     },
     dieciseisavos: {
       normal: {
-        dieciseisavos: { gapPartidos: 1, gapInterno: 20, alturaConector: 55 },
-        octavos: { gapPartidos: 1, gapInterno: 80, alturaConector: 125 },
-        cuartos: { gapPartidos: 1, gapInterno: 210, alturaConector: 245 },
-        semis: { gapPartidos: 1, gapInterno: 440, alturaConector: 485 },
-        final: { gapPartidos: 1, gapInterno: 925, alturaConector: 960 },
+        dieciseisavos: { gapPartidos: 1, gapInterno: 20, alturaConector: 55, anchoConector:25},
+        octavos: { gapPartidos: 1, gapInterno: 80, alturaConector: 125, anchoConector:25 },
+        cuartos: { gapPartidos: 1, gapInterno: 210, alturaConector: 245, anchoConector:25 },
+        semis: { gapPartidos: 1, gapInterno: 440, alturaConector: 485, anchoConector:25 },
+        final: { gapPartidos: 1, gapInterno: 925, alturaConector: 960 , anchoConector:25},
       },
       playin: {
         dieciseisavos: { gapPartidos: 0, gapInterno: 10, alturaConector: 50 },
@@ -187,7 +187,7 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
               alturaConector: 100,
             };
 
-          const { gapPartidos, gapInterno, alturaConector } = configActual;
+          const { gapPartidos, gapInterno, alturaConector,anchoConector } = configActual;
 
           const esFinal = fase.id === "final";
           const tieneSiguiente =
@@ -228,6 +228,7 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
                     <ConectoresFase
                       cantidad={esFinal ? 1 : fase.datos.length}
                       tieneSiguiente={true}
+                       ancho={anchoConector}
                       altura={alturaConector}
                       esFaseFinal={esFinal}
                     />
@@ -237,6 +238,7 @@ const PruebaElim = ({ rondas, Images, ErrorLogo, abreviarNombre }) => {
                     cantidad={esFinal ? 1 : fase.datos.length}
                     tieneSiguiente={true}
                     altura={alturaConector}
+                      ancho={anchoConector}
                     esFaseFinal={esFinal}
                   />
                 ))}

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import "./esilosElin.css";
 
-const ConectoresFase = ({ cantidad, altura, esFaseFinal }) => {
+const ConectoresFase = ({ cantidad, ancho, altura, esFaseFinal }) => {
   return (
     <div className="conectores">
       {Array.from({ length: cantidad }).map((_, i) => (
@@ -16,6 +16,7 @@ const ConectoresFase = ({ cantidad, altura, esFaseFinal }) => {
             className="conector_doble"
            style={{
   height: `${altura}px`,
+  width : `${ancho}px`,
   // Si es la final, aplicamos el degradado, sino, dejamos el estilo estándar
 
   // Bordes transparentes para que se vea el degradado de fondo

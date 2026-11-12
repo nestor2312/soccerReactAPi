@@ -277,30 +277,15 @@ const scrollRef = useRef(null);
     return nombre.slice(0, 3).toUpperCase();
   };
 
-  const todosLosPartidos = useMemo(() => {
-  return [
-    ...eliminatoriasdieciseisavos,
-    ...eliminatoriasOctavos,
-    ...eliminatoriasCuartos,
-    ...eliminatoriasSemis,
-    ...eliminatoriasFinal,
-    ...eliminatoriastercerPuesto,
-  ].filter(p => p && p.id); // evitar vacíos
-}, [
-  eliminatoriasdieciseisavos,
-  eliminatoriasOctavos,
-  eliminatoriasCuartos,
-  eliminatoriasSemis,
-  eliminatoriasFinal,
-  eliminatoriastercerPuesto,
-]);
+
+const todosLosPartidos = useMemo(() => {
+  return eliminatorias.filter(p => p && p.id);
+}, [eliminatorias]);
 
 const calendario = useMemo(() => {
-    return agruparPorFechaYFase(todosLosPartidos);
-  }, [todosLosPartidos]);
+  return agruparPorFechaYFase(todosLosPartidos);
+}, [todosLosPartidos]);
 
-    
-// 3. LA VARIABLE CRUCIAL QUE TE FALTABA DECLARAR ARRIBA
 const partidosDelDia = useMemo(() => {
   return (fechaSeleccionada && calendario[fechaSeleccionada]) || {};
 }, [calendario, fechaSeleccionada]);
